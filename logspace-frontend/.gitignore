@@ -1,0 +1,9 @@
+app/client/build
+app/client/dist
+app/client/css/app.css
+app/client/**/*.js~
+bower_components/
+node/
+node_modules/
+tmp/
+.idea
