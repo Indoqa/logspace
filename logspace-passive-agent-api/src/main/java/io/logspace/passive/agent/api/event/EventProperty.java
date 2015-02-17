@@ -1,4 +1,4 @@
-package io.logspace.passive.agent.api;
+package io.logspace.passive.agent.api.event;
 
 /**
  * An immutable key-value pair representation an event property.

@@ -14,11 +14,8 @@
   <name>Logspace Passive Agent API</name>
 
   <properties>
+    <!-- The logspace passive agent implementation should be usable in environments running on older JVMs. -->  
     <project.build.compiler.version>1.6</project.build.compiler.version>
   </properties>
-
-  <dependencies>
-
-  </dependencies>
 
 </project>

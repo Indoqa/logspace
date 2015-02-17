@@ -1,4 +1,4 @@
-package io.logspace.passive.agent.api;
+package io.logspace.passive.agent.api.event;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +7,9 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Immutable event object which carries explicit basic information (id, timestamp, type, globalEventId, parentEventId)
- * and a collection of key-value pairs with the details.
+ * Immutable {@link Event} implementation.
  */
-public final class Event {
+public final class ImmutableEvent implements Event {
 
     /**
      * A unique identifier of the event.
@@ -51,7 +50,8 @@ public final class Event {
      * @param parentEventId The parent event id.
      * @param properties The properties.
      */
-    public Event(Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId, EventProperty... properties) {
+    public ImmutableEvent(Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId,
+            EventProperty... properties) {
         this.id = UUID.randomUUID().toString();
         this.timestamp = new Date();
 
@@ -75,48 +75,54 @@ public final class Event {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        Event other = (Event) obj;
+        ImmutableEvent other = (ImmutableEvent) obj;
         return this.id.equals(other.id);
     }
 
     /**
-     * @return The optional global event id.
+     * @see io.logspace.passive.agent.api.event.Event#getGlobalEventId()
      */
+    @Override
     public Optional<String> getGlobalEventId() {
         return this.globalEventId;
     }
 
     /**
-     * @return The id.
+     * @see io.logspace.passive.agent.api.event.Event#getId()
      */
+    @Override
     public String getId() {
         return this.id;
     }
 
     /**
-     * @return The optional parent event id.
+     * @see io.logspace.passive.agent.api.event.Event#getParentEventId()
      */
+    @Override
     public Optional<String> getParentEventId() {
         return this.parentEventId;
     }
 
     /**
-     * @return A collection of properties. If there are no properties, the collection is empty.
+     * @see io.logspace.passive.agent.api.event.Event#getProperties()
      */
+    @Override
     public Collection<EventProperty> getProperties() {
         return new ArrayList<EventProperty>(this.properties);
     }
 
     /**
-     * @return The timestamp of the creation time.
+     * @see io.logspace.passive.agent.api.event.Event#getTimestamp()
      */
+    @Override
     public Date getTimestamp() {
         return this.timestamp;
     }
 
     /**
-     * @return The optional type of the event.
+     * @see io.logspace.passive.agent.api.event.Event#getType()
      */
+    @Override
     public Optional<String> getType() {
         return this.type;
     }

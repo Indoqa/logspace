@@ -14,10 +14,12 @@
   <name>Logspace Passive Agent</name>
 
   <properties>
+    <!-- The logspace passive agent implementation should be usable in environments running on older JVMs. -->
     <project.build.compiler.version>1.6</project.build.compiler.version>
   </properties>
 
   <dependencies>
+    <!-- RESTful webservices -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -26,6 +28,18 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
     </dependency>    
+    
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>    
+    
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
     
     <!-- Internal -->
     <dependency>

@@ -1,11 +1,13 @@
 package io.logspace.passive.agent.impl;
 
-import io.logspace.passive.agent.api.Event;
+import io.logspace.passive.agent.api.HqOrderReceiver;
 import io.logspace.passive.agent.api.PassiveController;
+import io.logspace.passive.agent.api.event.Event;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,6 +20,7 @@ import org.apache.http.impl.client.HttpClients;
 
 public class SimplePassiveController implements PassiveController {
 
+    private Collection<HqOrderReceiver> receivers = Collections.synchronizedSet(new HashSet<HqOrderReceiver>());
     private CloseableHttpClient httpclient;
     private String baseUrl;
 
@@ -26,13 +29,15 @@ public class SimplePassiveController implements PassiveController {
         this.initialize();
     }
 
-    private static StringEntity toJsonEntity(Collection<Event> event) {
+    private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
         return new StringEntity(EventJsonSerializer.toJson(event), ContentType.APPLICATION_JSON);
     }
 
-    /**
-     * @see io.logspace.passive.agent.api.PassiveController#send(io.logspace.passive.agent.api.Event)
-     */
+    @Override
+    public void register(HqOrderReceiver hqOrderReceiver) {
+        this.receivers.add(hqOrderReceiver);
+    }
+
     @Override
     public void send(Collection<Event> events) {
         try {

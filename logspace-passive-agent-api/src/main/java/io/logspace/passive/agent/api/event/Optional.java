@@ -1,8 +1,13 @@
-package io.logspace.passive.agent.api;
+package io.logspace.passive.agent.api.event;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ * A Java 7 implementation of Optional that can be replaced by the Java 8 equivalent.
+ * 
+ * @see http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html
+ */
 public class Optional<T> {
 
     private static final Optional<?> EMPTY = new Optional<Object>();

@@ -1,10 +1,10 @@
-package io.logspace.passive.agent.api;
+package io.logspace.passive.agent.api.event;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Base class for event builders.
+ * Base class for event builders. Extend it to simplify property handling by providing explicit methods.
  */
 public abstract class AbstractEventBuilder {
 
@@ -40,8 +40,8 @@ public abstract class AbstractEventBuilder {
      * @param globalEventId The optional global event id.
      * @return This event build object.
      */
-    public AbstractEventBuilder setGlobalEventId(Optional<String> globalEventId) {
-        this.globalEventId = globalEventId;
+    public AbstractEventBuilder setGlobalEventId(String globalEventId) {
+        this.globalEventId = Optional.of(globalEventId);
         return this;
     }
 
@@ -51,14 +51,14 @@ public abstract class AbstractEventBuilder {
      * @param parentEventId The optional parent event id.
      * @return This event builder object.
      */
-    public AbstractEventBuilder setParentEventId(Optional<String> parentEventId) {
-        this.parentEventId = parentEventId;
+    public AbstractEventBuilder setParentEventId(String parentEventId) {
+        this.parentEventId = Optional.of(parentEventId);
         return this;
     }
 
     public final Event toEvent() {
-        return new Event(this.getType(), this.globalEventId, this.parentEventId, this.properties.values().toArray(
-                new EventProperty[this.properties.size()]));
+        EventProperty[] properties = this.properties.values().toArray(new EventProperty[this.properties.size()]);
+        return new ImmutableEvent(this.getType(), this.globalEventId, this.parentEventId, properties);
     }
 
     /**
