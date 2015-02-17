@@ -1,0 +1,37 @@
+package io.logspace.agent.os.api;
+
+import io.logspace.passive.agent.api.AbstractEventBuilder;
+import io.logspace.passive.agent.api.Event;
+import io.logspace.passive.agent.api.EventProperty;
+import io.logspace.passive.agent.api.Optional;
+
+public class CpuEventBuilder extends AbstractEventBuilder {
+
+    public static final String TYPE = "os-cpu";
+    public static final String PROPERTY_LOAD_AVERAGE = "load-average";
+
+    public CpuEventBuilder() {
+        super();
+    }
+
+    public CpuEventBuilder(Event parentEvent) {
+        super(parentEvent);
+    }
+
+    /**
+     * @param loadAverage The value of the average load.
+     * @return This event builder.
+     */
+    public CpuEventBuilder setLoadAverage(double loadAverage) {
+        this.add(new EventProperty(PROPERTY_LOAD_AVERAGE, Double.toString(loadAverage)));
+        return this;
+    }
+
+    /**
+     * @see io.logspace.passive.agent.api.AbstractEventBuilder#getType()
+     */
+    @Override
+    protected Optional<String> getType() {
+        return Optional.of(TYPE);
+    }
+}

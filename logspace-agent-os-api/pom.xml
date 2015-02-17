@@ -9,15 +9,12 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-passive-controller</artifactId>
+  <artifactId>logspace-agent-os-api</artifactId>
 
-  <name>Logspace Passive Controller</name>
-
-  <properties>
-    <project.build.compiler.version>1.6</project.build.compiler.version>
-  </properties>
+  <name>Logspace Agent OS API</name>
 
   <dependencies>
+    <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-passive-agent-api</artifactId>

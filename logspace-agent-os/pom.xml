@@ -13,4 +13,16 @@
 
   <name>Logspace Agent OS</name>
 
+  <dependencies>
+    <!-- Internal -->
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-agent-os-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-passive-controller</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>

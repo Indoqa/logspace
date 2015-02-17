@@ -13,6 +13,10 @@
 
   <name>Logspace Passive Agent API</name>
 
+  <properties>
+    <project.build.compiler.version>1.6</project.build.compiler.version>
+  </properties>
+
   <dependencies>
 
   </dependencies>
