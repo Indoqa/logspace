@@ -9,15 +9,25 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-passive-controller</artifactId>
+  <artifactId>logspace-passive-agent</artifactId>
 
-  <name>Logspace Passive Controller</name>
+  <name>Logspace Passive Agent</name>
 
   <properties>
     <project.build.compiler.version>1.6</project.build.compiler.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+    </dependency>    
+    
+    <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-passive-agent-api</artifactId>

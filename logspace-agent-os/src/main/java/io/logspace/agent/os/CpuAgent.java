@@ -2,8 +2,8 @@ package io.logspace.agent.os;
 
 import io.logspace.agent.os.api.CpuEventBuilder;
 import io.logspace.passive.agent.api.Event;
-import io.logspace.passive.controller.PassiveAgent;
-import io.logspace.passive.controller.PassiveController;
+import io.logspace.passive.agent.api.PassiveAgent;
+import io.logspace.passive.agent.api.PassiveController;
 
 public class CpuAgent implements PassiveAgent {
 

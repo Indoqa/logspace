@@ -11,7 +11,7 @@
 
   <artifactId>logspace-agent-web</artifactId>
 
-  <name>Logspace HQ</name>
+  <name>Logspace Agent Web</name>
 
   <dependencies>
 

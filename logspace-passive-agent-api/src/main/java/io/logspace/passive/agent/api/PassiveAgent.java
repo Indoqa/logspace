@@ -1,4 +1,4 @@
-package io.logspace.passive.controller;
+package io.logspace.passive.agent.api;
 
 public interface PassiveAgent {
 

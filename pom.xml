@@ -22,6 +22,7 @@
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
     <log4j-version>2.1</log4j-version>
     <jackson-version>2.4.4</jackson-version>
+    <httpclient-version>4.3.6</httpclient-version>
 
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
@@ -31,16 +32,16 @@
 
   <modules>
     <module>logspace-active-agent-api</module>
-    <module>logspace-active-controller</module>
+    <module>logspace-active-agent</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-os-api</module>
     <module>logspace-agent-web</module>
+    <module>logspace-agent-web-api</module>
     <module>logspace-frontend</module>
     <module>logspace-hq</module>
-    <module>logspace-hq-api</module>
     <module>logspace-monitor</module>
     <module>logspace-passive-agent-api</module>
-    <module>logspace-passive-controller</module>
+    <module>logspace-passive-agent</module>
   </modules>
 
   <dependencyManagement>
@@ -141,6 +142,13 @@
         </exclusions>
       </dependency>
 
+      <!-- HTTP Client -->
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpclient-version}</version>
+      </dependency>
+
       <!-- Apache Commons -->
       <dependency>
         <groupId>commons-io</groupId>
@@ -203,7 +211,7 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-active-controller</artifactId>
+        <artifactId>logspace-active-agent</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -235,11 +243,6 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-hq-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
         <artifactId>logspace-monitor</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -250,7 +253,7 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-passive-controller</artifactId>
+        <artifactId>logspace-passive-agent</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

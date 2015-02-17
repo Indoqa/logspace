@@ -9,9 +9,9 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-active-controller</artifactId>
+  <artifactId>logspace-agent-web-api</artifactId>
 
-  <name>Logspace Active Controller</name>
+  <name>Logspace Agent Web API</name>
 
   <dependencies>
 

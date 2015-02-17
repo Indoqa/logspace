@@ -9,9 +9,9 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-hq-api</artifactId>
+  <artifactId>logspace-active-agent</artifactId>
 
-  <name>Logspace HQ API</name>
+  <name>Logspace Active Agent</name>
 
   <dependencies>
 
