@@ -44,7 +44,7 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>test</scope>            
+      <scope>test</scope>
     </dependency>
 
     <!-- Internal -->
@@ -53,5 +53,63 @@
       <artifactId>logspace-agent-api</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <shadeTestJar>false</shadeTestJar>
+          <minimizeJar>true</minimizeJar>
+          <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+          <shadeSourcesContent>true</shadeSourcesContent>
+          <artifactSet>
+            <excludes>
+              <exclude>org.slf4j:*</exclude>
+              <exclude>io.logspace:logspace-agent-api</exclude>
+            </excludes>
+          </artifactSet>
+          <relocations>
+            <relocation>
+              <pattern>org.apache.http</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.apache.http</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.apache.commons.codec</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.apache.commons.codec</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.fasterxml.jackson</pattern>
+              <shadedPattern>io.logspace.shaded.fasterxml.jackson</shadedPattern>
+            </relocation>
+          </relocations>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/license/**</exclude>
+                <exclude>META-INF/*</exclude>
+                <exclude>META-INF/maven/**</exclude>
+                <exclude>LICENSE</exclude>
+                <exclude>NOTICE</exclude>
+                <exclude>/*.txt</exclude>
+                <exclude>build.properties</exclude>
+              </excludes>
+            </filter>
+          </filters>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
