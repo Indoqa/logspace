@@ -38,7 +38,12 @@
     <module>logspace-agent-web</module>
     <module>logspace-agent-web-api</module>
     <module>logspace-frontend</module>
-    <module>logspace-hq</module>
+    <module>logspace-hq-core</module>
+    <module>logspace-hq-core-api</module>
+    <module>logspace-hq-solr-plugin</module>
+    <module>logspace-hq-webapp</module>
+    <module>logspace-hq-webapp-embedded-solr</module>
+    <module>logspace-it</module>
     <module>logspace-monitor</module>
     <module>logspace-passive-agent-api</module>
     <module>logspace-passive-agent</module>
@@ -238,7 +243,27 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-hq</artifactId>
+        <artifactId>logspace-hq-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-hq-core-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-hq-solr-plugin</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-hq-webapp</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-it</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
