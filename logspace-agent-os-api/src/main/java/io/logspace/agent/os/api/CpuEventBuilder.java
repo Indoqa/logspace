@@ -1,9 +1,9 @@
 package io.logspace.agent.os.api;
 
-import io.logspace.passive.agent.api.event.AbstractEventBuilder;
-import io.logspace.passive.agent.api.event.Event;
-import io.logspace.passive.agent.api.event.EventProperty;
-import io.logspace.passive.agent.api.event.Optional;
+import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.event.Optional;
 
 public class CpuEventBuilder extends AbstractEventBuilder {
 
@@ -28,7 +28,7 @@ public class CpuEventBuilder extends AbstractEventBuilder {
     }
 
     /**
-     * @see io.logspace.passive.agent.api.event.AbstractEventBuilder#getType()
+     * @see io.logspace.agent.api.event.AbstractEventBuilder#getType()
      */
     @Override
     protected Optional<String> getType() {

@@ -31,8 +31,8 @@
   </properties>
 
   <modules>
-    <module>logspace-active-agent-api</module>
-    <module>logspace-active-agent</module>
+    <module>logspace-agent</module>
+    <module>logspace-agent-api</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-os-api</module>
     <module>logspace-agent-web</module>
@@ -45,8 +45,6 @@
     <module>logspace-hq-webapp-embedded-solr</module>
     <module>logspace-it</module>
     <module>logspace-monitor</module>
-    <module>logspace-passive-agent-api</module>
-    <module>logspace-passive-agent</module>
   </modules>
 
   <dependencyManagement>
@@ -211,12 +209,12 @@
       <!-- Internal -->
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-active-agent-api</artifactId>
+        <artifactId>logspace-agent</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-active-agent</artifactId>
+        <artifactId>logspace-agent-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -269,16 +267,6 @@
       <dependency>
         <groupId>io.logspace</groupId>
         <artifactId>logspace-monitor</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
-        <artifactId>logspace-passive-agent-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
-        <artifactId>logspace-passive-agent</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

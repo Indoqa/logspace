@@ -9,16 +9,13 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-agent-os-api</artifactId>
+  <artifactId>logspace-agent-api</artifactId>
 
-  <name>Logspace Agent OS API</name>
+  <name>Logspace Agent API</name>
 
-  <dependencies>
-    <!-- Internal -->
-    <dependency>
-      <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent-api</artifactId>
-    </dependency>
-  </dependencies>
+  <properties>
+    <!-- The logspace passive agent implementation should be usable in environments running on older JVMs. -->
+    <project.build.compiler.version>1.6</project.build.compiler.version>
+  </properties>
 
 </project>
