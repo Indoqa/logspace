@@ -13,6 +13,11 @@
 
   <name>Logspace Agent</name>
 
+  <properties>
+    <!-- The agent API should be usable in environments running on older JVMs. -->
+    <project.build.compiler.version>1.6</project.build.compiler.version>
+  </properties>
+
   <dependencies>
     <!-- REST client -->
     <dependency>
@@ -22,6 +27,18 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
+    </dependency>
+
+    <!-- Quartz -->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+    </dependency>
+
+    <!-- Tape -->
+    <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>tape</artifactId>
     </dependency>
 
     <!-- Logging -->
@@ -34,6 +51,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -70,13 +92,13 @@
         </executions>
         <configuration>
           <shadeTestJar>false</shadeTestJar>
-          <minimizeJar>true</minimizeJar>
+          <!--<minimizeJar>true</minimizeJar>-->
+          <createSourcesJar>true</createSourcesJar>
           <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
           <shadeSourcesContent>true</shadeSourcesContent>
           <artifactSet>
             <excludes>
               <exclude>org.slf4j:*</exclude>
-              <exclude>io.logspace:logspace-agent-api</exclude>
             </excludes>
           </artifactSet>
           <relocations>
@@ -90,7 +112,23 @@
             </relocation>
             <relocation>
               <pattern>com.fasterxml.jackson</pattern>
-              <shadedPattern>io.logspace.shaded.fasterxml.jackson</shadedPattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.jackson</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.mchange</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.mchange</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.quartz</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.quartz</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.terracotta.quartz</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.terracotta.quartz</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.squareup.tape</pattern>
+              <shadedPattern>io.logspace.agent.impl.shaded.tape</shadedPattern>
             </relocation>
           </relocations>
           <filters>

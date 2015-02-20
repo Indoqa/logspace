@@ -23,7 +23,8 @@
     <log4j-version>2.1</log4j-version>
     <jackson-version>2.4.4</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
-
+    <quartz-version>2.2.1</quartz-version>
+    <tape-version>1.2.3</tape-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
@@ -173,6 +174,20 @@
         <version>${solr-version}</version>
       </dependency>
 
+      <!-- Quartz -->
+      <dependency>
+        <groupId>org.quartz-scheduler</groupId>
+        <artifactId>quartz</artifactId>
+        <version>${quartz-version}</version>
+      </dependency>
+
+      <!-- Tape -->
+      <dependency>
+        <groupId>com.squareup</groupId>
+        <artifactId>tape</artifactId>
+        <version>${tape-version}</version>
+      </dependency>
+
       <!-- Logging -->
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -184,6 +199,7 @@
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4j-version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-bom</artifactId>
