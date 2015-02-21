@@ -9,9 +9,9 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-hq</artifactId>
+  <artifactId>logspace-hq-core</artifactId>
 
-  <name>Logspace HQ</name>
+  <name>Logspace HQ Core</name>
 
   <dependencies>
 
