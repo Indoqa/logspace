@@ -1,5 +1,6 @@
 package io.logspace.agent.impl;
 
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -17,7 +18,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -29,25 +29,35 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultAgentController implements AgentController {
 
-    private Collection<Agent> receivers = Collections.synchronizedSet(new HashSet<Agent>());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Collection<Agent> agents = Collections.synchronizedSet(new HashSet<Agent>());
     private CloseableHttpClient httpclient;
     private String baseUrl;
+    private Scheduler scheduler;
 
     public DefaultAgentController(String baseUrl) {
+        this(baseUrl, null);
+    }
+
+    public DefaultAgentController(String baseUrl, Scheduler scheduler) {
         this.baseUrl = baseUrl;
+        this.scheduler = scheduler;
+
         this.initialize();
     }
 
     private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
-        return new StringEntity(EventJsonSerializer.toJson(event), ContentType.APPLICATION_JSON);
+        return new StringEntity(EventJsonSerializer.toJson(event), APPLICATION_JSON);
     }
 
     @Override
     public void register(Agent agent) {
-        this.receivers.add(agent);
+        this.agents.add(agent);
     }
 
     @Override
@@ -55,7 +65,7 @@ public class DefaultAgentController implements AgentController {
         try {
             this.sendEvents(events);
         } catch (IOException e) {
-
+            this.logger.error("Cannot send events to HQ.", e);
         }
     }
 
@@ -64,31 +74,48 @@ public class DefaultAgentController implements AgentController {
         this.send(Collections.singleton(event));
     }
 
+    @Override
+    public void unregister(Agent agent) {
+        this.agents.remove(agent);
+    }
+
     private void initialize() {
         this.initializeHttpClient();
-        this.initializeQuartz();
+        this.initializeQuartzScheduler();
+        this.initializeHqCommunication();
+    }
+
+    private void initializeHqCommunication() {
+        JobDetail job = newJob(HqCommunicationJob.class).withIdentity("hq-communication", "logspace").build();
+        Trigger trigger = newTrigger().withIdentity("hq-communication-trigger", "logspace").startNow()
+                .withSchedule(simpleSchedule().withIntervalInSeconds(5).repeatForever()).build();
+        try {
+            this.scheduler.scheduleJob(job, trigger);
+        } catch (SchedulerException e) {
+            throw new AgentControllerInitializationException("Error while scheduling a Quartz job.", e);
+        }
     }
 
     private void initializeHttpClient() {
         this.httpclient = HttpClients.createDefault();
     }
 
-    private void initializeQuartz() {
+    private void initializeQuartzScheduler() {
+        if (this.scheduler != null) {
+            return;
+        }
+
         if (this.isShaded()) {
             System.setProperty("org.quartz.properties", "logspace-shaded-quartz.properties");
+        } else {
+            System.setProperty("org.quartz.properties", "logspace-quartz.properties");
         }
-        StdSchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        Scheduler scheduler = null;
-        try {
-            scheduler = schedulerFactory.getScheduler();
-            scheduler.start();
 
-            JobDetail job = newJob(HelloJob.class).withIdentity("job1", "group1").build();
-            Trigger trigger = newTrigger().withIdentity("trigger1", "group1").startNow()
-                    .withSchedule(simpleSchedule().withIntervalInSeconds(5).repeatForever()).build();
-            scheduler.scheduleJob(job, trigger);
+        try {
+            this.scheduler = new StdSchedulerFactory().getScheduler();
+            this.scheduler.start();
         } catch (SchedulerException e) {
-            throw new RuntimeException("Error while creating and starting a Quartz scheduler.", e);
+            throw new AgentControllerInitializationException("Error while creating and starting a Quartz scheduler.", e);
         }
     }
 
@@ -117,7 +144,7 @@ public class DefaultAgentController implements AgentController {
         this.httpclient.execute(httpPut, responseHandler);
     }
 
-    public static class HelloJob implements Job {
+    public static class HqCommunicationJob implements Job {
 
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {

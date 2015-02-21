@@ -12,4 +12,6 @@ public interface AgentController {
 
     void send(Event event);
 
+    void unregister(Agent agent);
+
 }
