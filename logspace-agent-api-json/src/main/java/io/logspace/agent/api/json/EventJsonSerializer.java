@@ -1,4 +1,4 @@
-package io.logspace.agent.impl;
+package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
 import io.logspace.agent.api.event.Event;

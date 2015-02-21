@@ -7,6 +7,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.EventJsonSerializer;
 
 import java.io.IOException;
 import java.util.Collection;

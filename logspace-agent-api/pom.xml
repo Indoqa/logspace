@@ -14,7 +14,7 @@
   <name>Logspace Agent API</name>
 
   <properties>
-    <!-- The agent API should be usable in environments running on older JVMs. -->
+    <!-- The agent should be usable in environments running on older JVMs. -->
     <project.build.compiler.version>1.6</project.build.compiler.version>
   </properties>
 

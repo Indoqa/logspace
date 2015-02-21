@@ -5,6 +5,7 @@ import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.json.EventJsonSerializer;
 
 import java.io.IOException;
 import java.util.Collection;
