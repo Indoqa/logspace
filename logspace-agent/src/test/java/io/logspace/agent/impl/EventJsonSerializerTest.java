@@ -15,7 +15,6 @@ import org.junit.Test;
 
 public class EventJsonSerializerTest {
 
-    @Test
     public void agentControllerQuartz() {
         new DefaultAgentController("http://localhost:8080/test");
         try {
