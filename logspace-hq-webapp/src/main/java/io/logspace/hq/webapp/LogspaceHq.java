@@ -29,7 +29,7 @@ public class LogspaceHq extends AbstractSparkApplication {
 
     @Override
     protected void initializeSpringBeans() {
-        // nothing yet to do
+        // nothing to to yet
     }
 
     @Override

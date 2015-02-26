@@ -5,7 +5,6 @@ import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.eventrequest.HqEventRequest;
 import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.HqOrders;
 import io.logspace.agent.os.api.CpuEventBuilder;
 
 public class CpuAgent implements Agent {
@@ -20,10 +19,6 @@ public class CpuAgent implements Agent {
     @Override
     public void receiveEventRequest(HqEventRequest eventRequest) {
         // nothing to do
-    }
-
-    @Override
-    public void receiveHqOrder(HqOrders hqOrder) {
     }
 
     @Override
