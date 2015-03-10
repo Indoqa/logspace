@@ -19,12 +19,14 @@
 
     <indoqa-spark-version>0.1-SNAPSHOT</indoqa-spark-version>
     <spring-version>4.1.4.RELEASE</spring-version>
+    <solr-version>4.10.3</solr-version>
+
     <jackson-version>2.4.4</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
     <quartz-version>2.2.1</quartz-version>
     <tape-version>1.2.3</tape-version>
 
-    <indoqa-commons-jarinjarloader>1.2.1</indoqa-commons-jarinjarloader>
+    <indoqa-commons-solr-server-factory-version>4.3.3</indoqa-commons-solr-server-factory-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
@@ -178,8 +180,8 @@
       </dependency>
       <dependency>
         <groupId>com.indoqa.commons</groupId>
-        <artifactId>indoqa-commons-jarinjarloader</artifactId>
-        <version>${indoqa-commons-jarinjarloader}</version>
+        <artifactId>indoqa-commons-solr-server-factory</artifactId>
+        <version>${indoqa-commons-solr-server-factory-version}</version>
       </dependency>
 
       <!-- Solr / Lucene -->

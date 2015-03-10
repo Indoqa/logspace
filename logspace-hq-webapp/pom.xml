@@ -22,14 +22,10 @@
 
     <!-- Commons dependencies -->
     <dependency>
-      <groupId>com.indoqa.commons</groupId>
-      <artifactId>indoqa-commons-jarinjarloader</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
-    
+
     <!-- Logging: slf4j -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -79,39 +75,10 @@
       <groupId>io.logspace</groupId>
       <artifactId>logspace-agent-api-json</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-core</artifactId>
+    </dependency>
   </dependencies>
 
-  <!-- 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/runnable-jar.xml</descriptor>
-          </descriptors>
-          <archive>
-            <manifest>
-              <mainClass>com.indoqa.commons.jarinjarloader.Main</mainClass>
-            </manifest>
-            <manifestEntries>
-              <Implementation-Build>${project.version}</Implementation-Build>
-              <delegatedMainClass>io.logspace.hq.webapp.LogspaceHq</delegatedMainClass>
-            </manifestEntries>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-  -->
-  
 </project>

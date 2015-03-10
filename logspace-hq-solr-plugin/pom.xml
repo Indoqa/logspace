@@ -11,10 +11,47 @@
 
   <artifactId>logspace-hq-solr-plugin</artifactId>
 
-  <name>Logspace HQ Core</name>
+  <name>Logspace HQ Solr Plugin</name>
 
   <dependencies>
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
 
+    <!-- Dependency Injection -->
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>  
+  
+    <!-- Solr -->
+    <dependency>
+      <groupId>com.indoqa.commons</groupId>
+      <artifactId>indoqa-commons-solr-server-factory</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+    </dependency>
+    
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>   
+    
+    <!-- Internal -->
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-core-api</artifactId>
+    </dependency>     
   </dependencies>
 
 </project>

@@ -8,8 +8,13 @@ import com.indoqa.spark.AbstractSparkApplication;
 
 public class LogspaceHq extends AbstractSparkApplication {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new LogspaceHq().invoke();
+    }
+
+    @Override
+    public void beforeInitialization() {
+        this.printLogo();
     }
 
     @Override
@@ -17,7 +22,6 @@ public class LogspaceHq extends AbstractSparkApplication {
         return "Logspace";
     }
 
-    @Override
     protected String getAsciiLogo() throws IOException {
         return IOUtils.toString(LogspaceHq.class.getResourceAsStream("/logspace.io.txt"));
     }
@@ -29,11 +33,23 @@ public class LogspaceHq extends AbstractSparkApplication {
 
     @Override
     protected void initializeSpringBeans() {
-        // nothing to to yet
+        // nothing to do yet
     }
 
     @Override
     protected boolean isDevEnvironment() {
         return true;
+    }
+
+    private void printLogo() {
+        try {
+            String asciiLogo = IOUtils.toString(LogspaceHq.class.getResourceAsStream("/logspace.io.txt"));
+            if (asciiLogo == null) {
+                return;
+            }
+            this.getInitialzationLogger().info(asciiLogo);
+        } catch (IOException e) {
+            throw new ApplicationInitializationException("Error while reading ASCII logo.", e);
+        }
     }
 }

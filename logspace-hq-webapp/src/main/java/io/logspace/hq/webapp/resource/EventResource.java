@@ -8,18 +8,17 @@ import org.slf4j.LoggerFactory;
 
 import spark.Request;
 import spark.Response;
-import spark.Spark;
 
-import com.indoqa.spark.AbstractResourcesBase;
+import com.indoqa.spark.AbstractJsonResourcesBase;
 
 @Named
-public class EventResource extends AbstractResourcesBase {
+public class EventResource extends AbstractJsonResourcesBase {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct
     public void mount() {
-        Spark.post("/events", (req, res) -> this.logEvents(req, res));
+        this.post("/events", (req, res) -> this.logEvents(req, res));
     }
 
     private String logEvents(Request req, Response res) {
