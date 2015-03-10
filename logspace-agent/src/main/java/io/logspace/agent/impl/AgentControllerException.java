@@ -11,6 +11,10 @@ public class AgentControllerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    public AgentControllerException(String message) {
+        super(message);
+    }
+
     public AgentControllerException(String message, Throwable cause) {
         super(message, cause);
     }

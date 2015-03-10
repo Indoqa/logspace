@@ -13,12 +13,18 @@ import java.util.Collection;
 
 public interface AgentController {
 
+    void intialize();
+
     void register(Agent agent);
 
     void send(Collection<Event> events);
 
     void send(Event event);
 
+    void shutdown();
+
     void unregister(Agent agent);
+
+    void flush();
 
 }

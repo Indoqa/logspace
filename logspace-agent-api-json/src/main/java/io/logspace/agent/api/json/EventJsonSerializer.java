@@ -14,6 +14,7 @@ import io.logspace.agent.api.event.Optional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -49,7 +50,14 @@ public final class EventJsonSerializer {
 
     public static String toJson(Collection<Event> events) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JsonGenerator jsonGenerator = createJsonGenerator(baos);
+
+        toJson(events, baos);
+
+        return baos.toString(UTF8.getJavaName());
+    }
+
+    public static void toJson(Collection<Event> events, OutputStream outputStream) throws IOException {
+        JsonGenerator jsonGenerator = createJsonGenerator(outputStream);
 
         jsonGenerator.writeStartArray();
 
@@ -70,10 +78,9 @@ public final class EventJsonSerializer {
         jsonGenerator.writeEndArray();
 
         jsonGenerator.flush();
-        return baos.toString(UTF8.getJavaName());
     }
 
-    private static JsonGenerator createJsonGenerator(ByteArrayOutputStream baos) throws IOException {
+    private static JsonGenerator createJsonGenerator(OutputStream baos) throws IOException {
         JsonGenerator jsonGenerator = JSON_FACTORY.createGenerator(baos, UTF8);
 
         if (LOGGER.isDebugEnabled()) {

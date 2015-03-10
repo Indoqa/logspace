@@ -11,16 +11,12 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonSerializer;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -40,19 +36,19 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultAgentController implements AgentController {
+public class HqAgentController extends AbstractAgentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Collection<Agent> agents = Collections.synchronizedSet(new HashSet<Agent>());
+
     private CloseableHttpClient httpclient;
     private String baseUrl;
     private Scheduler scheduler;
 
-    public DefaultAgentController(String baseUrl) {
+    public HqAgentController(String baseUrl) {
         this(baseUrl, null);
     }
 
-    public DefaultAgentController(String baseUrl, Scheduler scheduler) {
+    public HqAgentController(String baseUrl, Scheduler scheduler) {
         this.baseUrl = baseUrl;
         this.scheduler = scheduler;
 
@@ -64,27 +60,12 @@ public class DefaultAgentController implements AgentController {
     }
 
     @Override
-    public void register(Agent agent) {
-        this.agents.add(agent);
-    }
-
-    @Override
     public void send(Collection<Event> events) {
         try {
             this.sendEvents(events);
         } catch (IOException e) {
             this.logger.error("Cannot send events to HQ.", e);
         }
-    }
-
-    @Override
-    public void send(Event event) {
-        this.send(Collections.singleton(event));
-    }
-
-    @Override
-    public void unregister(Agent agent) {
-        this.agents.remove(agent);
     }
 
     private void initialize() {
