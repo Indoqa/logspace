@@ -11,6 +11,8 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
+import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonSerializer;
 
@@ -38,21 +40,29 @@ import org.slf4j.LoggerFactory;
 
 public class HqAgentController extends AbstractAgentController {
 
+    public static final String BASE_URL_PARAMETER = "base-url";
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private CloseableHttpClient httpclient;
     private String baseUrl;
     private Scheduler scheduler;
 
-    public HqAgentController(String baseUrl) {
-        this(baseUrl, null);
-    }
+    public HqAgentController(AgentControllerDescription agentControllerDescription) {
+        this.baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
 
-    public HqAgentController(String baseUrl, Scheduler scheduler) {
-        this.baseUrl = baseUrl;
-        this.scheduler = scheduler;
+        if (this.baseUrl == null || this.baseUrl.trim().length() == 0) {
+            throw new AgentControllerInitializationException("The base URL must not be empty!");
+        }
 
         this.initialize();
+    }
+
+    public static HqAgentController withBaseUrl(String baseUrl) {
+        AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
+        description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
+
+        return new HqAgentController(description);
     }
 
     private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
@@ -66,6 +76,27 @@ public class HqAgentController extends AbstractAgentController {
         } catch (IOException e) {
             this.logger.error("Cannot send events to HQ.", e);
         }
+    }
+
+    @Override
+    public void shutdown() {
+        this.logger.info("Performing shutdown.");
+
+        try {
+            this.scheduler.shutdown(true);
+            this.logger.debug("All scheduler jobs stopped.");
+        } catch (SchedulerException sex) {
+            this.logger.error("Failed to stop scheduler.", sex);
+        }
+
+        try {
+            this.httpclient.close();
+            this.logger.debug("HTTP client closed.");
+        } catch (IOException ioex) {
+            this.logger.error("Failed to close HTTP client.", ioex);
+        }
+
+        super.shutdown();
     }
 
     private void initialize() {

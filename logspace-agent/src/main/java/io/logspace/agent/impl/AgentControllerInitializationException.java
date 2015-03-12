@@ -11,6 +11,10 @@ public class AgentControllerInitializationException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    public AgentControllerInitializationException(String message) {
+        super(message);
+    }
+
     public AgentControllerInitializationException(String message, Throwable cause) {
         super(message, cause);
     }

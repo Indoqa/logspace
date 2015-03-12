@@ -6,7 +6,6 @@ import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.eventrequest.HqEventRequest;
 import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.HqOrders;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -50,10 +49,6 @@ public class ApplicationTest {
 
         @Override
         public void receiveEventRequest(HqEventRequest eventRequest) {
-        }
-
-        @Override
-        public void receiveHqOrder(HqOrders hqOrder) {
         }
 
         @Override
