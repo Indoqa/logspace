@@ -375,6 +375,9 @@
             <excludes combine.children="append">
               <exclude>**/logspace.io.txt</exclude>
             </excludes>
+            <mapping>
+              <txt>SCRIPT_STYLE</txt> 
+            </mapping>
           </configuration>
         </plugin>
         <plugin>
