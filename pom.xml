@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Logspace
-  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-  This program and the accompanying materials are made available under the terms of
-  the Eclipse Public License Version 1.0, which accompanies this distribution and
-  is available at http://www.eclipse.org/legal/epl-v10.html.
+
+    Logspace
+    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+    This program and the accompanying materials are made available under the terms of
+    the Eclipse Public License Version 1.0, which accompanies this distribution and
+    is available at http://www.eclipse.org/legal/epl-v10.html.
+
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -20,6 +22,7 @@
   <artifactId>logspace</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>Logspace</name>
+  <inceptionYear>2015</inceptionYear>
 
   <licenses>
     <license>
@@ -350,6 +353,55 @@
           <artifactId>apache-rat-plugin</artifactId>
           <version>0.11</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+              <manifestEntries>
+                <Implementation-Build>${project.version}</Implementation-Build>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>2.9</version>
+          <configuration>
+            <header>header.txt</header>
+            <excludes combine.children="append">
+              <exclude>**/logspace.io.txt</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.11</version>
+          <configuration>
+            <excludes>
+              <exclude>**/logspace.io.txt</exclude>
+              <exclude>**/dependency-reduced-pom.xml</exclude>
+            </excludes>
+            <licenses>
+              <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                <licenseFamilyCategory>EPL</licenseFamilyCategory>
+                <licenseFamilyName>Eclipse Public License - v 1.0</licenseFamilyName>
+                <patterns>
+                  <pattern>Eclipse Public License</pattern>
+                </patterns>
+              </license>
+            </licenses>
+            <licenseFamilies>
+              <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                <familyName>Eclipse Public License - v 1.0</familyName>
+              </licenseFamily>
+            </licenseFamilies>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -369,25 +421,14 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/logspace.io.txt</exclude>
-          </excludes>
-          <licenses>
-            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-              <licenseFamilyCategory>EPL</licenseFamilyCategory>
-              <licenseFamilyName>Eclipse Public License - v 1.0</licenseFamilyName>
-              <patterns>
-                <pattern>Eclipse Public License</pattern>
-              </patterns>
-            </license>
-          </licenses>
-          <licenseFamilies>
-            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-              <familyName>Eclipse Public License - v 1.0</familyName>
-            </licenseFamily>
-          </licenseFamilies>
-        </configuration>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

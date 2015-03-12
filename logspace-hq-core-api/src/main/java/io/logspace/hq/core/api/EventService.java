@@ -1,4 +1,4 @@
-/*
+/**
  * Logspace
  * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
