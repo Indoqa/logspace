@@ -15,6 +15,10 @@ import com.indoqa.spark.AbstractSparkApplication;
 
 public class LogspaceHq extends AbstractSparkApplication {
 
+    private static final String APPLICATION_NAME = "Logspace";
+    private static final String BASE_PACKAGE = "io.logspace";
+    private static final String LOGO_PATH = "/logspace.io.txt";
+
     public static void main(String[] args) {
         new LogspaceHq().invoke();
     }
@@ -26,12 +30,12 @@ public class LogspaceHq extends AbstractSparkApplication {
 
     @Override
     protected String getApplicationName() {
-        return "Logspace";
+        return APPLICATION_NAME;
     }
 
     @Override
     protected String getComponentScanBasePackage() {
-        return LogspaceHq.class.getPackage().getName();
+        return BASE_PACKAGE;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class LogspaceHq extends AbstractSparkApplication {
 
     private void printLogo() {
         try {
-            String asciiLogo = IOUtils.toString(LogspaceHq.class.getResourceAsStream("/logspace.io.txt"));
+            String asciiLogo = IOUtils.toString(LogspaceHq.class.getResourceAsStream(LOGO_PATH));
             if (asciiLogo == null) {
                 return;
             }

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import com.indoqa.commons.solr.server.factory.SolrServerFactory;
 
 @Configuration
-@PropertySource("classpath:/io/logspace/solr/logspace-hq-solr.properties")
+@PropertySource("classpath:/io/logspace/hq/solr/logspace-hq-solr.properties")
 public class SolrPluginConfiguration {
 
     @Value("${logspace.solr.base-url}")
