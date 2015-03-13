@@ -388,6 +388,7 @@
             <excludes>
               <exclude>**/logspace.io.txt</exclude>
               <exclude>**/dependency-reduced-pom.xml</exclude>
+              <exclude>**/.recommenders/**</exclude>
             </excludes>
             <licenses>
               <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
