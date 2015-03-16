@@ -13,7 +13,11 @@ import java.util.Collection;
 
 public interface AgentController {
 
-    void intialize();
+    boolean isAgentEnabled(String agentId);
+
+    void flush();
+
+    String getId();
 
     void register(Agent agent);
 
@@ -24,7 +28,5 @@ public interface AgentController {
     void shutdown();
 
     void unregister(Agent agent);
-
-    void flush();
 
 }

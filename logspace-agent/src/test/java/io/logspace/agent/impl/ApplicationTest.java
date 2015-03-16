@@ -7,11 +7,10 @@
  */
 package io.logspace.agent.impl;
 
-import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.eventrequest.HqEventRequest;
 import io.logspace.agent.api.order.AgentCapabilities;
 
 import org.junit.AfterClass;
@@ -45,21 +44,13 @@ public class ApplicationTest {
         }
     }
 
-    public static class TestAgent implements Agent {
+    public static class TestAgent extends AbstractAgent {
 
         private AgentController agentController = AgentControllerProvider.getAgentController();
 
         @Override
-        public AgentCapabilities provideCapabilities() {
+        public AgentCapabilities getCapabilities() {
             return null;
-        }
-
-        @Override
-        public void receiveEventRequest(HqEventRequest eventRequest) {
-        }
-
-        @Override
-        public void setAgentController(AgentController agentController) {
         }
 
         public void triggerEvent() {

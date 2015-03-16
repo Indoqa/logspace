@@ -7,15 +7,19 @@
  */
 package io.logspace.agent.api;
 
-import io.logspace.agent.api.eventrequest.HqEventRequest;
 import io.logspace.agent.api.order.AgentCapabilities;
+import io.logspace.agent.api.order.AgentOrder;
 
 public interface Agent {
 
-    AgentCapabilities provideCapabilities();
+    String getId();
 
-    void receiveEventRequest(HqEventRequest eventRequest);
+    AgentCapabilities getCapabilities();
 
-    void setAgentController(AgentController agentController);
+    void execute(AgentOrder agentOrder);
+
+    void setEnabled(boolean enabled);
+
+    boolean isEnabled();
 
 }

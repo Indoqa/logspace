@@ -10,14 +10,17 @@ package io.logspace.agent.impl;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractAgentController implements AgentController {
 
-    private final Set<Agent> agents = Collections.synchronizedSet(new HashSet<Agent>());
+    private final Map<String, Agent> agents = new ConcurrentHashMap<String, Agent>();
+
+    private String id;
 
     @Override
     public void flush() {
@@ -25,18 +28,29 @@ public abstract class AbstractAgentController implements AgentController {
     }
 
     @Override
-    public void intialize() {
-        // default does nothing
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean isAgentEnabled(String agentId) {
+        return true;
     }
 
     @Override
     public final void register(Agent agent) {
-        this.agents.add(agent);
+        this.agents.put(agent.getId(), agent);
+
+        this.onAgentRegistered(agent);
     }
 
     @Override
     public final void send(Event event) {
         this.send(Collections.singleton(event));
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -46,6 +60,36 @@ public abstract class AbstractAgentController implements AgentController {
 
     @Override
     public final void unregister(Agent agent) {
-        this.agents.remove(agent);
+        this.agents.remove(agent.getId());
+
+        this.onAgentUnregistered(agent);
+    }
+
+    protected Agent getAgent(String agentId) {
+        return this.agents.get(agentId);
+    }
+
+    protected Iterable<Agent> getAgents() {
+        return this.agents.values();
+    }
+
+    protected AgentControllerCapabilities getCapabilities() {
+        AgentControllerCapabilities result = new AgentControllerCapabilities();
+
+        result.setId(this.getId());
+
+        for (Agent eachAgent : this.getAgents()) {
+            result.add(eachAgent.getCapabilities());
+        }
+
+        return result;
+    }
+
+    protected void onAgentRegistered(Agent agent) {
+        // default does nothing
+    }
+
+    protected void onAgentUnregistered(Agent agent) {
+        // default does nothing
     }
 }

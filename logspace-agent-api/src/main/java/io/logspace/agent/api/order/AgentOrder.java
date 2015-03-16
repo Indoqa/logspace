@@ -7,35 +7,35 @@
  */
 package io.logspace.agent.api.order;
 
-public class AgentCapabilities {
+public class AgentOrder {
 
     private String id;
 
-    private String type;
+    private TriggerType triggerType;
 
-    private TriggerType[] supportedTriggerTypes;
+    private String triggerParameter;
 
     public String getId() {
         return this.id;
     }
 
-    public TriggerType[] getSupportedTriggerTypes() {
-        return this.supportedTriggerTypes;
+    public String getTriggerParameter() {
+        return this.triggerParameter;
     }
 
-    public String getType() {
-        return this.type;
+    public TriggerType getTriggerType() {
+        return this.triggerType;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setSupportedTriggerTypes(TriggerType[] supportedTriggerTypes) {
-        this.supportedTriggerTypes = supportedTriggerTypes;
+    public void setTriggerParameter(String triggerParameter) {
+        this.triggerParameter = triggerParameter;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTriggerType(TriggerType triggerType) {
+        this.triggerType = triggerType;
     }
 }

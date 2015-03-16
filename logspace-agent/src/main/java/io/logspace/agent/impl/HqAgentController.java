@@ -11,22 +11,33 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
+import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
 import io.logspace.agent.api.json.EventJsonSerializer;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.hq.AgentControllerOrderResponseHandler;
+import io.logspace.agent.hq.UploadCapabilitiesResponseHandler;
+import io.logspace.agent.hq.UploadEventsResponseHandler;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -34,19 +45,36 @@ import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HqAgentController extends AbstractAgentController {
 
-    public static final String BASE_URL_PARAMETER = "base-url";
+    private static final String BASE_URL_PARAMETER = "base-url";
+
+    private static final String HQ_COMMUNICATION_INTERVAL_PARAMETER = "hq-communication-interval";
+    private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
+
+    private static final String KEY_AGENT_ID = "agent-id";
+    private static final String LOGSPACE_SCHEDULER_GROUP = "logspace";
+    private static final String AGENT_SCHEDULER_GROUP = "logspace-agents";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private CloseableHttpClient httpclient;
+    private CloseableHttpClient httpClient;
+
     private String baseUrl;
+
     private Scheduler scheduler;
+
+    private int hqCommunicationInterval;
+
+    private boolean modifiedAgents;
+
+    private final Map<String, AgentOrder> agentOrders = new HashMap<String, AgentOrder>();
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
         this.baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
@@ -55,10 +83,13 @@ public class HqAgentController extends AbstractAgentController {
             throw new AgentControllerInitializationException("The base URL must not be empty!");
         }
 
+        this.hqCommunicationInterval = Integer.parseInt(agentControllerDescription.getParameterValue(
+                HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
+
         this.initialize();
     }
 
-    public static HqAgentController withBaseUrl(String baseUrl) {
+    public static AbstractAgentController withBaseUrl(String baseUrl) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
 
@@ -67,6 +98,21 @@ public class HqAgentController extends AbstractAgentController {
 
     private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
         return new StringEntity(EventJsonSerializer.toJson(event), APPLICATION_JSON);
+    }
+
+    private static StringEntity toJSonEntity(AgentControllerCapabilities capabilities) throws IOException {
+        return new StringEntity(AgentControllerCapabilitiesJsonSerializer.toJson(capabilities), APPLICATION_JSON);
+    }
+
+    @Override
+    public boolean isAgentEnabled(String agentId) {
+        AgentOrder agentOrder = this.agentOrders.get(agentId);
+        if (agentOrder == null) {
+            return false;
+        }
+
+        TriggerType agentTriggerType = agentOrder.getTriggerType();
+        return agentTriggerType == TriggerType.Event || agentTriggerType == TriggerType.Cron;
     }
 
     @Override
@@ -90,13 +136,92 @@ public class HqAgentController extends AbstractAgentController {
         }
 
         try {
-            this.httpclient.close();
+            this.httpClient.close();
             this.logger.debug("HTTP client closed.");
         } catch (IOException ioex) {
             this.logger.error("Failed to close HTTP client.", ioex);
         }
 
         super.shutdown();
+    }
+
+    protected void callHQ() {
+        try {
+            this.uploadCapabilities();
+        } catch (IOException ioex) {
+            this.logger.error("Failed to communicate with the HQ.", ioex);
+        }
+
+        try {
+            this.downloadOrders();
+        } catch (IOException ioex) {
+            this.logger.error("Failed to download order", ioex);
+        } catch (SchedulerException sex) {
+            this.logger.error("Failed to apply order.", sex);
+        }
+    }
+
+    protected void executeAgent(String agentId) {
+        AgentOrder agentOrder = this.agentOrders.get(agentId);
+        if (agentOrder == null) {
+            this.logger.error("Could not execute agent with ID '" + agentId + "', because there is no order for it.");
+            return;
+        }
+
+        Agent agent = this.getAgent(agentId);
+        if (agent == null) {
+            this.logger.error("Could not execute agent with ID '" + agentId + "', because it does not exist.");
+            return;
+        }
+
+        agent.execute(agentOrder);
+    }
+
+    @Override
+    protected void onAgentRegistered(Agent agent) {
+        super.onAgentRegistered(agent);
+
+        this.modifiedAgents = true;
+    }
+
+    @Override
+    protected void onAgentUnregistered(Agent agent) {
+        super.onAgentUnregistered(agent);
+
+        this.modifiedAgents = true;
+    }
+
+    private void applyOrder(AgentControllerOrder agentControllerOrder) throws SchedulerException {
+        Set<TriggerKey> triggerKeys = this.scheduler.getTriggerKeys(GroupMatcher.<TriggerKey> groupEquals(AGENT_SCHEDULER_GROUP));
+        for (TriggerKey eachTriggerKey : triggerKeys) {
+            this.scheduler.unscheduleJob(eachTriggerKey);
+        }
+        this.agentOrders.clear();
+
+        for (AgentOrder eachAgentOrder : agentControllerOrder.getAgentOrders()) {
+            this.agentOrders.put(eachAgentOrder.getId(), eachAgentOrder);
+
+            if (eachAgentOrder.getTriggerType() == TriggerType.Cron) {
+                JobDetail job = newJob(AgentExecutionJob.class).withIdentity(eachAgentOrder.getId(), AGENT_SCHEDULER_GROUP)
+                        .usingJobData(KEY_AGENT_ID, eachAgentOrder.getId()).build();
+
+                Trigger trigger = newTrigger().withIdentity(eachAgentOrder.getId(), AGENT_SCHEDULER_GROUP).startNow()
+                        .withSchedule(CronScheduleBuilder.cronSchedule(eachAgentOrder.getTriggerParameter())).build();
+
+                this.scheduler.scheduleJob(job, trigger);
+            }
+        }
+    }
+
+    private void downloadOrders() throws IOException, SchedulerException {
+        HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.getId());
+
+        AgentControllerOrder agentControllerOrder = this.httpClient.execute(httpGet, new AgentControllerOrderResponseHandler());
+        if (agentControllerOrder == null) {
+            return;
+        }
+
+        this.applyOrder(agentControllerOrder);
     }
 
     private void initialize() {
@@ -106,10 +231,11 @@ public class HqAgentController extends AbstractAgentController {
     }
 
     private void initializeHqCommunication() {
-        JobDetail job = newJob(HqCommunicationJob.class).withIdentity("hq-communication", "logspace").build();
-        Trigger trigger = newTrigger().withIdentity("hq-communication-trigger", "logspace").startNow()
-                .withSchedule(simpleSchedule().withIntervalInSeconds(5).repeatForever()).build();
         try {
+            JobDetail job = newJob(HqCommunicationJob.class).withIdentity("hq-communication", LOGSPACE_SCHEDULER_GROUP).build();
+            Trigger trigger = newTrigger().withIdentity("hq-communication-trigger", LOGSPACE_SCHEDULER_GROUP).startNow()
+                    .withSchedule(simpleSchedule().withIntervalInSeconds(this.hqCommunicationInterval).repeatForever()).build();
+
             this.scheduler.scheduleJob(job, trigger);
         } catch (SchedulerException e) {
             throw new AgentControllerInitializationException("Error while scheduling a Quartz job.", e);
@@ -117,7 +243,7 @@ public class HqAgentController extends AbstractAgentController {
     }
 
     private void initializeHttpClient() {
-        this.httpclient = HttpClients.createDefault();
+        this.httpClient = HttpClients.createDefault();
     }
 
     private void initializeQuartzScheduler() {
@@ -152,23 +278,37 @@ public class HqAgentController extends AbstractAgentController {
         HttpPut httpPut = new HttpPut(this.baseUrl + "/events/");
         httpPut.setEntity(toJsonEntity(event));
 
-        ResponseHandler<Void> responseHandler = new ResponseHandler<Void>() {
-
-            @Override
-            public Void handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
-                return null;
-            }
-
-        };
-
-        this.httpclient.execute(httpPut, responseHandler);
+        this.httpClient.execute(httpPut, new UploadEventsResponseHandler());
     }
 
-    public static class HqCommunicationJob implements Job {
+    private void uploadCapabilities() throws IOException {
+        if (!this.modifiedAgents) {
+            return;
+        }
+
+        AgentControllerCapabilities capabilities = this.getCapabilities();
+        this.modifiedAgents = false;
+
+        HttpPut httpPut = new HttpPut(this.baseUrl + "/capabilities/" + this.getId());
+        httpPut.setEntity(toJSonEntity(capabilities));
+
+        this.httpClient.execute(httpPut, new UploadCapabilitiesResponseHandler());
+    }
+
+    public class AgentExecutionJob implements Job {
 
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
-            System.out.println("hello!!! - " + new Date());
+            String agentId = context.getJobDetail().getJobDataMap().getString(KEY_AGENT_ID);
+            HqAgentController.this.executeAgent(agentId);
+        }
+    }
+
+    public class HqCommunicationJob implements Job {
+
+        @Override
+        public void execute(JobExecutionContext context) throws JobExecutionException {
+            HqAgentController.this.callHQ();
         }
     }
 }

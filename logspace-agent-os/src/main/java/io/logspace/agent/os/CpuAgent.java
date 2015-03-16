@@ -7,30 +7,19 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.eventrequest.HqEventRequest;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.os.api.CpuEventBuilder;
 
-public class CpuAgent implements Agent {
+public class CpuAgent extends AbstractAgent {
 
     private AgentController agentController;
 
     @Override
-    public AgentCapabilities provideCapabilities() {
+    public AgentCapabilities getCapabilities() {
         return null;
-    }
-
-    @Override
-    public void receiveEventRequest(HqEventRequest eventRequest) {
-        // nothing to do
-    }
-
-    @Override
-    public void setAgentController(AgentController passiveController) {
-        this.agentController = passiveController;
     }
 
     public void someMethodSendingAnEvent() {

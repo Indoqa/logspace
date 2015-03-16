@@ -15,12 +15,10 @@ import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -76,19 +74,6 @@ public final class AgentControllerDescriptionJsonSerializer {
         validateTokenType(parser.nextToken(), null);
 
         return result;
-    }
-
-    public static void main(String[] args) throws IOException {
-        AgentControllerDescription description = new AgentControllerDescription();
-        description.setClassName("io.logspace.agent.impl.TestAgentController");
-        description
-                .setParameters(Arrays.asList(Parameter.create("parameter-1", "value-1"), Parameter.create("parameter-2", "value-2")));
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        toJson(description, System.out);
-
-        // ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        // AgentControllerDescription description2 = fromJson(bais);
     }
 
     public static void toJson(AgentControllerDescription description, OutputStream outputStream) throws IOException {

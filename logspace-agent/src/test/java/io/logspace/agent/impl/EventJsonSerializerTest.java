@@ -23,7 +23,7 @@ import org.junit.Test;
 public class EventJsonSerializerTest {
 
     public void agentControllerQuartz() {
-        HqAgentController controller = HqAgentController.withBaseUrl("http://localhost:8080/test");
+        AbstractAgentController controller = HqAgentController.withBaseUrl("http://localhost:8080/test");
 
         try {
             Thread.sleep(110000);
