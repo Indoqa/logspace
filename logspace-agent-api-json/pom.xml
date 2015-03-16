@@ -20,7 +20,7 @@
 
   <artifactId>logspace-agent-api-json</artifactId>
 
-  <name>Logspace Agent</name>
+  <name>Logspace Agent JSON API</name>
 
   <properties>
     <!-- The agent should be usable in environments running on older JVMs. -->
