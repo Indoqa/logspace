@@ -12,9 +12,11 @@ import io.logspace.agent.api.order.AgentOrder;
 
 public interface Agent {
 
+    AgentCapabilities getCapabilities();
+
     String getId();
 
-    AgentCapabilities getCapabilities();
+    String getType();
 
     void execute(AgentOrder agentOrder);
 

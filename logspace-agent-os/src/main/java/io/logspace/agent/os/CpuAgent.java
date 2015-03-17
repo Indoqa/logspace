@@ -10,16 +10,17 @@ package io.logspace.agent.os;
 import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.order.AgentCapabilities;
+import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.os.api.CpuEventBuilder;
 
 public class CpuAgent extends AbstractAgent {
 
     private AgentController agentController;
 
-    @Override
-    public AgentCapabilities getCapabilities() {
-        return null;
+    public CpuAgent() {
+        super();
+
+        this.updateCapabilities(TriggerType.Off, TriggerType.Cron);
     }
 
     public void someMethodSendingAnEvent() {

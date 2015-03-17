@@ -11,7 +11,6 @@ import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.AgentCapabilities;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -47,11 +46,6 @@ public class ApplicationTest {
     public static class TestAgent extends AbstractAgent {
 
         private AgentController agentController = AgentControllerProvider.getAgentController();
-
-        @Override
-        public AgentCapabilities getCapabilities() {
-            return null;
-        }
 
         public void triggerEvent() {
             this.agentController.send(new ImmutableEvent(Optional.of("TEST"), Optional.<String> empty(), Optional.<String> empty()));

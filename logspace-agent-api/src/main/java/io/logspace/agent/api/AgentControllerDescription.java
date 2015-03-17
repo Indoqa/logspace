@@ -7,6 +7,7 @@
  */
 package io.logspace.agent.api;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +110,11 @@ public class AgentControllerDescription {
 
         public void setValue(String value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return MessageFormat.format("{0} = {1}", this.name, this.value);
         }
     }
 }

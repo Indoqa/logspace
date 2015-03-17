@@ -37,15 +37,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.quartz.CronScheduleBuilder;
-import org.quartz.Job;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -59,6 +51,7 @@ public class HqAgentController extends AbstractAgentController {
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
 
     private static final String KEY_AGENT_ID = "agent-id";
+    private static final String KEY_AGENT_CONTROLLER = "agent-controller";
     private static final String LOGSPACE_SCHEDULER_GROUP = "logspace";
     private static final String AGENT_SCHEDULER_GROUP = "logspace-agents";
 
@@ -89,11 +82,11 @@ public class HqAgentController extends AbstractAgentController {
         this.initialize();
     }
 
-    public static AbstractAgentController withBaseUrl(String baseUrl) {
+    public static void install(String baseUrl) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
 
-        return new HqAgentController(description);
+        AgentControllerProvider.setDescription(description);
     }
 
     private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
@@ -202,8 +195,12 @@ public class HqAgentController extends AbstractAgentController {
             this.agentOrders.put(eachAgentOrder.getId(), eachAgentOrder);
 
             if (eachAgentOrder.getTriggerType() == TriggerType.Cron) {
+                JobDataMap jobDataMap = new JobDataMap();
+                jobDataMap.put(KEY_AGENT_CONTROLLER, this);
+                jobDataMap.put(KEY_AGENT_ID, eachAgentOrder.getId());
+
                 JobDetail job = newJob(AgentExecutionJob.class).withIdentity(eachAgentOrder.getId(), AGENT_SCHEDULER_GROUP)
-                        .usingJobData(KEY_AGENT_ID, eachAgentOrder.getId()).build();
+                        .usingJobData(jobDataMap).build();
 
                 Trigger trigger = newTrigger().withIdentity(eachAgentOrder.getId(), AGENT_SCHEDULER_GROUP).startNow()
                         .withSchedule(CronScheduleBuilder.cronSchedule(eachAgentOrder.getTriggerParameter())).build();
@@ -232,7 +229,11 @@ public class HqAgentController extends AbstractAgentController {
 
     private void initializeHqCommunication() {
         try {
-            JobDetail job = newJob(HqCommunicationJob.class).withIdentity("hq-communication", LOGSPACE_SCHEDULER_GROUP).build();
+            JobDataMap jobDataMap = new JobDataMap();
+            jobDataMap.put(KEY_AGENT_CONTROLLER, this);
+            JobDetail job = newJob(HqCommunicationJob.class).withIdentity("hq-communication", LOGSPACE_SCHEDULER_GROUP)
+                    .usingJobData(jobDataMap).build();
+
             Trigger trigger = newTrigger().withIdentity("hq-communication-trigger", LOGSPACE_SCHEDULER_GROUP).startNow()
                     .withSchedule(simpleSchedule().withIntervalInSeconds(this.hqCommunicationInterval).repeatForever()).build();
 
@@ -295,20 +296,28 @@ public class HqAgentController extends AbstractAgentController {
         this.httpClient.execute(httpPut, new UploadCapabilitiesResponseHandler());
     }
 
-    public class AgentExecutionJob implements Job {
+    public static class AgentExecutionJob implements Job {
 
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
-            String agentId = context.getJobDetail().getJobDataMap().getString(KEY_AGENT_ID);
-            HqAgentController.this.executeAgent(agentId);
+            JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
+
+            HqAgentController agentController = (HqAgentController) jobDataMap.get(KEY_AGENT_CONTROLLER);
+            String agentId = jobDataMap.getString(KEY_AGENT_ID);
+
+            agentController.executeAgent(agentId);
         }
     }
 
-    public class HqCommunicationJob implements Job {
+    public static class HqCommunicationJob implements Job {
 
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
-            HqAgentController.this.callHQ();
+            JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
+
+            HqAgentController agentController = (HqAgentController) jobDataMap.get(KEY_AGENT_CONTROLLER);
+
+            agentController.callHQ();
         }
     }
 }

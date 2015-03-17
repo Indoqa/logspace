@@ -17,6 +17,10 @@ public class AgentControllerOrder {
     private int commitMaxSeconds;
     private int commitMaxCount;
 
+    public void add(AgentOrder agentOrder) {
+        this.agentOrders.add(agentOrder);
+    }
+
     public List<AgentOrder> getAgentOrders() {
         return this.agentOrders;
     }

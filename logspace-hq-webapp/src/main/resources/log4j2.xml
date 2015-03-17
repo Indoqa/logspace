@@ -28,6 +28,7 @@
         <SizeBasedTriggeringPolicy size="10 MB" />
       </Policies>
     </RollingFile>
+    
     <!-- Only log to console if the log-path has not been overwritten -->
     <Routing name="ConsoleRouting">
       <Routes pattern="$${sys:log-path}">
@@ -41,6 +42,10 @@
     <Logger name="com.indoqa.spark.AbstractSparkApplication_INIT" additivity="false">
       <AppenderRef ref="ConsoleInit" />
     </Logger>
+    <Logger name="io.logspace" additivity="false" level="DEBUG">
+      <AppenderRef ref="ConsoleRouting" />
+    </Logger>
+    
     <Root level="${sys:log-level}">
       <AppenderRef ref="ConsoleRouting" />
       <AppenderRef ref="File" />

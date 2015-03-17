@@ -7,12 +7,18 @@
  */
 package io.logspace.agent.api;
 
+import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
 
 public abstract class AbstractAgent implements Agent {
 
     private String id;
+    private String type;
+
     private boolean enabled;
+
+    private AgentCapabilities capabilities;
 
     @Override
     public void execute(AgentOrder agentOrder) {
@@ -20,8 +26,18 @@ public abstract class AbstractAgent implements Agent {
     }
 
     @Override
+    public final AgentCapabilities getCapabilities() {
+        return this.capabilities;
+    }
+
+    @Override
     public final String getId() {
         return this.id;
+    }
+
+    @Override
+    public final String getType() {
+        return this.type;
     }
 
     @Override
@@ -36,5 +52,19 @@ public abstract class AbstractAgent implements Agent {
 
     protected final void setId(String id) {
         this.id = id;
+    }
+
+    protected final void setType(String type) {
+        this.type = type;
+    }
+
+    protected final void updateCapabilities(TriggerType... triggerTypes) {
+        AgentCapabilities agentCapabilities = new AgentCapabilities();
+
+        agentCapabilities.setId(this.getId());
+        agentCapabilities.setType(this.getType());
+        agentCapabilities.setSupportedTriggerTypes(triggerTypes);
+
+        this.capabilities = agentCapabilities;
     }
 }

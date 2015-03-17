@@ -7,6 +7,7 @@
  */
 package io.logspace.agent.impl;
 
+import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.DefaultEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -23,7 +24,8 @@ import org.junit.Test;
 public class EventJsonSerializerTest {
 
     public void agentControllerQuartz() {
-        AbstractAgentController controller = HqAgentController.withBaseUrl("http://localhost:8080/test");
+        HqAgentController.install("http://localhost:8080/test");
+        AgentController controller = AgentControllerProvider.getAgentController();
 
         try {
             Thread.sleep(110000);

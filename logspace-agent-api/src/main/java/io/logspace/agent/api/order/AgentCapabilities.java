@@ -31,7 +31,7 @@ public class AgentCapabilities {
         this.id = id;
     }
 
-    public void setSupportedTriggerTypes(TriggerType[] supportedTriggerTypes) {
+    public void setSupportedTriggerTypes(TriggerType... supportedTriggerTypes) {
         this.supportedTriggerTypes = supportedTriggerTypes;
     }
 

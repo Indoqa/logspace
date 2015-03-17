@@ -27,12 +27,12 @@ import com.fasterxml.jackson.core.JsonToken;
 
 public final class AgentControllerOrdersJsonSerializer {
 
-    private static final String FIELD_COMMIT_MAX_COUNT = "commit-max-count";
-    private static final String FIELD_COMMIT_MAX_SECONDS = "commit-max-seconds";
-    private static final String FIELD_AGENT_ORDERS = "agent-orders";
+    private static final String FIELD_COMMIT_MAX_COUNT = "commitMaxCount";
+    private static final String FIELD_COMMIT_MAX_SECONDS = "commitMaxSeconds";
+    private static final String FIELD_AGENT_ORDERS = "agentOrders";
     private static final String FIELD_ID = "id";
-    private static final String FIELD_TRIGGER_TYPE = "trigger-type";
-    private static final String FIELD_TRIGGER_PARAMETER = "trigger-parameter";
+    private static final String FIELD_TRIGGER_TYPE = "triggerType";
+    private static final String FIELD_TRIGGER_PARAMETER = "triggerParameter";
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
@@ -46,9 +46,6 @@ public final class AgentControllerOrdersJsonSerializer {
         JsonParser parser = JSON_FACTORY.createParser(inputStream);
 
         validateTokenType(parser.nextToken(), START_OBJECT);
-
-        result.setCommitMaxCount(getIntFieldValue(parser, FIELD_COMMIT_MAX_COUNT));
-        result.setCommitMaxSeconds(getIntFieldValue(parser, FIELD_COMMIT_MAX_SECONDS));
 
         JsonToken token = parser.nextToken();
         if (token == FIELD_NAME) {
@@ -69,6 +66,9 @@ public final class AgentControllerOrdersJsonSerializer {
                 validateTokenType(parser.nextToken(), END_OBJECT);
             }
         }
+
+        result.setCommitMaxSeconds(getIntFieldValue(parser, FIELD_COMMIT_MAX_SECONDS));
+        result.setCommitMaxCount(getIntFieldValue(parser, FIELD_COMMIT_MAX_COUNT));
 
         validateTokenType(parser.nextToken(), END_OBJECT);
         validateTokenType(parser.nextToken(), null);
