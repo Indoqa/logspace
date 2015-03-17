@@ -18,13 +18,14 @@ import io.logspace.agent.api.json.EventJsonSerializer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.junit.Test;
 
 public class EventJsonSerializerTest {
 
     public void agentControllerQuartz() {
-        HqAgentController.install("http://localhost:8080/test");
+        HqAgentController.install(UUID.randomUUID().toString(), "http://localhost:8080/test");
         AgentController controller = AgentControllerProvider.getAgentController();
 
         try {

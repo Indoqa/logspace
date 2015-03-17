@@ -15,6 +15,8 @@ public class AgentControllerDescription {
 
     private String className;
 
+    private String id;
+
     private List<Parameter> parameters = new ArrayList<Parameter>();
 
     public static AgentControllerDescription withClass(Class<? extends AgentController> agentControllerClass) {
@@ -31,6 +33,10 @@ public class AgentControllerDescription {
 
     public String getClassName() {
         return this.className;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public Parameter getParameter(String name) {
@@ -76,6 +82,10 @@ public class AgentControllerDescription {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setParameters(List<Parameter> parameters) {

@@ -7,6 +7,7 @@
  */
 package io.logspace.agent.api;
 
+import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
@@ -19,6 +20,7 @@ public abstract class AbstractAgent implements Agent {
     private boolean enabled;
 
     private AgentCapabilities capabilities;
+    private AgentController agentController;
 
     @Override
     public void execute(AgentOrder agentOrder) {
@@ -48,6 +50,26 @@ public abstract class AbstractAgent implements Agent {
     @Override
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    protected AgentController getAgentController() {
+        return this.agentController;
+    }
+
+    protected void sendEvent(Event event) {
+        this.agentController.send(event);
+    }
+
+    protected void setAgentController(AgentController agentController) {
+        if (this.agentController != null) {
+            this.agentController.unregister(this);
+        }
+
+        this.agentController = agentController;
+
+        if (this.agentController != null) {
+            this.agentController.register(this);
+        }
     }
 
     protected final void setId(String id) {

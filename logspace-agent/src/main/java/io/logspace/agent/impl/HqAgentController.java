@@ -7,7 +7,6 @@
  */
 package io.logspace.agent.impl;
 
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -15,15 +14,11 @@ import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
-import io.logspace.agent.api.json.EventJsonSerializer;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.hq.AgentControllerOrderResponseHandler;
-import io.logspace.agent.hq.UploadCapabilitiesResponseHandler;
-import io.logspace.agent.hq.UploadEventsResponseHandler;
+import io.logspace.agent.hq.HqClient;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -31,12 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -57,8 +46,6 @@ public class HqAgentController extends AbstractAgentController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private CloseableHttpClient httpClient;
-
     private String baseUrl;
 
     private Scheduler scheduler;
@@ -68,6 +55,8 @@ public class HqAgentController extends AbstractAgentController {
     private boolean modifiedAgents;
 
     private final Map<String, AgentOrder> agentOrders = new HashMap<String, AgentOrder>();
+
+    private HqClient hqClient;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
         this.baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
@@ -82,19 +71,12 @@ public class HqAgentController extends AbstractAgentController {
         this.initialize();
     }
 
-    public static void install(String baseUrl) {
+    public static void install(String id, String baseUrl) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
+        description.setId(id);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
 
         AgentControllerProvider.setDescription(description);
-    }
-
-    private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {
-        return new StringEntity(EventJsonSerializer.toJson(event), APPLICATION_JSON);
-    }
-
-    private static StringEntity toJSonEntity(AgentControllerCapabilities capabilities) throws IOException {
-        return new StringEntity(AgentControllerCapabilitiesJsonSerializer.toJson(capabilities), APPLICATION_JSON);
     }
 
     @Override
@@ -129,8 +111,8 @@ public class HqAgentController extends AbstractAgentController {
         }
 
         try {
-            this.httpClient.close();
-            this.logger.debug("HTTP client closed.");
+            this.hqClient.close();
+            this.logger.debug("HQ client closed.");
         } catch (IOException ioex) {
             this.logger.error("Failed to close HTTP client.", ioex);
         }
@@ -211,9 +193,7 @@ public class HqAgentController extends AbstractAgentController {
     }
 
     private void downloadOrders() throws IOException, SchedulerException {
-        HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.getId());
-
-        AgentControllerOrder agentControllerOrder = this.httpClient.execute(httpGet, new AgentControllerOrderResponseHandler());
+        AgentControllerOrder agentControllerOrder = this.hqClient.downloadOrder();
         if (agentControllerOrder == null) {
             return;
         }
@@ -222,9 +202,13 @@ public class HqAgentController extends AbstractAgentController {
     }
 
     private void initialize() {
-        this.initializeHttpClient();
+        this.initializeHqClient();
         this.initializeQuartzScheduler();
         this.initializeHqCommunication();
+    }
+
+    private void initializeHqClient() {
+        this.hqClient = new HqClient(this.baseUrl, this.getId());
     }
 
     private void initializeHqCommunication() {
@@ -241,10 +225,6 @@ public class HqAgentController extends AbstractAgentController {
         } catch (SchedulerException e) {
             throw new AgentControllerInitializationException("Error while scheduling a Quartz job.", e);
         }
-    }
-
-    private void initializeHttpClient() {
-        this.httpClient = HttpClients.createDefault();
     }
 
     private void initializeQuartzScheduler() {
@@ -275,11 +255,8 @@ public class HqAgentController extends AbstractAgentController {
         return true;
     }
 
-    private void sendEvents(Collection<Event> event) throws IOException, ClientProtocolException {
-        HttpPut httpPut = new HttpPut(this.baseUrl + "/events/");
-        httpPut.setEntity(toJsonEntity(event));
-
-        this.httpClient.execute(httpPut, new UploadEventsResponseHandler());
+    private void sendEvents(Collection<Event> events) throws IOException {
+        this.hqClient.uploadEvents(events);
     }
 
     private void uploadCapabilities() throws IOException {
@@ -290,10 +267,7 @@ public class HqAgentController extends AbstractAgentController {
         AgentControllerCapabilities capabilities = this.getCapabilities();
         this.modifiedAgents = false;
 
-        HttpPut httpPut = new HttpPut(this.baseUrl + "/capabilities/" + this.getId());
-        httpPut.setEntity(toJSonEntity(capabilities));
-
-        this.httpClient.execute(httpPut, new UploadCapabilitiesResponseHandler());
+        this.hqClient.uploadCapabilities(capabilities);
     }
 
     public static class AgentExecutionJob implements Job {

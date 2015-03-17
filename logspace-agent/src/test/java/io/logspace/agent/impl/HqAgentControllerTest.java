@@ -8,7 +8,12 @@
 package io.logspace.agent.impl;
 
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.event.DefaultEventBuilder;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
+
+import java.util.UUID;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -19,7 +24,7 @@ public class HqAgentControllerTest {
 
     @BeforeClass
     public static void beforeClass() {
-        HqAgentController.install("http://localhost:4567");
+        HqAgentController.install(UUID.randomUUID().toString(), "http://localhost:4567");
     }
 
     @Test
@@ -46,7 +51,14 @@ public class HqAgentControllerTest {
             this.setType("TEST-AGENT");
             this.updateCapabilities(TriggerType.Off, TriggerType.Cron);
 
-            AgentControllerProvider.getAgentController().register(this);
+            this.setAgentController(AgentControllerProvider.getAgentController());
+        }
+
+        @Override
+        public void execute(AgentOrder agentOrder) {
+            System.out.println("Creating event");
+            Event event = new DefaultEventBuilder().setGlobalEventId(UUID.randomUUID().toString()).toEvent();
+            this.sendEvent(event);
         }
     }
 }
