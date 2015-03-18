@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  * A Java 7 implementation of Optional that can be replaced by the Java 8 equivalent.
- * 
+ *
  * @see http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html
  */
 public class Optional<T> {
@@ -80,6 +80,11 @@ public class Optional<T> {
             return other;
         }
         return this.value;
+    }
+
+    @Override
+    public String toString() {
+        return "[Optional of '" + this.value + "']";
     }
 
 }

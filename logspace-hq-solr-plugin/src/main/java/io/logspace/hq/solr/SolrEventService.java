@@ -8,11 +8,12 @@
 package io.logspace.hq.solr;
 
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
 import io.logspace.hq.core.api.EventService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,18 +33,38 @@ public class SolrEventService implements EventService {
     private SolrServer solrServer;
 
     @Override
-    public void store(Collection<Event> events) {
-        SolrInputDocument doc = new SolrInputDocument();
-        String id = UUID.randomUUID().toString();
-        doc.addField("id", id);
-        doc.addField("name", "name: " + id);
-        doc.addField("text", "text: " + id);
+    public void store(Collection<? extends Event> events) {
+        if (events == null || events.isEmpty()) {
+            return;
+        }
+
+        this.logger.info("Storing {} event(s).", events.size());
+
+        Collection<SolrInputDocument> inputDocuments = new ArrayList<SolrInputDocument>();
+
+        for (Event eachEvent : events) {
+            SolrInputDocument document = new SolrInputDocument();
+
+            document.addField("id", eachEvent.getId());
+            document.addField("type", eachEvent.getType().orElse(null));
+            document.addField("timestamp", eachEvent.getTimestamp());
+            document.addField("parent_id", eachEvent.getParentEventId().orElse(null));
+            document.addField("global_id", eachEvent.getGlobalEventId().orElse(null));
+
+            if (eachEvent.hasProperties()) {
+                for (EventProperty eachProperty : eachEvent.getProperties()) {
+                    document.addField("property_" + eachEvent.getId(), eachProperty.getValue());
+                }
+            }
+
+            inputDocuments.add(document);
+        }
+
         try {
-            this.solrServer.add(doc);
+            this.solrServer.add(inputDocuments);
             this.solrServer.commit();
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
-        this.logger.info("SolrServer=" + this.solrServer);
     }
 }

@@ -13,6 +13,6 @@ import java.util.Collection;
 
 public interface EventService {
 
-    void store(Collection<Event> events);
+    void store(Collection<? extends Event> events);
 
 }

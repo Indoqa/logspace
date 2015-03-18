@@ -9,13 +9,6 @@
 
 -->
 <schema name="example" version="1.5">
-  <field name="_version_" type="long" indexed="true" stored="true" />
-  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-  <field name="name" type="string" indexed="true" stored="true" />
-  <field name="text" type="text_general" indexed="true" stored="true" />
-
-  <uniqueKey>id</uniqueKey>
-
   <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
   <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" />
   <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
@@ -30,7 +23,7 @@
   <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0" />
   <fieldtype name="binary" class="solr.BinaryField" />
   <fieldType name="random" class="solr.RandomSortField" indexed="true" />
-  
+
   <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory" />
@@ -43,4 +36,16 @@
       <filter class="solr.LowerCaseFilterFactory" />
     </analyzer>
   </fieldType>
+
+  <field name="_version_" type="long" indexed="true" stored="true" />
+  
+  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="type" type="string" indexed="true" stored="true" multiValued="false" />
+  <field name="timestamp" type="date" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
+  <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
+  
+  <dynamicField name="property_*" type="string" indexed="true" stored="true" multiValued="true" />
+  
+  <uniqueKey>id</uniqueKey>
 </schema>

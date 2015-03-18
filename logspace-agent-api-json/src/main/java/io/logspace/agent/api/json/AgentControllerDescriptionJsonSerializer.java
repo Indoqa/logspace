@@ -103,18 +103,20 @@ public final class AgentControllerDescriptionJsonSerializer {
         generator.close();
     }
 
-    protected static Parameter readParameter(JsonParser parser) throws IOException {
-        Parameter parameter = new Parameter();
-        parameter.setName(getFieldValue(parser, FIELD_PARAMETER_NAME));
-        parameter.setValue(getFieldValue(parser, FIELD_PARAMETER_VALUE));
-        return parameter;
-    }
-
     private static String getFieldValue(JsonParser parser, String fieldName) throws IOException {
         validateTokenType(parser.nextToken(), FIELD_NAME);
         validateFieldName(parser.getCurrentName(), fieldName);
 
         return parser.nextTextValue();
+    }
+
+    private static Parameter readParameter(JsonParser parser) throws IOException {
+        Parameter parameter = new Parameter();
+
+        parameter.setName(getFieldValue(parser, FIELD_PARAMETER_NAME));
+        parameter.setValue(getFieldValue(parser, FIELD_PARAMETER_VALUE));
+
+        return parameter;
     }
 
     private static void validateFieldName(String fieldName, String expectedFieldName) {

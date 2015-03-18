@@ -56,4 +56,9 @@ public interface Event {
      */
     Optional<String> getType();
 
+    /**
+     * @return A boolean indicating if this event has properties.
+     */
+    boolean hasProperties();
+
 }

@@ -51,7 +51,7 @@ public final class ImmutableEvent implements Event {
     /**
      * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using
      * {@link UUID#randomUUID()} and <code>new {@link Date}</code>.
-     * 
+     *
      * @param type The event type.
      * @param globalEventId The global event id.
      * @param parentEventId The parent event id.
@@ -140,5 +140,10 @@ public final class ImmutableEvent implements Event {
     @Override
     public int hashCode() {
         return this.id.hashCode();
+    }
+
+    @Override
+    public boolean hasProperties() {
+        return this.properties != null && !this.properties.isEmpty();
     }
 }

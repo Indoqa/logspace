@@ -8,18 +8,16 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
+import static io.logspace.agent.api.json.JacksonUtils.writeMandatoryDateField;
+import static io.logspace.agent.api.json.JacksonUtils.writeMandatoryField;
+import static io.logspace.agent.api.json.JacksonUtils.writeOptionalField;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.Optional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +29,6 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 public final class EventJsonSerializer {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
-
-    private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    private static final String TIMEZONE_UTC = "UTC";
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_TIMESTAMP = "timestamp";
@@ -48,7 +43,7 @@ public final class EventJsonSerializer {
         // hide utility class constructor
     }
 
-    public static String toJson(Collection<Event> events) throws IOException {
+    public static String toJson(Collection<? extends Event> events) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         toJson(events, baos);
@@ -56,7 +51,7 @@ public final class EventJsonSerializer {
         return baos.toString(UTF8.getJavaName());
     }
 
-    public static void toJson(Collection<Event> events, OutputStream outputStream) throws IOException {
+    public static void toJson(Collection<? extends Event> events, OutputStream outputStream) throws IOException {
         JsonGenerator jsonGenerator = createJsonGenerator(outputStream);
 
         jsonGenerator.writeStartArray();
@@ -64,13 +59,7 @@ public final class EventJsonSerializer {
         for (Event eachEvent : events) {
             jsonGenerator.writeStartObject();
 
-            writeId(jsonGenerator, eachEvent.getId());
-            writeType(jsonGenerator, eachEvent.getType());
-            writeTimestamp(jsonGenerator, eachEvent.getTimestamp());
-            writeParentId(jsonGenerator, eachEvent.getParentEventId());
-            writeGlobalId(jsonGenerator, eachEvent.getGlobalEventId());
-
-            writeProperties(jsonGenerator, eachEvent.getProperties());
+            writeEvent(jsonGenerator, eachEvent);
 
             jsonGenerator.writeEndObject();
         }
@@ -90,44 +79,26 @@ public final class EventJsonSerializer {
         return jsonGenerator;
     }
 
-    private static void writeGlobalId(JsonGenerator jsonGenerator, Optional<String> globalEventId) throws IOException {
-        if (globalEventId.isPresent()) {
-            jsonGenerator.writeStringField(FIELD_GLOBAL_EVENT_ID, globalEventId.get());
-        }
-    }
-
-    private static void writeId(JsonGenerator jsonGenerator, String id) throws IOException {
-        jsonGenerator.writeStringField(FIELD_ID, id);
-    }
-
-    private static void writeParentId(JsonGenerator jsonGenerator, Optional<String> parentEventId) throws IOException {
-        if (parentEventId.isPresent()) {
-            jsonGenerator.writeStringField(FIELD_PARENT_EVENT_ID, parentEventId.get());
-        }
+    private static void writeEvent(JsonGenerator jsonGenerator, Event event) throws IOException {
+        writeMandatoryField(jsonGenerator, FIELD_ID, event.getId());
+        writeOptionalField(jsonGenerator, FIELD_TYPE, event.getType());
+        writeMandatoryDateField(jsonGenerator, FIELD_TIMESTAMP, event.getTimestamp());
+        writeOptionalField(jsonGenerator, FIELD_PARENT_EVENT_ID, event.getParentEventId());
+        writeOptionalField(jsonGenerator, FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
+        writeProperties(jsonGenerator, event.getProperties());
     }
 
     private static void writeProperties(JsonGenerator jsonGenerator, Collection<EventProperty> properties) throws IOException {
-        if (properties.isEmpty()) {
+        if (properties == null || properties.isEmpty()) {
             return;
         }
 
         jsonGenerator.writeFieldName(FIELD_PROPERTIES);
+
         jsonGenerator.writeStartObject();
         for (EventProperty eachProperty : properties) {
             jsonGenerator.writeStringField(eachProperty.getKey(), eachProperty.getValue());
         }
         jsonGenerator.writeEndObject();
-    }
-
-    private static void writeTimestamp(JsonGenerator jsonGenerator, Date timestamp) throws IOException {
-        DateFormat df = new SimpleDateFormat(ISO_8601_DATE_FORMAT);
-        df.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
-        jsonGenerator.writeStringField(FIELD_TIMESTAMP, df.format(timestamp));
-    }
-
-    private static void writeType(JsonGenerator jsonGenerator, Optional<String> type) throws IOException {
-        if (type.isPresent()) {
-            jsonGenerator.writeStringField(FIELD_TYPE, type.get());
-        }
     }
 }

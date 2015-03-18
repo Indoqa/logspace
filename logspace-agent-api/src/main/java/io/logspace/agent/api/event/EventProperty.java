@@ -7,6 +7,8 @@
  */
 package io.logspace.agent.api.event;
 
+import java.text.MessageFormat;
+
 /**
  * An immutable key-value pair representation an event property.
  */
@@ -89,5 +91,10 @@ public class EventProperty {
         final int prime = 31;
         int result = prime + (this.key == null ? 0 : this.key.hashCode());
         return prime * result + (this.value == null ? 0 : this.value.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("[Property key={0}, value={1}]", this.key, this.value);
     }
 }
