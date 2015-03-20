@@ -8,9 +8,6 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
-import static io.logspace.agent.api.json.JacksonUtils.writeMandatoryDateField;
-import static io.logspace.agent.api.json.JacksonUtils.writeMandatoryField;
-import static io.logspace.agent.api.json.JacksonUtils.writeOptionalField;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 
@@ -19,28 +16,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public final class EventJsonSerializer extends AbstractJsonSerializer {
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-
-public final class EventJsonSerializer {
-
-    private static final JsonFactory JSON_FACTORY = new JsonFactory();
-
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TIMESTAMP = "timestamp";
-    private static final String FIELD_TYPE = "type";
-    private static final String FIELD_PARENT_EVENT_ID = "pid";
-    private static final String FIELD_GLOBAL_EVENT_ID = "gid";
-    private static final String FIELD_PROPERTIES = "properties";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventJsonSerializer.class);
-
-    private EventJsonSerializer() {
-        // hide utility class constructor
+    private EventJsonSerializer(OutputStream outputStream) throws IOException {
+        super(outputStream);
     }
 
     public static String toJson(Collection<? extends Event> events) throws IOException {
@@ -52,53 +31,45 @@ public final class EventJsonSerializer {
     }
 
     public static void toJson(Collection<? extends Event> events, OutputStream outputStream) throws IOException {
-        JsonGenerator jsonGenerator = createJsonGenerator(outputStream);
+        new EventJsonSerializer(outputStream).serialize(events);
+    }
 
-        jsonGenerator.writeStartArray();
+    private void serialize(Collection<? extends Event> events) throws IOException {
+        this.startArray();
 
         for (Event eachEvent : events) {
-            jsonGenerator.writeStartObject();
+            this.startObject();
 
-            writeEvent(jsonGenerator, eachEvent);
+            this.writeEvent(eachEvent);
 
-            jsonGenerator.writeEndObject();
+            this.endObject();
         }
 
-        jsonGenerator.writeEndArray();
+        this.endArray();
 
-        jsonGenerator.flush();
+        this.finish();
     }
 
-    private static JsonGenerator createJsonGenerator(OutputStream baos) throws IOException {
-        JsonGenerator jsonGenerator = JSON_FACTORY.createGenerator(baos, UTF8);
-
-        if (LOGGER.isDebugEnabled()) {
-            jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        }
-
-        return jsonGenerator;
+    private void writeEvent(Event event) throws IOException {
+        this.writeMandatoryField(Event.FIELD_ID, event.getId());
+        this.writeOptionalField(Event.FIELD_TYPE, event.getType());
+        this.writeMandatoryDateField(Event.FIELD_TIMESTAMP, event.getTimestamp());
+        this.writeOptionalField(Event.FIELD_PARENT_EVENT_ID, event.getParentEventId());
+        this.writeOptionalField(Event.FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
+        this.writeProperties(event.getProperties());
     }
 
-    private static void writeEvent(JsonGenerator jsonGenerator, Event event) throws IOException {
-        writeMandatoryField(jsonGenerator, FIELD_ID, event.getId());
-        writeOptionalField(jsonGenerator, FIELD_TYPE, event.getType());
-        writeMandatoryDateField(jsonGenerator, FIELD_TIMESTAMP, event.getTimestamp());
-        writeOptionalField(jsonGenerator, FIELD_PARENT_EVENT_ID, event.getParentEventId());
-        writeOptionalField(jsonGenerator, FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
-        writeProperties(jsonGenerator, event.getProperties());
-    }
-
-    private static void writeProperties(JsonGenerator jsonGenerator, Collection<EventProperty> properties) throws IOException {
+    private void writeProperties(Collection<EventProperty> properties) throws IOException {
         if (properties == null || properties.isEmpty()) {
             return;
         }
 
-        jsonGenerator.writeFieldName(FIELD_PROPERTIES);
+        this.writeField(Event.FIELD_PROPERTIES);
 
-        jsonGenerator.writeStartObject();
+        this.startObject();
         for (EventProperty eachProperty : properties) {
-            jsonGenerator.writeStringField(eachProperty.getKey(), eachProperty.getValue());
+            this.writeMandatoryField(eachProperty.getKey(), eachProperty.getValue());
         }
-        jsonGenerator.writeEndObject();
+        this.endObject();
     }
 }

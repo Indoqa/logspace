@@ -13,6 +13,12 @@ import java.util.List;
 
 public class AgentControllerDescription {
 
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_CLASS_NAME = "class-name";
+    public static final String FIELD_PARAMETERS = "parameters";
+    public static final String FIELD_PARAMETER_NAME = "parameter-name";
+    public static final String FIELD_PARAMETER_VALUE = "parameter-value";
+
     private String className;
 
     private String id;

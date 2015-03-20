@@ -81,12 +81,28 @@ public final class JacksonUtils {
     public static Optional<String> readOptionalField(JsonParser parser, String fieldName) throws IOException {
         prepareToken(parser);
 
-        validateTokenType(parser.getCurrentToken(), FIELD_NAME);
+        if (parser.getCurrentToken() != FIELD_NAME) {
+            return Optional.empty();
+        }
+
         if (!parser.getCurrentName().equals(fieldName)) {
             return Optional.empty();
         }
 
         String result = parser.nextTextValue();
+        consumeToken(parser);
+        return Optional.of(result);
+    }
+
+    public static Optional<Integer> readOptionalIntField(JsonParser parser, String fieldName) throws IOException {
+        prepareToken(parser);
+
+        validateTokenType(parser.getCurrentToken(), FIELD_NAME);
+        if (!parser.getCurrentName().equals(fieldName)) {
+            return Optional.empty();
+        }
+
+        int result = parser.nextIntValue(0);
         consumeToken(parser);
         return Optional.of(result);
     }
@@ -127,9 +143,19 @@ public final class JacksonUtils {
         generator.writeStringField(fieldName, value);
     }
 
+    public static void writeMandatoryIntField(JsonGenerator generator, String fieldName, int value) throws IOException {
+        generator.writeNumberField(fieldName, value);
+    }
+
     public static void writeOptionalField(JsonGenerator generator, String fieldName, Optional<String> optional) throws IOException {
         if (optional.isPresent()) {
             writeMandatoryField(generator, fieldName, optional.get());
+        }
+    }
+
+    public static void writeOptionalIntField(JsonGenerator generator, String fieldName, Optional<Integer> optional) throws IOException {
+        if (optional.isPresent()) {
+            writeMandatoryIntField(generator, fieldName, optional.get());
         }
     }
 

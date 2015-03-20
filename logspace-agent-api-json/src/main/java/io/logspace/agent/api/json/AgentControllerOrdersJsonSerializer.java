@@ -7,109 +7,70 @@
  */
 package io.logspace.agent.api.json;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
-import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
+import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_AGENT_ORDERS;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_COUNT;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_SECONDS;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_ID;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_PARAMETER;
+import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_TYPE;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.OutputStream;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+public final class AgentControllerOrdersJsonSerializer extends AbstractJsonSerializer {
 
-public final class AgentControllerOrdersJsonSerializer {
-
-    private static final String FIELD_COMMIT_MAX_COUNT = "commitMaxCount";
-    private static final String FIELD_COMMIT_MAX_SECONDS = "commitMaxSeconds";
-    private static final String FIELD_AGENT_ORDERS = "agentOrders";
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TRIGGER_TYPE = "triggerType";
-    private static final String FIELD_TRIGGER_PARAMETER = "triggerParameter";
-
-    private static final JsonFactory JSON_FACTORY = new JsonFactory();
-
-    private AgentControllerOrdersJsonSerializer() {
-        // hide utility class constructor
+    private AgentControllerOrdersJsonSerializer(OutputStream outputStream) throws IOException {
+        super(outputStream);
     }
 
-    public static AgentControllerOrder fromJson(InputStream inputStream) throws IOException {
-        AgentControllerOrder result = new AgentControllerOrder();
+    public static String toJson(AgentControllerOrder order) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        JsonParser parser = JSON_FACTORY.createParser(inputStream);
+        toJson(order, baos);
 
-        validateTokenType(parser.nextToken(), START_OBJECT);
+        return baos.toString(UTF8.getJavaName());
+    }
 
-        JsonToken token = parser.nextToken();
-        if (token == FIELD_NAME) {
-            List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
-            result.setAgentOrders(agentOrders);
+    public static void toJson(AgentControllerOrder order, OutputStream outputStream) throws IOException {
+        new AgentControllerOrdersJsonSerializer(outputStream).serialize(order);
+    }
 
-            validateFieldName(parser.getCurrentName(), FIELD_AGENT_ORDERS);
-            validateTokenType(parser.nextToken(), START_ARRAY);
+    private void serialize(AgentControllerOrder value) throws IOException {
+        this.startObject();
 
-            while (true) {
-                token = parser.nextToken();
-                if (token == END_ARRAY) {
-                    break;
-                }
+        this.writeAgentOrders(value);
+        this.writeCommitSettings(value);
 
-                validateTokenType(token, START_OBJECT);
-                agentOrders.add(readAgentOrder(parser));
-                validateTokenType(parser.nextToken(), END_OBJECT);
+        this.endObject();
+
+        this.finish();
+    }
+
+    private void writeAgentOrders(AgentControllerOrder value) throws IOException {
+        if (value.hasAgentOrders()) {
+            this.writeField(FIELD_AGENT_ORDERS);
+            this.startArray();
+
+            for (AgentOrder eachAgentOrder : value.getAgentOrders()) {
+                this.startObject();
+
+                this.writeMandatoryField(FIELD_ID, eachAgentOrder.getId());
+                this.writeMandatoryField(FIELD_TRIGGER_TYPE, String.valueOf(eachAgentOrder.getTriggerType()));
+                this.writeOptionalField(FIELD_TRIGGER_PARAMETER, eachAgentOrder.getTriggerParameter());
+
+                this.endObject();
             }
-        }
 
-        result.setCommitMaxSeconds(getIntFieldValue(parser, FIELD_COMMIT_MAX_SECONDS));
-        result.setCommitMaxCount(getIntFieldValue(parser, FIELD_COMMIT_MAX_COUNT));
-
-        validateTokenType(parser.nextToken(), END_OBJECT);
-        validateTokenType(parser.nextToken(), null);
-
-        return result;
-    }
-
-    private static String getFieldValue(JsonParser parser, String fieldName) throws IOException {
-        validateTokenType(parser.nextToken(), FIELD_NAME);
-        validateFieldName(parser.getCurrentName(), fieldName);
-
-        return parser.nextTextValue();
-    }
-
-    private static int getIntFieldValue(JsonParser parser, String fieldName) throws IOException {
-        validateTokenType(parser.nextToken(), FIELD_NAME);
-        validateFieldName(parser.getCurrentName(), fieldName);
-
-        return parser.nextIntValue(0);
-    }
-
-    private static AgentOrder readAgentOrder(JsonParser parser) throws IOException {
-        AgentOrder result = new AgentOrder();
-
-        result.setId(getFieldValue(parser, FIELD_ID));
-        result.setTriggerType(TriggerType.valueOf(getFieldValue(parser, FIELD_TRIGGER_TYPE)));
-        result.setTriggerParameter(getFieldValue(parser, FIELD_TRIGGER_PARAMETER));
-
-        return result;
-    }
-
-    private static void validateFieldName(String fieldName, String expectedFieldName) {
-        if (!fieldName.equals(expectedFieldName)) {
-            throw new IllegalArgumentException("Expected field of name '" + expectedFieldName + "', but found field of name '"
-                    + fieldName + "'.");
+            this.endArray();
         }
     }
 
-    private static void validateTokenType(JsonToken token, JsonToken expected) {
-        if (token != expected) {
-            throw new IllegalArgumentException("Expected token of type " + expected + ", but found " + token);
-        }
+    private void writeCommitSettings(AgentControllerOrder value) throws IOException {
+        this.writeOptionalIntField(FIELD_COMMIT_MAX_COUNT, value.getCommitMaxCount());
+        this.writeOptionalIntField(FIELD_COMMIT_MAX_SECONDS, value.getCommitMaxSeconds());
     }
 }

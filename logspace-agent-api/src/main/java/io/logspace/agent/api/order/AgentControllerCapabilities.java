@@ -12,6 +12,11 @@ import java.util.List;
 
 public class AgentControllerCapabilities {
 
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_TYPE = "type";
+    public static final String FIELD_TRIGGER_TYPES = "trigger-types";
+    public static final String FIELD_AGENT_CAPABILITIES = "agent-capabilities";
+
     private String id;
 
     private List<AgentCapabilities> agentCapabilities = new ArrayList<AgentCapabilities>();

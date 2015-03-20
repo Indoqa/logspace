@@ -12,6 +12,12 @@ import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
 import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
+import static io.logspace.agent.api.event.Event.FIELD_GLOBAL_EVENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_ID;
+import static io.logspace.agent.api.event.Event.FIELD_PARENT_EVENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_PROPERTIES;
+import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
+import static io.logspace.agent.api.event.Event.FIELD_TYPE;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.event.Optional;
@@ -22,14 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class EventJsonDeserializer extends AbstractJsonDeserializer {
-
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TIMESTAMP = "timestamp";
-    private static final String FIELD_TYPE = "type";
-    private static final String FIELD_PARENT_EVENT_ID = "pid";
-    private static final String FIELD_GLOBAL_EVENT_ID = "gid";
-    private static final String FIELD_PROPERTIES = "properties";
+public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
     private EventJsonDeserializer(byte[] data) throws IOException {
         super(data);
@@ -40,14 +39,14 @@ public class EventJsonDeserializer extends AbstractJsonDeserializer {
     }
 
     public static Collection<? extends Event> fromJson(byte[] data) throws IOException {
-        return new EventJsonDeserializer(data).parse();
+        return new EventJsonDeserializer(data).deserialize();
     }
 
     public static Collection<? extends Event> fromJson(InputStream inputStream) throws IOException {
-        return new EventJsonDeserializer(inputStream).parse();
+        return new EventJsonDeserializer(inputStream).deserialize();
     }
 
-    private Collection<? extends Event> parse() throws IOException {
+    private Collection<? extends Event> deserialize() throws IOException {
         Collection<Event> result = new ArrayList<Event>();
 
         this.prepareToken();

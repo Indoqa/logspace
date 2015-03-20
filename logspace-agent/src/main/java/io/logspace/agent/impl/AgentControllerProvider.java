@@ -9,7 +9,7 @@ package io.logspace.agent.impl;
 
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.json.AgentControllerDescriptionJsonSerializer;
+import io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,14 +56,14 @@ public final class AgentControllerProvider {
         AgentControllerProvider.agentControllerDescription = agentControllerDescription;
     }
 
-    public static synchronized void setDescription(InputStream descriptionInputStream) {
+    public static synchronized void setDescription(InputStream inputStream) {
         try {
-            setDescription(AgentControllerDescriptionJsonSerializer.fromJson(descriptionInputStream));
+            setDescription(AgentControllerDescriptionJsonDeserializer.fromJson(inputStream));
         } catch (IOException ioex) {
             throw new AgentControllerException("Could not load description from InputStream.", ioex);
         } finally {
             try {
-                descriptionInputStream.close();
+                inputStream.close();
             } catch (IOException e) {
                 // do nothing
             }

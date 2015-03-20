@@ -7,19 +7,21 @@
  */
 package io.logspace.agent.api.order;
 
+import io.logspace.agent.api.event.Optional;
+
 public class AgentOrder {
 
     private String id;
 
     private TriggerType triggerType;
 
-    private String triggerParameter;
+    private Optional<String> triggerParameter;
 
     public String getId() {
         return this.id;
     }
 
-    public String getTriggerParameter() {
+    public Optional<String> getTriggerParameter() {
         return this.triggerParameter;
     }
 
@@ -31,7 +33,7 @@ public class AgentOrder {
         this.id = id;
     }
 
-    public void setTriggerParameter(String triggerParameter) {
+    public void setTriggerParameter(Optional<String> triggerParameter) {
         this.triggerParameter = triggerParameter;
     }
 

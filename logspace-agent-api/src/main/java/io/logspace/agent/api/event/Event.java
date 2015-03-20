@@ -26,6 +26,13 @@ import java.util.Date;
  */
 public interface Event {
 
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_TIMESTAMP = "timestamp";
+    public static final String FIELD_TYPE = "type";
+    public static final String FIELD_PARENT_EVENT_ID = "pid";
+    public static final String FIELD_GLOBAL_EVENT_ID = "gid";
+    public static final String FIELD_PROPERTIES = "properties";
+
     /**
      * @return The optional global event id.
      */

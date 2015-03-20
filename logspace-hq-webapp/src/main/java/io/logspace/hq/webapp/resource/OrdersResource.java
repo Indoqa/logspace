@@ -7,6 +7,7 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
@@ -40,13 +41,13 @@ public class OrdersResource extends AbstractJsonResourcesBase {
 
         AgentControllerOrder result = new AgentControllerOrder();
 
-        result.setCommitMaxCount(1000);
-        result.setCommitMaxSeconds(60);
+        result.setCommitMaxCount(Optional.of(1000));
+        result.setCommitMaxSeconds(Optional.of(60));
 
         AgentOrder agentOrder = new AgentOrder();
         agentOrder.setId("TEST-AGENT-001");
         agentOrder.setTriggerType(TriggerType.Cron);
-        agentOrder.setTriggerParameter("0/10 * * * * ? *");
+        agentOrder.setTriggerParameter(Optional.of("0/10 * * * * ? *"));
         result.add(agentOrder);
 
         return result;

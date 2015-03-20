@@ -31,12 +31,20 @@ public abstract class AbstractJsonDeserializer {
         this.jsonParser = JSON_FACTORY.createParser(inputStream);
     }
 
+    protected void advance() throws IOException {
+        this.jsonParser.nextToken();
+    }
+
     protected void consumeToken() {
         JacksonUtils.consumeToken(this.jsonParser);
     }
 
     protected String getCurrentName() throws IOException {
         return this.jsonParser.getCurrentName();
+    }
+
+    protected boolean hasField(String fieldName) throws IOException {
+        return fieldName.equals(this.jsonParser.getCurrentName());
     }
 
     protected boolean hasToken(JsonToken expected) {
@@ -61,6 +69,14 @@ public abstract class AbstractJsonDeserializer {
 
     protected Optional<String> readOptionalField(String fieldName) throws IOException {
         return JacksonUtils.readOptionalField(this.jsonParser, fieldName);
+    }
+
+    protected Optional<Integer> readOptionalIntField(String fieldName) throws IOException {
+        return JacksonUtils.readOptionalIntField(this.jsonParser, fieldName);
+    }
+
+    protected String readString() throws IOException {
+        return this.jsonParser.getText();
     }
 
     protected void validateEnd() {

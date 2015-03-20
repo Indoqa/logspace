@@ -185,7 +185,7 @@ public class HqAgentController extends AbstractAgentController {
                         .usingJobData(jobDataMap).build();
 
                 Trigger trigger = newTrigger().withIdentity(eachAgentOrder.getId(), AGENT_SCHEDULER_GROUP).startNow()
-                        .withSchedule(CronScheduleBuilder.cronSchedule(eachAgentOrder.getTriggerParameter())).build();
+                        .withSchedule(CronScheduleBuilder.cronSchedule(eachAgentOrder.getTriggerParameter().get())).build();
 
                 this.scheduler.scheduleJob(job, trigger);
             }

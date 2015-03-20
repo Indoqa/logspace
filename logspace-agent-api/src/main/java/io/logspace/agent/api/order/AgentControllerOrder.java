@@ -7,15 +7,24 @@
  */
 package io.logspace.agent.api.order;
 
+import io.logspace.agent.api.event.Optional;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AgentControllerOrder {
 
+    public static final String FIELD_COMMIT_MAX_COUNT = "commit-max-count";
+    public static final String FIELD_COMMIT_MAX_SECONDS = "commit-max-seconds";
+    public static final String FIELD_AGENT_ORDERS = "agent-orders";
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_TRIGGER_TYPE = "trigger-type";
+    public static final String FIELD_TRIGGER_PARAMETER = "trigger-parameter";
+
     private List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
 
-    private int commitMaxSeconds;
-    private int commitMaxCount;
+    private Optional<Integer> commitMaxSeconds;
+    private Optional<Integer> commitMaxCount;
 
     public void add(AgentOrder agentOrder) {
         this.agentOrders.add(agentOrder);
@@ -25,23 +34,35 @@ public class AgentControllerOrder {
         return this.agentOrders;
     }
 
-    public int getCommitMaxCount() {
+    public int getAgentOrdersCount() {
+        if (this.agentOrders == null) {
+            return 0;
+        }
+
+        return this.agentOrders.size();
+    }
+
+    public Optional<Integer> getCommitMaxCount() {
         return this.commitMaxCount;
     }
 
-    public int getCommitMaxSeconds() {
+    public Optional<Integer> getCommitMaxSeconds() {
         return this.commitMaxSeconds;
+    }
+
+    public boolean hasAgentOrders() {
+        return this.agentOrders != null && !this.agentOrders.isEmpty();
     }
 
     public void setAgentOrders(List<AgentOrder> agentOrders) {
         this.agentOrders = agentOrders;
     }
 
-    public void setCommitMaxCount(int commitMaxCount) {
+    public void setCommitMaxCount(Optional<Integer> commitMaxCount) {
         this.commitMaxCount = commitMaxCount;
     }
 
-    public void setCommitMaxSeconds(int commitMaxSeconds) {
+    public void setCommitMaxSeconds(Optional<Integer> commitMaxSeconds) {
         this.commitMaxSeconds = commitMaxSeconds;
     }
 }

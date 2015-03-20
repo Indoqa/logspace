@@ -7,7 +7,7 @@
  */
 package io.logspace.agent.hq;
 
-import io.logspace.agent.api.json.AgentControllerOrdersJsonSerializer;
+import io.logspace.agent.api.json.AgentControllerOrdersJsonDeserializer;
 import io.logspace.agent.api.order.AgentControllerOrder;
 
 import java.io.IOException;
@@ -34,6 +34,6 @@ public class AgentControllerOrderResponseHandler implements ResponseHandler<Agen
             throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
         }
 
-        return AgentControllerOrdersJsonSerializer.fromJson(entity.getContent());
+        return AgentControllerOrdersJsonDeserializer.fromJson(entity.getContent());
     }
 }

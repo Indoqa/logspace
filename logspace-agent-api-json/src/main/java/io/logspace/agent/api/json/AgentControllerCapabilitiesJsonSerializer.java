@@ -8,6 +8,10 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
+import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_AGENT_CAPABILITIES;
+import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_ID;
+import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_TRIGGER_TYPES;
+import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_TYPE;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.TriggerType;
@@ -16,21 +20,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
+public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJsonSerializer {
 
-public final class AgentControllerCapabilitiesJsonSerializer {
-
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TYPE = "type";
-    private static final String FIELD_TRIGGER_TYPES = "trigger-types";
-
-    private static final String FIELD_AGENT_CAPABILITIES = "agent-capabilities";
-
-    private static final JsonFactory JSON_FACTORY = new JsonFactory();
-
-    private AgentControllerCapabilitiesJsonSerializer() {
-        // hide utility class constructor
+    private AgentControllerCapabilitiesJsonSerializer(OutputStream outputStream) throws IOException {
+        super(outputStream);
     }
 
     public static String toJson(AgentControllerCapabilities capabilities) throws IOException {
@@ -42,35 +35,53 @@ public final class AgentControllerCapabilitiesJsonSerializer {
     }
 
     public static void toJson(AgentControllerCapabilities capabilities, OutputStream outputStream) throws IOException {
-        JsonGenerator generator = JSON_FACTORY.createGenerator(outputStream);
+        new AgentControllerCapabilitiesJsonSerializer(outputStream).serialize(capabilities);
+    }
 
-        generator.writeStartObject();
+    private void serialize(AgentControllerCapabilities capabilities) throws IOException {
+        this.startObject();
 
-        generator.writeStringField(FIELD_ID, capabilities.getId());
+        this.writeAttributes(capabilities);
+        this.writeAgentCapabilities(capabilities);
 
-        if (capabilities.getAgentCapabilitiesCount() > 0) {
-            generator.writeArrayFieldStart(FIELD_AGENT_CAPABILITIES);
+        this.endObject();
 
-            for (AgentCapabilities eachAgentCapabilities : capabilities.getAgentCapabilities()) {
-                generator.writeStartObject();
+        this.finish();
+    }
 
-                generator.writeStringField(FIELD_ID, eachAgentCapabilities.getId());
-                generator.writeStringField(FIELD_TYPE, eachAgentCapabilities.getType());
+    private void writeAgentCapabilities(AgentCapabilities agentCapabilities) throws IOException {
+        this.writeMandatoryField(FIELD_ID, agentCapabilities.getId());
+        this.writeMandatoryField(FIELD_TYPE, agentCapabilities.getType());
 
-                generator.writeArrayFieldStart(FIELD_TRIGGER_TYPES);
-                for (TriggerType eachTriggerType : eachAgentCapabilities.getSupportedTriggerTypes()) {
-                    generator.writeString(eachTriggerType.name());
-                }
-                generator.writeEndArray();
+        this.writeField(FIELD_TRIGGER_TYPES);
 
-                generator.writeEndObject();
-            }
+        this.startArray();
+        for (TriggerType eachTriggerType : agentCapabilities.getSupportedTriggerTypes()) {
+            this.writeString(eachTriggerType.name());
+        }
+        this.endArray();
+    }
 
-            generator.writeEndArray();
+    private void writeAgentCapabilities(AgentControllerCapabilities capabilities) throws IOException {
+        if (capabilities.getAgentCapabilitiesCount() == 0) {
+            return;
         }
 
-        generator.writeEndObject();
+        this.writeField(FIELD_AGENT_CAPABILITIES);
+        this.startArray();
 
-        generator.close();
+        for (AgentCapabilities eachAgentCapabilities : capabilities.getAgentCapabilities()) {
+            this.startObject();
+
+            this.writeAgentCapabilities(eachAgentCapabilities);
+
+            this.endObject();
+        }
+
+        this.endArray();
+    }
+
+    private void writeAttributes(AgentControllerCapabilities capabilities) throws IOException {
+        this.writeMandatoryField(FIELD_ID, capabilities.getId());
     }
 }
