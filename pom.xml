@@ -349,11 +349,6 @@
           <version>0.0.20</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.rat</groupId>
-          <artifactId>apache-rat-plugin</artifactId>
-          <version>0.11</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <configuration>
             <archive>
@@ -389,6 +384,7 @@
               <exclude>**/logspace.io.txt</exclude>
               <exclude>**/dependency-reduced-pom.xml</exclude>
               <exclude>**/.recommenders/**</exclude>
+              <exclude>**/configs/**</exclude>
             </excludes>
             <licenses>
               <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
