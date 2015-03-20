@@ -45,7 +45,7 @@ public abstract class AbstractAgentController implements AgentController {
     }
 
     @Override
-    public final void send(Event event) {
+    public void send(Event event) {
         this.send(Collections.singleton(event));
     }
 
@@ -85,10 +85,20 @@ public abstract class AbstractAgentController implements AgentController {
         return result;
     }
 
+    /**
+     * Called when an {@link Agent} has registered itself with this {@link AgentController}.
+     *
+     * @param agent The registered agent.
+     */
     protected void onAgentRegistered(Agent agent) {
         // default does nothing
     }
 
+    /**
+     * Called when an {@link Agent} has unregistered itself from this {@link AgentController}.
+     *
+     * @param agent The unregistered agent.
+     */
     protected void onAgentUnregistered(Agent agent) {
         // default does nothing
     }

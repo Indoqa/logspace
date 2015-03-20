@@ -102,7 +102,7 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
         AgentOrder result = new AgentOrder();
 
         result.setId(this.readMandatoryField(FIELD_ID));
-        result.setTriggerType(TriggerType.valueOf(this.readMandatoryField(FIELD_TRIGGER_TYPE)));
+        result.setTriggerType(TriggerType.get(this.readMandatoryField(FIELD_TRIGGER_TYPE)));
 
         this.prepareToken();
         if (this.hasToken(FIELD_NAME)) {

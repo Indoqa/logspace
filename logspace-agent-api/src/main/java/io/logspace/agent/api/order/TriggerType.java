@@ -11,4 +11,13 @@ public enum TriggerType {
 
     Event, Cron, Off;
 
+    public static TriggerType get(String name) {
+        for (TriggerType eachTriggerType : TriggerType.values()) {
+            if (eachTriggerType.name().equalsIgnoreCase(name)) {
+                return eachTriggerType;
+            }
+        }
+
+        return null;
+    }
 }

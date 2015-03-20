@@ -13,6 +13,7 @@ import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
 import io.logspace.agent.api.json.EventJsonSerializer;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.impl.AgentControllerInitializationException;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -31,10 +32,16 @@ public class HqClient {
     private String baseUrl;
     private String agentControllerId;
 
+    private final AgentControllerOrderResponseHandler agentControllerOrderResponseHandler = new AgentControllerOrderResponseHandler();
+
     public HqClient(String baseUrl, String agentControllerId) {
         super();
 
         this.baseUrl = baseUrl;
+        if (this.baseUrl == null || this.baseUrl.trim().length() == 0) {
+            throw new AgentControllerInitializationException("The base URL must not be empty!");
+        }
+
         this.agentControllerId = agentControllerId;
         this.httpClient = HttpClients.createDefault();
     }
@@ -53,8 +60,9 @@ public class HqClient {
 
     public AgentControllerOrder downloadOrder() throws IOException {
         HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.agentControllerId);
+        httpGet.addHeader("If-Modified-Since", this.agentControllerOrderResponseHandler.getLastModified());
 
-        return this.httpClient.execute(httpGet, new AgentControllerOrderResponseHandler());
+        return this.httpClient.execute(httpGet, this.agentControllerOrderResponseHandler);
     }
 
     public void uploadCapabilities(AgentControllerCapabilities capabilities) throws IOException {

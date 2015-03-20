@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Logspace
+    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+    This program and the accompanying materials are made available under the terms of
+    the Eclipse Public License Version 1.0, which accompanies this distribution and
+    is available at http://www.eclipse.org/legal/epl-v10.html.
+
+-->
+<Configuration status="INFO" debug="true">
+  <Properties>
+    <Property name="log-path">./target</Property>
+    <Property name="log-level">INFO</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{1.} - %msg%n" />
+    </Console>
+    <Console name="ConsoleInit" target="SYSTEM_OUT">
+      <PatternLayout pattern="%msg%n" />
+    </Console>
+    <RollingFile name="File" fileName="${sys:log-path}/cerebro.log" filePattern="${sys:log-path}/cerebro-%d{yyyy-MM-dd}-%i.log">
+      <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger - %msg%n" />
+      <Policies>
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingFile>
+    
+    <!-- Only log to console if the log-path has not been overwritten -->
+    <Routing name="ConsoleRouting">
+      <Routes pattern="$${sys:log-path}">
+        <Route ref="Console" key="./target" />
+      </Routes>
+    </Routing>
+  </Appenders>
+
+  <Loggers>
+    <!-- Always log basic initialization information -->
+    <Logger name="com.indoqa.spark.AbstractSparkApplication_INIT" additivity="false">
+      <AppenderRef ref="ConsoleInit" />
+    </Logger>
+    <Logger name="io.logspace" additivity="false" level="DEBUG">
+      <AppenderRef ref="ConsoleRouting" />
+    </Logger>
+    
+    <Root level="${sys:log-level}">
+      <AppenderRef ref="ConsoleRouting" />
+      <AppenderRef ref="File" />
+    </Root>
+  </Loggers>
+</Configuration>

@@ -24,7 +24,7 @@ public class HqAgentControllerTest {
 
     @BeforeClass
     public static void beforeClass() {
-        HqAgentController.install(UUID.randomUUID().toString(), "http://localhost:4567");
+        HqAgentController.install("1", "http://localhost:4567");
     }
 
     @Test
@@ -56,7 +56,7 @@ public class HqAgentControllerTest {
 
         @Override
         public void execute(AgentOrder agentOrder) {
-            System.out.println("Creating event");
+            System.out.println(System.currentTimeMillis() + ": Creating event");
             Event event = new DefaultEventBuilder().setGlobalEventId(UUID.randomUUID().toString()).toEvent();
             this.sendEvent(event);
         }

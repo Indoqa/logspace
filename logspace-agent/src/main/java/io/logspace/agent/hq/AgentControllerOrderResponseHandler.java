@@ -21,6 +21,12 @@ import org.apache.http.client.ResponseHandler;
 
 public class AgentControllerOrderResponseHandler implements ResponseHandler<AgentControllerOrder> {
 
+    private String lastModified;
+
+    public String getLastModified() {
+        return this.lastModified;
+    }
+
     @Override
     public AgentControllerOrder handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
         StatusLine statusLine = response.getStatusLine();
@@ -34,6 +40,7 @@ public class AgentControllerOrderResponseHandler implements ResponseHandler<Agen
             throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
         }
 
+        this.lastModified = response.getFirstHeader("Last-Modified").getValue();
         return AgentControllerOrdersJsonDeserializer.fromJson(entity.getContent());
     }
 }
