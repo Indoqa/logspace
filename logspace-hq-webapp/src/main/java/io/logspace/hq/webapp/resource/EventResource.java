@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
-import com.indoqa.spark.AbstractJsonResourcesBase;
+import com.indoqa.boot.AbstractJsonResourcesBase;
 
 @Named
 public class EventResource extends AbstractJsonResourcesBase {

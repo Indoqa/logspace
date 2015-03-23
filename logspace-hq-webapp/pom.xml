@@ -23,10 +23,10 @@
   <name>Logspace HQ Webapp</name>
 
   <dependencies>
-    <!-- Indoqa Spark -->
+    <!-- Indoqa Boot -->
     <dependency>
       <groupId>com.indoqa</groupId>
-      <artifactId>indoqa-spark</artifactId>
+      <artifactId>indoqa-boot</artifactId>
     </dependency>
 
     <!-- Commons dependencies -->

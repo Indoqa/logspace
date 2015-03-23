@@ -11,9 +11,9 @@ import java.io.IOException;
 
 import spark.utils.IOUtils;
 
-import com.indoqa.spark.AbstractSparkApplication;
+import com.indoqa.boot.AbstractIndoqaBootApplication;
 
-public class LogspaceHq extends AbstractSparkApplication {
+public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     private static final String APPLICATION_NAME = "Logspace";
     private static final String BASE_PACKAGE = "io.logspace";

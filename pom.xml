@@ -35,7 +35,7 @@
   <properties>
     <project.build.compiler.version>1.8</project.build.compiler.version>
 
-    <indoqa-spark-version>0.1-SNAPSHOT</indoqa-spark-version>
+    <indoqa-boot-version>0.1-SNAPSHOT</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
     <solr-version>4.10.3</solr-version>
 
@@ -75,11 +75,11 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- Indoqa Spark -->
+      <!-- Indoqa Boot -->
       <dependency>
         <groupId>com.indoqa</groupId>
-        <artifactId>indoqa-spark</artifactId>
-        <version>${indoqa-spark-version}</version>
+        <artifactId>indoqa-boot</artifactId>
+        <version>${indoqa-boot-version}</version>
       </dependency>
 
       <!-- Dependency Injection -->

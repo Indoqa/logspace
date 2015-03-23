@@ -31,7 +31,7 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-import com.indoqa.spark.AbstractJsonResourcesBase;
+import com.indoqa.boot.AbstractJsonResourcesBase;
 
 @Named
 public class OrdersResource extends AbstractJsonResourcesBase {
