@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<!-- Logspace Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved. This program and the accompanying materials are 
+  made available under the terms of the Eclipse Public License Version 1.0, which accompanies this distribution and is available at http://www.eclipse.org/legal/epl-v10.html. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
 
@@ -41,10 +35,11 @@
 
     <jackson-version>2.4.4</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
+    <httpcore-version>4.3.3</httpcore-version>
     <quartz-version>2.2.1</quartz-version>
     <tape-version>1.2.3</tape-version>
 
-    <indoqa-commons-solr-server-factory-version>4.3.3</indoqa-commons-solr-server-factory-version>
+    <indoqa-commons-solr-server-factory-version>4.10.0-SNAPSHOT</indoqa-commons-solr-server-factory-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
@@ -184,6 +179,18 @@
         <artifactId>httpclient</artifactId>
         <version>${httpclient-version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpmime</artifactId>
+        <version>${httpclient-version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>${httpcore-version}</version>
+      </dependency>
+
 
       <!-- Commons dependencies -->
       <dependency>
@@ -206,6 +213,11 @@
       <dependency>
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-solrj</artifactId>
+        <version>${solr-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.solr</groupId>
+        <artifactId>solr-core</artifactId>
         <version>${solr-version}</version>
       </dependency>
 
@@ -371,7 +383,7 @@
               <exclude>**/logspace.io.txt</exclude>
             </excludes>
             <mapping>
-              <txt>SCRIPT_STYLE</txt> 
+              <txt>SCRIPT_STYLE</txt>
             </mapping>
           </configuration>
         </plugin>
@@ -381,6 +393,7 @@
           <version>0.11</version>
           <configuration>
             <excludes>
+              <exclude>**/_rest_managed.json</exclude>
               <exclude>**/logspace.io.txt</exclude>
               <exclude>**/dependency-reduced-pom.xml</exclude>
               <exclude>**/.recommenders/**</exclude>

@@ -22,16 +22,14 @@ public final class AgentControllerProvider {
     private static AgentController agentController;
     private static AgentControllerDescription agentControllerDescription;
 
-    private static boolean isShutdown;
-
     private AgentControllerProvider() {
         // hide utility class constructor
     }
 
     public static synchronized void flush() {
-        verifyNotShutdown();
-
-        agentController.flush();
+        if (agentController != null) {
+            agentController.flush();
+        }
     }
 
     public static synchronized AgentController getAgentController() {
@@ -44,10 +42,6 @@ public final class AgentControllerProvider {
 
     public static synchronized boolean isInitialized() {
         return agentController != null;
-    }
-
-    public static synchronized boolean isShutdown() {
-        return isShutdown;
     }
 
     public static synchronized void setDescription(AgentControllerDescription agentControllerDescription) {
@@ -80,11 +74,10 @@ public final class AgentControllerProvider {
 
     public static synchronized void shutdown() {
         if (agentController != null) {
+            agentController.flush();
             agentController.shutdown();
             agentController = null;
         }
-
-        isShutdown = true;
     }
 
     private static AgentControllerDescription createDefaultDescription() {
@@ -111,8 +104,6 @@ public final class AgentControllerProvider {
     }
 
     private static AgentController initialize() {
-        verifyNotShutdown();
-
         if (agentControllerDescription == null) {
             agentControllerDescription = createDefaultDescription();
         }
@@ -148,16 +139,8 @@ public final class AgentControllerProvider {
     }
 
     private static void verifyNotInitialized() {
-        verifyNotShutdown();
-
         if (isInitialized()) {
             throw new AgentControllerException("Cannot set a new description after the AgentController has already been initialized.");
-        }
-    }
-
-    private static void verifyNotShutdown() {
-        if (isShutdown()) {
-            throw new AgentControllerException("The AgentControllerProvider is already shutdown.");
         }
     }
 }

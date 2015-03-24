@@ -24,6 +24,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HqClient {
 
@@ -33,6 +35,8 @@ public class HqClient {
     private String agentControllerId;
 
     private final AgentControllerOrderResponseHandler agentControllerOrderResponseHandler = new AgentControllerOrderResponseHandler();
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public HqClient(String baseUrl, String agentControllerId) {
         super();
@@ -55,6 +59,7 @@ public class HqClient {
     }
 
     public void close() throws IOException {
+        this.logger.info("Closing now.");
         this.httpClient.close();
     }
 

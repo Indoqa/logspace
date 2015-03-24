@@ -16,6 +16,7 @@ import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AgentControllerException;
 import io.logspace.agent.impl.AgentControllerInitializationException;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -60,15 +61,22 @@ public class AgentScheduler {
         }
     }
 
-    public void applyOrder(AgentControllerOrder agentControllerOrder) throws AgentControllerException {
+    public void applyOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) throws AgentControllerException {
         this.logger.info("Applying new AgentControllerOrder");
 
         this.clearAgentOrders();
 
         for (AgentOrder eachAgentOrder : agentControllerOrder.getAgentOrders()) {
-            this.agentOrders.put(eachAgentOrder.getId(), eachAgentOrder);
+            String agentId = eachAgentOrder.getId();
+
+            this.agentOrders.put(agentId, eachAgentOrder);
 
             if (eachAgentOrder.getTriggerType() == TriggerType.Cron) {
+                if (!agentIds.contains(agentId)) {
+                    this.logger.warn("Cannot schedule cron trigger for agent with ID '{}' because no such agent exists!", agentId);
+                    continue;
+                }
+
                 this.scheduleAgentOrder(eachAgentOrder);
             }
         }
@@ -93,8 +101,8 @@ public class AgentScheduler {
         return this.agentOrders.get(agentId);
     }
 
-    public void shutdown() {
-        this.logger.info("Shutting down.");
+    public void stop() {
+        this.logger.info("Stopping now.");
 
         try {
             this.scheduler.shutdown(true);
