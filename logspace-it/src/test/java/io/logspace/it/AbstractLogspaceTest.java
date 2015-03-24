@@ -16,13 +16,18 @@ import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(MethodSorters.JVM)
 public abstract class AbstractLogspaceTest {
 
     @ClassRule
     public static InfrastructureRule infrastructureRule = new InfrastructureRule();
 
-    protected final void commitSolrDocument() {
+    protected final long commitAndGetSolrDocumentCount(String query) {
+        this.commitSolr();
+        return this.getSolrDocumentCount(query);
+    }
+
+    protected final void commitSolr() {
         try {
             this.getSolrServer().commit();
         } catch (Exception e) {

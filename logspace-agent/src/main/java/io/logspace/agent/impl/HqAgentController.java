@@ -51,14 +51,12 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
     }
 
-    public static AbstractAgentController install(String id, String baseUrl) {
+    public static void install(String id, String baseUrl) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
         description.setId(id);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
 
         AgentControllerProvider.setDescription(description);
-
-        return (AbstractAgentController) AgentControllerProvider.getAgentController();
     }
 
     @Override

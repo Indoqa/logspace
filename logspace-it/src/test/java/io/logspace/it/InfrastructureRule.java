@@ -7,10 +7,13 @@
  */
 package io.logspace.it;
 
+import static com.indoqa.commons.lang.util.FileUtils.getCanonicalFile;
 import io.logspace.hq.webapp.LogspaceHq;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrServer;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
@@ -63,8 +66,11 @@ public class InfrastructureRule extends ExternalResource {
     }
 
     private void initializeHQ() throws Exception {
+        File solrDataDirectory = getCanonicalFile(new File("./target/solr"));
+        FileUtils.deleteDirectory(solrDataDirectory);
+
         System.setProperty("log-path", "./target");
-        System.setProperty("logspace.solr.base-url", "file://./target/solr");
+        System.setProperty("logspace.solr.base-url", solrDataDirectory.toURI().toString());
 
         this.logspaceHq = new LogspaceHq();
         this.logspaceHq.invoke();
