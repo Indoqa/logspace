@@ -12,6 +12,7 @@ import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,6 +68,10 @@ public abstract class AbstractAgentController implements AgentController {
 
     protected Agent getAgent(String agentId) {
         return this.agents.get(agentId);
+    }
+
+    protected Collection<String> getAgentIds() {
+        return this.agents.keySet();
     }
 
     protected Iterable<Agent> getAgents() {

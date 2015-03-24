@@ -24,7 +24,7 @@ public class LogspaceHq extends AbstractSparkApplication {
     }
 
     @Override
-    public void beforeInitialization() {
+    protected void beforeInitialization() {
         this.printLogo();
     }
 
@@ -54,7 +54,7 @@ public class LogspaceHq extends AbstractSparkApplication {
             if (asciiLogo == null) {
                 return;
             }
-            this.getInitialzationLogger().info(asciiLogo);
+            this.getInitializationLogger().info(asciiLogo);
         } catch (IOException e) {
             throw new ApplicationInitializationException("Error while reading ASCII logo.", e);
         }

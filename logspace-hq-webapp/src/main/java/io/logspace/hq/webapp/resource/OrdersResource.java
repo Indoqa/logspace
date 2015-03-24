@@ -91,7 +91,7 @@ public class OrdersResource extends AbstractJsonResourcesBase {
 
     private String getOrder(Request req, Response res) throws IOException {
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
-        this.logger.debug("Retrieving order for controller " + controllerId);
+        this.logger.debug("Retrieving order for AgentController with ID '{}'.", controllerId);
 
         File file = this.getConfigFile(controllerId);
         if (!file.exists()) {

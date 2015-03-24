@@ -7,6 +7,9 @@
  */
 package io.logspace.hq.solr;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,19 @@ public class SolrPluginConfiguration {
     public SolrServerFactory getSolrServerFactory() {
         SolrServerFactory solrServerFactory = new SolrServerFactory();
         solrServerFactory.setUrl(this.solrBaseUrl);
+        solrServerFactory.setEmbeddedSolrConfigurationDir(this.getSolrInstanceDir());
         return solrServerFactory;
+    }
+
+    private String getSolrInstanceDir() {
+        File file = new File("../logspace-hq-solr-plugin/src/main/solr");
+
+        try {
+            file = file.getCanonicalFile();
+        } catch (IOException e) {
+            // do nothing
+        }
+
+        return file.getAbsolutePath();
     }
 }

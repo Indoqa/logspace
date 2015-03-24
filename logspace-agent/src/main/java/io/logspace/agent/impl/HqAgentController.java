@@ -51,12 +51,14 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
     }
 
-    public static void install(String id, String baseUrl) {
+    public static AbstractAgentController install(String id, String baseUrl) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
         description.setId(id);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
 
         AgentControllerProvider.setDescription(description);
+
+        return (AbstractAgentController) AgentControllerProvider.getAgentController();
     }
 
     @Override
@@ -95,7 +97,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.logger.info("Performing shutdown.");
 
         try {
-            this.agentScheduler.shutdown();
+            this.agentScheduler.stop();
             this.logger.debug("Scheduler is stopped.");
         } catch (AgentControllerException acex) {
             this.logger.error("Failed to stop scheduler.", acex);
@@ -146,7 +148,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             return;
         }
 
-        this.agentScheduler.applyOrder(agentControllerOrder);
+        this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
     }
 
     private void sendEvents(Collection<Event> events) throws IOException {
