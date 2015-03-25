@@ -14,6 +14,7 @@ import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.event.Optional;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,20 @@ public class EventTest {
 
             this.compare(expected, actual);
         }
+    }
+
+    @Test
+    public void testSingleEvent() throws IOException {
+        for (int i = 0; i < 100; i++) {
+            Event expected = this.createRandomEvent();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            EventJsonSerializer.eventToJson(expected, baos);
+            Event actual = EventJsonDeserializer.eventFromJson(baos.toByteArray());
+
+            this.compare(expected, actual);
+        }
+
     }
 
     private void compare(Collection<? extends Event> expected, Collection<? extends Event> actual) {

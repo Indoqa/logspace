@@ -30,11 +30,16 @@ import org.junit.Test;
 
 public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
+    private static final String HQ_URL = "http://localhost:4567";
+    private static final String QUEUE_FILE = "./target/queue-file.dat";
+
     @Test
     public void testMissingAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", "http://localhost:4567");
+        HqAgentController.install("1", HQ_URL, QUEUE_FILE);
+        AgentControllerProvider.getAgentController();
+
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
 
@@ -45,7 +50,9 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingOrder() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("2", "http://localhost:4567");
+        HqAgentController.install("2", HQ_URL, QUEUE_FILE);
+        AgentControllerProvider.getAgentController();
+
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
 
@@ -56,7 +63,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testSimpleAgent() throws SolrServerException, IOException {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", "http://localhost:4567");
+        HqAgentController.install("1", HQ_URL, QUEUE_FILE);
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();

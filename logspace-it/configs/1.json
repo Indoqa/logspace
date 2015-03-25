@@ -2,7 +2,7 @@
   "agent-orders" : [ {
     "id" : "TEST-AGENT-001",
     "trigger-type" : "cron",
-    "trigger-parameter" : "0/2 * * * * ? *"
+    "trigger-parameter" : "0/1 * * * * ? *"
   } ],
   "commit-max-count" : 1000,
   "commit-max-seconds" : 60

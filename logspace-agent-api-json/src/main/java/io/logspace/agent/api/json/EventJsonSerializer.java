@@ -22,6 +22,12 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
         super(outputStream);
     }
 
+    public static void eventToJson(Event event, OutputStream outputStream) throws IOException {
+        EventJsonSerializer serializer = new EventJsonSerializer(outputStream);
+        serializer.serializeSingleEvent(event);
+        serializer.finish();
+    }
+
     public static String toJson(Collection<? extends Event> events) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -31,23 +37,27 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
     }
 
     public static void toJson(Collection<? extends Event> events, OutputStream outputStream) throws IOException {
-        new EventJsonSerializer(outputStream).serialize(events);
+        EventJsonSerializer serializer = new EventJsonSerializer(outputStream);
+        serializer.serialize(events);
+        serializer.finish();
     }
 
     private void serialize(Collection<? extends Event> events) throws IOException {
         this.startArray();
 
         for (Event eachEvent : events) {
-            this.startObject();
-
-            this.writeEvent(eachEvent);
-
-            this.endObject();
+            this.serializeSingleEvent(eachEvent);
         }
 
         this.endArray();
+    }
 
-        this.finish();
+    private void serializeSingleEvent(Event event) throws IOException {
+        this.startObject();
+
+        this.writeEvent(event);
+
+        this.endObject();
     }
 
     private void writeEvent(Event event) throws IOException {

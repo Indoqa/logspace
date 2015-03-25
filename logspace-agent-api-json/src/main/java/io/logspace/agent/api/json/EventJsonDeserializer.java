@@ -46,6 +46,10 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         return new EventJsonDeserializer(inputStream).deserialize();
     }
 
+    public static Event eventFromJson(byte[] data) throws IOException {
+        return new EventJsonDeserializer(data).deserializeSingleEvent();
+    }
+
     private Collection<? extends Event> deserialize() throws IOException {
         Collection<Event> result = new ArrayList<Event>();
 
@@ -61,18 +65,25 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
                 break;
             }
 
-            this.validateToken(START_OBJECT);
-            this.consumeToken();
-
-            result.add(this.readEvent());
-
-            this.prepareToken();
-            this.validateToken(END_OBJECT);
-            this.consumeToken();
+            result.add(this.deserializeSingleEvent());
         }
 
         this.prepareToken();
         this.validateEnd();
+
+        return result;
+    }
+
+    private Event deserializeSingleEvent() throws IOException {
+        this.prepareToken();
+        this.validateToken(START_OBJECT);
+        this.consumeToken();
+
+        Event result = this.readEvent();
+
+        this.prepareToken();
+        this.validateToken(END_OBJECT);
+        this.consumeToken();
 
         return result;
     }
