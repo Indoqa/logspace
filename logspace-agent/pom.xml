@@ -40,10 +40,6 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.squareup</groupId>
-      <artifactId>tape</artifactId>
-    </dependency>
 
     <!-- Quartz -->
     <dependency>
