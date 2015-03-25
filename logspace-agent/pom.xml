@@ -53,7 +53,8 @@
 
     <!-- Tape -->
     <dependency>
-      <groupId>com.squareup</groupId>
+      <!--<groupId>com.squareup</groupId>-->
+      <groupId>com.indoqa.thirdparty</groupId>
       <artifactId>tape</artifactId>
     </dependency>
 
