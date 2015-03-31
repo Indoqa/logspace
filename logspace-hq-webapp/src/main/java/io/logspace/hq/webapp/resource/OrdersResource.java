@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import spark.Request;
 import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import com.indoqa.boot.AbstractJsonResourcesBase;
@@ -82,7 +81,7 @@ public class OrdersResource extends AbstractJsonResourcesBase {
 
     @PostConstruct
     public void mount() {
-        Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (Route) (req, res) -> this.getOrder(req, res));
+        Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
     }
 
     private File getConfigFile(String controllerId) {

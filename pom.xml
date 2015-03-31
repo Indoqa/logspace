@@ -73,6 +73,7 @@
     <module>logspace-hq-webapp</module>
     <module>logspace-hq-webapp-embedded-solr</module>
     <module>logspace-it</module>
+    <module>logspace-jvm-agent</module>
     <module>logspace-monitor</module>
   </modules>
 
