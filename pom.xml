@@ -15,8 +15,8 @@
 
   <parent>
     <groupId>com.indoqa</groupId>
-    <artifactId>indoqa-maven-root</artifactId>
-    <version>19</version>
+    <artifactId>indoqa-oss-parent</artifactId>
+    <version>2</version>
   </parent>
 
   <groupId>io.logspace</groupId>
@@ -403,7 +403,6 @@
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.11</version>
           <configuration>
             <excludes>
               <exclude>**/_rest_managed.json</exclude>
