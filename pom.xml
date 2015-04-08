@@ -400,33 +400,6 @@
             </mapping>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.apache.rat</groupId>
-          <artifactId>apache-rat-plugin</artifactId>
-          <configuration>
-            <excludes>
-              <exclude>**/_rest_managed.json</exclude>
-              <exclude>**/logspace.io.txt</exclude>
-              <exclude>**/dependency-reduced-pom.xml</exclude>
-              <exclude>**/.recommenders/**</exclude>
-              <exclude>**/configs/**</exclude>
-            </excludes>
-            <licenses>
-              <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                <licenseFamilyCategory>EPL</licenseFamilyCategory>
-                <licenseFamilyName>Eclipse Public License - v 1.0</licenseFamilyName>
-                <patterns>
-                  <pattern>Eclipse Public License</pattern>
-                </patterns>
-              </license>
-            </licenses>
-            <licenseFamilies>
-              <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                <familyName>Eclipse Public License - v 1.0</familyName>
-              </licenseFamily>
-            </licenseFamilies>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -446,14 +419,31 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>install</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
+        <configuration>
+          <excludes>
+            <exclude>**/bin/*</exclude>
+            <exclude>README.md</exclude>
+            <exclude>**/_rest_managed.json</exclude>
+            <exclude>**/logspace.io.txt</exclude>
+            <exclude>**/dependency-reduced-pom.xml</exclude>
+            <exclude>**/.recommenders/**</exclude>
+            <exclude>**/configs/**</exclude>
+          </excludes>
+          <licenses>
+            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+              <licenseFamilyCategory>EPL</licenseFamilyCategory>
+              <licenseFamilyName>Eclipse Public License - v 1.0</licenseFamilyName>
+              <patterns>
+                <pattern>Eclipse Public License</pattern>
+              </patterns>
+            </license>
+          </licenses>
+          <licenseFamilies>
+            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+              <familyName>Eclipse Public License - v 1.0</familyName>
+            </licenseFamily>
+          </licenseFamilies>
+        </configuration>
       </plugin>
     </plugins>
   </build>
