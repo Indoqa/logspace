@@ -28,6 +28,11 @@
       <groupId>com.indoqa</groupId>
       <artifactId>indoqa-boot</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>com.indoqa.commons</groupId>
+      <artifactId>indoqa-commons-jarinjarloader</artifactId>
+    </dependency>    
 
     <!-- Commons dependencies -->
     <dependency>
