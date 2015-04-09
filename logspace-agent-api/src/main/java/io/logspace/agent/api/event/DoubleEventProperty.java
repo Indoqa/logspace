@@ -7,10 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
-public interface EventProperty<T> {
+public class DoubleEventProperty extends AbstractEventProperty<Double> {
 
-    String getKey();
-
-    T getValue();
-
+    public DoubleEventProperty(String key, Double value) {
+        super(key, value);
+    }
 }

@@ -7,10 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
-public interface EventProperty<T> {
+public class FloatEventProperty extends AbstractEventProperty<Float> {
 
-    String getKey();
-
-    T getValue();
-
+    public FloatEventProperty(String key, Float value) {
+        super(key, value);
+    }
 }

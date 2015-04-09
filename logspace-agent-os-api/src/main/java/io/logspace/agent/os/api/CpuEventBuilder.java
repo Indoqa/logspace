@@ -9,7 +9,6 @@ package io.logspace.agent.os.api;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.event.Optional;
 
 public class CpuEventBuilder extends AbstractEventBuilder {
@@ -30,7 +29,7 @@ public class CpuEventBuilder extends AbstractEventBuilder {
      * @return This event builder.
      */
     public CpuEventBuilder setLoadAverage(double loadAverage) {
-        this.add(new EventProperty(PROPERTY_LOAD_AVERAGE, Double.toString(loadAverage)));
+        this.addProperty(PROPERTY_LOAD_AVERAGE, loadAverage);
         return this;
     }
 

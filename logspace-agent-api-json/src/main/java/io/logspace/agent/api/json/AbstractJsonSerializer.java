@@ -48,6 +48,10 @@ public abstract class AbstractJsonSerializer {
         this.jsonGenerator.close();
     }
 
+    protected JsonGenerator getJsonGenerator() {
+        return this.jsonGenerator;
+    }
+
     protected void startArray() throws IOException {
         this.jsonGenerator.writeStartArray();
     }

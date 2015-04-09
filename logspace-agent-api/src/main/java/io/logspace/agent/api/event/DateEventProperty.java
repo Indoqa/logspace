@@ -7,10 +7,11 @@
  */
 package io.logspace.agent.api.event;
 
-public interface EventProperty<T> {
+import java.util.Date;
 
-    String getKey();
+public class DateEventProperty extends AbstractEventProperty<Date> {
 
-    T getValue();
-
+    public DateEventProperty(String key, Date value) {
+        super(key, value);
+    }
 }

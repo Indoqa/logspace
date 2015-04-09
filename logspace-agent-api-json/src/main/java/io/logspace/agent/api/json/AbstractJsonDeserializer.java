@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.Date;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -43,12 +44,24 @@ public abstract class AbstractJsonDeserializer {
         return this.jsonParser.getCurrentName();
     }
 
+    protected JsonParser getJsonParser() {
+        return this.jsonParser;
+    }
+
     protected boolean hasField(String fieldName) throws IOException {
         return fieldName.equals(this.jsonParser.getCurrentName());
     }
 
     protected boolean hasToken(JsonToken expected) {
         return this.jsonParser.getCurrentToken() == expected;
+    }
+
+    protected Boolean nextBooleanValue() throws IOException {
+        return this.jsonParser.nextBooleanValue();
+    }
+
+    protected int nextIntValue() throws IOException, JsonParseException {
+        return this.jsonParser.nextIntValue(0);
     }
 
     protected String nextTextValue() throws IOException {
@@ -83,8 +96,8 @@ public abstract class AbstractJsonDeserializer {
         this.validateToken((JsonToken) null);
     }
 
-    protected void validateField(String fieldName) throws IOException {
-        JacksonUtils.validateFieldName(this.jsonParser.getCurrentName(), fieldName);
+    protected void validateField(String... expected) throws IOException {
+        JacksonUtils.validateFieldName(this.jsonParser.getCurrentName(), expected);
         this.jsonParser.nextToken();
     }
 
