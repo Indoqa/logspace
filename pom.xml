@@ -434,6 +434,9 @@
             <exclude>**/dependency-reduced-pom.xml</exclude>
             <exclude>**/.recommenders/**</exclude>
             <exclude>**/configs/**</exclude>
+            <exclude>**/logspace.json</exclude>
+            <exclude>**/logspace-test.json</exclude>
+            <exclude>**/logspace-default.json</exclude>
           </excludes>
           <licenses>
             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">

@@ -14,13 +14,20 @@ import io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class AgentControllerProvider {
 
+    private static final String[] CONFIG_LOCATIONS = {"/logspace-test.json", "/logspace.json", "/logspace-default.json"};
+
     private static AgentController agentController;
     private static AgentControllerDescription agentControllerDescription;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AgentControllerProvider.class);
 
     private AgentControllerProvider() {
         // hide utility class constructor
@@ -45,7 +52,9 @@ public final class AgentControllerProvider {
     }
 
     public static synchronized void setDescription(AgentControllerDescription agentControllerDescription) {
-        verifyNotInitialized();
+        if (isInitialized()) {
+            throw new AgentControllerException("Cannot set a new description after the AgentController has already been initialized.");
+        }
 
         AgentControllerProvider.agentControllerDescription = agentControllerDescription;
     }
@@ -54,34 +63,45 @@ public final class AgentControllerProvider {
         try {
             setDescription(AgentControllerDescriptionJsonDeserializer.fromJson(inputStream));
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load description from InputStream.", ioex);
+            throw new AgentControllerException("Could not load description.", ioex);
         } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                // do nothing
-            }
+            closeQuietly(inputStream);
         }
     }
 
-    public static synchronized void setDescription(URI descriptionURI) {
+    public static synchronized void setDescription(URL descriptionURL) {
+        if (descriptionURL == null) {
+            return;
+        }
+
         try {
-            setDescription(descriptionURI.toURL().openStream());
+            LOGGER.info("Loading AgentControllerDescription from {}.", descriptionURL);
+            setDescription(descriptionURL.openStream());
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load description from URI '" + descriptionURI + "'.", ioex);
+            throw new AgentControllerException("Could not load description from URL '" + descriptionURL + "'.", ioex);
         }
     }
 
     public static synchronized void shutdown() {
-        if (agentController != null) {
-            agentController.flush();
-            agentController.shutdown();
-            agentController = null;
+        if (agentController == null) {
+            return;
         }
+
+        agentController.flush();
+        agentController.shutdown();
+        agentController = null;
     }
 
-    private static AgentControllerDescription createDefaultDescription() {
-        return AgentControllerDescription.withClass(LoggingAgentController.class);
+    private static void closeQuietly(InputStream inputStream) {
+        if (inputStream == null) {
+            return;
+        }
+
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            // do nothing
+        }
     }
 
     private static Object executeConstructor(Constructor<?> constructor, Object... arguments) {
@@ -104,8 +124,12 @@ public final class AgentControllerProvider {
     }
 
     private static AgentController initialize() {
-        if (agentControllerDescription == null) {
-            agentControllerDescription = createDefaultDescription();
+        for (String eachConfigLocation : CONFIG_LOCATIONS) {
+            if (agentControllerDescription != null) {
+                break;
+            }
+
+            setDescription(AgentControllerProvider.class.getResource(eachConfigLocation));
         }
 
         Class<? extends AgentController> agentControllerClass = loadClass(agentControllerDescription);
@@ -121,7 +145,7 @@ public final class AgentControllerProvider {
             return (AgentController) executeConstructor(constructor);
         }
 
-        throw new AgentControllerException("Could not find a suitable constructor for Agent Controller class '" + agentControllerClass
+        throw new AgentControllerException("Could not find a suitable constructor for AgentController '" + agentControllerClass
                 + "'. Either a constructor accepting " + AgentControllerDescription.class + " or a default constructor is required.");
     }
 
@@ -135,12 +159,6 @@ public final class AgentControllerProvider {
             return (Class<? extends AgentController>) Class.forName(description.getClassName());
         } catch (ClassNotFoundException cnfex) {
             throw new AgentControllerException("Could not load Agent Controller class '" + description.getClassName() + "'.", cnfex);
-        }
-    }
-
-    private static void verifyNotInitialized() {
-        if (isInitialized()) {
-            throw new AgentControllerException("Cannot set a new description after the AgentController has already been initialized.");
         }
     }
 }

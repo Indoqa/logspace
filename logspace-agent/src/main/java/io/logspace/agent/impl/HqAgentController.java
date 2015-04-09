@@ -24,7 +24,6 @@ import io.logspace.agent.scheduling.AgentScheduler;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 
@@ -213,9 +212,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     protected void performCommit() {
-        long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        System.out.println(MessageFormat.format("{0} KB", usedMemory / 1024));
-
         try {
             List<Event> eventsForUpload = this.getEventsForUpload();
             if (eventsForUpload == null || eventsForUpload.isEmpty()) {

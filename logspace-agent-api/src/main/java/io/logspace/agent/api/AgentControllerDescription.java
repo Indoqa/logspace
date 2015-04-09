@@ -37,6 +37,10 @@ public class AgentControllerDescription {
         this.parameters.add(parameter);
     }
 
+    public void addParameter(String name, String value) {
+        this.addParameter(Parameter.create(name, value));
+    }
+
     public String getClassName() {
         return this.className;
     }

@@ -7,16 +7,12 @@
  */
 package io.logspace.agent.api.json;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_CLASS_NAME;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_ID;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETERS;
-import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETER_NAME;
-import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETER_VALUE;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 
@@ -61,27 +57,20 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
             this.validateField(FIELD_PARAMETERS);
 
             this.prepareToken();
-            this.validateToken(START_ARRAY);
+            this.validateToken(START_OBJECT);
             this.consumeToken();
 
             while (true) {
                 this.prepareToken();
 
-                this.validateToken(END_ARRAY, START_OBJECT);
+                this.validateToken(END_OBJECT, FIELD_NAME);
 
-                if (this.hasToken(END_ARRAY)) {
+                if (this.hasToken(END_OBJECT)) {
                     this.consumeToken();
                     break;
                 }
 
-                this.validateToken(START_OBJECT);
-                this.consumeToken();
-
                 parameters.add(this.readParameter());
-
-                this.prepareToken();
-                this.validateToken(END_OBJECT);
-                this.consumeToken();
             }
         }
 
@@ -98,8 +87,10 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
     private Parameter readParameter() throws IOException {
         Parameter parameter = new Parameter();
 
-        parameter.setName(this.readMandatoryField(FIELD_PARAMETER_NAME));
-        parameter.setValue(this.readMandatoryField(FIELD_PARAMETER_VALUE));
+        parameter.setName(this.getCurrentName());
+        parameter.setValue(this.nextTextValue());
+
+        this.consumeToken();
 
         return parameter;
     }

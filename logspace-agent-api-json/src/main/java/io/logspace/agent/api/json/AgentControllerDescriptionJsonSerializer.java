@@ -11,8 +11,6 @@ import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_CLASS_NAME;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_ID;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETERS;
-import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETER_NAME;
-import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETER_VALUE;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 
@@ -61,17 +59,12 @@ public final class AgentControllerDescriptionJsonSerializer extends AbstractJson
 
         this.writeField(FIELD_PARAMETERS);
 
-        this.startArray();
+        this.startObject();
 
         for (Parameter eachParameter : description.getParameters()) {
-            this.startObject();
-
-            this.writeMandatoryField(FIELD_PARAMETER_NAME, eachParameter.getName());
-            this.writeMandatoryField(FIELD_PARAMETER_VALUE, eachParameter.getValue());
-
-            this.endObject();
+            this.writeMandatoryField(eachParameter.getName(), eachParameter.getValue());
         }
 
-        this.endArray();
+        this.endObject();
     }
 }

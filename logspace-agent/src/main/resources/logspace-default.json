@@ -1,0 +1,4 @@
+{
+  "id" : "logspace-default",
+  "class-name" : "io.logspace.agent.impl.LoggingAgentController"
+}
