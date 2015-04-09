@@ -7,10 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
-public interface EventProperty<T> {
+public class BooleanEventProperty extends AbstractEventProperty<Boolean> {
 
-    String getKey();
-
-    T getValue();
-
+    public BooleanEventProperty(String key, Boolean value) {
+        super(key, value);
+    }
 }

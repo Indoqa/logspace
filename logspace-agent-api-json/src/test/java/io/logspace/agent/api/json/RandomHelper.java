@@ -7,8 +7,10 @@
  */
 package io.logspace.agent.api.json;
 
+import static java.util.concurrent.TimeUnit.DAYS;
 import io.logspace.agent.api.event.Optional;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -16,8 +18,37 @@ public class RandomHelper {
 
     private static final Random RANDOM = new Random();
 
+    public static boolean getRandomBoolean() {
+        return RANDOM.nextBoolean();
+    }
+
     public static int getRandomCount(int max) {
         return RANDOM.nextInt(max);
+    }
+
+    public static Date getRandomDate() {
+        long time = (long) (System.currentTimeMillis() - getRandomDouble() * DAYS.toMillis(3650));
+
+        // set the milliseconds to 0
+        time = time / 1000 * 1000;
+
+        return new Date(time);
+    }
+
+    public static double getRandomDouble() {
+        return RANDOM.nextDouble();
+    }
+
+    public static float getRandomFloat() {
+        return RANDOM.nextFloat();
+    }
+
+    public static int getRandomInt() {
+        return RANDOM.nextInt();
+    }
+
+    public static long getRandomLong() {
+        return RANDOM.nextLong();
     }
 
     public static Optional<String> getRandomOptional() {

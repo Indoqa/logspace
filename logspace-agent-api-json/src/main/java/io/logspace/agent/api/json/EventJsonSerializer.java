@@ -66,19 +66,27 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
         this.writeMandatoryDateField(Event.FIELD_TIMESTAMP, event.getTimestamp());
         this.writeOptionalField(Event.FIELD_PARENT_EVENT_ID, event.getParentEventId());
         this.writeOptionalField(Event.FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
-        this.writeProperties(event.getProperties());
+
+        this.writeProperties(EventPropertyJsonHandlers.getBooleanHandler(), event.getBooleanProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getDateHandler(), event.getDateProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getDoubleHandler(), event.getDoubleProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getFloatHandler(), event.getFloatProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getIntegerHandler(), event.getIntegerProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getLongHandler(), event.getLongProperties());
+        this.writeProperties(EventPropertyJsonHandlers.getStringHandler(), event.getStringProperties());
     }
 
-    private void writeProperties(Collection<EventProperty> properties) throws IOException {
+    private <T> void writeProperties(EventPropertyJsonHandler<T> handler, Collection<? extends EventProperty<T>> properties)
+            throws IOException {
         if (properties == null || properties.isEmpty()) {
             return;
         }
 
-        this.writeField(Event.FIELD_PROPERTIES);
+        this.writeField(handler.getFieldName());
 
         this.startObject();
-        for (EventProperty eachProperty : properties) {
-            this.writeMandatoryField(eachProperty.getKey(), eachProperty.getValue());
+        for (EventProperty<T> eachProperty : properties) {
+            handler.writeEventProperty(eachProperty, this.getJsonGenerator());
         }
         this.endObject();
     }

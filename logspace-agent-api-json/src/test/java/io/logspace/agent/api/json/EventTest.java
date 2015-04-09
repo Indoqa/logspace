@@ -7,12 +7,16 @@
  */
 package io.logspace.agent.api.json;
 
+import static io.logspace.agent.api.json.RandomHelper.getRandomBoolean;
+import static io.logspace.agent.api.json.RandomHelper.getRandomDate;
+import static io.logspace.agent.api.json.RandomHelper.getRandomDouble;
+import static io.logspace.agent.api.json.RandomHelper.getRandomFloat;
+import static io.logspace.agent.api.json.RandomHelper.getRandomInt;
+import static io.logspace.agent.api.json.RandomHelper.getRandomLong;
 import static io.logspace.agent.api.json.RandomHelper.getRandomOptional;
 import static io.logspace.agent.api.json.RandomHelper.getRandomString;
 import static org.junit.Assert.assertEquals;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.event.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,7 +53,6 @@ public class EventTest {
 
             this.compare(expected, actual);
         }
-
     }
 
     private void compare(Collection<? extends Event> expected, Collection<? extends Event> actual) {
@@ -69,22 +72,13 @@ public class EventTest {
         assertEquals(expected.getTimestamp().getTime() / 1000, actual.getTimestamp().getTime() / 1000);
         assertEquals(expected.getType(), actual.getType());
 
-        assertEquals(expected.getProperties() == null, actual.getProperties() == null);
-        if (expected.getProperties() == null) {
-            return;
-        }
-
-        assertEquals(expected.getProperties().size(), actual.getProperties().size());
-        Iterator<EventProperty> expectedIterator = expected.getProperties().iterator();
-        Iterator<EventProperty> actualIterator = actual.getProperties().iterator();
-        while (expectedIterator.hasNext()) {
-            this.compare(expectedIterator.next(), actualIterator.next());
-        }
-    }
-
-    private void compare(EventProperty expected, EventProperty actual) {
-        assertEquals(expected.getKey(), actual.getKey());
-        assertEquals(expected.getValue(), actual.getValue());
+        assertEquals(expected.getBooleanProperties(), actual.getBooleanProperties());
+        assertEquals(expected.getDateProperties(), actual.getDateProperties());
+        assertEquals(expected.getDoubleProperties(), actual.getDoubleProperties());
+        assertEquals(expected.getFloatProperties(), actual.getFloatProperties());
+        assertEquals(expected.getIntegerProperties(), actual.getIntegerProperties());
+        assertEquals(expected.getLongProperties(), actual.getLongProperties());
+        assertEquals(expected.getStringProperties(), actual.getStringProperties());
     }
 
     private Event createRandomEvent() {
@@ -111,19 +105,43 @@ public class EventTest {
         return result;
     }
 
-    private Collection<EventProperty> createRandomProperties() {
-        Collection<EventProperty> result = new ArrayList<EventProperty>();
+    private EventProperties createRandomProperties() {
+        EventProperties result = new EventProperties();
 
         int count = RandomHelper.getRandomCount(5);
         for (int i = 0; i < count; i++) {
-            result.add(this.createRandomProperty());
+            switch (RandomHelper.getRandomCount(7)) {
+                case 0:
+                    result.add(new BooleanEventProperty(getRandomString(), getRandomBoolean()));
+                    break;
+
+                case 1:
+                    result.add(new DateEventProperty(getRandomString(), getRandomDate()));
+                    break;
+
+                case 2:
+                    result.add(new DoubleEventProperty(getRandomString(), getRandomDouble()));
+                    break;
+
+                case 3:
+                    result.add(new FloatEventProperty(getRandomString(), getRandomFloat()));
+                    break;
+
+                case 4:
+                    result.add(new IntegerEventProperty(getRandomString(), getRandomInt()));
+                    break;
+
+                case 5:
+                    result.add(new LongEventProperty(getRandomString(), getRandomLong()));
+                    break;
+
+                case 6:
+                    result.add(new StringEventProperty(getRandomString(), getRandomString()));
+                    break;
+            }
         }
 
         return result;
-    }
-
-    private EventProperty createRandomProperty() {
-        return new EventProperty(getRandomString(), getRandomString());
     }
 
     private class TestEvent implements Event {
@@ -131,9 +149,29 @@ public class EventTest {
         private String id;
         private Optional<String> globalEventId;
         private Optional<String> parentEventId;
-        private Collection<EventProperty> properties;
         private Optional<String> type;
         private Date timestamp;
+        private EventProperties properties;
+
+        @Override
+        public Collection<BooleanEventProperty> getBooleanProperties() {
+            return this.properties.getBooleanProperties();
+        }
+
+        @Override
+        public Collection<DateEventProperty> getDateProperties() {
+            return this.properties.getDateProperties();
+        }
+
+        @Override
+        public Collection<DoubleEventProperty> getDoubleProperties() {
+            return this.properties.getDoubleProperties();
+        }
+
+        @Override
+        public Collection<FloatEventProperty> getFloatProperties() {
+            return this.properties.getFloatProperties();
+        }
 
         @Override
         public Optional<String> getGlobalEventId() {
@@ -146,13 +184,23 @@ public class EventTest {
         }
 
         @Override
+        public Collection<IntegerEventProperty> getIntegerProperties() {
+            return this.properties.getIntegerProperties();
+        }
+
+        @Override
+        public Collection<LongEventProperty> getLongProperties() {
+            return this.properties.getLongProperties();
+        }
+
+        @Override
         public Optional<String> getParentEventId() {
             return this.parentEventId;
         }
 
         @Override
-        public Collection<EventProperty> getProperties() {
-            return this.properties;
+        public Collection<StringEventProperty> getStringProperties() {
+            return this.properties.getStringProperties();
         }
 
         @Override
@@ -182,7 +230,7 @@ public class EventTest {
             this.parentEventId = parentEventId;
         }
 
-        public void setProperties(Collection<EventProperty> properties) {
+        public void setProperties(EventProperties properties) {
             this.properties = properties;
         }
 

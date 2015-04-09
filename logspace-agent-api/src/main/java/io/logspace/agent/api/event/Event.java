@@ -31,7 +31,13 @@ public interface Event {
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_PARENT_EVENT_ID = "pid";
     public static final String FIELD_GLOBAL_EVENT_ID = "gid";
-    public static final String FIELD_PROPERTIES = "properties";
+    public static final String FIELD_BOOLEAN_PROPERTIES = "boolean-properties";
+    public static final String FIELD_DATE_PROPERTIES = "date-properties";
+    public static final String FIELD_DOUBLE_PROPERTIES = "double-properties";
+    public static final String FIELD_FLOAT_PROPERTIES = "float-properties";
+    public static final String FIELD_INTEGER_PROPERTIES = "integer-properties";
+    public static final String FIELD_LONG_PROPERTIES = "long-properties";
+    public static final String FIELD_STRING_PROPERTIES = "string-properties";
 
     /**
      * @return The optional global event id.
@@ -49,9 +55,39 @@ public interface Event {
     Optional<String> getParentEventId();
 
     /**
-     * @return A collection of properties. If there are no properties, the collection is empty.
+     * @return The properties carrying Booleans. If there are no properties, the collection is empty.
      */
-    Collection<EventProperty> getProperties();
+    Collection<BooleanEventProperty> getBooleanProperties();
+
+    /**
+     * @return The properties carrying Dates. If there are no properties, the collection is empty.
+     */
+    Collection<DateEventProperty> getDateProperties();
+
+    /**
+     * @return The properties carrying Integers. If there are no properties, the collection is empty.
+     */
+    Collection<IntegerEventProperty> getIntegerProperties();
+
+    /**
+     * @return The properties carrying Longs. If there are no properties, the collection is empty.
+     */
+    Collection<LongEventProperty> getLongProperties();
+
+    /**
+     * @return The properties carrying Floats. If there are no properties, the collection is empty.
+     */
+    Collection<FloatEventProperty> getFloatProperties();
+
+    /**
+     * @return The properties carrying Doubles. If there are no properties, the collection is empty.
+     */
+    Collection<DoubleEventProperty> getDoubleProperties();
+
+    /**
+     * @return The properties carrying Strings. If there are no properties, the collection is empty.
+     */
+    Collection<StringEventProperty> getStringProperties();
 
     /**
      * @return The timestamp of the creation time.

@@ -48,7 +48,8 @@ public class ApplicationTest {
         private AgentController agentController = AgentControllerProvider.getAgentController();
 
         public void triggerEvent() {
-            this.agentController.send(new ImmutableEvent(Optional.of("TEST"), Optional.<String> empty(), Optional.<String> empty()));
+            this.agentController.send(new ImmutableEvent(Optional.of("TEST"), Optional.<String> empty(), Optional.<String> empty(),
+                    null));
         }
     }
 }

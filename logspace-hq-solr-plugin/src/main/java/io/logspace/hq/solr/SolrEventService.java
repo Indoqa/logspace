@@ -40,31 +40,48 @@ public class SolrEventService implements EventService {
 
         this.logger.info("Storing {} event(s).", events.size());
 
-        Collection<SolrInputDocument> inputDocuments = new ArrayList<SolrInputDocument>();
-
-        for (Event eachEvent : events) {
-            SolrInputDocument document = new SolrInputDocument();
-
-            document.addField("id", eachEvent.getId());
-            document.addField("type", eachEvent.getType().orElse(null));
-            document.addField("timestamp", eachEvent.getTimestamp());
-            document.addField("parent_id", eachEvent.getParentEventId().orElse(null));
-            document.addField("global_id", eachEvent.getGlobalEventId().orElse(null));
-
-            if (eachEvent.hasProperties()) {
-                for (EventProperty eachProperty : eachEvent.getProperties()) {
-                    document.addField("property_" + eachEvent.getId(), eachProperty.getValue());
-                }
-            }
-
-            inputDocuments.add(document);
-        }
+        Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events);
 
         try {
             this.solrServer.add(inputDocuments);
-            this.solrServer.commit();
         } catch (SolrServerException | IOException e) {
-            e.printStackTrace();
+            this.logger.error("Failed to store events.", e);
         }
+    }
+
+    private void addProperties(SolrInputDocument document, Iterable<? extends EventProperty<?>> properties, String prefix) {
+        for (EventProperty<?> eachProperty : properties) {
+            document.addField(prefix + eachProperty.getKey(), eachProperty.getValue());
+        }
+    }
+
+    private SolrInputDocument createInputDocument(Event eachEvent) {
+        SolrInputDocument result = new SolrInputDocument();
+
+        result.addField("id", eachEvent.getId());
+        result.addField("type", eachEvent.getType().orElse(null));
+        result.addField("timestamp", eachEvent.getTimestamp());
+        result.addField("parent_id", eachEvent.getParentEventId().orElse(null));
+        result.addField("global_id", eachEvent.getGlobalEventId().orElse(null));
+
+        this.addProperties(result, eachEvent.getBooleanProperties(), "boolean_property_");
+        this.addProperties(result, eachEvent.getDateProperties(), "date_property_");
+        this.addProperties(result, eachEvent.getDoubleProperties(), "double_property_");
+        this.addProperties(result, eachEvent.getFloatProperties(), "float_property_");
+        this.addProperties(result, eachEvent.getIntegerProperties(), "integer_property_");
+        this.addProperties(result, eachEvent.getLongProperties(), "long_property_");
+        this.addProperties(result, eachEvent.getStringProperties(), "string_property_");
+
+        return result;
+    }
+
+    private Collection<SolrInputDocument> createInputDocuments(Collection<? extends Event> events) {
+        Collection<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
+
+        for (Event eachEvent : events) {
+            result.add(this.createInputDocument(eachEvent));
+        }
+
+        return result;
     }
 }

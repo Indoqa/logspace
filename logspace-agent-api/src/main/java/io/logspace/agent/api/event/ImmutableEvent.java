@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.api.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -43,10 +41,7 @@ public final class ImmutableEvent implements Event {
      */
     private Optional<String> parentEventId;
 
-    /**
-     * Key-value pairs of additional information.
-     */
-    private final Collection<EventProperty> properties;
+    private final EventProperties properties;
 
     /**
      * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using
@@ -58,14 +53,19 @@ public final class ImmutableEvent implements Event {
      * @param properties The properties.
      */
     public ImmutableEvent(Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId,
-            EventProperty... properties) {
+            EventProperties properties) {
         this.id = UUID.randomUUID().toString();
         this.timestamp = new Date();
 
         this.type = type;
         this.globalEventId = globalEventId;
         this.parentEventId = parentEventId;
-        this.properties = Arrays.asList(properties);
+
+        if (properties == null) {
+            this.properties = new EventProperties();
+        } else {
+            this.properties = properties;
+        }
     }
 
     /**
@@ -87,6 +87,29 @@ public final class ImmutableEvent implements Event {
     }
 
     /**
+     * @see io.logspace.agent.api.event.Event#getBooleanProperties()
+     */
+    @Override
+    public Collection<BooleanEventProperty> getBooleanProperties() {
+        return this.properties.getBooleanProperties();
+    }
+
+    @Override
+    public Collection<DateEventProperty> getDateProperties() {
+        return this.properties.getDateProperties();
+    }
+
+    @Override
+    public Collection<DoubleEventProperty> getDoubleProperties() {
+        return this.properties.getDoubleProperties();
+    }
+
+    @Override
+    public Collection<FloatEventProperty> getFloatProperties() {
+        return this.properties.getFloatProperties();
+    }
+
+    /**
      * @see io.logspace.agent.api.event.Event#getGlobalEventId()
      */
     @Override
@@ -102,6 +125,16 @@ public final class ImmutableEvent implements Event {
         return this.id;
     }
 
+    @Override
+    public Collection<IntegerEventProperty> getIntegerProperties() {
+        return this.properties.getIntegerProperties();
+    }
+
+    @Override
+    public Collection<LongEventProperty> getLongProperties() {
+        return this.properties.getLongProperties();
+    }
+
     /**
      * @see io.logspace.agent.api.event.Event#getParentEventId()
      */
@@ -110,12 +143,9 @@ public final class ImmutableEvent implements Event {
         return this.parentEventId;
     }
 
-    /**
-     * @see io.logspace.agent.api.event.Event#getProperties()
-     */
     @Override
-    public Collection<EventProperty> getProperties() {
-        return new ArrayList<EventProperty>(this.properties);
+    public Collection<StringEventProperty> getStringProperties() {
+        return this.properties.getStringProperties();
     }
 
     /**
@@ -144,6 +174,6 @@ public final class ImmutableEvent implements Event {
 
     @Override
     public boolean hasProperties() {
-        return this.properties != null && !this.properties.isEmpty();
+        return !this.properties.isEmpty();
     }
 }

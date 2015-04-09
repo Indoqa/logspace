@@ -12,15 +12,8 @@ import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
 import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
-import static io.logspace.agent.api.event.Event.FIELD_GLOBAL_EVENT_ID;
-import static io.logspace.agent.api.event.Event.FIELD_ID;
-import static io.logspace.agent.api.event.Event.FIELD_PARENT_EVENT_ID;
-import static io.logspace.agent.api.event.Event.FIELD_PROPERTIES;
-import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
-import static io.logspace.agent.api.event.Event.FIELD_TYPE;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.Optional;
+import static io.logspace.agent.api.event.Event.*;
+import io.logspace.agent.api.event.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,16 +31,16 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         super(inputStream);
     }
 
+    public static Event eventFromJson(byte[] data) throws IOException {
+        return new EventJsonDeserializer(data).deserializeSingleEvent();
+    }
+
     public static Collection<? extends Event> fromJson(byte[] data) throws IOException {
         return new EventJsonDeserializer(data).deserialize();
     }
 
     public static Collection<? extends Event> fromJson(InputStream inputStream) throws IOException {
         return new EventJsonDeserializer(inputStream).deserialize();
-    }
-
-    public static Event eventFromJson(byte[] data) throws IOException {
-        return new EventJsonDeserializer(data).deserializeSingleEvent();
     }
 
     private Collection<? extends Event> deserialize() throws IOException {
@@ -101,35 +94,40 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         return event;
     }
 
-    private Collection<EventProperty> readProperties() throws IOException {
-        Collection<EventProperty> result = new ArrayList<EventProperty>();
-
-        this.prepareToken();
-        if (!this.hasToken(FIELD_NAME)) {
-            return result;
-        }
-
-        this.validateField(FIELD_PROPERTIES);
-
-        this.prepareToken();
-        this.validateToken(START_OBJECT);
-        this.consumeToken();
+    private EventProperties readProperties() throws IOException {
+        EventProperties result = new EventProperties();
 
         while (true) {
             this.prepareToken();
-            this.validateToken(FIELD_NAME, END_OBJECT);
-
-            if (this.hasToken(END_OBJECT)) {
-                this.consumeToken();
-                break;
+            if (!this.hasToken(FIELD_NAME)) {
+                return result;
             }
 
-            this.validateToken(FIELD_NAME);
-            result.add(new EventProperty(this.getCurrentName(), this.nextTextValue()));
-            this.consumeToken();
-        }
+            String fieldName = this.getCurrentName();
+            EventPropertyJsonHandler<?> eventPropertyJsonHandler = EventPropertyJsonHandlers.getHandler(fieldName);
 
-        return result;
+            this.validateField(FIELD_BOOLEAN_PROPERTIES, FIELD_DATE_PROPERTIES, FIELD_DOUBLE_PROPERTIES, FIELD_FLOAT_PROPERTIES,
+                    FIELD_INTEGER_PROPERTIES, FIELD_LONG_PROPERTIES, FIELD_STRING_PROPERTIES);
+
+            this.prepareToken();
+            this.validateToken(START_OBJECT);
+            this.consumeToken();
+
+            while (true) {
+                this.prepareToken();
+                this.validateToken(FIELD_NAME, END_OBJECT);
+
+                if (this.hasToken(END_OBJECT)) {
+                    this.consumeToken();
+                    break;
+                }
+
+                this.validateToken(FIELD_NAME);
+
+                eventPropertyJsonHandler.readEventProperty(result, this.getJsonParser());
+                this.consumeToken();
+            }
+        }
     }
 
     public static class DeserializedEvent implements Event {
@@ -139,7 +137,27 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         private Optional<String> parentEventId;
         private Optional<String> globalEventId;
         private Optional<String> type;
-        private Collection<EventProperty> properties;
+        private EventProperties properties = new EventProperties();
+
+        @Override
+        public Collection<BooleanEventProperty> getBooleanProperties() {
+            return this.properties.getBooleanProperties();
+        }
+
+        @Override
+        public Collection<DateEventProperty> getDateProperties() {
+            return this.properties.getDateProperties();
+        }
+
+        @Override
+        public Collection<DoubleEventProperty> getDoubleProperties() {
+            return this.properties.getDoubleProperties();
+        }
+
+        @Override
+        public Collection<FloatEventProperty> getFloatProperties() {
+            return this.properties.getFloatProperties();
+        }
 
         @Override
         public Optional<String> getGlobalEventId() {
@@ -152,13 +170,23 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         @Override
+        public Collection<IntegerEventProperty> getIntegerProperties() {
+            return this.properties.getIntegerProperties();
+        }
+
+        @Override
+        public Collection<LongEventProperty> getLongProperties() {
+            return this.properties.getLongProperties();
+        }
+
+        @Override
         public Optional<String> getParentEventId() {
             return this.parentEventId;
         }
 
         @Override
-        public Collection<EventProperty> getProperties() {
-            return this.properties;
+        public Collection<StringEventProperty> getStringProperties() {
+            return this.properties.getStringProperties();
         }
 
         @Override
@@ -188,7 +216,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             this.parentEventId = parentEventId;
         }
 
-        public void setProperties(Collection<EventProperty> properties) {
+        public void setProperties(EventProperties properties) {
             this.properties = properties;
         }
 

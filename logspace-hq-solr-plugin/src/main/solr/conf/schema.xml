@@ -12,12 +12,12 @@
   <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
   <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" />
   <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
-  <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0" />
-  <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
-  <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" />
   <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0" />
-  <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
   <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" />
   <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0" />
   <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
   <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0" />
@@ -45,7 +45,13 @@
   <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
   <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
   
-  <dynamicField name="property_*" type="string" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="date_property_*" type="date" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="double_property_*" type="double" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="float_property_*" type="float" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
   
   <uniqueKey>id</uniqueKey>
 </schema>

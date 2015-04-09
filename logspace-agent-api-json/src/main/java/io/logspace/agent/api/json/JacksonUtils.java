@@ -47,6 +47,15 @@ public final class JacksonUtils {
         return parser.nextTextValue();
     }
 
+    public static Date parseDateValue(String value) {
+        try {
+            return getTimeFormat().parse(value);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but value '" + value
+                    + "'.");
+        }
+    }
+
     public static void prepareToken(JsonParser parser) throws IOException {
         if (parser.getCurrentToken() == null) {
             parser.nextToken();
@@ -59,12 +68,7 @@ public final class JacksonUtils {
             return null;
         }
 
-        try {
-            return getTimeFormat().parse(value);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but value '" + value
-                    + "'.");
-        }
+        return parseDateValue(value);
     }
 
     public static String readMandatoryField(JsonParser parser, String fieldName) throws IOException {
@@ -107,11 +111,20 @@ public final class JacksonUtils {
         return Optional.of(result);
     }
 
-    public static void validateFieldName(String fieldName, String expectedFieldName) {
-        if (!fieldName.equals(expectedFieldName)) {
-            throw new IllegalArgumentException("Expected field of name '" + expectedFieldName + "', but found field of name '"
-                    + fieldName + "'.");
+    public static void validateFieldName(String fieldName, String... expected) {
+        for (String eachExpected : expected) {
+            if (fieldName.equals(eachExpected)) {
+                return;
+            }
         }
+
+        if (expected.length == 1) {
+            throw new IllegalArgumentException("Expected field of name '" + expected + "', but found field of name '" + fieldName
+                    + "'.");
+        }
+
+        throw new IllegalArgumentException("Expected field of name '" + Arrays.toString(expected) + "', but found field of name '"
+                + fieldName + "'.");
     }
 
     public static void validateTokenType(JsonToken token, JsonToken... expected) {
