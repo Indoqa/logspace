@@ -38,6 +38,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private static final int DEFAULT_MAX_COMMIT_SECONDS = 300;
 
     private static final String BASE_URL_PARAMETER = "base-url";
+    private static final String SPACE_TOKEN_PARAMETER = "space-token";
     private static final String QUEUE_FILE_PARAMETER = "queue-file";
     private static final String HQ_COMMUNICATION_INTERVAL_PARAMETER = "hq-communication-interval";
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
@@ -61,7 +62,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.setId(agentControllerDescription.getId());
 
         String baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
-        this.hqClient = new HqClient(baseUrl, this.getId());
+        String spaceToken = agentControllerDescription.getParameterValue(SPACE_TOKEN_PARAMETER);
+        this.hqClient = new HqClient(baseUrl, this.getId(), spaceToken);
 
         int hqCommunicationInterval = Integer.parseInt(agentControllerDescription.getParameterValue(
                 HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
@@ -88,11 +90,12 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
-    public static void install(String id, String baseUrl, String queueFile) {
+    public static void install(String id, String baseUrl, String queueFile, String spaceToken) {
         AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
         description.setId(id);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
         description.addParameter(Parameter.create(QUEUE_FILE_PARAMETER, queueFile));
+        description.addParameter(Parameter.create(SPACE_TOKEN_PARAMETER, spaceToken));
 
         AgentControllerProvider.setDescription(description);
     }

@@ -33,14 +33,14 @@ public class SolrEventService implements EventService {
     private SolrServer solrServer;
 
     @Override
-    public void store(Collection<? extends Event> events) {
+    public void store(Collection<? extends Event> events, String space) {
         if (events == null || events.isEmpty()) {
             return;
         }
 
         this.logger.info("Storing {} event(s).", events.size());
 
-        Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events);
+        Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
 
         try {
             this.solrServer.add(inputDocuments);
@@ -55,31 +55,33 @@ public class SolrEventService implements EventService {
         }
     }
 
-    private SolrInputDocument createInputDocument(Event eachEvent) {
+    private SolrInputDocument createInputDocument(Event event, String space) {
         SolrInputDocument result = new SolrInputDocument();
 
-        result.addField("id", eachEvent.getId());
-        result.addField("type", eachEvent.getType().orElse(null));
-        result.addField("timestamp", eachEvent.getTimestamp());
-        result.addField("parent_id", eachEvent.getParentEventId().orElse(null));
-        result.addField("global_id", eachEvent.getGlobalEventId().orElse(null));
+        result.addField("id", event.getId());
+        result.addField("type", event.getType().orElse(null));
+        result.addField("timestamp", event.getTimestamp());
+        result.addField("parent_id", event.getParentEventId().orElse(null));
+        result.addField("global_id", event.getGlobalEventId().orElse(null));
 
-        this.addProperties(result, eachEvent.getBooleanProperties(), "boolean_property_");
-        this.addProperties(result, eachEvent.getDateProperties(), "date_property_");
-        this.addProperties(result, eachEvent.getDoubleProperties(), "double_property_");
-        this.addProperties(result, eachEvent.getFloatProperties(), "float_property_");
-        this.addProperties(result, eachEvent.getIntegerProperties(), "integer_property_");
-        this.addProperties(result, eachEvent.getLongProperties(), "long_property_");
-        this.addProperties(result, eachEvent.getStringProperties(), "string_property_");
+        result.addField("space", space);
+
+        this.addProperties(result, event.getBooleanProperties(), "boolean_property_");
+        this.addProperties(result, event.getDateProperties(), "date_property_");
+        this.addProperties(result, event.getDoubleProperties(), "double_property_");
+        this.addProperties(result, event.getFloatProperties(), "float_property_");
+        this.addProperties(result, event.getIntegerProperties(), "integer_property_");
+        this.addProperties(result, event.getLongProperties(), "long_property_");
+        this.addProperties(result, event.getStringProperties(), "string_property_");
 
         return result;
     }
 
-    private Collection<SolrInputDocument> createInputDocuments(Collection<? extends Event> events) {
+    private Collection<SolrInputDocument> createInputDocuments(Collection<? extends Event> events, String space) {
         Collection<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
 
         for (Event eachEvent : events) {
-            result.add(this.createInputDocument(eachEvent));
+            result.add(this.createInputDocument(eachEvent, space));
         }
 
         return result;
