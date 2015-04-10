@@ -7,6 +7,9 @@
  */
 package io.logspace.hq.webapp;
 
+import io.logspace.hq.webapp.resource.EmbeddedStaticResources;
+import io.logspace.hq.webapp.resource.ExternalStaticResources;
+
 import java.io.IOException;
 
 import spark.utils.IOUtils;
@@ -18,6 +21,7 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
     private static final String APPLICATION_NAME = "Logspace";
     private static final String BASE_PACKAGE = "io.logspace";
     private static final String LOGO_PATH = "/logspace.io.txt";
+    private static final String FRONTEND_INDEX_HTML_PATH = "/logspace-frontend/index.html";
 
     public static void main(String[] args) {
         new LogspaceHq().invoke();
@@ -40,12 +44,13 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected void initializeSpringBeans() {
-        // nothing to do yet
+        this.getApplicationContext().register(EmbeddedStaticResources.class);
+        this.getApplicationContext().register(ExternalStaticResources.class);
     }
 
     @Override
     protected boolean isDevEnvironment() {
-        return true;
+        return LogspaceHq.class.getResourceAsStream(FRONTEND_INDEX_HTML_PATH) == null;
     }
 
     private void printLogo() {

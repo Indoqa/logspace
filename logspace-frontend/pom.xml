@@ -22,6 +22,28 @@
   <artifactId>logspace-frontend</artifactId>
   <name>Logspace Frontend</name>
 
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>dist-zip.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
   <profiles>
     <profile>
       <id>indoqa-release</id>
@@ -51,12 +73,6 @@
                 </configuration>
               </execution>
               <execution>
-                <id>bower install</id>
-                <goals>
-                  <goal>bower</goal>
-                </goals>
-              </execution>
-              <execution>
                 <id>gulp build</id>
                 <goals>
                   <goal>gulp</goal>
@@ -64,23 +80,6 @@
                 <configuration>
                   <arguments>dist -p</arguments>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-              <descriptors>
-                <descriptor>dist-zip.xml</descriptor>
-              </descriptors>
-            </configuration>
-            <executions>
-              <execution>
-                <id>make-assembly</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
               </execution>
             </executions>
           </plugin>

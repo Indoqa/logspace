@@ -1,9 +1,7 @@
-app/client/build
-app/client/dist
-app/client/css/app.css
-app/client/**/*.js~
-bower_components/
-node/
-node_modules/
-tmp/
-.idea
+.DS_Store
+bower_components
+build
+node
+node_modules
+npm-debug.log
+*.sublime-workspace

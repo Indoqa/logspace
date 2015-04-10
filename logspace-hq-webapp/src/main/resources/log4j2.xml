@@ -21,7 +21,7 @@
     <Console name="ConsoleInit" target="SYSTEM_OUT">
       <PatternLayout pattern="%msg%n" />
     </Console>
-    <RollingFile name="File" fileName="${sys:log-path}/cerebro.log" filePattern="${sys:log-path}/cerebro-%d{yyyy-MM-dd}-%i.log">
+    <RollingFile name="File" fileName="${sys:log-path}/logspace.log" filePattern="${sys:log-path}/cerebro-%d{yyyy-MM-dd}-%i.log">
       <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger - %msg%n" />
       <Policies>
         <TimeBasedTriggeringPolicy />
@@ -39,7 +39,7 @@
 
   <Loggers>
     <!-- Always log basic initialization information -->
-    <Logger name="com.indoqa.spark.AbstractSparkApplication_INIT" additivity="false">
+    <Logger name="com.indoqa.boot.AbstractIndoqaBootApplication_INIT" additivity="false">
       <AppenderRef ref="ConsoleInit" />
     </Logger>
     <Logger name="io.logspace" additivity="false" level="DEBUG">

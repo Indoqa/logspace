@@ -20,9 +20,17 @@
 
   <fileSets>
     <fileSet>
-      <directory>app/client/dist</directory>
+      <directory>build</directory>
       <outputDirectory>${project.artifactId}</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>../</directory>
+      <outputDirectory>.</outputDirectory>
+      <includes>
+        <include>LICENSE</include>
+        <include>NOTICE</include>
+      </includes>
+    </fileSet>
   </fileSets>
-  
+
 </assembly>

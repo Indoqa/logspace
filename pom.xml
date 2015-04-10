@@ -28,15 +28,14 @@
   <licenses>
     <license>
       <name>Eclipse Public License Version 1.0</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-      <distribution>repo</distribution>
+      <url>https://raw.githubusercontent.com/Indoqa/logspace/master/LICENSE</url>
     </license>
   </licenses>
 
   <properties>
     <project.build.compiler.version>1.8</project.build.compiler.version>
 
-    <indoqa-boot-version>0.1-SNAPSHOT</indoqa-boot-version>
+    <indoqa-boot-version>0.2-SNAPSHOT</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
     <solr-version>4.10.3</solr-version>
 
@@ -404,6 +403,7 @@
             </excludes>
             <mapping>
               <txt>SCRIPT_STYLE</txt>
+              <styl>SLASHSTAR_STYLE</styl>
             </mapping>
           </configuration>
         </plugin>
@@ -435,10 +435,14 @@
             <exclude>**/dependency-reduced-pom.xml</exclude>
             <exclude>**/.recommenders/**</exclude>
             <exclude>**/configs/**</exclude>
-            <exclude>**/logspace.json</exclude>
-            <exclude>**/logspace-test.json</exclude>
-            <exclude>**/logspace-default.json</exclude>
             <exclude>src/build-with-jdk-6</exclude>
+            <exclude>**/*.json</exclude>
+            <exclude>**/node/**/*.*</exclude>
+            <exclude>**/node/**/*</exclude>
+            <exclude>**/node_modules/**/*.*</exclude>
+            <exclude>**/node_modules/**/*</exclude>
+            <exclude>**/.eslintrc</exclude>
+            <exclude>**/build/**</exclude>
           </excludes>
           <licenses>
             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -458,7 +462,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <profiles>
     <profile>
       <id>build-with-jdk-6</id>
