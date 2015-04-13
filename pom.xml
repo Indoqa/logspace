@@ -438,6 +438,7 @@
             <exclude>**/logspace.json</exclude>
             <exclude>**/logspace-test.json</exclude>
             <exclude>**/logspace-default.json</exclude>
+            <exclude>src/build-with-jdk-6</exclude>
           </excludes>
           <licenses>
             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -457,4 +458,44 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>build-with-jdk-6</id>
+      <activation>
+        <file>
+          <exists>src/build-with-jdk-6</exists>
+        </file>
+      </activation>
+      <properties>
+          <project.build.compiler.version>1.6</project.build.compiler.version>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <verbose>true</verbose>
+              <fork>true</fork>
+              <executable>${JAVA_6_HOME}/bin/javac</executable>
+              <compilerVersion>1.6</compilerVersion>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <archive>
+                <index>true</index>
+                <manifestEntries>
+                  <Build-Jdk>1.6.0</Build-Jdk>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
