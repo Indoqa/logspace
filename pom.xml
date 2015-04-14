@@ -61,6 +61,7 @@
     <module>logspace-agent</module>
     <module>logspace-agent-api</module>
     <module>logspace-agent-api-json</module>
+    <module>logspace-agent-cxf</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-os-api</module>
     <module>logspace-agent-solr</module>
@@ -441,7 +442,7 @@
             <exclude>**/dependency-reduced-pom.xml</exclude>
             <exclude>**/.recommenders/**</exclude>
             <exclude>**/configs/**</exclude>
-            <exclude>src/build-with-jdk-6</exclude>
+            <exclude>**/src/build-with-jdk-6</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/node/**/*.*</exclude>
             <exclude>**/node/**/*</exclude>
