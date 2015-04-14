@@ -19,25 +19,31 @@ import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.impl.HqAgentController;
 import io.logspace.it.AbstractLogspaceTest;
 
-import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
     private static final String HQ_URL = "http://localhost:4567";
     private static final String QUEUE_FILE = "./target/queue-file.dat";
+    private static final String SPACE_TOKEN = "test";
+
+    @Before
+    public void before() {
+        this.deleteByQuery("*:*");
+    }
 
     @Test
     public void testMissingAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_FILE);
+        HqAgentController.install("1", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -50,7 +56,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingOrder() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("2", HQ_URL, QUEUE_FILE);
+        HqAgentController.install("2", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -60,10 +66,10 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     }
 
     @Test
-    public void testSimpleAgent() throws SolrServerException, IOException {
+    public void testSimpleAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_FILE);
+        HqAgentController.install("1", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
@@ -74,15 +80,25 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         SolrQuery solrQuery = new SolrQuery("*:*");
         solrQuery.addSort("global_id", ORDER.asc);
 
-        QueryResponse queryResponse = this.getSolrServer().query(solrQuery);
+        QueryResponse queryResponse = this.querySolr(solrQuery);
 
         int documentCount = 0;
         for (SolrDocument eachDocument : queryResponse.getResults()) {
             assertEquals(String.valueOf(++documentCount), eachDocument.getFirstValue("global_id"));
         }
+    }
 
-        this.getSolrServer().deleteByQuery("*:*");
-        this.commitSolr();
+    @Test
+    public void testUnrecognizedSpaceToken() {
+        assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
+
+        HqAgentController.install("1", HQ_URL, QUEUE_FILE, UUID.randomUUID().toString());
+        TestAgent testAgent = new TestAgent();
+        this.waitFor(5, SECONDS);
+        AgentControllerProvider.shutdown();
+
+        assertTrue(testAgent.getEventCount() > 0);
+        assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
     }
 
     public static class TestAgent extends AbstractAgent {

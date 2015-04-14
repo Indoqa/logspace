@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.SolrParams;
 import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
@@ -35,6 +37,15 @@ public abstract class AbstractLogspaceTest {
         }
     }
 
+    protected final void deleteByQuery(String query) {
+        try {
+            this.getSolrServer().deleteByQuery(query);
+            this.commitSolr();
+        } catch (Exception e) {
+            throw new LogspaceTestException("Failed to delete with query '" + query + "'.", e);
+        }
+    }
+
     protected final long getSolrDocumentCount(String query) {
         SolrQuery solrQuery = new SolrQuery(query);
         solrQuery.setRows(0);
@@ -49,6 +60,14 @@ public abstract class AbstractLogspaceTest {
 
     protected final SolrServer getSolrServer() {
         return infrastructureRule.getSolrServer();
+    }
+
+    protected final QueryResponse querySolr(SolrParams solrQuery) {
+        try {
+            return this.getSolrServer().query(solrQuery);
+        } catch (SolrServerException e) {
+            throw new LogspaceTestException("Could not query documents from solr.", e);
+        }
     }
 
     protected final void waitFor(long duration, TimeUnit timeUnit) {

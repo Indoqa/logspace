@@ -33,12 +33,13 @@ public class HqClient {
 
     private String baseUrl;
     private String agentControllerId;
+    private String spaceToken;
 
     private final AgentControllerOrderResponseHandler agentControllerOrderResponseHandler = new AgentControllerOrderResponseHandler();
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public HqClient(String baseUrl, String agentControllerId) {
+    public HqClient(String baseUrl, String agentControllerId, String spaceToken) {
         super();
 
         this.baseUrl = baseUrl;
@@ -47,6 +48,8 @@ public class HqClient {
         }
 
         this.agentControllerId = agentControllerId;
+        this.spaceToken = spaceToken;
+
         this.httpClient = HttpClients.createDefault();
     }
 
@@ -80,6 +83,7 @@ public class HqClient {
     public void uploadEvents(Collection<Event> events) throws IOException {
         HttpPost httpMethod = new HttpPost(this.baseUrl + "/events");
         httpMethod.setEntity(toJsonEntity(events));
+        httpMethod.addHeader("logspace.space-token", this.spaceToken);
 
         this.httpClient.execute(httpMethod, new UploadEventsResponseHandler());
     }
