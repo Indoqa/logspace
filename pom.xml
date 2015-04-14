@@ -64,6 +64,7 @@
     <module>logspace-agent-api-json</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-os-api</module>
+    <module>logspace-agent-solr</module>
     <module>logspace-agent-web</module>
     <module>logspace-agent-web-api</module>
     <module>logspace-frontend</module>
@@ -312,6 +313,11 @@
       <dependency>
         <groupId>io.logspace</groupId>
         <artifactId>logspace-agent-os-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-agent-solr</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

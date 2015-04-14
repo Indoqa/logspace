@@ -20,8 +20,4 @@ public interface Agent {
 
     void execute(AgentOrder agentOrder);
 
-    void setEnabled(boolean enabled);
-
-    boolean isEnabled();
-
 }

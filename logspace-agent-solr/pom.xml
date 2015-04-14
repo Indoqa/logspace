@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Logspace
+    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+    This program and the accompanying materials are made available under the terms of
+    the Eclipse Public License Version 1.0, which accompanies this distribution and
+    is available at http://www.eclipse.org/legal/epl-v10.html.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>jar</packaging>
+
+  <parent>
+    <groupId>io.logspace</groupId>
+    <artifactId>logspace</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>logspace-agent-solr</artifactId>
+
+  <name>Logspace Agent Solr</name>
+
+  <properties>
+    <!-- The agent should be usable in environments running on older JVMs. -->
+    <project.build.compiler.version>1.6</project.build.compiler.version>
+  </properties>
+
+  <dependencies>
+    <!-- Internal -->
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-agent</artifactId>
+    </dependency>
+
+    <!-- Solr -->
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.indoqa.commons</groupId>
+      <artifactId>indoqa-commons-solr-server-factory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

@@ -21,7 +21,12 @@
   <artifactId>logspace-agent-os</artifactId>
 
   <name>Logspace Agent OS</name>
-
+  
+  <properties>
+    <!-- The agent should be usable in environments running on older JVMs. -->
+    <project.build.compiler.version>1.6</project.build.compiler.version>
+  </properties>
+  
   <dependencies>
     <!-- Internal -->
     <dependency>

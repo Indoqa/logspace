@@ -17,10 +17,21 @@ public abstract class AbstractAgent implements Agent {
     private String id;
     private String type;
 
-    private boolean enabled;
-
     private AgentCapabilities capabilities;
     private AgentController agentController;
+
+    protected AbstractAgent() {
+        super();
+    }
+
+    protected AbstractAgent(String id, String type, TriggerType... triggerType) {
+        super();
+
+        this.id = id;
+        this.type = type;
+
+        this.updateCapabilities(triggerType);
+    }
 
     @Override
     public void execute(AgentOrder agentOrder) {
@@ -42,25 +53,19 @@ public abstract class AbstractAgent implements Agent {
         return this.type;
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return this.enabled;
-    }
-
-    @Override
-    public final void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    protected AgentController getAgentController() {
+    protected final AgentController getAgentController() {
         return this.agentController;
     }
 
-    protected void sendEvent(Event event) {
+    protected final boolean isEnabled() {
+        return this.agentController != null && this.agentController.isAgentEnabled(this.id);
+    }
+
+    protected final void sendEvent(Event event) {
         this.agentController.send(event);
     }
 
-    protected void setAgentController(AgentController agentController) {
+    protected final void setAgentController(AgentController agentController) {
         if (this.agentController != null) {
             this.agentController.unregister(this);
         }
