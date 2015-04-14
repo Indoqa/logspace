@@ -479,6 +479,7 @@
       </activation>
       <properties>
           <project.build.compiler.version>1.6</project.build.compiler.version>
+          <JAVA_6_HOME>${env.JAVA_6_HOME}</JAVA_6_HOME>
       </properties>
       <build>
         <plugins>
@@ -497,16 +498,16 @@
             <artifactId>maven-enforcer-plugin</artifactId>
             <executions>
               <execution>
-                <id>enforce-environment-variable-is-set</id>
+                <id>enforce-property</id>
                 <goals>
                   <goal>enforce</goal>
                 </goals>
                 <configuration>
                   <rules>
-                    <requireEnvironmentVariable>
-                      <variableName>JAVA_6_HOME</variableName>
+                    <requireProperty>
+                      <property>JAVA_6_HOME</property>
                       <message>You must set the environment variable JAVA_6_HOME to an existing Java 1.6 JDK.</message>
-                    </requireEnvironmentVariable>
+                    </requireProperty>
                   </rules>
                   <fail>true</fail>
                 </configuration>
