@@ -16,6 +16,8 @@ import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AgentControllerException;
 import io.logspace.agent.impl.AgentControllerInitializationException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -116,17 +118,28 @@ public class AgentScheduler {
             return;
         }
 
+        InputStream resourceStream;
         if (isShaded()) {
-            System.setProperty("org.quartz.properties", "logspace-shaded-quartz.properties");
+            resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-shaded-quartz.properties");
+            // System.setProperty("org.quartz.properties", "logspace-shaded-quartz.properties");
         } else {
-            System.setProperty("org.quartz.properties", "logspace-quartz.properties");
+            resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-quartz.properties");
+            // System.setProperty("org.quartz.properties", "logspace-quartz.properties");
         }
 
         try {
-            this.scheduler = new StdSchedulerFactory().getScheduler();
+            StdSchedulerFactory factory = new StdSchedulerFactory();
+            factory.initialize(resourceStream);
+            this.scheduler = factory.getScheduler();
             this.scheduler.start();
         } catch (SchedulerException e) {
             throw new AgentControllerInitializationException("Error while creating and starting a Quartz scheduler.", e);
+        } finally {
+            try {
+                resourceStream.close();
+            } catch (IOException e) {
+                // do nothing
+            }
         }
     }
 

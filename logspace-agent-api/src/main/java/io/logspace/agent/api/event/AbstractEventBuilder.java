@@ -22,7 +22,7 @@ public abstract class AbstractEventBuilder {
     /**
      * Create an event builder with empty {@link #globalEventId} and empty {@link #parentEventId}.
      */
-    public AbstractEventBuilder() {
+    protected AbstractEventBuilder() {
         super();
         this.parentEventId = Optional.empty();
         this.globalEventId = Optional.empty();
@@ -35,7 +35,7 @@ public abstract class AbstractEventBuilder {
      * @param parentEvent The parent event to be used as template.
      * @return A new event object.
      */
-    public AbstractEventBuilder(final Event parentEvent) {
+    protected AbstractEventBuilder(Event parentEvent) {
         this.parentEventId = Optional.of(parentEvent.getId());
         this.globalEventId = parentEvent.getGlobalEventId();
     }
@@ -131,4 +131,5 @@ public abstract class AbstractEventBuilder {
      * @return The optional type of the event.
      */
     protected abstract Optional<String> getType();
+
 }

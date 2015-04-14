@@ -59,13 +59,12 @@ public class TestAgentController extends AbstractAgentController {
         }
     }
 
-    @Override
-    public void send(Collection<Event> events) {
-        this.collectedEvents.addAll(events);
+    public List<Event> getCollectedEvents() {
+        return this.collectedEvents;
     }
 
     @Override
-    public void shutdown() {
-        this.flush();
+    public void send(Collection<Event> events) {
+        this.collectedEvents.addAll(events);
     }
 }

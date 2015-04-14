@@ -33,6 +33,10 @@
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
+      <artifactId>logspace-agent-solr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
       <artifactId>logspace-hq-webapp</artifactId>
     </dependency>
 

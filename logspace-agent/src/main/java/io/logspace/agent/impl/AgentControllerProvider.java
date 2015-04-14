@@ -11,9 +11,11 @@ import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -124,13 +126,7 @@ public final class AgentControllerProvider {
     }
 
     private static AgentController initialize() {
-        for (String eachConfigLocation : CONFIG_LOCATIONS) {
-            if (agentControllerDescription != null) {
-                break;
-            }
-
-            setDescription(AgentControllerProvider.class.getResource(eachConfigLocation));
-        }
+        initializeDescription();
 
         Class<? extends AgentController> agentControllerClass = loadClass(agentControllerDescription);
 
@@ -147,6 +143,35 @@ public final class AgentControllerProvider {
 
         throw new AgentControllerException("Could not find a suitable constructor for AgentController '" + agentControllerClass
                 + "'. Either a constructor accepting " + AgentControllerDescription.class + " or a default constructor is required.");
+    }
+
+    private static void initializeDescription() {
+        if (agentControllerDescription != null) {
+            return;
+        }
+
+        File file = new File("logspace.json");
+        if (file.exists()) {
+            try {
+                setDescription(file.toURI().toURL());
+            } catch (MalformedURLException e) {
+                // do nothing
+            }
+        } else {
+            System.out.println(file.getAbsolutePath() + " does not exists.");
+        }
+
+        if (agentControllerDescription != null) {
+            return;
+        }
+
+        for (String eachConfigLocation : CONFIG_LOCATIONS) {
+            if (agentControllerDescription != null) {
+                break;
+            }
+
+            setDescription(AgentControllerProvider.class.getResource(eachConfigLocation));
+        }
     }
 
     @SuppressWarnings("unchecked")
