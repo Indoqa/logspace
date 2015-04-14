@@ -8,7 +8,6 @@
 package io.logspace.agent.api.event;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 /**
  * A Java 7 implementation of Optional that can be replaced by the Java 8 equivalent.
@@ -53,7 +52,8 @@ public class Optional<T> {
         }
 
         Optional<?> other = (Optional<?>) obj;
-        return Objects.equals(this.value, other.value);
+        Object b = other.value;
+        return this.value == b || this.value != null && this.value.equals(b);
     }
 
     public T get() {
