@@ -23,7 +23,6 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
         super(core, "/statistics", Off, Cron);
     }
 
-    @SuppressWarnings("unused")
     public static void create(SolrCore solrCore) {
         new SolrCoreStatisticsAgent(solrCore);
     }

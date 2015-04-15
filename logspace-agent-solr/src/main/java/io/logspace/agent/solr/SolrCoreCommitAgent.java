@@ -23,7 +23,6 @@ public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
         this.getSolrCore().getUpdateHandler().registerSoftCommitCallback(this);
     }
 
-    @SuppressWarnings("unused")
     public static void create(SolrCore solrCore) {
         new SolrCoreCommitAgent(solrCore);
     }
