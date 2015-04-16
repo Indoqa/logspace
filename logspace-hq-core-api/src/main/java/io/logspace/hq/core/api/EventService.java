@@ -15,4 +15,8 @@ public interface EventService {
 
     void store(Collection<? extends Event> events, String space);
 
+    Suggestion getSuggestion(String input);
+
+    Object[] getData(DataDefinition dataDefinition);
+
 }

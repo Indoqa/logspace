@@ -29,6 +29,7 @@ public interface Event {
     public static final String FIELD_ID = "id";
     public static final String FIELD_TIMESTAMP = "timestamp";
     public static final String FIELD_TYPE = "type";
+    public static final String FIELD_AGENT_ID = "agent-id";
     public static final String FIELD_PARENT_EVENT_ID = "pid";
     public static final String FIELD_GLOBAL_EVENT_ID = "gid";
     public static final String FIELD_BOOLEAN_PROPERTIES = "boolean-properties";
@@ -40,9 +41,14 @@ public interface Event {
     public static final String FIELD_STRING_PROPERTIES = "string-properties";
 
     /**
-     * @return The optional global event id.
+     * @return The optional global event ID.
      */
     Optional<String> getGlobalEventId();
+
+    /**
+     * @return The ID of the Agent which produced this event.
+     */
+    String getAgentId();
 
     /**
      * @return The id.
@@ -50,7 +56,7 @@ public interface Event {
     String getId();
 
     /**
-     * @return The optional parent event id.
+     * @return The optional parent event ID.
      */
     Optional<String> getParentEventId();
 

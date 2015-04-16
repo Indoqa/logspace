@@ -33,7 +33,7 @@ public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getCoreName());
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getId(), this.getCoreName());
         solrEventBuilder.setWarmuptime(getLong(newSearcher.getStatistics(), "warmupTime"));
         this.sendEvent(solrEventBuilder.toEvent());
     }
@@ -44,7 +44,7 @@ public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createCommitBuilder(this.getCoreName());
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createCommitBuilder(this.getId(), this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 
@@ -54,7 +54,7 @@ public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getCoreName());
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 }

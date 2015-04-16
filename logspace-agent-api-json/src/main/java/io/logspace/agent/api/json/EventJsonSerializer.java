@@ -8,6 +8,12 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
+import static io.logspace.agent.api.event.Event.FIELD_AGENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_GLOBAL_EVENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_ID;
+import static io.logspace.agent.api.event.Event.FIELD_PARENT_EVENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
+import static io.logspace.agent.api.event.Event.FIELD_TYPE;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 
@@ -61,11 +67,12 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
     }
 
     private void writeEvent(Event event) throws IOException {
-        this.writeMandatoryField(Event.FIELD_ID, event.getId());
-        this.writeOptionalField(Event.FIELD_TYPE, event.getType());
-        this.writeMandatoryDateField(Event.FIELD_TIMESTAMP, event.getTimestamp());
-        this.writeOptionalField(Event.FIELD_PARENT_EVENT_ID, event.getParentEventId());
-        this.writeOptionalField(Event.FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
+        this.writeMandatoryField(FIELD_ID, event.getId());
+        this.writeOptionalField(FIELD_TYPE, event.getType());
+        this.writeMandatoryField(FIELD_AGENT_ID, event.getAgentId());
+        this.writeMandatoryDateField(FIELD_TIMESTAMP, event.getTimestamp());
+        this.writeOptionalField(FIELD_PARENT_EVENT_ID, event.getParentEventId());
+        this.writeOptionalField(FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
 
         this.writeProperties(EventPropertyJsonHandlers.getBooleanHandler(), event.getBooleanProperties());
         this.writeProperties(EventPropertyJsonHandlers.getDateHandler(), event.getDateProperties());

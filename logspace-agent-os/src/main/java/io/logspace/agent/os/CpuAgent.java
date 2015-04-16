@@ -8,14 +8,11 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.os.api.CpuEventBuilder;
 
 public class CpuAgent extends AbstractAgent {
-
-    private AgentController agentController;
 
     public CpuAgent() {
         super();
@@ -24,7 +21,7 @@ public class CpuAgent extends AbstractAgent {
     }
 
     public void someMethodSendingAnEvent() {
-        Event event = new CpuEventBuilder().setLoadAverage(3.2).toEvent();
-        this.agentController.send(event);
+        Event event = new CpuEventBuilder(this.getId()).setLoadAverage(3.2).toEvent();
+        this.sendEvent(event);
     }
 }

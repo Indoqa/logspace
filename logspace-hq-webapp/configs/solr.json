@@ -1,13 +1,24 @@
 {
-  "agent-orders" : [ {
-    "id" : "logspace/statistics",
-    "trigger-type" : "CRON",
-    "trigger-parameter" : "0 * * * * ? *"
-  },
-  {
-    "id" : "logspace/commit",
-    "trigger-type" : "EVENT"
-  } ],
+  "agent-orders" : [
+	  {
+	    "id" : "logspace-monitored/statistics",
+	    "trigger-type" : "CRON",
+	    "trigger-parameter" : "0 * * * * ? *"
+	  },
+	  {
+	    "id" : "logspace-monitored/commit",
+	    "trigger-type" : "EVENT"
+	  },
+      {
+	    "id" : "deep-search-wwkswm/statistics",
+	    "trigger-type" : "CRON",
+	    "trigger-parameter" : "0 * * * * ? *"
+	  },
+	  {
+	    "id" : "deep-search-wwkswm/commit",
+	    "trigger-type" : "EVENT"
+	  }
+   ],
   "commit-max-count" : 1000,
   "commit-max-seconds" : 60
 }
