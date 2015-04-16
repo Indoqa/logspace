@@ -18,9 +18,11 @@ import io.logspace.agent.impl.AgentControllerInitializationException;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -70,7 +72,19 @@ public class HqClient {
         HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.agentControllerId);
         httpGet.addHeader("If-Modified-Since", this.agentControllerOrderResponseHandler.getLastModified());
 
-        return this.httpClient.execute(httpGet, this.agentControllerOrderResponseHandler);
+        try {
+            return this.httpClient.execute(httpGet, this.agentControllerOrderResponseHandler);
+        } catch (HttpHostConnectException e) {
+            this.logger.error("Could not connect to HQ at '{}': {}", this.baseUrl, e.getMessage());
+            return null;
+        } catch (HttpResponseException e) {
+            if (e.getStatusCode() == 404) {
+                this.logger.error("There was no order available at '{}'.", httpGet.getURI());
+                return null;
+            }
+
+            throw e;
+        }
     }
 
     public void uploadCapabilities(AgentControllerCapabilities capabilities) throws IOException {

@@ -60,7 +60,7 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getCoreName());
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getId(), this.getCoreName());
 
         Map<String, SolrInfoMBean> infoRegistry = this.getSolrCore().getInfoRegistry();
         this.addIndexStatistics(solrEventBuilder, infoRegistry);

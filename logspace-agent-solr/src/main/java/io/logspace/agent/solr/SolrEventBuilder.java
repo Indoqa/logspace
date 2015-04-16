@@ -49,27 +49,27 @@ public class SolrEventBuilder extends AbstractEventBuilder {
 
     private Optional<String> eventType;
 
-    private SolrEventBuilder(Optional<String> eventType, String coreName) {
-        super();
+    private SolrEventBuilder(String agentId, Optional<String> eventType, String coreName) {
+        super(agentId);
 
         this.eventType = eventType;
         this.addProperty(PROPERTY_CORE_NAME, coreName);
     }
 
-    public static SolrEventBuilder createCommitBuilder(String coreName) {
-        return new SolrEventBuilder(COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createCommitBuilder(String agentId, String coreName) {
+        return new SolrEventBuilder(agentId, COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createNewSearcherBuilder(String coreName) {
-        return new SolrEventBuilder(NEW_SEARCHER_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String coreName) {
+        return new SolrEventBuilder(agentId, NEW_SEARCHER_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createSoftCommitBuilder(String coreName) {
-        return new SolrEventBuilder(SOFT_COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String coreName) {
+        return new SolrEventBuilder(agentId, SOFT_COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createStatisticsBuilder(String coreName) {
-        return new SolrEventBuilder(STATISTICS_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createStatisticsBuilder(String agentId, String coreName) {
+        return new SolrEventBuilder(agentId, STATISTICS_EVENT_TYPE, coreName);
     }
 
     public void set75thPercentileRequestTime(double requestTime) {

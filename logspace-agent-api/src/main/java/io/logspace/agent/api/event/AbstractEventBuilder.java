@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public abstract class AbstractEventBuilder {
 
+    private final String agentId;
     private Optional<String> globalEventId;
     private Optional<String> parentEventId;
 
@@ -22,8 +23,10 @@ public abstract class AbstractEventBuilder {
     /**
      * Create an event builder with empty {@link #globalEventId} and empty {@link #parentEventId}.
      */
-    protected AbstractEventBuilder() {
+    protected AbstractEventBuilder(String agentId) {
         super();
+
+        this.agentId = agentId;
         this.parentEventId = Optional.empty();
         this.globalEventId = Optional.empty();
     }
@@ -35,7 +38,8 @@ public abstract class AbstractEventBuilder {
      * @param parentEvent The parent event to be used as template.
      * @return A new event object.
      */
-    protected AbstractEventBuilder(Event parentEvent) {
+    protected AbstractEventBuilder(String agentId, Event parentEvent) {
+        this.agentId = agentId;
         this.parentEventId = Optional.of(parentEvent.getId());
         this.globalEventId = parentEvent.getGlobalEventId();
     }
@@ -63,7 +67,7 @@ public abstract class AbstractEventBuilder {
     }
 
     public final Event toEvent() {
-        return new ImmutableEvent(this.getType(), this.globalEventId, this.parentEventId, this.properties);
+        return new ImmutableEvent(this.agentId, this.getType(), this.globalEventId, this.parentEventId, this.properties);
     }
 
     protected final void addProperty(BooleanEventProperty property) {

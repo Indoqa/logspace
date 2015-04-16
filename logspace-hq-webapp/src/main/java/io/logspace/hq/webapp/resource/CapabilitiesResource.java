@@ -30,6 +30,7 @@ public class CapabilitiesResource extends AbstractJsonResourcesBase {
         this.put("/capabilities/:" + PARAMETER_CONTROLLER_ID, (req, res) -> this.saveCapabilities(req, res));
     }
 
+    @SuppressWarnings("unused")
     private String saveCapabilities(Request req, Response res) {
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
 

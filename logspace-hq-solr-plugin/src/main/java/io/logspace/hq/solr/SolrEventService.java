@@ -7,19 +7,34 @@
  */
 package io.logspace.hq.solr;
 
+import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
+import static java.text.MessageFormat.format;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
+import io.logspace.hq.core.api.DataDefinition;
 import io.logspace.hq.core.api.EventService;
+import io.logspace.hq.core.api.Suggestion;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.StreamingResponseCallback;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +46,71 @@ public class SolrEventService implements EventService {
 
     @Inject
     private SolrServer solrServer;
+
+    @Override
+    public Object[] getData(DataDefinition dataDefinition) {
+        Class<?> propertyType = this.getPropertyType(dataDefinition);
+        if (propertyType == null) {
+            // TODO: property exception class
+            throw new RuntimeException("Unsupported property type.");
+        }
+
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.addFilterQuery("space:" + escapeSolr(dataDefinition.getSpace()));
+        solrQuery.addFilterQuery("agent_id:" + escapeSolr(dataDefinition.getAgentId()));
+        solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
+        solrQuery.setFields("timestamp", dataDefinition.getPropertyId());
+        solrQuery.setRows(Integer.MAX_VALUE);
+
+        try {
+            PropertyValueCollector propertyValueCollector = new PropertyValueCollector(dataDefinition);
+            this.solrServer.queryAndStreamResponse(solrQuery, propertyValueCollector);
+            return propertyValueCollector.getData();
+        } catch (SolrServerException | IOException e) {
+            // TODO: proper exception class
+            throw new RuntimeException("Failed to retrieve data", e);
+        }
+    }
+
+    @Override
+    public Suggestion getSuggestion(String input) {
+        Suggestion result = new Suggestion();
+
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setRows(0);
+
+        solrQuery.addFilterQuery(format("property_name:{0}* OR space:{0}* OR agent_id:{0}*", escapeSolr(input)));
+
+        solrQuery.addFacetField("space");
+        solrQuery.addFacetField("agent_id");
+        solrQuery.addFacetField("property_name");
+        solrQuery.setFacetLimit(1000);
+
+        try {
+            QueryResponse response = this.solrServer.query(solrQuery);
+
+            String lowercaseInput = StringUtils.lowerCase(input);
+            FacetField spaceFacetField = response.getFacetField("space");
+            if (spaceFacetField != null) {
+                result.setSpaces(this.getNamesWithInput(spaceFacetField.getValues(), lowercaseInput));
+            }
+
+            FacetField agentIdFacetField = response.getFacetField("agent_id");
+            if (agentIdFacetField != null) {
+                result.setAgentIds(this.getNamesWithInput(agentIdFacetField.getValues(), lowercaseInput));
+            }
+
+            FacetField propertyNameFacetField = response.getFacetField("property_name");
+            if (propertyNameFacetField != null) {
+                result.setPropertyNames(this.getNamesWithInput(propertyNameFacetField.getValues(), lowercaseInput));
+            }
+
+            return result;
+        } catch (SolrServerException e) {
+            // TODO: proper exception class
+            throw new RuntimeException("Failed to create suggestions", e);
+        }
+    }
 
     @Override
     public void store(Collection<? extends Event> events, String space) {
@@ -52,6 +132,7 @@ public class SolrEventService implements EventService {
     private void addProperties(SolrInputDocument document, Iterable<? extends EventProperty<?>> properties, String prefix) {
         for (EventProperty<?> eachProperty : properties) {
             document.addField(prefix + eachProperty.getKey(), eachProperty.getValue());
+            document.addField("property_name", eachProperty.getKey());
         }
     }
 
@@ -59,6 +140,7 @@ public class SolrEventService implements EventService {
         SolrInputDocument result = new SolrInputDocument();
 
         result.addField("id", event.getId());
+        result.addField("agent_id", event.getAgentId());
         result.addField("type", event.getType().orElse(null));
         result.addField("timestamp", event.getTimestamp());
         result.addField("parent_id", event.getParentEventId().orElse(null));
@@ -85,5 +167,255 @@ public class SolrEventService implements EventService {
         }
 
         return result;
+    }
+
+    private List<String> getNamesWithInput(List<Count> values, String lowercaseInput) {
+        List<String> result = new ArrayList<>();
+
+        for (Count eachValue : values) {
+            if (eachValue.getName().toLowerCase().contains(lowercaseInput)) {
+                result.add(eachValue.getName());
+            }
+        }
+
+        // if we didn't find a single matching value we take them all, apparently the input does not apply here
+        if (result.isEmpty()) {
+            for (Count eachValue : values) {
+                result.add(eachValue.getName());
+            }
+        }
+
+        return result;
+    }
+
+    private Class<?> getPropertyType(DataDefinition dataDefinition) {
+        if (dataDefinition.getPropertyId().startsWith("long_property")) {
+            return Long.class;
+        }
+
+        if (dataDefinition.getPropertyId().startsWith("int_property")) {
+            return Integer.class;
+        }
+
+        if (dataDefinition.getPropertyId().startsWith("float_property")) {
+            return Float.class;
+        }
+
+        if (dataDefinition.getPropertyId().startsWith("double_property")) {
+            return Double.class;
+        }
+
+        return null;
+    }
+
+    private static class AverageBucket<T extends Number> extends SumBucket<T> {
+
+        private int count;
+
+        @Override
+        public void add(T value) {
+            super.add(value);
+            this.count++;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public T getAggregate() {
+            T value = super.getAggregate();
+
+            if (value instanceof Integer) {
+                return (T) Integer.valueOf(value.intValue() / this.count);
+            }
+
+            if (value instanceof Long) {
+                return (T) Long.valueOf(value.longValue() / this.count);
+            }
+
+            if (value instanceof Float) {
+                return (T) Float.valueOf(value.floatValue() / this.count);
+            }
+
+            if (value instanceof Double) {
+                return (T) Double.valueOf(value.doubleValue() / this.count);
+            }
+
+            return null;
+        }
+    }
+
+    private static interface Bucket<T> {
+
+        void add(T value);
+
+        T getAggregate();
+    }
+
+    private static class CountBucket implements Bucket<Object> {
+
+        private int count;
+
+        @Override
+        public void add(Object value) {
+            this.count++;
+        }
+
+        @Override
+        public Integer getAggregate() {
+            return this.count;
+        }
+    }
+
+    private static class MaxBucket<T extends Comparable<T>> implements Bucket<T> {
+
+        private T max;
+
+        @Override
+        public void add(T value) {
+            if (this.max == null || value.compareTo(this.max) > 0) {
+                this.max = value;
+            }
+        }
+
+        @Override
+        public T getAggregate() {
+            return this.max;
+        }
+    }
+
+    private static class MinBucket<T extends Comparable<T>> implements Bucket<T> {
+
+        private T min;
+
+        @Override
+        public void add(T value) {
+            if (this.min == null || value.compareTo(this.min) < 0) {
+                this.min = value;
+            }
+        }
+
+        @Override
+        public T getAggregate() {
+            return this.min;
+        }
+    }
+
+    private class PropertyValueCollector extends StreamingResponseCallback {
+
+        private final Map<Integer, Bucket<?>> data = new ConcurrentHashMap<Integer, Bucket<?>>();
+        private final DataDefinition dataDefinition;
+
+        public PropertyValueCollector(DataDefinition dataDefinition) {
+            this.dataDefinition = dataDefinition;
+        }
+
+        public Object[] getData() {
+            long intervalLength = this.dataDefinition.getDateRange().getEnd().getTime()
+                    - this.dataDefinition.getDateRange().getStart().getTime();
+            int bucketCount = (int) ((intervalLength + this.dataDefinition.getDateRange().getGap() - 1) / this.dataDefinition
+                    .getDateRange().getGap());
+
+            Object[] result = new Object[bucketCount];
+
+            for (int i = 0; i < bucketCount; i++) {
+                Bucket<?> bucket = this.data.get(i);
+                if (bucket == null) {
+                    continue;
+                }
+
+                result[i] = bucket.getAggregate();
+            }
+
+            return result;
+        }
+
+        @Override
+        public void streamDocListInfo(long numFound, long start, Float maxScore) {
+            // do nothing
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public void streamSolrDocument(SolrDocument doc) {
+            Object propertyValue = doc.getFirstValue(this.dataDefinition.getPropertyId());
+            if (propertyValue == null) {
+                return;
+            }
+
+            int bucketIndex = this.getBucketIndex((Date) doc.getFirstValue("timestamp"));
+
+            Bucket<Object> bucket = (Bucket<Object>) this.data.get(bucketIndex);
+            if (bucket == null) {
+                bucket = this.createBucket();
+                this.data.put(bucketIndex, bucket);
+            }
+            bucket.add(propertyValue);
+        }
+
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        private Bucket<Object> createBucket() {
+            switch (this.dataDefinition.getAggregate()) {
+                case average:
+                    return new AverageBucket();
+                    // break;
+
+                case count:
+                    return new CountBucket();
+                    // break;
+
+                case max:
+                    return new MaxBucket();
+                    // break;
+
+                case min:
+                    return new MinBucket();
+                    // break;
+
+                case sum:
+                    return new SumBucket();
+                    // break;
+
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
+        private int getBucketIndex(Date date) {
+            Date start = this.dataDefinition.getDateRange().getStart();
+            long offset = date.getTime() - start.getTime();
+            return (int) (offset / this.dataDefinition.getDateRange().getGap());
+        }
+    }
+
+    private static class SumBucket<T extends Number> implements Bucket<T> {
+
+        @SuppressWarnings("unchecked")
+        private T sum = (T) Integer.valueOf(0);
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public void add(T value) {
+            if (value instanceof Integer) {
+                this.sum = (T) Integer.valueOf(value.intValue() + this.sum.intValue());
+            }
+
+            if (value instanceof Long) {
+                this.sum = (T) Long.valueOf(value.longValue() + this.sum.longValue());
+            }
+
+            if (value instanceof Float) {
+                this.sum = (T) Float.valueOf(value.floatValue() + this.sum.floatValue());
+            }
+
+            if (value instanceof Double) {
+                this.sum = (T) Double.valueOf(value.doubleValue() + this.sum.doubleValue());
+            }
+        }
+
+        @Override
+        public T getAggregate() {
+            return this.sum;
+        }
     }
 }

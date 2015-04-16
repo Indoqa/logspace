@@ -16,12 +16,12 @@ public class CpuEventBuilder extends AbstractEventBuilder {
     public static final String TYPE = "os-cpu";
     public static final String PROPERTY_LOAD_AVERAGE = "load-average";
 
-    public CpuEventBuilder() {
-        super();
+    public CpuEventBuilder(String agentId) {
+        super(agentId);
     }
 
-    public CpuEventBuilder(Event parentEvent) {
-        super(parentEvent);
+    public CpuEventBuilder(String agentId, Event parentEvent) {
+        super(agentId, parentEvent);
     }
 
     /**

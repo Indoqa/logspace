@@ -147,11 +147,17 @@ public class EventTest {
     private class TestEvent implements Event {
 
         private String id;
+        private String agentId;
         private Optional<String> globalEventId;
         private Optional<String> parentEventId;
         private Optional<String> type;
         private Date timestamp;
         private EventProperties properties;
+
+        @Override
+        public String getAgentId() {
+            return this.agentId;
+        }
 
         @Override
         public Collection<BooleanEventProperty> getBooleanProperties() {
@@ -216,6 +222,10 @@ public class EventTest {
         @Override
         public boolean hasProperties() {
             return this.properties != null && !this.properties.isEmpty();
+        }
+
+        public void setAgentId(String agentId) {
+            this.agentId = agentId;
         }
 
         public void setGlobalEventId(Optional<String> globalEventId) {

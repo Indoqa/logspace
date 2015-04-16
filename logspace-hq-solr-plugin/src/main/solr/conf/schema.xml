@@ -40,8 +40,9 @@
   <field name="_version_" type="long" indexed="true" stored="true" />
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-  <field name="type" type="string" indexed="true" stored="true" multiValued="false" />
+  <field name="agent_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
   <field name="timestamp" type="date" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="type" type="string" indexed="true" stored="true" multiValued="false" />
   <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
   <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
 
@@ -54,6 +55,8 @@
   <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
+  
+  <field name="property_name" type="string" indexed="true" stored="false" multiValued="true" />
 
   <uniqueKey>id</uniqueKey>
 </schema>

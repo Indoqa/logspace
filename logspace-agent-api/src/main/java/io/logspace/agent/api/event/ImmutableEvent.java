@@ -22,6 +22,11 @@ public final class ImmutableEvent implements Event {
     private final String id;
 
     /**
+     * The ID of the Agent which produced the event.
+     */
+    private final String agentId;
+
+    /**
      * The event's creation time.
      */
     private final Date timestamp;
@@ -52,9 +57,10 @@ public final class ImmutableEvent implements Event {
      * @param parentEventId The parent event id.
      * @param properties The properties.
      */
-    public ImmutableEvent(Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId,
+    public ImmutableEvent(String agentId, Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId,
             EventProperties properties) {
         this.id = UUID.randomUUID().toString();
+        this.agentId = agentId;
         this.timestamp = new Date();
 
         this.type = type;
@@ -84,6 +90,11 @@ public final class ImmutableEvent implements Event {
         }
         ImmutableEvent other = (ImmutableEvent) obj;
         return this.id.equals(other.id);
+    }
+
+    @Override
+    public String getAgentId() {
+        return this.agentId;
     }
 
     /**

@@ -86,6 +86,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
         event.setId(this.readMandatoryField(FIELD_ID));
         event.setType(this.readOptionalField(FIELD_TYPE));
+        event.setAgentId(this.readMandatoryField(FIELD_AGENT_ID));
         event.setTimestamp(this.readMandatoryDateField(FIELD_TIMESTAMP));
         event.setParentEventId(this.readOptionalField(FIELD_PARENT_EVENT_ID));
         event.setGlobalEventId(this.readOptionalField(FIELD_GLOBAL_EVENT_ID));
@@ -133,11 +134,17 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
     public static class DeserializedEvent implements Event {
 
         private String id;
+        private String agentId;
         private Date timestamp;
         private Optional<String> parentEventId;
         private Optional<String> globalEventId;
         private Optional<String> type;
         private EventProperties properties = new EventProperties();
+
+        @Override
+        public String getAgentId() {
+            return this.agentId;
+        }
 
         @Override
         public Collection<BooleanEventProperty> getBooleanProperties() {
@@ -202,6 +209,10 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         @Override
         public boolean hasProperties() {
             return this.properties != null && !this.properties.isEmpty();
+        }
+
+        public void setAgentId(String agentId) {
+            this.agentId = agentId;
         }
 
         public void setGlobalEventId(Optional<String> globalEventId) {
