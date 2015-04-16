@@ -79,12 +79,13 @@ public class SolrEventService implements EventService {
         SolrQuery solrQuery = new SolrQuery("*:*");
         solrQuery.setRows(0);
 
-        solrQuery.addFilterQuery(format("property_name:{0}* OR space:{0}* OR agent_id:{0}*", escapeSolr(input)));
+        solrQuery.addFilterQuery(format("tokenized_search_field:{0}*", escapeSolr(input)));
 
         solrQuery.addFacetField("space");
         solrQuery.addFacetField("agent_id");
         solrQuery.addFacetField("property_name");
         solrQuery.setFacetLimit(1000);
+        solrQuery.setFacetMinCount(1);
 
         try {
             QueryResponse response = this.solrServer.query(solrQuery);
@@ -92,12 +93,12 @@ public class SolrEventService implements EventService {
             String lowercaseInput = StringUtils.lowerCase(input);
             FacetField spaceFacetField = response.getFacetField("space");
             if (spaceFacetField != null) {
-                result.setSpaces(this.getNamesWithInput(spaceFacetField.getValues(), lowercaseInput));
+                result.setSpaces(this.getNames(spaceFacetField.getValues()));
             }
 
             FacetField agentIdFacetField = response.getFacetField("agent_id");
             if (agentIdFacetField != null) {
-                result.setAgentIds(this.getNamesWithInput(agentIdFacetField.getValues(), lowercaseInput));
+                result.setAgentIds(this.getNames(agentIdFacetField.getValues()));
             }
 
             FacetField propertyNameFacetField = response.getFacetField("property_name");
@@ -164,6 +165,16 @@ public class SolrEventService implements EventService {
 
         for (Event eachEvent : events) {
             result.add(this.createInputDocument(eachEvent, space));
+        }
+
+        return result;
+    }
+
+    private List<String> getNames(List<Count> values) {
+        List<String> result = new ArrayList<>();
+
+        for (Count eachValue : values) {
+            result.add(eachValue.getName());
         }
 
         return result;

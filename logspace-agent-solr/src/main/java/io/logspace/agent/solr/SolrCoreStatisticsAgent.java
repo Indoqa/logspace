@@ -11,6 +11,9 @@ import static io.logspace.agent.api.order.TriggerType.Cron;
 import static io.logspace.agent.api.order.TriggerType.Off;
 import io.logspace.agent.api.order.AgentOrder;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.solr.common.util.NamedList;
@@ -35,27 +38,37 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
             String indexSizeString = (String) indexSize;
 
             if (indexSizeString.endsWith(" GB")) {
-                double value = Double.parseDouble(indexSizeString.substring(0, indexSizeString.length() - 3));
+                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
                 return (long) (value * 1024 * 1024 * 1024);
             }
 
             if (indexSizeString.endsWith(" MB")) {
-                double value = Double.parseDouble(indexSizeString.substring(0, indexSizeString.length() - 3));
+                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
                 return (long) (value * 1024 * 1024);
             }
 
             if (indexSizeString.endsWith(" KB")) {
-                double value = Double.parseDouble(indexSizeString.substring(0, indexSizeString.length() - 3));
+                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
                 return (long) (value * 1024);
             }
 
             if (indexSizeString.endsWith(" bytes")) {
-                double value = Double.parseDouble(indexSizeString.substring(0, indexSizeString.length() - 6));
+                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 6));
                 return (long) value;
             }
         }
 
         return 0;
+    }
+
+    private static double parse(String value) {
+        try {
+            NumberFormat formatter = NumberFormat.getNumberInstance(Locale.ROOT);
+            return formatter.parse(value).doubleValue();
+        } catch (ParseException e) {
+            SolrCore.log.error("Failed to parse numeric value '{}'", value);
+            return 0;
+        }
     }
 
     @Override

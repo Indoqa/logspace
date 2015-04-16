@@ -24,9 +24,11 @@ import io.logspace.agent.scheduling.AgentScheduler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,7 @@ import com.squareup.tape.FileObjectQueue;
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
     private static final int DEFAULT_FAILURE_COMMIT_DELAY = 1000;
-    private static final int DEFAULT_MAX_COMMIT_SECONDS = 300;
+    private static final int DEFAULT_MAX_COMMIT = 300;
 
     private static final String BASE_URL_PARAMETER = "base-url";
     private static final String SPACE_TOKEN_PARAMETER = "space-token";
@@ -55,7 +57,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     private CommitRunnable commitRunnable;
     private int uploadSize = 1000;
-    private long maxCommitDelay;
+    private long maxCommitDelay = SECONDS.toMillis(DEFAULT_MAX_COMMIT);
     private long failureCommitDelay = DEFAULT_FAILURE_COMMIT_DELAY;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
@@ -70,7 +72,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
 
         this.commitRunnable = new CommitRunnable();
-        new Thread(this.commitRunnable).start();
+        new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
 
         try {
             String queueFile = agentControllerDescription.getParameterValue(QUEUE_FILE_PARAMETER);
@@ -190,13 +192,25 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         try {
             this.uploadCapabilities();
         } catch (IOException ioex) {
-            this.logger.error("Failed to communicate with the HQ.", ioex);
+            if (ioex instanceof ConnectException) {
+                this.logger.error("Could not upload capabilities because the HQ was not available: {}", ioex.getMessage());
+                // no need to try downloading as well
+                return;
+            }
+
+            this.logger.error("Failed to upload capabilities.", ioex);
         }
 
         try {
             this.downloadOrder();
         } catch (IOException ioex) {
-            this.logger.error("Failed to download order", ioex);
+            if (ioex instanceof ConnectException) {
+                this.logger.error("Could not download orders because the HQ was not available: {}", ioex.getMessage());
+            } else if (ioex instanceof HttpResponseException && ((HttpResponseException) ioex).getStatusCode() == 404) {
+                this.logger.error("There was no order available: {}", ioex.getMessage());
+            } else {
+                this.logger.error("Failed to download order.", ioex);
+            }
         }
     }
 
@@ -225,9 +239,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
             this.purgeUploadedEvents(eventsForUpload);
             this.failureCommitDelay = DEFAULT_FAILURE_COMMIT_DELAY;
-        } catch (IOException e) {
-            this.logger.error("Failed to commit events.", e);
+        } catch (IOException ioex) {
+            if (ioex instanceof ConnectException) {
+                this.logger.error("Could not upload events because the HQ was not available: {}", ioex.getMessage());
+            } else {
+                this.logger.error("Failed to download order.", ioex);
+            }
+
             this.commitRunnable.schedule(this.failureCommitDelay);
+            this.logger.error("Will retry uploading events in {}s", MILLISECONDS.toSeconds(this.failureCommitDelay));
             this.failureCommitDelay = Math.min(this.failureCommitDelay * 2, this.maxCommitDelay);
         }
     }
@@ -240,8 +260,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
 
-        this.maxCommitDelay = SECONDS.toMillis(agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_MAX_COMMIT_SECONDS));
+        this.maxCommitDelay = SECONDS.toMillis(agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_MAX_COMMIT));
         this.logger.info("Committing after {} seconds.", MILLISECONDS.toSeconds(this.maxCommitDelay));
+        this.failureCommitDelay = Math.min(this.failureCommitDelay, this.maxCommitDelay);
     }
 
     private List<Event> getEventsForUpload() {
@@ -270,9 +291,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
 
         AgentControllerCapabilities capabilities = this.getCapabilities();
-        this.modifiedAgents = false;
-
         this.hqClient.uploadCapabilities(capabilities);
+        this.modifiedAgents = false;
     }
 
     private void uploadEvents(Collection<Event> events) throws IOException {

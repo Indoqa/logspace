@@ -31,8 +31,19 @@
     </analyzer>
     <analyzer type="query">
       <tokenizer class="solr.StandardTokenizerFactory" />
-      <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-      <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+<!--       <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" /> -->
+<!--       <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" /> -->
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+  </fieldType>
+
+  <fieldType name="text_tokenized" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.LetterTokenizerFactory" />
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.LetterTokenizerFactory" />
       <filter class="solr.LowerCaseFilterFactory" />
     </analyzer>
   </fieldType>
@@ -57,6 +68,12 @@
   <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
   
   <field name="property_name" type="string" indexed="true" stored="false" multiValued="true" />
+  
+  <field name="tokenized_search_field" type="text_tokenized" indexed="true" stored="false" multiValued="true" />
 
   <uniqueKey>id</uniqueKey>
+  
+  <copyField source="property_name" dest="tokenized_search_field" />
+  <copyField source="agent_id" dest="tokenized_search_field" />
+  <copyField source="space" dest="tokenized_search_field" />
 </schema>
