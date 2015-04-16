@@ -1,29 +1,29 @@
 # Indoqa logspace.io
 
-## Development Environment
+## Prepare the frontend development environment
 
 ### Mac
 
 - Install node.js: ```brew install node```
-- Install gulp.js using npm which comes with node.js: ```npm install -g gulp```
-- Install node packages: ```npm install```
 
 ### Windows
 
 - Install [node.js](https://nodejs.org/download/)
-- Install gulp.js using the npm which comes with node.js: ```npm install -g gulp```
 - Install [Python 2.7.x](https://www.python.org/downloads/) and add it to your path or/and create a PYTHONPATH environment variable.
 - Install Visual Studio, the [Express Edition](https://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx) is fine.
 - Set GYP_MSVS_VERSION environment property, if you are using Express, ```GYP_MSVS_VERSION=2013e```
-- Install node packages: ```npm install```
 
 ### Linux (Debian based)
 
 - Install node.js: ```curl -sL https://deb.nodesource.com/setup | sudo bash -```
 - Install build essentials and C++ compiler: ```sudo apt-get install build-essential g++```
-- Install gulp.js using npm which comes with node.js: ```npm install -g gulp```
-- Install node packages: ```npm install```
 
+## Install node dependencies
+``` shell
+npm install -g gulp
+cd logspace-frontend
+npm install
+```
 
 ## Run the frontend
 
