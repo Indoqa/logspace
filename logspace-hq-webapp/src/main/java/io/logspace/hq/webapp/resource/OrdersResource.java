@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +24,7 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import spark.Request;
 import spark.Response;
@@ -42,6 +42,9 @@ public class OrdersResource extends AbstractJsonResourcesBase {
     private static final String PARAMETER_CONTROLLER_ID = "controller-id";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${logspace.hq-webapp.configs-directory}")
+    private String configsDirectory;
 
     private static DateFormat createDateFormat(String format) {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
@@ -85,7 +88,7 @@ public class OrdersResource extends AbstractJsonResourcesBase {
     }
 
     private File getConfigFile(String controllerId) {
-        return new File(MessageFormat.format("./configs/{0}.json", controllerId));
+        return new File(this.configsDirectory, controllerId + ".json");
     }
 
     private String getOrder(Request req, Response res) throws IOException {
