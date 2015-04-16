@@ -23,12 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import com.indoqa.commons.lang.util.FileUtils;
 
 @Configuration
-@PropertySource("classpath:/io/logspace/hq/webapp/logspace-hq-webapp.properties")
 public class SpacesConfiguration {
 
     @Value("${logspace.hq-webapp.space-tokens-directory}")
