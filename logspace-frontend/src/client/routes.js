@@ -6,16 +6,14 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import App from './app/app.react'
-import Home from './pages/home.react'
-import Other from './pages/other.react'
+import TimeSeries from './pages/time-series.react'
 import NotFound from './pages/notfound.react'
 import React from 'react'
 import {DefaultRoute, NotFoundRoute, Route} from 'react-router'
 
 export default (
   <Route handler={App} path="/">
-    <DefaultRoute handler={Home} name="home" />
-    <Route handler={Other} name="other" />
+    <DefaultRoute handler={TimeSeries} name="time-series" />
     <NotFoundRoute handler={NotFound} name="not-found" />
   </Route>
 )

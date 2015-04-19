@@ -24,19 +24,7 @@ export default class App extends React.Component {
     return (
       <DocumentTitle title='logspace.io'>
         <div className="page">
-          <header>
-            <h1>Welcome to logspace.io</h1>
-            <ul>
-              <li><Link to="home">Home</Link></li>
-              <li><Link to="other">Other</Link></li>
-            </ul>
-          </header>
-          <hr />
           <RouteHandler />
-          <hr />
-          <footer>
-            <p>created by este-boot</p>
-          </footer>
         </div>
       </DocumentTitle>
     )
