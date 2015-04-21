@@ -24,6 +24,9 @@ public class SolrPluginConfiguration {
     @Value("${logspace.solr.base-url}")
     private String solrBaseUrl;
 
+    @Value("${logspace.solr.embedded-configuration-dir}")
+    private String solrEmbeddedConfigurationDir;
+
     @Bean
     public SolrServerFactory getSolrServerFactory() {
         SolrServerFactory solrServerFactory = new SolrServerFactory();
@@ -33,7 +36,7 @@ public class SolrPluginConfiguration {
     }
 
     private String getSolrInstanceDir() {
-        File file = new File("../logspace-hq-solr-plugin/src/main/solr");
+        File file = new File(this.solrEmbeddedConfigurationDir);
 
         try {
             file = file.getCanonicalFile();
