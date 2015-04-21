@@ -1,0 +1,37 @@
+/**
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+package io.logspace.agent.os;
+
+import static io.logspace.agent.os.api.OsEventBuilder.createMemoryBuilder;
+import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.impl.AgentControllerProvider;
+import io.logspace.agent.os.api.OsEventBuilder;
+
+public class MemoryAgent extends AbstractAgent {
+
+    public MemoryAgent(String agentId) {
+        super(agentId, "os/memory", TriggerType.Off, TriggerType.Cron);
+
+        this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    @Override
+    public void execute(AgentOrder agentOrder) {
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        long freeMemory = Runtime.getRuntime().freeMemory();
+        long usedMemory = totalMemory - freeMemory;
+
+        OsEventBuilder eventBuilder = createMemoryBuilder(this.getId()).setMaxMemory(maxMemory).setTotalMemory(totalMemory);
+        Event event = eventBuilder.setFreeMemory(freeMemory).setUsedMemory(usedMemory).toEvent();
+        this.sendEvent(event);
+    }
+}

@@ -443,6 +443,7 @@
             <exclude>**/.recommenders/**</exclude>
             <exclude>**/configs/**</exclude>
             <exclude>**/src/build-with-jdk-6</exclude>
+            <exclude>**/src/build-with-jdk-7</exclude>	    
             <exclude>**/*.json</exclude>
             <exclude>**/node/**/*.*</exclude>
             <exclude>**/node/**/*</exclude>
@@ -523,6 +524,65 @@
                 <index>true</index>
                 <manifestEntries>
                   <Build-Jdk>1.6.0</Build-Jdk>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>build-with-jdk-7</id>
+      <activation>
+        <file>
+          <exists>src/build-with-jdk-7</exists>
+        </file>
+      </activation>
+      <properties>
+          <project.build.compiler.version>1.7</project.build.compiler.version>
+          <JAVA_7_HOME>${env.JAVA_7_HOME}</JAVA_7_HOME>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <verbose>true</verbose>
+              <fork>true</fork>
+              <executable>${JAVA_7_HOME}/bin/javac</executable>
+              <compilerVersion>1.7</compilerVersion>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-property</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <property>JAVA_7_HOME</property>
+                      <message>You must set the environment variable JAVA_7_HOME to an existing Java 1.7 JDK.</message>
+                    </requireProperty>
+                  </rules>
+                  <fail>true</fail>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <archive>
+                <index>true</index>
+                <manifestEntries>
+                  <Build-Jdk>1.7.0</Build-Jdk>
                 </manifestEntries>
               </archive>
             </configuration>

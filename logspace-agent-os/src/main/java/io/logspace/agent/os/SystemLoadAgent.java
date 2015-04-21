@@ -14,21 +14,22 @@ import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.os.api.OsEventBuilder;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 
-import com.sun.management.OperatingSystemMXBean;
+public class SystemLoadAgent extends AbstractAgent {
 
-public class CpuAgent extends AbstractAgent {
-
-    public CpuAgent(String agentId) {
-        super(agentId, "os/cpu", TriggerType.Off, TriggerType.Cron);
+    public SystemLoadAgent(String agentId) {
+        super(agentId, "os/system-load", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId()).setProcessorCount(
-                Runtime.getRuntime().availableProcessors());
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId()).setLoadAverage(
+                operatingSystemMXBean.getSystemLoadAverage());
 
         this.addAdditionalProperties(eventBuilder);
 
@@ -36,12 +37,12 @@ public class CpuAgent extends AbstractAgent {
     }
 
     private void addAdditionalProperties(OsEventBuilder eventBuilder) {
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        com.sun.management.OperatingSystemMXBean operatingSystemMXBean = ManagementFactory
+                .getPlatformMXBean(com.sun.management.OperatingSystemMXBean.class);
         if (operatingSystemMXBean == null) {
             return;
         }
 
-        eventBuilder.setProcessCpuLoad(operatingSystemMXBean.getProcessCpuLoad());
-        eventBuilder.setProcessCpuTime(operatingSystemMXBean.getProcessCpuTime());
+        eventBuilder.setSystemCpuLoad(operatingSystemMXBean.getSystemCpuLoad());
     }
 }
