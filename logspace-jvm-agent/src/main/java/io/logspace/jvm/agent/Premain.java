@@ -11,7 +11,13 @@ import java.lang.instrument.Instrumentation;
 
 public class Premain {
 
+    protected static JvmAgent AGENT;
+
+    public static void agentmain(String args, Instrumentation inst) {
+        AGENT = new JvmAgent();
+    }
+
     public static void premain(String args, Instrumentation inst) {
-        System.out.println("----- pre main called -----");
+        AGENT = new JvmAgent();
     }
 }
