@@ -8,6 +8,7 @@
 package io.logspace.agent.os;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.impl.TestAgentController;
 
@@ -28,7 +29,7 @@ public class OsAgentTest {
         new SwapAgent("swap-agent").execute(null);
         new SystemLoadAgent("system-load-agent").execute(null);
 
-        assertEquals(5, agentController.getCollectedEvents().size());
+        assertTrue("Expected at least 5 events.", agentController.getCollectedEvents().size() >= 5);
 
         AgentControllerProvider.shutdown();
     }
