@@ -38,6 +38,7 @@
     <indoqa-boot-version>0.2-SNAPSHOT</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
     <solr-version>4.10.3</solr-version>
+    <jetty-version>9.0.2.v20130417</jetty-version>
 
     <jackson-version>2.4.4</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
@@ -182,6 +183,18 @@
           </exclusion>
         </exclusions>
       </dependency>
+      
+      <!-- Jetty -->
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+        <version>${jetty-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-webapp</artifactId>
+        <version>${jetty-version}</version>
+      </dependency>
 
       <!-- HTTP Client -->
       <dependency>
@@ -232,6 +245,52 @@
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-core</artifactId>
         <version>${solr-version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-http</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-io</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-xml</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-continuation</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-deploy</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-security</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jmx</artifactId>
+          </exclusion>
+        </exclusions>        
       </dependency>
 
       <!-- Quartz -->
