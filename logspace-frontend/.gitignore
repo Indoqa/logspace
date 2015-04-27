@@ -1,7 +1,7 @@
 .DS_Store
 bower_components
 build
-node
 node_modules
 npm-debug.log
 *.sublime-workspace
+node
