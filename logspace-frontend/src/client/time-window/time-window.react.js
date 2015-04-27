@@ -13,7 +13,7 @@ export default class TimeWindow extends PureComponent {
   render() {
     return (
       <div>
-        ___{this.props.timeWindow.start}___
+        ___{this.props.timeWindow.get('gap')}___
       </div>
     );
   }

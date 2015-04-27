@@ -3,6 +3,5 @@ export default {
     start: 'von',
     end: 'bis',
     gap: 'sekunden'
-  },
-  auth: {}
+  }
 };
