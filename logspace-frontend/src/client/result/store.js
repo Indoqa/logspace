@@ -11,13 +11,13 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.onTimeWindowChange:
       waitFor(TimeWindowStore_dispatchToken);
-      loadResult();  
+      refreshResult();  
       break;
   }
 
 });  
 
-function loadResult() {
+function refreshResult() {
   // TODO: execute ajax call  
   alert('executing ajax');
   
