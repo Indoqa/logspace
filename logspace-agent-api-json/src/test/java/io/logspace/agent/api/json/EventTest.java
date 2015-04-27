@@ -67,6 +67,7 @@ public class EventTest {
 
     private void compare(Event expected, Event actual) {
         assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getAgentId(), actual.getAgentId());
         assertEquals(expected.getGlobalEventId(), actual.getGlobalEventId());
         assertEquals(expected.getParentEventId(), actual.getParentEventId());
         assertEquals(expected.getTimestamp().getTime() / 1000, actual.getTimestamp().getTime() / 1000);
@@ -86,6 +87,7 @@ public class EventTest {
 
         result.setGlobalEventId(getRandomOptional());
         result.setId(getRandomString());
+        result.setAgentId(getRandomString());
         result.setParentEventId(getRandomOptional());
         result.setProperties(this.createRandomProperties());
         result.setTimestamp(new Date());

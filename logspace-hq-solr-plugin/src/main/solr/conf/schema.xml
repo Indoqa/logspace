@@ -70,6 +70,7 @@
   <field name="property_name" type="string" indexed="true" stored="false" multiValued="true" />
   
   <field name="tokenized_search_field" type="text_tokenized" indexed="true" stored="false" multiValued="true" />
+  <field name="_route_" type="string" indexed="false" stored="false" multiValued="false" />
 
   <uniqueKey>id</uniqueKey>
   

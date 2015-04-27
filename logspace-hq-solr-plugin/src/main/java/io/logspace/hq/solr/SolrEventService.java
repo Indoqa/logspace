@@ -9,6 +9,9 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static java.text.MessageFormat.format;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+import static org.apache.solr.common.params.ShardParams._ROUTE_;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.hq.core.api.DataDefinition;
@@ -16,13 +19,16 @@ import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.Suggestion;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,13 +37,16 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.StreamingResponseCallback;
+import org.apache.solr.client.solrj.impl.CloudSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.cloud.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 @Named
 public class SolrEventService implements EventService {
@@ -46,6 +55,11 @@ public class SolrEventService implements EventService {
 
     @Inject
     private SolrServer solrServer;
+
+    @Value("${logspace.solr.fallback-shard}")
+    private String fallbackShard;
+
+    private boolean isCloud;
 
     @Override
     public Object[] getData(DataDefinition dataDefinition) {
@@ -113,6 +127,11 @@ public class SolrEventService implements EventService {
         }
     }
 
+    @PostConstruct
+    public void initialize() {
+        this.isCloud = this.solrServer instanceof CloudSolrServer;
+    }
+
     @Override
     public void store(Collection<? extends Event> events, String space) {
         if (events == null || events.isEmpty()) {
@@ -148,6 +167,10 @@ public class SolrEventService implements EventService {
         result.addField("global_id", event.getGlobalEventId().orElse(null));
 
         result.addField("space", space);
+
+        if (this.isCloud) {
+            result.setField(_ROUTE_, this.getTargetShard(event.getTimestamp()));
+        }
 
         this.addProperties(result, event.getBooleanProperties(), "boolean_property_");
         this.addProperties(result, event.getDateProperties(), "date_property_");
@@ -217,6 +240,26 @@ public class SolrEventService implements EventService {
         }
 
         return null;
+    }
+
+    private String getTargetShard(Date timestamp) {
+        if (!this.isCloud) {
+            return null;
+        }
+
+        CloudSolrServer cloudSolrServer = (CloudSolrServer) this.solrServer;
+        Map<String, Slice> activeSlicesMap = cloudSolrServer.getZkStateReader().getClusterState()
+                .getActiveSlicesMap(cloudSolrServer.getDefaultCollection());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        String sliceName = MessageFormat.format("{0,number,0000}-{1,number,00}", calendar.get(YEAR), calendar.get(MONTH));
+
+        if (activeSlicesMap.containsKey(sliceName)) {
+            return sliceName;
+        }
+
+        return "fallback";
     }
 
     private static class AverageBucket<T extends Number> extends SumBucket<T> {
