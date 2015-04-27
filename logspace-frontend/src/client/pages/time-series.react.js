@@ -10,7 +10,9 @@ import {Link} from 'react-router'
 import classnames from 'classnames';
 import AddTimeSerie from '../time-series-selection/addtimeserie.react'
 import TimeWindow  from '../time-window/time-window.react.js'
+import Chart  from '../result/result-chart.react.js'
 import {getTimeWindow} from '../time-window/store';
+import {getResult} from '../result/store';
 
 export default class TimeSeries extends React.Component {
 
@@ -38,7 +40,8 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    const t = getTimeWindow();
+    const timeWindow = getTimeWindow();
+    
     return (
       <div className='time-series'>
         <div className='header'>
@@ -46,7 +49,8 @@ export default class TimeSeries extends React.Component {
         </div>
 
         <div className={classnames(this.state.navDrawerCss)}>
-          <TimeWindow timeWindow={t} />
+          <TimeWindow timeWindow={timeWindow} />
+          <hr/>
           <AddTimeSerie />
           <div className='tools'>
             Tools
@@ -54,58 +58,7 @@ export default class TimeSeries extends React.Component {
         </div>
 
         <div className={classnames(this.state.mainCss)}>
-          <div className='graph'>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph (last)<br/>
-          </div>
+          <Chart timeWindow={timeWindow} result={getResult()} />
         </div>
       </div>
     )

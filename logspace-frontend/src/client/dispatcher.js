@@ -31,6 +31,12 @@ export function dispatch(action: Function, data: ?Object, options: ?Object) {
 export function isPending(actionName) {
   return $pendingActionsCursor().has(actionName);
 }
+  
+export function waitFor(name) {
+  dispatcher.waitFor([
+      name
+  ]);
+}
 
 function dispatchAsync(action: Function, promise: Object, options: ?Object) {
   const actionName = action.toString();

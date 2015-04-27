@@ -9,3 +9,4 @@ import State from '../lib/state';
 
 export const state = new State(require('./initialstate'));
 export const timeWindowCursor = state.cursor(['timeWindow']);
+export const resultCursor = state.cursor(['result']);
