@@ -52,9 +52,11 @@ public class JvmAgentTestIT {
 
         Event event = collectedEvents.get(0);
         assertEquals("jvm-" + JVM_IDENTIFIER, event.getAgentId());
-        assertTrue("Expected at least 1 double property.", event.getDoubleProperties().size() >= 1);
+        assertTrue("Expected at least 1 double property, but received " + event.getDoubleProperties().size(), event
+                .getDoubleProperties().size() >= 1);
         assertEquals(4, event.getIntegerProperties().size());
-        assertTrue("Expected at least 12 long properties.", event.getLongProperties().size() >= 12);
+        assertTrue("Expected at least 10 long properties, but received " + event.getLongProperties().size(), event.getLongProperties()
+                .size() >= 10);
 
         AgentControllerProvider.shutdown();
     }
@@ -66,10 +68,7 @@ public class JvmAgentTestIT {
 
             @Override
             public boolean accept(File file, String name) {
-                if (name.startsWith("logspace-jvm-agent-") && name.endsWith(".jar")) {
-                    return true;
-                }
-                return false;
+                return name.matches("logspace-jvm-agent-\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?.jar");
             }
         });
 
