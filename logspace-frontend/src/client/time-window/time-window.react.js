@@ -5,16 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import State from '../lib/state'
+import React from 'react';
+import PureComponent from '../components/purecomponent.react';
 
-const initialState = {
-  timeWindow: {
-    start:'von', 
-    end: 'bis', 
-    gap: 'sekunden'
+export default class TimeWindow extends PureComponent {
+
+  render() {
+    return (
+      <div>
+        {this.props.timeWindow.start}
+      </div>
+    );
   }
-}
-  
-export const state = new State(initialState)
-export const timeWindowCursor = state.cursor(['time-window'])
 
+}
