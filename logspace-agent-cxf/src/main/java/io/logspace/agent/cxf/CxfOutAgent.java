@@ -89,6 +89,8 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             this.logInMessageUrl(cxfEventBuilder, message);
             this.logOutMessage(cxfEventBuilder, message);
             this.logDuration(cxfEventBuilder, message);
+
+            this.sendEvent(cxfEventBuilder.toEvent());
         }
 
         private <T> T getProtocolHeaderValue(Message message, String header, Class<T> type) {
