@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import AddTimeSerie from '../time-series-selection/addtimeserie.react'
 import TimeWindow  from '../time-window/time-window.react.js'
 import {getTimeWindow} from '../time-window/store';
-  
+
 export default class TimeSeries extends React.Component {
 
   constructor(props) {
@@ -38,7 +38,7 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    const timeWindow = getTimeWindow();
+    const t = getTimeWindow();
     return (
       <div className='time-series'>
         <div className='header'>
@@ -46,7 +46,7 @@ export default class TimeSeries extends React.Component {
         </div>
 
         <div className={classnames(this.state.navDrawerCss)}>
-          <TimeWindow timeWindow={timeWindow} />              
+          <TimeWindow timeWindow={t} />
           <AddTimeSerie />
           <div className='tools'>
             Tools

@@ -5,16 +5,8 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import State from '../lib/state'
+import State from '../lib/state';
 
-const initialState = {
-  timeWindow: {
-    start:'von', 
-    end: 'bis', 
-    gap: 'sekunden'
-  }
-}
-  
-export const state = new State(initialState)
-export const timeWindowCursor = state.cursor(['time-window'])
-
+export const state = new State(require('./initialstate'));
+export const timeWindowCursor = state.cursor(['timeWindow']);
+export const authCursor = state.cursor(['auth']);
