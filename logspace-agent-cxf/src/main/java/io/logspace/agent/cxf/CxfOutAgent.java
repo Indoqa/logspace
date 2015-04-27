@@ -30,6 +30,8 @@ import org.apache.cxf.jaxrs.utils.HttpUtils;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Agent {
 
@@ -72,6 +74,8 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
 
     private class DelegateAgent extends AbstractAgent {
 
+        private final Logger logger = LoggerFactory.getLogger(CxfOutAgent.class);
+
         private static final String AGENT_ID = "CXF";
 
         public DelegateAgent(String id) {
@@ -100,7 +104,12 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
                 return null;
             }
 
-            return type.cast(headers.get(0));
+            try {
+                return type.cast(headers.get(0));
+            } catch (ClassCastException e) {
+                this.logger.warn("Could not extract header '{}':", header, e);
+            }
+            return null;
         }
 
         private void logDuration(CxfEventBuilder cxfEventBuilder, Message message) {
