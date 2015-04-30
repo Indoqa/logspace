@@ -23,11 +23,11 @@ public class OsAgentTest {
 
         assertEquals(0, agentController.getCollectedEvents().size());
 
-        new CpuAgent("cpu-agent").execute(null);
-        new DiskAgent("disk-agent").execute(null);
-        new MemoryAgent("memory-agent").execute(null);
-        new SwapAgent("swap-agent").execute(null);
-        new SystemLoadAgent("system-load-agent").execute(null);
+        CpuAgent.create("cpu-agent").execute(null);
+        DiskAgent.create("disk-agent").execute(null);
+        MemoryAgent.create("memory-agent").execute(null);
+        SwapAgent.create("swap-agent").execute(null);
+        SystemLoadAgent.create("system-load-agent").execute(null);
 
         assertTrue("Expected at least 5 events.", agentController.getCollectedEvents().size() >= 5);
 

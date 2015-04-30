@@ -19,10 +19,14 @@ import com.sun.management.OperatingSystemMXBean;
 
 public class CpuAgent extends AbstractAgent {
 
-    public CpuAgent(String agentId) {
+    private CpuAgent(String agentId) {
         super(agentId, "os/cpu", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    public static CpuAgent create(String agentId) {
+        return new CpuAgent(agentId);
     }
 
     @Override

@@ -17,10 +17,14 @@ import io.logspace.agent.os.api.OsEventBuilder;
 
 public class MemoryAgent extends AbstractAgent {
 
-    public MemoryAgent(String agentId) {
+    private MemoryAgent(String agentId) {
         super(agentId, "os/memory", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    public static MemoryAgent create(String agentId) {
+        return new MemoryAgent(agentId);
     }
 
     @Override

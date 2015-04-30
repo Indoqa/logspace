@@ -18,10 +18,14 @@ import java.lang.management.OperatingSystemMXBean;
 
 public class SystemLoadAgent extends AbstractAgent {
 
-    public SystemLoadAgent(String agentId) {
+    private SystemLoadAgent(String agentId) {
         super(agentId, "os/system-load", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    public static SystemLoadAgent create(String agentId) {
+        return new SystemLoadAgent(agentId);
     }
 
     @Override

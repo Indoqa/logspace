@@ -19,10 +19,14 @@ import com.sun.management.OperatingSystemMXBean;
 
 public class SwapAgent extends AbstractAgent {
 
-    public SwapAgent(String agentId) {
+    private SwapAgent(String agentId) {
         super(agentId, "os/swap", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    public static SwapAgent create(String agentId) {
+        return new SwapAgent(agentId);
     }
 
     @Override

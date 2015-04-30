@@ -20,10 +20,14 @@ import java.nio.file.Path;
 
 public class DiskAgent extends AbstractAgent {
 
-    public DiskAgent(String agentId) {
+    private DiskAgent(String agentId) {
         super(agentId, "os/disk", TriggerType.Off, TriggerType.Cron);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    public static DiskAgent create(String agentId) {
+        return new DiskAgent(agentId);
     }
 
     @Override
