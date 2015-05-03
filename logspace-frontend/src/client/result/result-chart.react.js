@@ -8,13 +8,16 @@
 import React from 'react';
 
 export default class Chart extends React.Component {
+  
+  
+  
   render() {
     return (
       <div>
-        showing a chart for Timewindow: <b>{this.props.timeWindow.get("start")}</b> to <b>{this.props.timeWindow.get("end")}</b>
+        showing a chart for Timewindow: <b>{this.props.timeWindow.start}</b> to <b>{this.props.timeWindow.end}</b>
         <br/>
         <br/>
-        DATA: {this.props.result.get("data")}
+        DATA: {this.props.result.foo}
       </div>
     );
   }

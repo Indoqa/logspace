@@ -12,10 +12,11 @@ export default class TimeWindow extends React.Component {
   
   constructor(props) {
     super(props);
+    
     this.state = {
-      start: props.timeWindow.get("start"),
-      end: props.timeWindow.get("end"),
-      gap: props.timeWindow.get("gap"),
+      start: props.timeWindow.start ? props.timeWindow.start : 'heute',
+      end: props.timeWindow.end ? props.timeWindow.end : 'gestern',
+      gap: props.timeWindow.gap ? props.timeWindow.gap : '1 Tag'
     }
   }
 
@@ -26,7 +27,13 @@ export default class TimeWindow extends React.Component {
   }
   
   handleSubmit() {
-    onTimeWindowChange(this.state);  
+    onTimeWindowChange(
+      {
+        start: this.state.start,
+        end: this.state.end,
+        gap: this.state.gap
+      }
+    );  
   }
   
   render() {

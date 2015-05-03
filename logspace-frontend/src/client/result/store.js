@@ -4,7 +4,7 @@ import {resultCursor} from '../state';
 import {register,waitFor} from '../dispatcher';
 
 export function getResult() {
-  return resultCursor();
+  return resultCursor().get("data");
 }
   
 export const ResultStore_dispatchToken = register(({action, data}) => {
@@ -14,6 +14,7 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
       refreshResult();  
       break;
   }
+  
 
 });  
 
@@ -22,6 +23,6 @@ function refreshResult() {
   alert('executing ajax');
   
   resultCursor(result => {
-        return result.set("data", Math.random());
+    return result.set("data", {foo: 'bar', test: 'value'});
   });
 }
