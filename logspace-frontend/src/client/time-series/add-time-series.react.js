@@ -5,10 +5,10 @@
 * the Eclipse Public License Version 1.0, which accompanies this distribution and
 * is available at http://www.eclipse.org/legal/epl-v10.html.
 */
+
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import shallowEqual from 'react/lib/shallowEqual';
-
 import {onTimeSeriesAdded} from './actions';
 
 export default class AddTimeSerie extends PureComponent {

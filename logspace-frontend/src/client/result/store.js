@@ -7,13 +7,10 @@
  */
 import Immutable from 'immutable';
 import axios from 'axios';
-
 import * as timeWindowActions from '../time-window/actions';
 import * as timeSeriesActions from '../time-series/actions';
-
 import {resultCursor} from '../state';
 import {register,waitFor} from '../dispatcher';
-
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store';
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store';
 

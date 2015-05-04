@@ -8,12 +8,10 @@
 import React from 'react'
 import {Link} from 'react-router'
 import classnames from 'classnames';
-
 import AddTimeSerie from '../time-series/add-time-series.react'
 import TimeWindow  from '../time-window/time-window.react.js'
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
 import Chart  from '../result/result-chart.react.js'
-
 import {getTimeWindow} from '../time-window/store';
 import {getTimeSeries} from '../time-series/store';
 import {getResult} from '../result/store';

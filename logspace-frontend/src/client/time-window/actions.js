@@ -5,7 +5,8 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
- import {dispatch} from '../dispatcher';
+
+import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
 export function onTimeWindowChange(newTimeWindowData) {

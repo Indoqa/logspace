@@ -8,7 +8,6 @@
 
  import React from 'react';
  import PureComponent from '../components/purecomponent.react';
-
  import {onTimeSeriesDeleted} from './actions';
 
  export default class TimeSeriesItem extends PureComponent {

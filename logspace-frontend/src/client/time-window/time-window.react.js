@@ -8,7 +8,6 @@
  
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
-
 import {onTimeWindowChange} from './actions';
 
 export default class TimeWindow extends PureComponent {

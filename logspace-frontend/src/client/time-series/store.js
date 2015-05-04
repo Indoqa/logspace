@@ -5,7 +5,8 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
- import * as actions from './actions';
+
+import * as actions from './actions';
 import {timeSeriesCursor} from '../state';
 import {register} from '../dispatcher';
 import {Record} from 'immutable';

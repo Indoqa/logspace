@@ -5,10 +5,10 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+
 import React from 'react';
 import immutable from 'immutable';
 import PureComponent from '../components/purecomponent.react';
-
 import TimeSeriesItem  from '../time-series/time-series-item.react.js'
 
 export default class TimeSeriesList extends PureComponent {
