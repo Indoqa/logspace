@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 @import '../../../node_modules/normalize.css/normalize.css'
-//@import './skeleton.css'
+// @import './skeleton.css'
 @import url(http://fonts.googleapis.com/css?family=Raleway);
 
 $header-height = 50px
@@ -62,7 +62,17 @@ body
   position absolute
   overflow auto
   slide-navigation-drawer-transformation()
-
+  .left
+    width: $navigation-drawer-width
+    position: absolute
+  .right
+    width: $navigation-drawer-width
+    position: absolute
+    left: $navigation-drawer-width
+    border-left: 1px solid black
+    height: 100%
+    background: blue
+  
 .navigation-drawer:hover
   width 700px
 
@@ -91,3 +101,4 @@ body
   position relative
   height 100%
   overflow auto
+  

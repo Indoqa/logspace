@@ -17,7 +17,7 @@ export default class App extends React.Component {
   componentDidMount() {
     state.on('change', () => {
       this.forceUpdate();
-    })
+    }) 
   }
 
   render() {

@@ -5,3 +5,4 @@ node_modules
 npm-debug.log
 *.sublime-workspace
 node
+.sublime-gulp.cache

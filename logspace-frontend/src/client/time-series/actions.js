@@ -8,12 +8,16 @@
  import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
-export function onTimeWindowChange(newTimeWindowData) {
-  dispatch(onTimeWindowChange, newTimeWindowData);
+export function onTimeSeriesAdded(newTimeSeriesData) {
+  dispatch(onTimeSeriesAdded, newTimeSeriesData);
+}
+  
+export function onTimeSeriesDeleted(deletedTimeSeries) {
+  dispatch(onTimeSeriesDeleted, deletedTimeSeries);
 }
 
 // Override actions toString for logging.
-setToString('timeWindow', {
-  onTimeWindowChange
+setToString('timeSeries', {
+  onTimeSeriesAdded, onTimeSeriesDeleted
 });
   

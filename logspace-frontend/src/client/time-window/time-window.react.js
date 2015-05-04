@@ -5,18 +5,21 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+ 
 import React from 'react';
+import PureComponent from '../components/purecomponent.react';
+
 import {onTimeWindowChange} from './actions';
 
-export default class TimeWindow extends React.Component {
+export default class TimeWindow extends PureComponent {
   
   constructor(props) {
     super(props);
     
     this.state = {
-      start: props.timeWindow.start ? props.timeWindow.start : 'heute',
-      end: props.timeWindow.end ? props.timeWindow.end : 'gestern',
-      gap: props.timeWindow.gap ? props.timeWindow.gap : '1 Tag'
+      start: props.timeWindow.get('start'),
+      end: props.timeWindow.get('end'),
+      gap: props.timeWindow.get('gap')
     }
   }
 

@@ -8,16 +8,21 @@
 import React from 'react'
 import {Link} from 'react-router'
 import classnames from 'classnames';
-import AddTimeSerie from '../time-series-selection/addtimeserie.react'
+
+import AddTimeSerie from '../time-series/add-time-series.react'
 import TimeWindow  from '../time-window/time-window.react.js'
+import TimeSeriesList  from '../time-series/time-series-list.react.js'
 import Chart  from '../result/result-chart.react.js'
+
 import {getTimeWindow} from '../time-window/store';
+import {getTimeSeries} from '../time-series/store';
 import {getResult} from '../result/store';
 
 export default class TimeSeries extends React.Component {
 
   constructor(props) {
     super(props);
+    
     this.state = {
       navDrawerCss: 'navigation-drawer',
       mainCss: 'main'
@@ -40,25 +45,30 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    const timeWindow = getTimeWindow();
-    
     return (
       <div className='time-series'>
         <div className='header'>
-          logspace.io <button onClick={() => this.toggleNavigationDrawer()}>Toggle navigation drawer</button>
+          logspace.io
         </div>
 
         <div className={classnames(this.state.navDrawerCss)}>
-          <TimeWindow timeWindow={timeWindow} />
-          <hr/>
-          <AddTimeSerie />
-          <div className='tools'>
-            Tools
+          <div className="left">
+            <TimeWindow timeWindow={getTimeWindow()} />
+            <hr/>
+            <button onClick={() => this.toggleNavigationDrawer()}>Add Time Series</button>
+            <hr/>
+            <TimeSeriesList items={getTimeSeries()} />
+            <div className='tools'>
+              Tools
+            </div>
           </div>
+          <div className="right">
+            <AddTimeSerie onSuccess={() => this.toggleNavigationDrawer()}/>
+          </div>  
         </div>
 
         <div className={classnames(this.state.mainCss)}>
-          <Chart timeWindow={timeWindow} result={getResult()} />
+          <Chart series={getTimeSeries()} result={getResult()}/>
         </div>
       </div>
     )
