@@ -6,20 +6,13 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-export default {
-  "timeWindow": {
-    "start": "2015-04-16",
-    "end": "2015-04-17",
-    "gap": 86400000  
- },
- "timeSeries": [
-   
- ],  
- "result": {
-   "translatedResult": {
-   	 "error": false,
-     "empty": true,	
-     "series": null	
-   }
- }  
-};
+import {dispatch} from '../dispatcher';
+import setToString from '../../lib/settostring';
+
+export function onResultRefreshed() {
+  dispatch(onResultRefreshed);
+}
+  
+setToString('result', {
+  onResultRefreshed
+});  

@@ -7,74 +7,39 @@
  */
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
+import {onResultRefreshed} from './actions';
 
 export default class Chart extends PureComponent {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      chartData: [],
-      empty: true,
-      loading: false
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.result == null || nextProps.result.get("data") == null 
-      || nextProps.result.get("data").isEmpty() 
-      || nextProps.series.size != nextProps.result.get("data").size) {
-       this.setState({
-        chartData: [],
-        empty: true,
-        loading: false
-      });
-      return; 
-    }
-
-    var chartData = [];
-    var data = nextProps.result.get("data");
-    var series = nextProps.series;
-
-    for (var i = 0; i < data.size; i++) {
-       var line = {
-          color: series.get(i).get("color"),
-          key: series.get(i).get("id"),
-          data: data.get(i)
-       }
-       chartData.push(line);
-     }
-
-     this.setState({
-        chartData: chartData,
-        empty: false,
-        loading: false
-     });
-  }
-
-
   render() {
-    if (this.state.loading) {
-       return <div>loading..</div>
+    const result = this.props.result
+    
+    if (result.get("error") == true) {
+       return (
+          <div>
+            Logspace REST Error {result.get('errorStatus')}: {result.get('errorText')}
+            <button onClick={onResultRefreshed}>Try again</button>
+          </div>
+        )
     }
 
-    if (this.state.empty) {
-       return <div>no data</div>
+    if (result.get("empty") == true) {
+       return <div>Please add a time series</div>
     }
 
     return (
       <div>
         Chart: 
-        {this.state.chartData.map(function(item, index) {
+        {result.get("series").map(function(item) {
           var bgStyle = {
-            backgroundColor: item.color,
+            backgroundColor: item.get("color"),
             padding: '5px',
             marginLeft: '5px',
             width: '200px'
           }
           
           return (
-            <div key={item.key} style={bgStyle}>
-              {item.key}: {item.data} 
+            <div key={item.get("id")} style={bgStyle}>
+              {item.get("id")}: {item.get("data")} 
             </div>
             );
         })}

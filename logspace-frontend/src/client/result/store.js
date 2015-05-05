@@ -9,15 +9,16 @@ import Immutable from 'immutable';
 import axios from 'axios';
 import * as timeWindowActions from '../time-window/actions';
 import * as timeSeriesActions from '../time-series/actions';
+import * as resultActions from './actions';
 import {resultCursor} from '../state';
 import {register,waitFor} from '../dispatcher';
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store';
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store';
 
 export function getResult() {
-  return resultCursor().get("restResult");
+  return resultCursor().get("translatedResult");
 }
-  
+
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.onTimeWindowChange:
@@ -34,18 +35,38 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
       waitFor(TimeSeriesStore_dispatchToken);
       refreshResult();  
       break;    
+
+    case resultActions.onResultRefreshed:
+      refreshResult();  
+      break;      
   }
 });  
 
 function refreshResult() {
+  var timeSeries = getTimeSeries();
+  var timeWindow = getTimeWindow();
+
+  if (timeSeries.isEmpty()) {
+    storeEmptyResult()
+    return;
+  }
+
+  axios.post('/query', createRestRequest(timeSeries, timeWindow))
+  .then(function (response) {
+    storeSuccessResult(timeSeries, response.data)  
+  })
+  .catch(function (response) {
+    storeErrorResult(response)  
+  });
+}
+
+
+function createRestRequest(timeSeries, timeWindow) {
   var request = {
     "dataDefinitions": []
   }
   
-  var series = getTimeSeries();
-  var timeWindow = getTimeWindow();
-  
-  series.forEach(function(item) { 
+  timeSeries.forEach(function(item) { 
     request.dataDefinitions.push({
       "dateRange": {
             "start": timeWindow.get('start'),
@@ -59,13 +80,48 @@ function refreshResult() {
     });
   })
 
-  axios.post('/query', request)
-  .then(function (response) {
-    resultCursor(result => {
-      return result.set("restResult", Immutable.fromJS(response.data));
-    });
-  })
-  .catch(function (response) {
-    console.log(response);
+  return request;  
+}
+
+function storeEmptyResult() {
+  resultCursor(result => {
+    return result.set("translatedResult", Immutable.fromJS({
+      empty: true,
+      error: false
+    }));
+  });  
+}
+
+function storeErrorResult(serverResponse) {
+  resultCursor(result => {
+    return result.set("translatedResult", Immutable.fromJS({
+      empty: true,
+      error: true,
+      errorStatus: serverResponse.status,
+      errorText: serverResponse.statusText 
+    }));
   });
 }
+
+function storeSuccessResult(timeSeries, responseJson) {
+  var translatedResult = {
+    series: [],
+    empty: false,
+    error: false,
+    errorStatus: null,
+    errorText: null  
+  }
+
+  timeSeries.forEach(function(item, index) { 
+     translatedResult.series.push({
+        id: item.get("id"),
+        color: item.get("color"),
+        data: responseJson.data[index]
+     })
+  });
+
+  resultCursor(result => {
+    return result.set("translatedResult", Immutable.fromJS(translatedResult));
+  });
+}  
+
