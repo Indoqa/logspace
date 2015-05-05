@@ -104,24 +104,32 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  var translatedResult = {
-    series: [],
-    empty: false,
-    error: false,
-    errorStatus: null,
-    errorText: null  
-  }
+  var chartSeries = [];  
+  var headers = [];
 
   timeSeries.forEach(function(item, index) { 
-     translatedResult.series.push({
+     chartSeries.push({
         id: item.get("id"),
         color: item.get("color"),
         data: responseJson.data[index]
      })
   });
 
+  var date = Date.parse(responseJson.dateRange.start);
+  var end = Date.parse(responseJson.dateRange.end);
+  
+  /*while(date < end) {
+    headers.push(new Date(date));
+    date = new Date(date + responseJson.dateRange.gap);
+  }*/
+
   resultCursor(result => {
-    return result.set("translatedResult", Immutable.fromJS(translatedResult));
+    return result.set("translatedResult", Immutable.fromJS( {
+      empty: false,
+      error: false,
+      series: chartSeries,
+      headers: headers
+    }));
   });
 }  
 

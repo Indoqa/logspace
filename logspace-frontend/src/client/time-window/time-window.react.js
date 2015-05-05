@@ -44,7 +44,13 @@ export default class TimeWindow extends PureComponent {
         <form name="time" >
           <input name="start" value={this.state.start} onChange={this.handleChange.bind(this)}/> <br/>
           <input name="end" value={this.state.end} onChange={this.handleChange.bind(this)}/> <br/>
-          <input name="gap" value={this.state.gap} onChange={this.handleChange.bind(this)}/> <br/>
+          <select name="gap" value={this.state.gap} onChange={this.handleChange.bind(this)}>
+            <option value="3600000">pro Stunde</option>
+            <option value="86400000">pro Tag</option>
+            <option value="604800000">pro Woche</option>
+            <option value="2629740000">pro Monat</option>
+            <option value="31556900000">pro Jahr</option>
+          </select>  
           <input type="button" value="set time" onClick={this.handleSubmit.bind(this)} />  
         </form>
       </div>

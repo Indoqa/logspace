@@ -53,7 +53,7 @@ export default class TimeSeries extends React.Component {
           <div className="left">
             <TimeWindow timeWindow={getTimeWindow()} />
             <hr/>
-            <button onClick={() => this.toggleNavigationDrawer()}>Add Time Series</button>
+            <button onClick={() => this.toggleNavigationDrawer()}>+</button>
             <hr/>
             <TimeSeriesList items={getTimeSeries()} />
             <div className='tools'>

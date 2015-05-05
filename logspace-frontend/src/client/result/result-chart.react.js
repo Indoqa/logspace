@@ -28,7 +28,7 @@ export default class Chart extends PureComponent {
 
     return (
       <div>
-        Chart: 
+        Chart Data: 
         {result.get("series").map(function(item) {
           var bgStyle = {
             backgroundColor: item.get("color"),
@@ -39,7 +39,7 @@ export default class Chart extends PureComponent {
           
           return (
             <div key={item.get("id")} style={bgStyle}>
-              {item.get("id")}: {item.get("data")} 
+              {item.get("id")}: {item.get("data").join()} 
             </div>
             );
         })}
