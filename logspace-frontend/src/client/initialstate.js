@@ -21,5 +21,10 @@ export default {
      "empty": true,	
      "series": null	
    }
- }  
+ },
+  "suggestions": {
+  	"spaces": [],
+    "agentIds": [],
+    "propertyNames": []
+  }
 };

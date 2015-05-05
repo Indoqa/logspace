@@ -11,10 +11,12 @@ import classnames from 'classnames';
 import AddTimeSerie from '../time-series/add-time-series.react'
 import TimeWindow  from '../time-window/time-window.react.js'
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
+import Suggestions  from '../suggestions/suggestions.react.js'
 import Chart  from '../result/result-chart.react.js'
 import {getTimeWindow} from '../time-window/store';
 import {getTimeSeries} from '../time-series/store';
 import {getResult} from '../result/store';
+import {getSuggestions} from '../suggestions/store';
 
 export default class TimeSeries extends React.Component {
 
@@ -62,6 +64,11 @@ export default class TimeSeries extends React.Component {
           </div>
           <div className="right">
             <AddTimeSerie onSuccess={() => this.toggleNavigationDrawer()}/>
+            <hr/>
+            <br/>
+            <br/>
+            <br/>
+            <Suggestions suggestions={getSuggestions()}/>
           </div>  
         </div>
 

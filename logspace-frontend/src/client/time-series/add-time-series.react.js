@@ -46,7 +46,7 @@ export default class AddTimeSerie extends PureComponent {
           <option value="sum">sum</option>
         </select>
         <br/>
-        <button onClick={() => this.addTimeSeries()}>add time serie</button>
+        <button onClick={() => this.addTimeSeries()}>add time series</button>
       </div>
     );
   }

@@ -115,14 +115,6 @@ function storeSuccessResult(timeSeries, responseJson) {
      })
   });
 
-  var date = Date.parse(responseJson.dateRange.start);
-  var end = Date.parse(responseJson.dateRange.end);
-  
-  /*while(date < end) {
-    headers.push(new Date(date));
-    date = new Date(date + responseJson.dateRange.gap);
-  }*/
-
   resultCursor(result => {
     return result.set("translatedResult", Immutable.fromJS( {
       empty: false,
