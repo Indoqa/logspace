@@ -8,11 +8,27 @@
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import {onResultRefreshed} from './actions';
+import ChartJS from 'react-chartjs'
+
+export const LineChart = ChartJS.Line;
 
 export default class Chart extends PureComponent {
-  render() {
-    const result = this.props.result
+
+  constructor(props) {
+    super(props);
     
+    this.state = {
+      options:  {
+        responsive: false,
+        maintainAspectRatio: false
+      },
+      chartData: null
+    }
+  }
+
+  render() {
+    const result = this.props.result;
+
     if (result.get("error") == true) {
        return (
           <div>
@@ -28,21 +44,7 @@ export default class Chart extends PureComponent {
 
     return (
       <div>
-        Chart Data: 
-        {result.get("series").map(function(item) {
-          var bgStyle = {
-            backgroundColor: item.get("color"),
-            padding: '5px',
-            marginLeft: '5px',
-            width: '200px'
-          }
-          
-          return (
-            <div key={item.get("id")} style={bgStyle}>
-              {item.get("id")}: {item.get("data").join()} 
-            </div>
-            );
-        })}
+        <LineChart data={result.get("chartData").toJS()} options={this.state.options} width="600" height="500" redraw/>
       </div>
     );
   }

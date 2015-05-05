@@ -10,6 +10,7 @@ import axios from 'axios';
 import * as actions from './actions';
 import {suggestionCursor} from '../state';
 import {register} from '../dispatcher';
+import {getRestUrl} from '../rest';
 
 export function getSuggestions() {
   return suggestionCursor();
@@ -28,7 +29,7 @@ function refreshSelections(query) {
     storeEmptyResult()  
   }
 
-  axios.get('/suggest/' + query)
+  axios.get(getRestUrl('/suggest/') + query)
   .then(function (response) {
     storeSuccessResult(response.data)  
   })

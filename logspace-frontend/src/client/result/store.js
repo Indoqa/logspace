@@ -12,6 +12,7 @@ import * as timeSeriesActions from '../time-series/actions';
 import * as resultActions from './actions';
 import {resultCursor} from '../state';
 import {register,waitFor} from '../dispatcher';
+import {getRestUrl} from '../rest';
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store';
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store';
 
@@ -51,11 +52,12 @@ function refreshResult() {
     return;
   }
 
-  axios.post('/query', createRestRequest(timeSeries, timeWindow))
+  axios.post(getRestUrl('/query'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
     storeSuccessResult(timeSeries, response.data)  
   })
   .catch(function (response) {
+    console.log(response)
     storeErrorResult(response)  
   });
 }
@@ -104,24 +106,58 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  var chartSeries = [];  
-  var headers = [];
-
-  timeSeries.forEach(function(item, index) { 
-     chartSeries.push({
-        id: item.get("id"),
-        color: item.get("color"),
-        data: responseJson.data[index]
-     })
-  });
-
+  var chartData = {
+      labels: createXAxisLabals(responseJson),
+      datasets: createDatasets(timeSeries, responseJson)
+  }
+ 
   resultCursor(result => {
     return result.set("translatedResult", Immutable.fromJS( {
       empty: false,
       error: false,
-      series: chartSeries,
-      headers: headers
+      chartData: chartData
     }));
   });
-}  
+} 
+
+function createXAxisLabals(responseJson) {
+  var labels = [];
+
+  var start = new Date(responseJson.dateRange.start).getTime();
+  var end = new Date(responseJson.dateRange.end).getTime();
+  var gap = responseJson.dateRange.gap;
+ 
+  for (var i = start; i < end; i = i + gap) {
+    labels.push(new Date(i));
+  }
+  
+  return labels;  
+}
+
+function createDatasets(timeSeries, responseJson) {
+  var datasets = [];
+  
+  {timeSeries.forEach(function(item, index) {
+      datasets.push({
+          label: item.get("id"),
+          fillColor: "transparent",
+          strokeColor: item.get("color"),
+          pointColor: item.get("color"),
+          pointHighlightStroke: "#FFF",
+          data: fillNullValues(responseJson.data[index])
+      });  
+  })}  
+
+  return datasets;
+}
+
+function fillNullValues(array) {
+  return array.map(function(item) {
+     if (item != null) {
+       return item; 
+     }
+
+     return 0;
+   });  
+} 
 
