@@ -15,5 +15,5 @@ export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={TimeSeries} name="time-series" />
     <NotFoundRoute handler={NotFound} name="not-found" />
-  </Route>
+  </Route>  
 )

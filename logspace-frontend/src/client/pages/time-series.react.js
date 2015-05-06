@@ -8,12 +8,21 @@
 import React from 'react'
 import {Link} from 'react-router'
 import classnames from 'classnames';
-import AddTimeSerie from '../time-series-selection/addtimeserie.react'
+import AddTimeSerie from '../time-series/add-time-series.react'
+import TimeWindow  from '../time-window/time-window.react.js'
+import TimeSeriesList  from '../time-series/time-series-list.react.js'
+import Suggestions  from '../suggestions/suggestions.react.js'
+import Chart  from '../result/result-chart.react.js'
+import {getTimeWindow} from '../time-window/store';
+import {getTimeSeries} from '../time-series/store';
+import {getResult} from '../result/store';
+import {getSuggestions} from '../suggestions/store';
 
 export default class TimeSeries extends React.Component {
 
   constructor(props) {
     super(props);
+    
     this.state = {
       navDrawerCss: 'navigation-drawer',
       mainCss: 'main'
@@ -39,69 +48,32 @@ export default class TimeSeries extends React.Component {
     return (
       <div className='time-series'>
         <div className='header'>
-          logspace.io <button onClick={() => this.toggleNavigationDrawer()}>Toggle navigation drawer</button>
+          logspace.io
         </div>
 
         <div className={classnames(this.state.navDrawerCss)}>
-          <AddTimeSerie />
-          <div className='tools'>
-            Tools
+          <div className="left">
+            <TimeWindow timeWindow={getTimeWindow()} />
+            <hr/>
+            <button onClick={() => this.toggleNavigationDrawer()}>+</button>
+            <hr/>
+            <TimeSeriesList items={getTimeSeries()} />
+            <div className='tools'>
+              Tools
+            </div>
           </div>
+          <div className="right">
+            <AddTimeSerie onSuccess={() => this.toggleNavigationDrawer()}/>
+            <hr/>
+            <br/>
+            <br/>
+            <br/>
+            <Suggestions suggestions={getSuggestions()}/>
+          </div>  
         </div>
 
         <div className={classnames(this.state.mainCss)}>
-          <div className='graph'>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph<br/>
-            graph (last)<br/>
-          </div>
+          <Chart series={getTimeSeries()} result={getResult()}/>
         </div>
       </div>
     )

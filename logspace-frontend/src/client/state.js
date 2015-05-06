@@ -5,6 +5,10 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import State from '../lib/state'
+import State from '../lib/state';
 
-export const state = new State(window._appState)
+export const state = new State(require('./initialstate'));
+export const timeWindowCursor = state.cursor(['timeWindow']);
+export const timeSeriesCursor = state.cursor(['timeSeries']);
+export const resultCursor = state.cursor(['result']);
+export const suggestionCursor = state.cursor(['suggestions']);

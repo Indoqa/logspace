@@ -5,3 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+
+export function getRestUrl(url): string {
+  if (typeof window.getLogspaceRestUrl === "function") { 
+    return window.getLogspaceRestUrl(url);
+  }  
+
+  return url;
+}

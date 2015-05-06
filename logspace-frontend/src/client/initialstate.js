@@ -5,21 +5,26 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react';
-import PureComponent from '../components/purecomponent.react';
 
-export default class AddTimeSerie extends PureComponent {
-
-  foo() {
-    alert('foo');
+export default {
+  "timeWindow": {
+    "start": "2015-04-16",
+    "end": "2015-04-17",
+    "gap": 86400000  
+ },
+ "timeSeries": [
+   
+ ],  
+ "result": {
+   "translatedResult": {
+   	 "error": false,
+     "empty": true,	
+     "series": null	
+   }
+ },
+  "suggestions": {
+  	"spaces": [],
+    "agentIds": [],
+    "propertyNames": []
   }
-
-  render() {
-    return (
-      <div>
-			  <button onClick={() => this.foo()}>add time serie</button>
-			</div>
-    );
-  }
-
-}
+};

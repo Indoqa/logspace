@@ -15,7 +15,7 @@ app.use('/build', express.static('build'));
 app.use('/assets', express.static('assets'));
 app.use('/', express.static('site'));
 
-app.use('', proxy('http://localhost:8200', {
+app.use('', proxy('http://localhost:4567', {
 	forwardPath: function(req, res) {
 		return require('url').parse(req.url).path;
 	}
