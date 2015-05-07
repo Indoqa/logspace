@@ -253,13 +253,13 @@ public class SolrEventService implements EventService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timestamp);
-        String sliceName = MessageFormat.format("{0,number,0000}-{1,number,00}", calendar.get(YEAR), calendar.get(MONTH));
+        String sliceName = MessageFormat.format("{0,number,0000}-{1,number,00}", calendar.get(YEAR), calendar.get(MONTH) + 1);
 
         if (activeSlicesMap.containsKey(sliceName)) {
             return sliceName;
         }
 
-        return "fallback";
+        return this.fallbackShard;
     }
 
     private static class AverageBucket<T extends Number> extends SumBucket<T> {
