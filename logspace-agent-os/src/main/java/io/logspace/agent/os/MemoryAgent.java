@@ -13,7 +13,6 @@ import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AgentControllerProvider;
-import io.logspace.agent.os.api.OsEventBuilder;
 
 public class MemoryAgent extends AbstractAgent {
 
@@ -34,8 +33,8 @@ public class MemoryAgent extends AbstractAgent {
         long freeMemory = Runtime.getRuntime().freeMemory();
         long usedMemory = totalMemory - freeMemory;
 
-        OsEventBuilder eventBuilder = createMemoryBuilder(this.getId()).setMaxMemory(maxMemory).setTotalMemory(totalMemory);
-        Event event = eventBuilder.setFreeMemory(freeMemory).setUsedMemory(usedMemory).toEvent();
+        Event event = createMemoryBuilder(this.getId(), this.getSystem()).setMaxMemory(maxMemory).setTotalMemory(totalMemory)
+                .setFreeMemory(freeMemory).setUsedMemory(usedMemory).toEvent();
         this.sendEvent(event);
     }
 }

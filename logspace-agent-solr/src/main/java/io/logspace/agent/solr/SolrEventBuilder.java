@@ -49,27 +49,27 @@ public class SolrEventBuilder extends AbstractEventBuilder {
 
     private Optional<String> eventType;
 
-    private SolrEventBuilder(String agentId, Optional<String> eventType, String coreName) {
-        super(agentId);
+    private SolrEventBuilder(String agentId, String system, Optional<String> eventType, String coreName) {
+        super(agentId, system);
 
         this.eventType = eventType;
         this.addProperty(PROPERTY_CORE_NAME, coreName);
     }
 
-    public static SolrEventBuilder createCommitBuilder(String agentId, String coreName) {
-        return new SolrEventBuilder(agentId, COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createCommitBuilder(String agentId, String system, String coreName) {
+        return new SolrEventBuilder(agentId, system, COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String coreName) {
-        return new SolrEventBuilder(agentId, NEW_SEARCHER_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String system, String coreName) {
+        return new SolrEventBuilder(agentId, system, NEW_SEARCHER_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String coreName) {
-        return new SolrEventBuilder(agentId, SOFT_COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String system, String coreName) {
+        return new SolrEventBuilder(agentId, system, SOFT_COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createStatisticsBuilder(String agentId, String coreName) {
-        return new SolrEventBuilder(agentId, STATISTICS_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createStatisticsBuilder(String agentId, String system, String coreName) {
+        return new SolrEventBuilder(agentId, system, STATISTICS_EVENT_TYPE, coreName);
     }
 
     public void set75thPercentileRequestTime(double requestTime) {

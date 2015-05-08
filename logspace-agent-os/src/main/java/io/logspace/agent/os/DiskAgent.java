@@ -38,7 +38,7 @@ public class DiskAgent extends AbstractAgent {
     }
 
     private void sendDiskEvent(Path root) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId());
+        OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem());
         try {
             FileStore store = Files.getFileStore(root);
 

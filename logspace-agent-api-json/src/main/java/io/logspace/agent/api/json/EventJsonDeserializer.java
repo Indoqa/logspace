@@ -86,6 +86,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
         event.setId(this.readMandatoryField(FIELD_ID));
         event.setType(this.readOptionalField(FIELD_TYPE));
+        event.setSystem(this.readMandatoryField(FIELD_SYSTEM));
         event.setAgentId(this.readMandatoryField(FIELD_AGENT_ID));
         event.setTimestamp(this.readMandatoryDateField(FIELD_TIMESTAMP));
         event.setParentEventId(this.readOptionalField(FIELD_PARENT_EVENT_ID));
@@ -134,6 +135,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
     public static class DeserializedEvent implements Event {
 
         private String id;
+        private String system;
         private String agentId;
         private Date timestamp;
         private Optional<String> parentEventId;
@@ -197,6 +199,11 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         @Override
+        public String getSystem() {
+            return this.system;
+        }
+
+        @Override
         public Date getTimestamp() {
             return this.timestamp;
         }
@@ -229,6 +236,10 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
         public void setProperties(EventProperties properties) {
             this.properties = properties;
+        }
+
+        public void setSystem(String system) {
+            this.system = system;
         }
 
         public void setTimestamp(Date timestamp) {

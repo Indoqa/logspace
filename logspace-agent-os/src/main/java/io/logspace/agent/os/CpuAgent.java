@@ -31,7 +31,7 @@ public class CpuAgent extends AbstractAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId()).setProcessorCount(
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem()).setProcessorCount(
                 Runtime.getRuntime().availableProcessors());
 
         this.addAdditionalProperties(eventBuilder);

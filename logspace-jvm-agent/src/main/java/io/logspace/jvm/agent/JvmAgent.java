@@ -45,7 +45,7 @@ public class JvmAgent extends AbstractAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmBuilder(this.getId());
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmBuilder(this.getId(), this.getSystem());
 
         this.addOperatingSystemProperties(eventBuilder);
         this.addGarbageCollectorProperties(eventBuilder);

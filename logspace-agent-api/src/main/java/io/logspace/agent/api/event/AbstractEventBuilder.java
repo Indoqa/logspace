@@ -15,6 +15,7 @@ import java.util.Date;
 public abstract class AbstractEventBuilder {
 
     private final String agentId;
+    private final String system;
     private Optional<String> globalEventId;
     private Optional<String> parentEventId;
 
@@ -23,12 +24,16 @@ public abstract class AbstractEventBuilder {
     /**
      * Create an event builder with empty {@link #globalEventId} and empty {@link #parentEventId}.
      */
-    protected AbstractEventBuilder(String agentId) {
-        super();
+    protected AbstractEventBuilder(String agentId, String system) {
+        this(agentId, system, Optional.<String> empty(), Optional.<String> empty());
+    }
 
+    protected AbstractEventBuilder(String agentId, String system, Optional<String> parentEventId, Optional<String> globalEventId) {
         this.agentId = agentId;
-        this.parentEventId = Optional.empty();
-        this.globalEventId = Optional.empty();
+        this.system = system;
+
+        this.parentEventId = parentEventId;
+        this.globalEventId = globalEventId;
     }
 
     /**
@@ -38,10 +43,8 @@ public abstract class AbstractEventBuilder {
      * @param parentEvent The parent event to be used as template.
      * @return A new event object.
      */
-    protected AbstractEventBuilder(String agentId, Event parentEvent) {
-        this.agentId = agentId;
-        this.parentEventId = Optional.of(parentEvent.getId());
-        this.globalEventId = parentEvent.getGlobalEventId();
+    protected AbstractEventBuilder(String agentId, String system, Event parentEvent) {
+        this(agentId, system, Optional.of(parentEvent.getId()), parentEvent.getGlobalEventId());
     }
 
     /**
@@ -67,7 +70,7 @@ public abstract class AbstractEventBuilder {
     }
 
     public final Event toEvent() {
-        return new ImmutableEvent(this.agentId, this.getType(), this.globalEventId, this.parentEventId, this.properties);
+        return new ImmutableEvent(this.agentId, this.system, this.getType(), this.globalEventId, this.parentEventId, this.properties);
     }
 
     protected final void addProperty(BooleanEventProperty property) {

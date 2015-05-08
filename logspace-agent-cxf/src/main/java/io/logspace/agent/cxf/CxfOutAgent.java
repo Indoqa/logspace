@@ -88,7 +88,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             if (!this.isEnabled()) {
                 return;
             }
-            CxfEventBuilder cxfEventBuilder = new CxfEventBuilder(this.getId());
+            CxfEventBuilder cxfEventBuilder = new CxfEventBuilder(this.getId(), this.getSystem());
 
             this.logInMessageUrl(cxfEventBuilder, message);
             this.logOutMessage(cxfEventBuilder, message);

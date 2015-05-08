@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
 <schema name="example" version="1.5">
@@ -31,8 +31,6 @@
     </analyzer>
     <analyzer type="query">
       <tokenizer class="solr.StandardTokenizerFactory" />
-<!--       <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" /> -->
-<!--       <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" /> -->
       <filter class="solr.LowerCaseFilterFactory" />
     </analyzer>
   </fieldType>
@@ -48,16 +46,23 @@
     </analyzer>
   </fieldType>
 
+  <!-- this field is neither stored nor indexed and just here to allow sending the shard-id per document -->
+  <field name="_route_" type="string" indexed="false" stored="false" multiValued="false" />
   <field name="_version_" type="long" indexed="true" stored="true" />
 
   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <field name="global_agent_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <field name="space" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="system" type="string" indexed="true" stored="true" required="true" multiValued="false" />
   <field name="agent_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
   <field name="timestamp" type="date" indexed="true" stored="true" required="true" multiValued="false" />
   <field name="type" type="string" indexed="true" stored="true" multiValued="false" />
   <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
   <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
 
-  <field name="space" type="string" indexed="true" stored="true" multiValued="false" />
 
   <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="date_property_*" type="date" indexed="true" stored="true" multiValued="true" />
@@ -66,14 +71,13 @@
   <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="true" />
   <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
-  
+
   <field name="property_name" type="string" indexed="true" stored="false" multiValued="true" />
-  
+
   <field name="tokenized_search_field" type="text_tokenized" indexed="true" stored="false" multiValued="true" />
-  <field name="_route_" type="string" indexed="false" stored="false" multiValued="false" />
 
   <uniqueKey>id</uniqueKey>
-  
+
   <copyField source="property_name" dest="tokenized_search_field" />
   <copyField source="agent_id" dest="tokenized_search_field" />
   <copyField source="space" dest="tokenized_search_field" />

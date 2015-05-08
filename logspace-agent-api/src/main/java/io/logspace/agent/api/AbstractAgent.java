@@ -57,6 +57,10 @@ public abstract class AbstractAgent implements Agent {
         return this.agentController;
     }
 
+    protected String getSystem() {
+        return this.agentController.getSystem();
+    }
+
     protected final boolean isEnabled() {
         return this.agentController != null && this.agentController.isAgentEnabled(this.id);
     }

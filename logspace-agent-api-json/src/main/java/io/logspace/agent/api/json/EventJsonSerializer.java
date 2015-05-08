@@ -12,6 +12,7 @@ import static io.logspace.agent.api.event.Event.FIELD_AGENT_ID;
 import static io.logspace.agent.api.event.Event.FIELD_GLOBAL_EVENT_ID;
 import static io.logspace.agent.api.event.Event.FIELD_ID;
 import static io.logspace.agent.api.event.Event.FIELD_PARENT_EVENT_ID;
+import static io.logspace.agent.api.event.Event.FIELD_SYSTEM;
 import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
 import static io.logspace.agent.api.event.Event.FIELD_TYPE;
 import io.logspace.agent.api.event.Event;
@@ -69,6 +70,7 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
     private void writeEvent(Event event) throws IOException {
         this.writeMandatoryField(FIELD_ID, event.getId());
         this.writeOptionalField(FIELD_TYPE, event.getType());
+        this.writeMandatoryField(FIELD_SYSTEM, event.getSystem());
         this.writeMandatoryField(FIELD_AGENT_ID, event.getAgentId());
         this.writeMandatoryDateField(FIELD_TIMESTAMP, event.getTimestamp());
         this.writeOptionalField(FIELD_PARENT_EVENT_ID, event.getParentEventId());

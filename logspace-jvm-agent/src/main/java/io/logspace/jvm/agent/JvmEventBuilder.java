@@ -46,14 +46,14 @@ public class JvmEventBuilder extends AbstractEventBuilder {
 
     private Optional<String> eventType;
 
-    private JvmEventBuilder(String agentId, Optional<String> eventType) {
-        super(agentId);
+    private JvmEventBuilder(String agentId, String system, Optional<String> eventType) {
+        super(agentId, system);
 
         this.eventType = eventType;
     }
 
-    public static JvmEventBuilder createJvmBuilder(String agentId) {
-        return new JvmEventBuilder(agentId, JVM_EVENT_TYPE);
+    public static JvmEventBuilder createJvmBuilder(String agentId, String system) {
+        return new JvmEventBuilder(agentId, system, JVM_EVENT_TYPE);
     }
 
     public void setCommitedHeapMemory(long commitedHeapMemory) {

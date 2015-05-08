@@ -67,6 +67,7 @@ public class EventTest {
 
     private void compare(Event expected, Event actual) {
         assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getSystem(), actual.getSystem());
         assertEquals(expected.getAgentId(), actual.getAgentId());
         assertEquals(expected.getGlobalEventId(), actual.getGlobalEventId());
         assertEquals(expected.getParentEventId(), actual.getParentEventId());
@@ -87,6 +88,7 @@ public class EventTest {
 
         result.setGlobalEventId(getRandomOptional());
         result.setId(getRandomString());
+        result.setSystem(getRandomString());
         result.setAgentId(getRandomString());
         result.setParentEventId(getRandomOptional());
         result.setProperties(this.createRandomProperties());
@@ -149,6 +151,7 @@ public class EventTest {
     private class TestEvent implements Event {
 
         private String id;
+        private String system;
         private String agentId;
         private Optional<String> globalEventId;
         private Optional<String> parentEventId;
@@ -212,6 +215,11 @@ public class EventTest {
         }
 
         @Override
+        public String getSystem() {
+            return this.system;
+        }
+
+        @Override
         public Date getTimestamp() {
             return this.timestamp;
         }
@@ -244,6 +252,10 @@ public class EventTest {
 
         public void setProperties(EventProperties properties) {
             this.properties = properties;
+        }
+
+        public void setSystem(String system) {
+            this.system = system;
         }
 
         public void setTimestamp(Date timestamp) {

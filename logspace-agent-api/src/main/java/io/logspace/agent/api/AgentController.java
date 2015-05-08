@@ -13,11 +13,13 @@ import java.util.Collection;
 
 public interface AgentController {
 
-    boolean isAgentEnabled(String agentId);
-
     void flush();
 
     String getId();
+
+    String getSystem();
+
+    boolean isAgentEnabled(String agentId);
 
     void register(Agent agent);
 

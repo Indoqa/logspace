@@ -61,6 +61,18 @@ public class SolrEventService implements EventService {
 
     private boolean isCloud;
 
+    private static String getGlobalAgentId(Event event, String space) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(space);
+        stringBuilder.append("|");
+        stringBuilder.append(event.getSystem());
+        stringBuilder.append("|");
+        stringBuilder.append(event.getAgentId());
+
+        return stringBuilder.toString();
+    }
+
     @Override
     public Object[] getData(DataDefinition dataDefinition) {
         Class<?> propertyType = this.getPropertyType(dataDefinition);
@@ -160,17 +172,16 @@ public class SolrEventService implements EventService {
         SolrInputDocument result = new SolrInputDocument();
 
         result.addField("id", event.getId());
+
+        result.addField("global_agent_id", getGlobalAgentId(event, space));
+        result.addField("space", space);
+        result.addField("system", event.getSystem());
         result.addField("agent_id", event.getAgentId());
+
         result.addField("type", event.getType().orElse(null));
         result.addField("timestamp", event.getTimestamp());
         result.addField("parent_id", event.getParentEventId().orElse(null));
         result.addField("global_id", event.getGlobalEventId().orElse(null));
-
-        result.addField("space", space);
-
-        if (this.isCloud) {
-            result.setField(_ROUTE_, this.getTargetShard(event.getTimestamp()));
-        }
 
         this.addProperties(result, event.getBooleanProperties(), "boolean_property_");
         this.addProperties(result, event.getDateProperties(), "date_property_");
@@ -179,6 +190,10 @@ public class SolrEventService implements EventService {
         this.addProperties(result, event.getIntegerProperties(), "integer_property_");
         this.addProperties(result, event.getLongProperties(), "long_property_");
         this.addProperties(result, event.getStringProperties(), "string_property_");
+
+        if (this.isCloud) {
+            result.setField(_ROUTE_, this.getTargetShard(event.getTimestamp()));
+        }
 
         return result;
     }

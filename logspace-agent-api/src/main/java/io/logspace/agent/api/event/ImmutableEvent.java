@@ -39,14 +39,16 @@ public final class ImmutableEvent implements Event {
     /**
      * A optional global event is the root for multiple sub events.
      */
-    private Optional<String> globalEventId;
+    private final Optional<String> globalEventId;
 
     /**
      * The optional direct predecessor event related to this event.
      */
-    private Optional<String> parentEventId;
+    private final Optional<String> parentEventId;
 
     private final EventProperties properties;
+
+    private final String system;
 
     /**
      * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using
@@ -57,10 +59,11 @@ public final class ImmutableEvent implements Event {
      * @param parentEventId The parent event id.
      * @param properties The properties.
      */
-    public ImmutableEvent(String agentId, Optional<String> type, Optional<String> globalEventId, Optional<String> parentEventId,
-            EventProperties properties) {
+    public ImmutableEvent(String agentId, String system, Optional<String> type, Optional<String> globalEventId,
+            Optional<String> parentEventId, EventProperties properties) {
         this.id = UUID.randomUUID().toString();
         this.agentId = agentId;
+        this.system = system;
         this.timestamp = new Date();
 
         this.type = type;
@@ -157,6 +160,11 @@ public final class ImmutableEvent implements Event {
     @Override
     public Collection<StringEventProperty> getStringProperties() {
         return this.properties.getStringProperties();
+    }
+
+    @Override
+    public String getSystem() {
+        return this.system;
     }
 
     /**

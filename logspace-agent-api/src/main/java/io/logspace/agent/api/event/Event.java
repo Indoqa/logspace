@@ -29,6 +29,7 @@ public interface Event {
     public static final String FIELD_ID = "id";
     public static final String FIELD_TIMESTAMP = "timestamp";
     public static final String FIELD_TYPE = "type";
+    public static final String FIELD_SYSTEM = "system";
     public static final String FIELD_AGENT_ID = "agent-id";
     public static final String FIELD_PARENT_EVENT_ID = "pid";
     public static final String FIELD_GLOBAL_EVENT_ID = "gid";
@@ -104,6 +105,11 @@ public interface Event {
      * @return The optional type of the event.
      */
     Optional<String> getType();
+
+    /**
+     * @return The system of the event.
+     */
+    String getSystem();
 
     /**
      * @return A boolean indicating if this event has properties.

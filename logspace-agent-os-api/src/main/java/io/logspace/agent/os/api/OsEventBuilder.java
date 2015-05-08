@@ -43,34 +43,34 @@ public class OsEventBuilder extends AbstractEventBuilder {
 
     private Optional<String> eventType;
 
-    public OsEventBuilder(String agentId, Event parentEvent) {
-        super(agentId, parentEvent);
+    private OsEventBuilder(String agentId, String system, Event parentEvent) {
+        super(agentId, system, parentEvent);
     }
 
-    public OsEventBuilder(String agentId, Optional<String> eventType) {
-        super(agentId);
+    private OsEventBuilder(String agentId, String system, Optional<String> eventType) {
+        super(agentId, system);
 
         this.eventType = eventType;
     }
 
-    public static OsEventBuilder createCpuBuilder(String agentId) {
-        return new OsEventBuilder(agentId, CPU_EVENT_TYPE);
+    public static OsEventBuilder createCpuBuilder(String agentId, String system) {
+        return new OsEventBuilder(agentId, system, CPU_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createDiskBuilder(String agentId) {
-        return new OsEventBuilder(agentId, DISK_EVENT_TYPE);
+    public static OsEventBuilder createDiskBuilder(String agentId, String system) {
+        return new OsEventBuilder(agentId, system, DISK_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createMemoryBuilder(String agentId) {
-        return new OsEventBuilder(agentId, MEMORY_EVENT_TYPE);
+    public static OsEventBuilder createMemoryBuilder(String agentId, String system) {
+        return new OsEventBuilder(agentId, system, MEMORY_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSwapBuilder(String agentId) {
-        return new OsEventBuilder(agentId, SWAP_EVENT_TYPE);
+    public static OsEventBuilder createSwapBuilder(String agentId, String system) {
+        return new OsEventBuilder(agentId, system, SWAP_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSystemLoadBuilder(String agentId) {
-        return new OsEventBuilder(agentId, SYSTEM_LOAD_EVENT_TYPE);
+    public static OsEventBuilder createSystemLoadBuilder(String agentId, String system) {
+        return new OsEventBuilder(agentId, system, SYSTEM_LOAD_EVENT_TYPE);
     }
 
     public OsEventBuilder setDiskPath(String diskPath) {

@@ -8,9 +8,9 @@
 package io.logspace.agent.impl;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.order.TriggerType;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -45,10 +45,14 @@ public class ApplicationTest {
 
     public static class TestAgent extends AbstractAgent {
 
-        private AgentController agentController = AgentControllerProvider.getAgentController();
+        public TestAgent() {
+            super("test", "test", TriggerType.Off, TriggerType.Event);
+
+            this.setAgentController(AgentControllerProvider.getAgentController());
+        }
 
         public void triggerEvent() {
-            this.agentController.send(new ImmutableEvent("TEST", Optional.of("TEST"), Optional.<String> empty(), Optional
+            this.sendEvent(new ImmutableEvent("TEST", this.getSystem(), Optional.of("TEST"), Optional.<String> empty(), Optional
                     .<String> empty(), null));
         }
     }

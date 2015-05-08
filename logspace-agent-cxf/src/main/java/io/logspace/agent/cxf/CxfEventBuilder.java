@@ -29,12 +29,12 @@ public class CxfEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_GLOBAL_REQUEST_ID = "global-request-id";
     public static final String PROPERTY_PARENT_REQUEST_ID = "parent-request-id";
 
-    public CxfEventBuilder(String agentId) {
-        super(agentId);
+    public CxfEventBuilder(String agentId, String system) {
+        super(agentId, system);
     }
 
-    public CxfEventBuilder(String agentId, Event parentEvent) {
-        super(agentId, parentEvent);
+    public CxfEventBuilder(String agentId, String system, Event parentEvent) {
+        super(agentId, system, parentEvent);
     }
 
     public CxfEventBuilder setDomain(String domain) {

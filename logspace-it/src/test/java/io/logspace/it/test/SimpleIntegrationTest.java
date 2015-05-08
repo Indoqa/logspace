@@ -117,7 +117,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
         @Override
         public void execute(AgentOrder agentOrder) {
-            Event event = new DefaultEventBuilder(this.getId()).setGlobalEventId(String.valueOf(++this.eventCount)).toEvent();
+            Event event = new DefaultEventBuilder(this.getId(), "TEST").setGlobalEventId(String.valueOf(++this.eventCount)).toEvent();
             this.sendEvent(event);
         }
 

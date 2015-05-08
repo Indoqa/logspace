@@ -12,6 +12,8 @@ import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -23,6 +25,14 @@ public abstract class AbstractAgentController implements AgentController {
 
     private String id;
 
+    private String system;
+
+    protected AbstractAgentController() {
+        super();
+
+        this.initalizeSystem();
+    }
+
     @Override
     public void flush() {
         // default does nothing
@@ -31,6 +41,11 @@ public abstract class AbstractAgentController implements AgentController {
     @Override
     public String getId() {
         return this.id;
+    }
+
+    @Override
+    public String getSystem() {
+        return this.system;
     }
 
     @Override
@@ -52,6 +67,10 @@ public abstract class AbstractAgentController implements AgentController {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setSystem(String system) {
+        this.system = system;
     }
 
     @Override
@@ -106,5 +125,13 @@ public abstract class AbstractAgentController implements AgentController {
      */
     protected void onAgentUnregistered(Agent agent) {
         // default does nothing
+    }
+
+    private void initalizeSystem() {
+        try {
+            this.system = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 }
