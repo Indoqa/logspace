@@ -106,9 +106,21 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
+  var columns = [createXAxisLabals(responseJson)];
+  var columnKeys = [];
+  var colors = {};
+  
+  {timeSeries.forEach(function(item, index) {
+      columnKeys.push(item.get("id")),
+      columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")));  
+      colors[item.get("id")] = item.get("color");
+  })}  
+
+  // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
   var chartData = {
-      labels: createXAxisLabals(responseJson),
-      datasets: createDatasets(timeSeries, responseJson)
+      colors: colors,
+      columnKeys: columnKeys,
+      columns: columns
   }
  
   resultCursor(result => {
@@ -121,43 +133,34 @@ function storeSuccessResult(timeSeries, responseJson) {
 } 
 
 function createXAxisLabals(responseJson) {
-  var labels = [];
+  var labels = ['x'];
 
   var start = new Date(responseJson.dateRange.start).getTime();
   var end = new Date(responseJson.dateRange.end).getTime();
   var gap = responseJson.dateRange.gap;
- 
+
   for (var i = start; i < end; i = i + gap) {
-    labels.push(new Date(i));
+    labels.push(new Date(i).toJSON());
   }
   
   return labels;  
 }
 
-function createDatasets(timeSeries, responseJson) {
-  var datasets = [];
-  
-  {timeSeries.forEach(function(item, index) {
-      datasets.push({
-          label: item.get("id"),
-          fillColor: "transparent",
-          strokeColor: item.get("color"),
-          pointColor: item.get("color"),
-          pointHighlightStroke: "#FFF",
-          data: fillNullValues(responseJson.data[index])
-      });  
-  })}  
 
-  return datasets;
-}
+function normalizeData(array, id, scaleMin, scaleMax) {
+  const scaleRange = scaleMax - scaleMin;
 
-function fillNullValues(array) {
-  return array.map(function(item) {
+  var values =  array.map(function(item) {
      if (item != null) {
-       return item; 
+       return item ; 
      }
 
-     return 0;
+     return null;
    });  
+
+   // add id as first value of data array, see http://c3js.org/reference.html#data-columns
+   values.unshift(id);
+
+  return values;
 } 
 
