@@ -18,10 +18,12 @@ const TimeSeriesItem = Record({
   agentId: '',
   propertyId: '',
   aggregate: '',
+  scaleMin: 0,
+  scaleMax: 100,
   space: ''
 });
 
-const colors = ['rgb(213, 191, 255)', 'rgb(191, 255, 218)', 'rgb(255, 209, 191)', 'rgb(247, 191, 255)', 'rgb(194, 191, 255)',
+const colors = ['blue', 'red', 'green', 'rgb(247, 191, 255)', 'rgb(194, 191, 255)',
   'rgb(213, 191, 255)', 'rgb(191, 255, 218)', 'rgb(255, 209, 191)', 'rgb(247, 191, 255)', 'rgb(213, 191, 255)', 'rgb(191, 255, 218)',
   'rgb(255, 209, 191)', 'rgb(247, 191, 255)', 'rgb(213, 191, 255)', 'rgb(191, 255, 218)', 'rgb(255, 209, 191)',
   'rgb(247, 191, 255)'

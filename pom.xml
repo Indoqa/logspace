@@ -75,7 +75,6 @@
     <module>logspace-hq-core-api</module>
     <module>logspace-hq-solr-plugin</module>
     <module>logspace-hq-webapp</module>
-    <module>logspace-hq-webapp-embedded-solr</module>
     <module>logspace-it</module>
     <module>logspace-jvm-agent</module>
     <module>logspace-monitor</module>

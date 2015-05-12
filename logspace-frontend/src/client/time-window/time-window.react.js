@@ -9,6 +9,7 @@
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import {onTimeWindowChange} from './actions';
+import {TIMEWINDOW_CONSTANTS} from './store'
 
 export default class TimeWindow extends PureComponent {
   
@@ -45,11 +46,13 @@ export default class TimeWindow extends PureComponent {
           <input name="start" value={this.state.start} onChange={this.handleChange.bind(this)}/> <br/>
           <input name="end" value={this.state.end} onChange={this.handleChange.bind(this)}/> <br/>
           <select name="gap" value={this.state.gap} onChange={this.handleChange.bind(this)}>
-            <option value="3600000">pro Stunde</option>
-            <option value="86400000">pro Tag</option>
-            <option value="604800000">pro Woche</option>
-            <option value="2629740000">pro Monat</option>
-            <option value="31556900000">pro Jahr</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.second}>pro Sekunde</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.minute}>pro Minute</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.hour}>pro Stunde</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.day}>pro Tag</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.week}>pro Woche</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.month}>pro Monat</option>
+            <option value={TIMEWINDOW_CONSTANTS.gap.year}>pro Jahr</option>
           </select>  
           <input type="button" value="set time" onClick={this.handleSubmit.bind(this)} />  
         </form>
