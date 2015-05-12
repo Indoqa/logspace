@@ -19,15 +19,15 @@ public class CxfEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_DOMAIN = "domain";
     public static final String PROPERTY_PORT = "port";
     public static final String PROPERTY_PATH = "path";
-    public static final String PROPERTY_QUERY_STRING = "query-string";
-    public static final String PROPERTY_RESPONSE_CODE = "response-code";
+    public static final String PROPERTY_QUERY_STRING = "query_string";
+    public static final String PROPERTY_RESPONSE_CODE = "response_code";
     public static final String PROPERTY_LOCATION = "location";
-    public static final String PROPERTY_IP_ADDRESS = "ip-address";
-    public static final String PROPERTY_HTTP_METHOD = "http-method";
+    public static final String PROPERTY_IP_ADDRESS = "ip_address";
+    public static final String PROPERTY_HTTP_METHOD = "http_method";
     public static final String PROPERTY_DURATION = "duration";
-    public static final String PROPERTY_REQUEST_ID = "request-id";
-    public static final String PROPERTY_GLOBAL_REQUEST_ID = "global-request-id";
-    public static final String PROPERTY_PARENT_REQUEST_ID = "parent-request-id";
+    public static final String PROPERTY_REQUEST_ID = "request_id";
+    public static final String PROPERTY_GLOBAL_REQUEST_ID = "global_request_id";
+    public static final String PROPERTY_PARENT_REQUEST_ID = "parent_request_id";
 
     public CxfEventBuilder(String agentId, String system) {
         super(agentId, system);

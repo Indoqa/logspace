@@ -13,31 +13,31 @@ import io.logspace.agent.api.event.Optional;
 
 public class OsEventBuilder extends AbstractEventBuilder {
 
-    public static final String PROPERTY_LOAD_AVERAGE = "load-average";
-    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system-cpu-load";
-    public static final String PROPERTY_PROCESSOR_COUNT = "processor-count";
+    public static final String PROPERTY_LOAD_AVERAGE = "load_average";
+    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system_cpu_load";
+    public static final String PROPERTY_PROCESSOR_COUNT = "processor_count";
 
-    public static final String PROPERTY_PROCESS_CPU_LOAD = "process-cpu-load";
-    public static final String PROPERTY_PROCESS_CPU_TIME = "process-cpu-time";
+    public static final String PROPERTY_PROCESS_CPU_LOAD = "process_cpu_load";
+    public static final String PROPERTY_PROCESS_CPU_TIME = "process_cpu_time";
 
-    private static final String PROPERTY_MAX_MEMORY = "max-memory";
-    private static final String PROPERTY_TOTAL_MEMORY = "total-memory";
-    private static final String PROPERTY_FREE_MEMORY = "free-memory";
-    private static final String PROPERTY_USED_MEMORY = "used-memory";
+    private static final String PROPERTY_MAX_MEMORY = "max_memory";
+    private static final String PROPERTY_TOTAL_MEMORY = "total_memory";
+    private static final String PROPERTY_FREE_MEMORY = "free_memory";
+    private static final String PROPERTY_USED_MEMORY = "used_memory";
 
-    private static final String PROPERTY_DISK_PATH = "disk-path";
-    private static final String PROPERTY_DISK_TOTAL_SPACE = "disk-total-space";
-    private static final String PROPERTY_DISK_UNALLOCATED_SPACE = "disk-unallocated-space";
-    private static final String PROPERTY_DISK_USED_SPACE = "disk-used-space";
-    private static final String PROPERTY_DISK_USABLE_SPACE = "disk-usable-space";
+    private static final String PROPERTY_DISK_PATH = "disk_path";
+    private static final String PROPERTY_DISK_TOTAL_SPACE = "disk_total_space";
+    private static final String PROPERTY_DISK_UNALLOCATED_SPACE = "disk_unallocated_space";
+    private static final String PROPERTY_DISK_USED_SPACE = "disk_used_space";
+    private static final String PROPERTY_DISK_USABLE_SPACE = "disk_usable_space";
 
-    private static final String PROPERTY_SWAP_FREE_SPACE = "swap-free-space";
-    private static final String PROPERTY_SWAP_TOTAL_SPACE = "swap-total-space";
-    private static final String PROPERTY_SWAP_USED_SPACE = "swap-used-space";
+    private static final String PROPERTY_SWAP_FREE_SPACE = "swap_free_space";
+    private static final String PROPERTY_SWAP_TOTAL_SPACE = "swap_total_space";
+    private static final String PROPERTY_SWAP_USED_SPACE = "swap_used_space";
 
     private static final Optional<String> MEMORY_EVENT_TYPE = Optional.of("os/memory");
     private static final Optional<String> CPU_EVENT_TYPE = Optional.of("os/cpu");
-    private static final Optional<String> SYSTEM_LOAD_EVENT_TYPE = Optional.of("os/system-load");
+    private static final Optional<String> SYSTEM_LOAD_EVENT_TYPE = Optional.of("os/system_load");
     private static final Optional<String> SWAP_EVENT_TYPE = Optional.of("os/swap");
     private static final Optional<String> DISK_EVENT_TYPE = Optional.of("os/disk");
 

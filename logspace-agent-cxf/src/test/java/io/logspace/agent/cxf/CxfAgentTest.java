@@ -68,7 +68,7 @@ public class CxfAgentTest {
         assertNull(result);
     }
 
-    public void executeCxfGetMethod() throws Exception {
+    public void executeCxfGetMethod() {
         WebClient client = WebClient.create(ENDPOINT_ADDRESS);
         WebClient.getConfig(client).getRequestContext().put(LocalConduit.DIRECT_DISPATCH, Boolean.TRUE);
 
@@ -80,7 +80,7 @@ public class CxfAgentTest {
     }
 
     @Before
-    public void startServer() throws Exception {
+    public void startServer() {
         JAXRSServerFactoryBean serverFactory = new JAXRSServerFactoryBean();
         serverFactory.setResourceClasses(TestCxfResource.class);
 
@@ -103,7 +103,7 @@ public class CxfAgentTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void test() {
         TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
 
         assertEquals(0, agentController.getCollectedEvents().size());
@@ -113,7 +113,7 @@ public class CxfAgentTest {
         List<Event> collectedEvents = agentController.getCollectedEvents();
         assertEquals(1, collectedEvents.size());
         Event event = collectedEvents.get(0);
-        assertEquals("GET", getProperty(event.getStringProperties(), "http-method"));
+        assertEquals("GET", getProperty(event.getStringProperties(), "http_method"));
         assertEquals("/test", getProperty(event.getStringProperties(), "path"));
 
         this.executeCxfCrudMethods();
@@ -122,11 +122,11 @@ public class CxfAgentTest {
         assertEquals(8, collectedEvents.size());
 
         event = collectedEvents.get(1);
-        assertEquals("GET", getProperty(event.getStringProperties(), "http-method"));
+        assertEquals("GET", getProperty(event.getStringProperties(), "http_method"));
         assertEquals("/crud", getProperty(event.getStringProperties(), "path"));
 
         event = collectedEvents.get(6);
-        assertEquals("DELETE", getProperty(event.getStringProperties(), "http-method"));
+        assertEquals("DELETE", getProperty(event.getStringProperties(), "http_method"));
         assertEquals("/crud", getProperty(event.getStringProperties(), "path"));
 
         AgentControllerProvider.shutdown();

@@ -14,33 +14,33 @@ public class JvmEventBuilder extends AbstractEventBuilder {
 
     public static final String PROPERTY_JVM_IDENTIFIER = "jvm-identifier";
 
-    public static final String PROPERTY_INITIAL_HEAP_MEMORY = "initial-heap-memory";
-    public static final String PROPERTY_MAX_HEAP_MEMORY = "max-heap-memory";
-    public static final String PROPERTY_USED_HEAP_MEMORY = "used-heap-memory";
-    public static final String PROPERTY_COMMITED_HEAP_MEMORY = "commited-heap-memory";
+    public static final String PROPERTY_INITIAL_HEAP_MEMORY = "initial_heap_memory";
+    public static final String PROPERTY_MAX_HEAP_MEMORY = "max_heap_memory";
+    public static final String PROPERTY_USED_HEAP_MEMORY = "used_heap_memory";
+    public static final String PROPERTY_COMMITED_HEAP_MEMORY = "commited_heap_memory";
 
-    public static final String PROPERTY_INITIAL_NON_HEAP_MEMORY = "initial-non-heap-memory";
-    public static final String PROPERTY_MAX_NON_HEAP_MEMORY = "max-non-heap-memory";
-    public static final String PROPERTY_USED_NON_HEAP_MEMORY = "used-non-heap-memory";
-    public static final String PROPERTY_COMMITED_NON_HEAP_MEMORY = "commited-non-heap-memory";
+    public static final String PROPERTY_INITIAL_NON_HEAP_MEMORY = "initial_non_heap_memory";
+    public static final String PROPERTY_MAX_NON_HEAP_MEMORY = "max_non_heap_memory";
+    public static final String PROPERTY_USED_NON_HEAP_MEMORY = "used_non_heap_memory";
+    public static final String PROPERTY_COMMITED_NON_HEAP_MEMORY = "commited_non_heap_memory";
 
-    public static final String PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT = "object-pending-finalization-count";
+    public static final String PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT = "object_pending_finalization_count";
 
-    public static final String PROPERTY_LOADED_CLASS_COUNT = "loaded-class-count";
-    public static final String PROPERTY_TOTAL_LOADED_CLASS_COUNT = "total-loaded-class-count";
-    public static final String PROPERTY_UNLOADED_CLASS_COUNT = "unloaded-class-count";
+    public static final String PROPERTY_LOADED_CLASS_COUNT = "loaded_class_count";
+    public static final String PROPERTY_TOTAL_LOADED_CLASS_COUNT = "total_loaded_class_count";
+    public static final String PROPERTY_UNLOADED_CLASS_COUNT = "unloaded_class_count";
 
-    public static final String PROPERTY_THREAD_COUNT = "thread-count";
-    public static final String PROPERTY_DAEMON_THREAD_COUNT = "daemon-thread-count";
+    public static final String PROPERTY_THREAD_COUNT = "thread_count";
+    public static final String PROPERTY_DAEMON_THREAD_COUNT = "daemon_thread_count";
 
-    public static final String PROPERTY_GARBAGE_COLLECTOR_RUN_COUNT = "garbagecollector-run-count";
-    public static final String PROPERTY_GARBAGE_COLLECTOR_TIME = "garbagecollector-time";
+    public static final String PROPERTY_GARBAGE_COLLECTOR_RUN_COUNT = "garbagecollector_run_count";
+    public static final String PROPERTY_GARBAGE_COLLECTOR_TIME = "garbagecollector_time";
 
-    public static final String PROPERTY_OPEN_FILE_DESCRIPTOR_COUNT = "open-file-descriptor-count";
-    public static final String PROPERTY_MAX_FILE_DESCRIPTOR_COUNT = "max-file-descriptor-count";
+    public static final String PROPERTY_OPEN_FILE_DESCRIPTOR_COUNT = "open_file_descriptor_count";
+    public static final String PROPERTY_MAX_FILE_DESCRIPTOR_COUNT = "max_file_descriptor_count";
 
-    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system-cpu-load";
-    public static final String PROPERTY_SYSTEM_LOAD_AVERAGE = "system-load-average";
+    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system_cpu_load";
+    public static final String PROPERTY_SYSTEM_LOAD_AVERAGE = "system_load_average";
 
     private static final Optional<String> JVM_EVENT_TYPE = Optional.of("jvm");
 
