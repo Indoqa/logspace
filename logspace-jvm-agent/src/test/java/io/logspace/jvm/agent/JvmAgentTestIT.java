@@ -35,12 +35,12 @@ public class JvmAgentTestIT {
 
         assertEquals(0, agentController.getCollectedEvents().size());
 
-        JvmAgent jvmAgent = Premain.AGENT;
+        JvmAgent jvmAgent = Premain.getAgent();
         assertNull(jvmAgent);
 
         this.loadAgent();
 
-        jvmAgent = Premain.AGENT;
+        jvmAgent = Premain.getAgent();
         assertNotNull(jvmAgent);
 
         assertEquals(0, agentController.getCollectedEvents().size());

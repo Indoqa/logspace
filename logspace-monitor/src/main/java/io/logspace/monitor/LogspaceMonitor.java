@@ -13,9 +13,13 @@ import io.logspace.agent.os.MemoryAgent;
 import io.logspace.agent.os.SwapAgent;
 import io.logspace.agent.os.SystemLoadAgent;
 
-public class LogspaceMonitor {
+public final class LogspaceMonitor {
 
     public static final String SYSTEM_PROPERTY_SYSTEM_IDENTIFIER = "io.logspace.system-identifier";
+
+    private LogspaceMonitor() {
+        // hide utility class constructor
+    }
 
     public static void main(String[] args) {
         String systemIdentifier = getSystemIdentifier();

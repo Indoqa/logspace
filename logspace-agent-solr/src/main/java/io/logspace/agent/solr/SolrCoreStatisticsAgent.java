@@ -22,12 +22,11 @@ import org.apache.solr.core.SolrInfoMBean;
 
 public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
 
-    private SolrCoreStatisticsAgent(SolrCore core) {
-        super(core, "/statistics", Off, Cron);
-    }
+    private static final String FIELD_SIZE = "size";
+    private static final String FIELD_CUMULATIVE_HITS = "cumulative_hits";
 
-    public static void create(SolrCore solrCore) {
-        new SolrCoreStatisticsAgent(solrCore);
+    public SolrCoreStatisticsAgent(SolrCore core) {
+        super(core, "/statistics", Off, Cron);
     }
 
     private static long getIndexSize(NamedList<?> statistics) {
@@ -52,8 +51,7 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
             }
 
             if (indexSizeString.endsWith(" bytes")) {
-                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 6));
-                return (long) value;
+                return (long) parse(indexSizeString.substring(0, indexSizeString.length() - 6));
             }
         }
 
@@ -89,40 +87,40 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
         if (mBean != null) {
             NamedList<?> statistics = mBean.getStatistics();
 
-            solrEventBuilder.setFieldCacheSize(getLong(statistics, "size"));
-            solrEventBuilder.setFieldCacheHitRatio(getFloat(statistics, "cumulative_hits"));
+            solrEventBuilder.setFieldCacheSize(getLong(statistics, FIELD_SIZE));
+            solrEventBuilder.setFieldCacheHitRatio(getFloat(statistics, FIELD_CUMULATIVE_HITS));
         }
 
         mBean = infoRegistry.get("fieldValueCache");
         if (mBean != null) {
             NamedList<?> statistics = mBean.getStatistics();
 
-            solrEventBuilder.setFieldValueCacheSize(getLong(statistics, "size"));
-            solrEventBuilder.setFieldValueCacheHitRatio(getFloat(statistics, "cumulative_hits"));
+            solrEventBuilder.setFieldValueCacheSize(getLong(statistics, FIELD_SIZE));
+            solrEventBuilder.setFieldValueCacheHitRatio(getFloat(statistics, FIELD_CUMULATIVE_HITS));
         }
 
         mBean = infoRegistry.get("queryCache");
         if (mBean != null) {
             NamedList<?> statistics = mBean.getStatistics();
 
-            solrEventBuilder.setQueryCacheSize(getLong(statistics, "size"));
-            solrEventBuilder.setQueryCacheHitRatio(getFloat(statistics, "cumulative_hits"));
+            solrEventBuilder.setQueryCacheSize(getLong(statistics, FIELD_SIZE));
+            solrEventBuilder.setQueryCacheHitRatio(getFloat(statistics, FIELD_CUMULATIVE_HITS));
         }
 
         mBean = infoRegistry.get("documentCache");
         if (mBean != null) {
             NamedList<?> statistics = mBean.getStatistics();
 
-            solrEventBuilder.setDocumentCacheSize(getLong(statistics, "size"));
-            solrEventBuilder.setDocumentCacheHitRatio(getFloat(statistics, "cumulative_hits"));
+            solrEventBuilder.setDocumentCacheSize(getLong(statistics, FIELD_SIZE));
+            solrEventBuilder.setDocumentCacheHitRatio(getFloat(statistics, FIELD_CUMULATIVE_HITS));
         }
 
         mBean = infoRegistry.get("filterCache");
         if (mBean != null) {
             NamedList<?> statistics = mBean.getStatistics();
 
-            solrEventBuilder.setFilterCacheSize(getLong(statistics, "size"));
-            solrEventBuilder.setFilterCacheHitRatio(getFloat(statistics, "cumulative_hits"));
+            solrEventBuilder.setFilterCacheSize(getLong(statistics, FIELD_SIZE));
+            solrEventBuilder.setFilterCacheHitRatio(getFloat(statistics, FIELD_CUMULATIVE_HITS));
         }
     }
 

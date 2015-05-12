@@ -26,20 +26,20 @@ import java.util.Date;
  */
 public interface Event {
 
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_TIMESTAMP = "timestamp";
-    public static final String FIELD_TYPE = "type";
-    public static final String FIELD_SYSTEM = "system";
-    public static final String FIELD_AGENT_ID = "agent-id";
-    public static final String FIELD_PARENT_EVENT_ID = "pid";
-    public static final String FIELD_GLOBAL_EVENT_ID = "gid";
-    public static final String FIELD_BOOLEAN_PROPERTIES = "boolean-properties";
-    public static final String FIELD_DATE_PROPERTIES = "date-properties";
-    public static final String FIELD_DOUBLE_PROPERTIES = "double-properties";
-    public static final String FIELD_FLOAT_PROPERTIES = "float-properties";
-    public static final String FIELD_INTEGER_PROPERTIES = "integer-properties";
-    public static final String FIELD_LONG_PROPERTIES = "long-properties";
-    public static final String FIELD_STRING_PROPERTIES = "string-properties";
+    String FIELD_ID = "id";
+    String FIELD_TIMESTAMP = "timestamp";
+    String FIELD_TYPE = "type";
+    String FIELD_SYSTEM = "system";
+    String FIELD_AGENT_ID = "agent-id";
+    String FIELD_PARENT_EVENT_ID = "pid";
+    String FIELD_GLOBAL_EVENT_ID = "gid";
+    String FIELD_BOOLEAN_PROPERTIES = "boolean-properties";
+    String FIELD_DATE_PROPERTIES = "date-properties";
+    String FIELD_DOUBLE_PROPERTIES = "double-properties";
+    String FIELD_FLOAT_PROPERTIES = "float-properties";
+    String FIELD_INTEGER_PROPERTIES = "integer-properties";
+    String FIELD_LONG_PROPERTIES = "long-properties";
+    String FIELD_STRING_PROPERTIES = "string-properties";
 
     /**
      * @return The optional global event ID.

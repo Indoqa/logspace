@@ -66,7 +66,7 @@ public class AgentScheduler {
         }
     }
 
-    public void applyOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) throws AgentControllerException {
+    public void applyOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) {
         this.logger.info("Applying new AgentControllerOrder");
 
         this.clearAgentOrders();
@@ -87,7 +87,7 @@ public class AgentScheduler {
         }
     }
 
-    public void clearAgentOrders() throws AgentControllerException {
+    public void clearAgentOrders() {
         this.logger.info("Cancelling schedules for all agents.");
 
         try {
@@ -162,7 +162,7 @@ public class AgentScheduler {
         }
     }
 
-    private void scheduleAgentOrder(AgentOrder agentOrder) throws AgentControllerException {
+    private void scheduleAgentOrder(AgentOrder agentOrder) {
         if (agentOrder.getTriggerParameter().isPresent()) {
             this.logger.info("Scheduling order for agent '{}' with trigger '{}' and parameter '{}'.", new Object[] {
                     agentOrder.getId(), agentOrder.getTriggerType(), agentOrder.getTriggerParameter().get()});

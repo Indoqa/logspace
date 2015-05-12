@@ -14,7 +14,7 @@ import org.apache.cxf.phase.Phase;
 
 public class CxfInAgent extends AbstractPhaseInterceptor<Message> {
 
-    public static String CXF_AGENT_DURATION_KEY = "io.logspace.agent.cxf.duration";
+    public static final String CXF_AGENT_DURATION_KEY = "io.logspace.agent.cxf.duration";
 
     public CxfInAgent() {
         super(Phase.RECEIVE);

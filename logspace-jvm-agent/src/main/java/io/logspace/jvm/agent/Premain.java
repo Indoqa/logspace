@@ -9,15 +9,25 @@ package io.logspace.jvm.agent;
 
 import java.lang.instrument.Instrumentation;
 
-public class Premain {
+public final class Premain {
 
-    protected static JvmAgent AGENT;
+    private static JvmAgent agent;
 
-    public static void agentmain(String args, Instrumentation inst) {
-        AGENT = new JvmAgent();
+    private Premain() {
+        // hide utility class constructor
     }
 
+    @SuppressWarnings("unused")
+    public static void agentmain(String args, Instrumentation inst) {
+        agent = new JvmAgent();
+    }
+
+    @SuppressWarnings("unused")
     public static void premain(String args, Instrumentation inst) {
-        AGENT = new JvmAgent();
+        agent = new JvmAgent();
+    }
+
+    protected static JvmAgent getAgent() {
+        return agent;
     }
 }

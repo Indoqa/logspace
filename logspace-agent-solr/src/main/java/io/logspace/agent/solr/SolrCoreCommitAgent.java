@@ -15,16 +15,12 @@ import org.apache.solr.search.SolrIndexSearcher;
 
 public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
 
-    private SolrCoreCommitAgent(SolrCore core) {
+    public SolrCoreCommitAgent(SolrCore core) {
         super(core, "/commit", Off, Event);
 
         this.getSolrCore().registerNewSearcherListener(this);
         this.getSolrCore().getUpdateHandler().registerCommitCallback(this);
         this.getSolrCore().getUpdateHandler().registerSoftCommitCallback(this);
-    }
-
-    public static void create(SolrCore solrCore) {
-        new SolrCoreCommitAgent(solrCore);
     }
 
     @Override
