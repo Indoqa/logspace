@@ -11,15 +11,10 @@ public class DataDefinition {
 
     private DateRange dateRange;
 
-    private String space;
-    private String agentId;
+    private String globalAgentId;
     private String propertyId;
 
     private Aggregate aggregate;
-
-    public String getAgentId() {
-        return this.agentId;
-    }
 
     public Aggregate getAggregate() {
         return this.aggregate;
@@ -29,16 +24,23 @@ public class DataDefinition {
         return this.dateRange;
     }
 
+    public String getFacetFunction() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.getAggregate());
+        stringBuilder.append("(");
+        stringBuilder.append(this.getPropertyId());
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
+    }
+
+    public String getGlobalAgentId() {
+        return this.globalAgentId;
+    }
+
     public String getPropertyId() {
         return this.propertyId;
-    }
-
-    public String getSpace() {
-        return this.space;
-    }
-
-    public void setAgentId(String agentId) {
-        this.agentId = agentId;
     }
 
     public void setAggregate(Aggregate aggregate) {
@@ -49,15 +51,15 @@ public class DataDefinition {
         this.dateRange = dateRange;
     }
 
+    public void setGlobalAgentId(String globalAgentId) {
+        this.globalAgentId = globalAgentId;
+    }
+
     public void setPropertyId(String propertyId) {
         this.propertyId = propertyId;
     }
 
-    public void setSpace(String space) {
-        this.space = space;
-    }
-
     public static enum Aggregate {
-        max, min, average, count, sum;
+        max, min, avg, count, sum;
     }
 }

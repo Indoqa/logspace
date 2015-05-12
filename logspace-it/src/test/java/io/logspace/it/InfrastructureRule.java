@@ -14,7 +14,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
 
@@ -24,7 +24,7 @@ public class InfrastructureRule extends ExternalResource {
 
     private LogspaceHq logspaceHq;
 
-    private SolrServer solrServer;
+    private SolrClient solrClient;
 
     private static Field getField(Class<?> type, String fieldName) {
         Class<?> currentType = type;
@@ -44,8 +44,8 @@ public class InfrastructureRule extends ExternalResource {
         return null;
     }
 
-    public SolrServer getSolrServer() {
-        return this.solrServer;
+    public SolrClient getSolrClient() {
+        return this.solrClient;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class InfrastructureRule extends ExternalResource {
         this.logspaceHq = new LogspaceHq();
         this.logspaceHq.invoke();
 
-        this.solrServer = this.getSpringBean(SolrServer.class);
+        this.solrClient = this.getSpringBean(SolrClient.class);
 
         this.initialized = true;
     }

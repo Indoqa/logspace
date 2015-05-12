@@ -7,34 +7,48 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.hq.core.api.CapabilitiesService;
+
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import spark.Request;
-import spark.Response;
-
-import com.indoqa.boot.AbstractJsonResourcesBase;
 
 @Named
-public class CapabilitiesResource extends AbstractJsonResourcesBase {
+public class CapabilitiesResource extends AbstractSpaceResource {
 
     private static final String PARAMETER_CONTROLLER_ID = "controller-id";
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Inject
+    private CapabilitiesService capabilitiesService;
 
     @PostConstruct
     public void mount() {
-        this.put("/capabilities/:" + PARAMETER_CONTROLLER_ID, (req, res) -> this.saveCapabilities(req, res));
+        this.put("/capabilities/:" + PARAMETER_CONTROLLER_ID, (req, res) -> this.saveCapabilities(req));
     }
 
-    @SuppressWarnings("unused")
-    private String saveCapabilities(Request req, Response res) {
-        String controllerId = req.params(PARAMETER_CONTROLLER_ID);
+    private String saveCapabilities(Request req) throws IOException {
+        String space = this.getSpace(req);
 
+        String controllerId = req.params(PARAMETER_CONTROLLER_ID);
         this.logger.info("Storing capabilities of controller with ID '{}'.", controllerId);
+
+        AgentControllerCapabilities agentControllerCapabilities = AgentControllerCapabilitiesJsonDeserializer.fromJson(req
+                .bodyAsBytes());
+        agentControllerCapabilities.setSpace(Optional.of(space));
+
+        if (!controllerId.equals(agentControllerCapabilities.getId())) {
+            // TODO: proper exception class
+            throw new RuntimeException("Ids do not match");
+        }
+
+        this.capabilitiesService.save(agentControllerCapabilities);
 
         return null;
     }

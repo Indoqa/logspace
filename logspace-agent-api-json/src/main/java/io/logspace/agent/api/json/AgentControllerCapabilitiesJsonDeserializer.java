@@ -12,17 +12,20 @@ import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
 import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
 import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
-import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_AGENT_CAPABILITIES;
-import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_ID;
-import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_TRIGGER_TYPES;
-import static io.logspace.agent.api.order.AgentControllerCapabilities.FIELD_TYPE;
+import static io.logspace.agent.api.order.AgentControllerCapabilities.*;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.PropertyDescription;
+import io.logspace.agent.api.order.PropertyDescription.PropertyType;
+import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
 import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonParseException;
 
 public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJsonDeserializer {
 
@@ -30,8 +33,16 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         super(data);
     }
 
+    private AgentControllerCapabilitiesJsonDeserializer(InputStream inputStream) throws IOException {
+        super(inputStream);
+    }
+
     public static AgentControllerCapabilities fromJson(byte[] data) throws IOException {
         return new AgentControllerCapabilitiesJsonDeserializer(data).deserialize();
+    }
+
+    public static AgentControllerCapabilities fromJson(InputStream inputStream) throws IOException {
+        return new AgentControllerCapabilitiesJsonDeserializer(inputStream).deserialize();
     }
 
     private AgentControllerCapabilities deserialize() throws IOException {
@@ -42,6 +53,8 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         this.consumeToken();
 
         result.setId(this.readMandatoryField(FIELD_ID));
+        result.setSystem(this.readMandatoryField(FIELD_SYSTEM));
+        result.setSpace(this.readOptionalField(FIELD_SPACE));
 
         this.prepareToken();
         if (this.hasToken(FIELD_NAME)) {
@@ -97,6 +110,7 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         while (true) {
             this.prepareToken();
             if (this.hasToken(END_ARRAY)) {
+                this.consumeToken();
                 break;
             }
 
@@ -106,8 +120,73 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         result.setSupportedTriggerTypes(triggerTypes.toArray(new TriggerType[triggerTypes.size()]));
 
         this.prepareToken();
-        this.validateToken(END_ARRAY);
+        this.validateToken(FIELD_NAME);
+        this.validateField(FIELD_PROPERTY_DESCRIPTIONS);
+
+        this.prepareToken();
+        this.validateToken(START_ARRAY);
         this.consumeToken();
+
+        List<PropertyDescription> propertyDescriptions = new ArrayList<PropertyDescription>();
+        while (true) {
+            this.prepareToken();
+            if (this.hasToken(END_ARRAY)) {
+                this.consumeToken();
+                break;
+            }
+
+            this.validateToken(START_OBJECT);
+            this.consumeToken();
+
+            propertyDescriptions.add(this.readPropertyDescription());
+
+            this.prepareToken();
+            this.validateToken(END_OBJECT);
+            this.consumeToken();
+        }
+        result.setPropertyDescriptions(propertyDescriptions.toArray(new PropertyDescription[propertyDescriptions.size()]));
+
+        return result;
+    }
+
+    private PropertyDescription readPropertyDescription() throws IOException {
+        PropertyDescription result = new PropertyDescription();
+
+        result.setName(this.readMandatoryField(FIELD_PROPERTY_NAME));
+        result.setPropertyType(PropertyType.valueOf(this.readMandatoryField(FIELD_PROPERTY_TYPE)));
+
+        this.prepareToken();
+        if (this.hasToken(FIELD_NAME)) {
+            this.validateToken(FIELD_NAME);
+            this.validateField(FIELD_PROPERTY_UNITS);
+
+            this.prepareToken();
+            this.validateToken(START_OBJECT);
+            this.consumeToken();
+
+            List<PropertyUnit> propertyUnits = new ArrayList<PropertyUnit>();
+            while (true) {
+                this.prepareToken();
+                if (this.hasToken(END_OBJECT)) {
+                    this.consumeToken();
+                    break;
+                }
+
+                propertyUnits.add(this.readPropertyUnit());
+
+                this.consumeToken();
+            }
+            result.setUnits(propertyUnits.toArray(new PropertyUnit[propertyUnits.size()]));
+        }
+
+        return result;
+    }
+
+    private PropertyUnit readPropertyUnit() throws IOException, JsonParseException {
+        PropertyUnit result = new PropertyUnit();
+
+        result.setName(this.getCurrentName());
+        result.setFactor(this.nextDoubleValue());
 
         return result;
     }

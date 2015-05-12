@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -37,7 +37,7 @@
 
     <indoqa-boot-version>0.2-SNAPSHOT</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
-    <solr-version>4.10.3</solr-version>
+    <solr-version>5.1.0</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
 
     <jackson-version>2.4.4</jackson-version>
@@ -47,7 +47,9 @@
     <!--<tape-version>1.2.3</tape-version> -->
 
     <indoqa-commons-solr-server-factory-version>4.10.0-SNAPSHOT</indoqa-commons-solr-server-factory-version>
+    <solr-spring-client-version>5.1.0-SNAPSHOT</solr-spring-client-version>
     <indoqa-commons-jar-in-jar-version>1.2.1</indoqa-commons-jar-in-jar-version>
+    <indoqa-commons-lang-version>1.0.17</indoqa-commons-lang-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
@@ -183,7 +185,7 @@
           </exclusion>
         </exclusions>
       </dependency>
-      
+
       <!-- Jetty -->
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
@@ -226,8 +228,18 @@
       </dependency>
       <dependency>
         <groupId>com.indoqa.commons</groupId>
+        <artifactId>indoqa-commons-lang</artifactId>
+        <version>${indoqa-commons-lang-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.indoqa.commons</groupId>
         <artifactId>indoqa-commons-solr-server-factory</artifactId>
         <version>${indoqa-commons-solr-server-factory-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.indoqa.solr</groupId>
+        <artifactId>solr-spring-client</artifactId>
+        <version>${solr-spring-client-version}</version>
       </dependency>
       <dependency>
         <groupId>com.indoqa.commons</groupId>
@@ -290,7 +302,7 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jmx</artifactId>
           </exclusion>
-        </exclusions>        
+        </exclusions>
       </dependency>
 
       <!-- Quartz -->
@@ -379,6 +391,12 @@
         <groupId>io.logspace</groupId>
         <artifactId>logspace-agent-solr</artifactId>
         <version>${project.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.indoqa.commons</groupId>
+            <artifactId>indoqa-commons-solr-server-factory</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
@@ -502,7 +520,7 @@
             <exclude>**/.recommenders/**</exclude>
             <exclude>**/configs/**</exclude>
             <exclude>**/src/build-with-jdk-6</exclude>
-            <exclude>**/src/build-with-jdk-7</exclude>	    
+            <exclude>**/src/build-with-jdk-7</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/node/**/*.*</exclude>
             <exclude>**/node/**/*</exclude>
@@ -539,8 +557,8 @@
         </file>
       </activation>
       <properties>
-          <project.build.compiler.version>1.6</project.build.compiler.version>
-          <JAVA_6_HOME>${env.JAVA_6_HOME}</JAVA_6_HOME>
+        <project.build.compiler.version>1.6</project.build.compiler.version>
+        <JAVA_6_HOME>${env.JAVA_6_HOME}</JAVA_6_HOME>
       </properties>
       <build>
         <plugins>
@@ -574,7 +592,7 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -598,8 +616,8 @@
         </file>
       </activation>
       <properties>
-          <project.build.compiler.version>1.7</project.build.compiler.version>
-          <JAVA_7_HOME>${env.JAVA_7_HOME}</JAVA_7_HOME>
+        <project.build.compiler.version>1.7</project.build.compiler.version>
+        <JAVA_7_HOME>${env.JAVA_7_HOME}</JAVA_7_HOME>
       </properties>
       <build>
         <plugins>
@@ -633,7 +651,7 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>

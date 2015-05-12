@@ -152,6 +152,10 @@ public final class JacksonUtils {
         writeMandatoryField(generator, fieldName, formattedValue);
     }
 
+    public static void writeMandatoryDoubleField(JsonGenerator generator, String fieldName, double value) throws IOException {
+        generator.writeNumberField(fieldName, value);
+    }
+
     public static void writeMandatoryField(JsonGenerator generator, String fieldName, String value) throws IOException {
         generator.writeStringField(fieldName, value);
     }

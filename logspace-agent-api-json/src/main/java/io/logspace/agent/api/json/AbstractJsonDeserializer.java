@@ -60,6 +60,14 @@ public abstract class AbstractJsonDeserializer {
         return this.jsonParser.nextBooleanValue();
     }
 
+    protected double nextDoubleValue() throws IOException, JsonParseException {
+        if (this.jsonParser.nextToken() == JsonToken.VALUE_NUMBER_FLOAT) {
+            return this.jsonParser.getDoubleValue();
+        }
+
+        return 0;
+    }
+
     protected int nextIntValue() throws IOException, JsonParseException {
         return this.jsonParser.nextIntValue(0);
     }

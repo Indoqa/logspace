@@ -68,6 +68,10 @@ public abstract class AbstractJsonSerializer {
         JacksonUtils.writeMandatoryDateField(this.jsonGenerator, fieldName, value);
     }
 
+    protected void writeMandatoryDoubleField(String fieldName, double value) throws IOException {
+        JacksonUtils.writeMandatoryDoubleField(this.jsonGenerator, fieldName, value);
+    }
+
     protected void writeMandatoryField(String fieldName, String value) throws IOException {
         JacksonUtils.writeMandatoryField(this.jsonGenerator, fieldName, value);
     }

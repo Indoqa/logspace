@@ -36,15 +36,18 @@
   </fieldType>
 
   <fieldType name="text_tokenized" class="solr.TextField" positionIncrementGap="100">
-    <analyzer type="index">
-      <tokenizer class="solr.LetterTokenizerFactory" />
+    <analyzer>
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}&amp;&amp;\D]" replacement=" " />
+      <tokenizer class="solr.WhitespaceTokenizerFactory" />
+      <filter class="solr.TrimFilterFactory" />
       <filter class="solr.LowerCaseFilterFactory" />
-    </analyzer>
-    <analyzer type="query">
-      <tokenizer class="solr.LetterTokenizerFactory" />
-      <filter class="solr.LowerCaseFilterFactory" />
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
     </analyzer>
   </fieldType>
+
+<fieldtype name="german_text" class="solr.TextField">
+  <analyzer class="org.apache.lucene.analysis.de.GermanAnalyzer" />
+</fieldtype>
 
   <!-- this field is neither stored nor indexed and just here to allow sending the shard-id per document -->
   <field name="_route_" type="string" indexed="false" stored="false" multiValued="false" />
@@ -64,21 +67,22 @@
   <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
 
 
-  <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="date_property_*" type="date" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="double_property_*" type="double" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="float_property_*" type="float" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="true" />
-  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="date_property_*" type="date" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="double_property_*" type="double" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="float_property_*" type="float" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="false" />
 
-  <field name="property_name" type="string" indexed="true" stored="false" multiValued="true" />
+  <field name="property_id" type="string" indexed="true" stored="false" multiValued="true" />
 
   <field name="tokenized_search_field" type="text_tokenized" indexed="true" stored="false" multiValued="true" />
 
   <uniqueKey>id</uniqueKey>
 
-  <copyField source="property_name" dest="tokenized_search_field" />
+  <copyField source="property_id" dest="tokenized_search_field" />
   <copyField source="agent_id" dest="tokenized_search_field" />
+  <copyField source="system" dest="tokenized_search_field" />
   <copyField source="space" dest="tokenized_search_field" />
 </schema>

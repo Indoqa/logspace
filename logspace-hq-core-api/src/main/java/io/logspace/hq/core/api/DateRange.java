@@ -14,13 +14,13 @@ public class DateRange {
     private Date start;
     private Date end;
 
-    private long gap;
+    private int gap;
 
     public Date getEnd() {
         return this.end;
     }
 
-    public long getGap() {
+    public int getGap() {
         return this.gap;
     }
 
@@ -32,7 +32,7 @@ public class DateRange {
         this.end = end;
     }
 
-    public void setGap(long gap) {
+    public void setGap(int gap) {
         this.gap = gap;
     }
 

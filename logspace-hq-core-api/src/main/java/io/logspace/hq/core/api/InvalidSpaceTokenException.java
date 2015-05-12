@@ -7,16 +7,18 @@
  */
 package io.logspace.hq.core.api;
 
-import io.logspace.agent.api.event.Event;
+public class InvalidSpaceTokenException extends AbstractLogspaceResourceException {
 
-import java.util.Collection;
+    private static final long serialVersionUID = 1L;
 
-public interface EventService {
+    private final String spaceToken;
 
-    void store(Collection<? extends Event> events, String space);
+    public InvalidSpaceTokenException(String spaceToken) {
+        super();
+        this.spaceToken = spaceToken;
+    }
 
-    Suggestion getSuggestion(SuggestionInput input);
-
-    Object[] getData(DataDefinition dataDefinition);
-
+    public String getSpaceToken() {
+        return this.spaceToken;
+    }
 }

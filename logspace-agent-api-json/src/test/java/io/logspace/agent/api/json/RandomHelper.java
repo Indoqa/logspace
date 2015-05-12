@@ -39,6 +39,13 @@ public class RandomHelper {
         return RANDOM.nextDouble();
     }
 
+    public static <T extends Enum<T>> T getRandomEnumValue(Class<T> enumType) {
+        T[] values = enumType.getEnumConstants();
+
+        int index = getRandomCount(values.length);
+        return values[index];
+    }
+
     public static float getRandomFloat() {
         return RANDOM.nextFloat();
     }

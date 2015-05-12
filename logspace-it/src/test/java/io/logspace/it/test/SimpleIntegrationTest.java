@@ -97,7 +97,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
 
-        assertTrue(testAgent.getEventCount() > 0);
+        assertEquals(0, testAgent.getEventCount());
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
     }
 

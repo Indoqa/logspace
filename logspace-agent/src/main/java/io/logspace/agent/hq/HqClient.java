@@ -69,6 +69,7 @@ public class HqClient {
     public AgentControllerOrder downloadOrder() throws IOException {
         HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.agentControllerId);
         httpGet.addHeader("If-Modified-Since", this.agentControllerOrderResponseHandler.getLastModified());
+        httpGet.addHeader("logspace.space-token", this.spaceToken);
 
         return this.httpClient.execute(httpGet, this.agentControllerOrderResponseHandler);
     }
@@ -76,15 +77,16 @@ public class HqClient {
     public void uploadCapabilities(AgentControllerCapabilities capabilities) throws IOException {
         HttpPut httpPut = new HttpPut(this.baseUrl + "/capabilities/" + this.agentControllerId);
         httpPut.setEntity(toJSonEntity(capabilities));
+        httpPut.addHeader("logspace.space-token", this.spaceToken);
 
         this.httpClient.execute(httpPut, new UploadCapabilitiesResponseHandler());
     }
 
     public void uploadEvents(Collection<Event> events) throws IOException {
-        HttpPost httpMethod = new HttpPost(this.baseUrl + "/events");
-        httpMethod.setEntity(toJsonEntity(events));
-        httpMethod.addHeader("logspace.space-token", this.spaceToken);
+        HttpPost httpPost = new HttpPost(this.baseUrl + "/events");
+        httpPost.setEntity(toJsonEntity(events));
+        httpPost.addHeader("logspace.space-token", this.spaceToken);
 
-        this.httpClient.execute(httpMethod, new UploadEventsResponseHandler());
+        this.httpClient.execute(httpPost, new UploadEventsResponseHandler());
     }
 }

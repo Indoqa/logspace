@@ -7,16 +7,8 @@
  */
 package io.logspace.hq.core.api;
 
-import io.logspace.agent.api.event.Event;
+public abstract class AbstractLogspaceResourceException extends RuntimeException {
 
-import java.util.Collection;
-
-public interface EventService {
-
-    void store(Collection<? extends Event> events, String space);
-
-    Suggestion getSuggestion(SuggestionInput input);
-
-    Object[] getData(DataDefinition dataDefinition);
+    private static final long serialVersionUID = 1L;
 
 }

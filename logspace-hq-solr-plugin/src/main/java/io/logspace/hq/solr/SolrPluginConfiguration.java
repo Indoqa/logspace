@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import com.indoqa.commons.solr.server.factory.SolrServerFactory;
+import com.indoqa.solr.spring.client.SolrClientFactory;
 
 @Configuration
 @PropertySource("classpath:/io/logspace/hq/solr/logspace-hq-solr.properties")
@@ -28,11 +28,11 @@ public class SolrPluginConfiguration {
     private String solrEmbeddedConfigurationDir;
 
     @Bean
-    public SolrServerFactory getSolrServerFactory() {
-        SolrServerFactory solrServerFactory = new SolrServerFactory();
-        solrServerFactory.setUrl(this.solrBaseUrl);
-        solrServerFactory.setEmbeddedSolrConfigurationDir(this.getSolrInstanceDir());
-        return solrServerFactory;
+    public SolrClientFactory getSolrClientFactory() {
+        SolrClientFactory solrClientFactory = new SolrClientFactory();
+        solrClientFactory.setUrl(this.solrBaseUrl);
+        solrClientFactory.setEmbeddedSolrConfigurationDir(this.getSolrInstanceDir());
+        return solrClientFactory;
     }
 
     private String getSolrInstanceDir() {

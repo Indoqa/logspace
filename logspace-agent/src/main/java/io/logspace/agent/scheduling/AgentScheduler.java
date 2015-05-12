@@ -19,6 +19,7 @@ import io.logspace.agent.impl.AgentControllerInitializationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AgentScheduler {
+
+    private static final long UPDATE_START_DELAY = 1000;
 
     private static final String KEY_AGENT_ORDER = "agent-order";
     private static final String KEY_AGENT_EXECUTOR = "agent-executor";
@@ -149,7 +152,8 @@ public class AgentScheduler {
             jobDataMap.put(KEY_AGENT_EXECUTOR, this.agentExecutor);
             JobDetail job = newJob(UpdateJob.class).withIdentity("update", LOGSPACE_SCHEDULER_GROUP).usingJobData(jobDataMap).build();
 
-            Trigger trigger = newTrigger().withIdentity("update-trigger", LOGSPACE_SCHEDULER_GROUP).startNow()
+            Trigger trigger = newTrigger().withIdentity("update-trigger", LOGSPACE_SCHEDULER_GROUP)
+                    .startAt(new Date(System.currentTimeMillis() + UPDATE_START_DELAY))
                     .withSchedule(simpleSchedule().withIntervalInSeconds(updateInterval).repeatForever()).build();
 
             this.scheduler.scheduleJob(job, trigger);

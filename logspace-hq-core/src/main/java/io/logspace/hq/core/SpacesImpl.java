@@ -5,7 +5,9 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp;
+package io.logspace.hq.core;
+
+import io.logspace.hq.core.api.Spaces;
 
 import java.util.Map;
 
@@ -25,4 +27,5 @@ public class SpacesImpl implements Spaces {
     public void setSpaceTokens(Map<String, String> spaceTokens) {
         this.spaceTokens = spaceTokens;
     }
+
 }

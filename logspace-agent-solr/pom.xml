@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,7 +38,14 @@
     <!-- Solr -->
     <dependency>
       <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>4.10.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
       <artifactId>solr-core</artifactId>
+      <version>4.10.4</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>

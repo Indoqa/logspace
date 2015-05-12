@@ -11,6 +11,7 @@ import io.logspace.hq.core.api.DataDefinition;
 import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.Suggestion;
+import io.logspace.hq.core.api.SuggestionInput;
 
 import java.util.List;
 
@@ -26,20 +27,18 @@ import com.indoqa.boot.AbstractJsonResourcesBase;
 @Named
 public class QueryResource extends AbstractJsonResourcesBase {
 
-    private static final String PARAMETER_INPUT = "input";
-
     @Inject
     private EventService eventService;
 
     @PostConstruct
     public void mount() {
         this.post("/query", (req, res) -> this.postQuery(req, res));
-        this.get("/suggest/:" + PARAMETER_INPUT, (req, res) -> this.getSuggestion(req, res));
+        this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
     }
 
     @SuppressWarnings("unused")
     private Suggestion getSuggestion(Request req, Response res) {
-        String input = req.params(PARAMETER_INPUT);
+        SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
 
         return this.eventService.getSuggestion(input);
     }
@@ -55,8 +54,6 @@ public class QueryResource extends AbstractJsonResourcesBase {
         Object[][] data = new Object[dataDefinitions.size()][];
         for (int i = 0; i < dataDefinitions.size(); i++) {
             DataDefinition dataDefinition = dataDefinitions.get(i);
-            System.out.println(dataDefinition.getAggregate() + " of " + dataDefinition.getPropertyId() + " from "
-                    + dataDefinition.getAgentId() + " in " + dataDefinition.getSpace());
             dateRange = dataDefinition.getDateRange();
             data[i] = this.eventService.getData(dataDefinition);
         }

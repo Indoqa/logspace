@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
 
@@ -33,34 +34,44 @@
       <artifactId>spring-context</artifactId>
     </dependency>
 
+    <!-- Commons -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.indoqa.commons</groupId>
+      <artifactId>indoqa-commons-lang</artifactId>
+    </dependency>
+
     <!-- Dependency Injection -->
     <dependency>
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
-    </dependency>  
-  
+    </dependency>
+
     <!-- Solr -->
     <dependency>
-      <groupId>com.indoqa.commons</groupId>
-      <artifactId>indoqa-commons-solr-server-factory</artifactId>
+      <groupId>com.indoqa.solr</groupId>
+      <artifactId>solr-spring-client</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
     </dependency>
-    
+
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
-    </dependency>   
-    
+    </dependency>
+
     <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-hq-core-api</artifactId>
-    </dependency>     
+    </dependency>
   </dependencies>
 
 </project>

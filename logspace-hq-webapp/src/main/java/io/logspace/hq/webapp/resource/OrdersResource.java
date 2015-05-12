@@ -22,26 +22,20 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import spark.Request;
 import spark.Response;
 import spark.Spark;
 
-import com.indoqa.boot.AbstractJsonResourcesBase;
-
 @Named
-public class OrdersResource extends AbstractJsonResourcesBase {
+public class OrdersResource extends AbstractSpaceResource {
 
     private static final String RFC1123 = "EEE, dd MMM yyyy HH:mm:ss z";
     private static final String RFC850 = "EEEE, dd-MMM-yy HH:mm:ss z";
     private static final String ANSI_C = "EEE MMM d HH:mm:ss YYYY";
 
     private static final String PARAMETER_CONTROLLER_ID = "controller-id";
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${logspace.hq-webapp.configs-directory}")
     private String configsDirectory;
@@ -83,7 +77,7 @@ public class OrdersResource extends AbstractJsonResourcesBase {
     }
 
     @PostConstruct
-    public void mount() {
+    public void mapExceptions() {
         Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
     }
 
@@ -92,6 +86,8 @@ public class OrdersResource extends AbstractJsonResourcesBase {
     }
 
     private String getOrder(Request req, Response res) throws IOException {
+        this.validateSpace(req);
+
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
         this.logger.debug("Retrieving order for AgentController with ID '{}'.", controllerId);
 

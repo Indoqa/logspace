@@ -15,8 +15,14 @@ public class AgentCapabilities {
 
     private TriggerType[] supportedTriggerTypes;
 
+    private PropertyDescription[] propertyDescriptions;
+
     public String getId() {
         return this.id;
+    }
+
+    public PropertyDescription[] getPropertyDescriptions() {
+        return this.propertyDescriptions;
     }
 
     public TriggerType[] getSupportedTriggerTypes() {
@@ -27,8 +33,16 @@ public class AgentCapabilities {
         return this.type;
     }
 
+    public boolean hasPropertyDescriptions() {
+        return this.propertyDescriptions != null && this.propertyDescriptions.length > 0;
+    }
+
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setPropertyDescriptions(PropertyDescription[] propertyDescriptions) {
+        this.propertyDescriptions = propertyDescriptions;
     }
 
     public void setSupportedTriggerTypes(TriggerType... supportedTriggerTypes) {

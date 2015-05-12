@@ -7,48 +7,62 @@
  */
 package io.logspace.hq.core.api;
 
+import io.logspace.agent.api.order.PropertyDescription;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Suggestion {
 
-    private List<String> spaces = new ArrayList<>();
-    private List<String> agentIds = new ArrayList<>();
-    private List<String> propertyNames = new ArrayList<>();
+    private Set<String> spaces = new TreeSet<>();
+    private Set<String> systems = new TreeSet<>();
+    private Set<String> propertyNames = new TreeSet<>();
 
-    public void addAgentId(String agentId) {
-        this.agentIds.add(agentId);
+    private List<AgentDescription> agentDescriptions = new ArrayList<>();
+
+    public void addAgentDescription(AgentDescription agentDescription) {
+        this.agentDescriptions.add(agentDescription);
+
+        this.spaces.add(agentDescription.getSpace());
+        this.systems.add(agentDescription.getSystem());
+
+        for (PropertyDescription eachPropertyDescription : agentDescription.getPropertyDescriptions()) {
+            this.propertyNames.add(eachPropertyDescription.getName());
+        }
     }
 
-    public void addPropertyName(String propertyName) {
-        this.propertyNames.add(propertyName);
+    public List<AgentDescription> getAgentDescriptions() {
+        return this.agentDescriptions;
     }
 
-    public void addSpace(String space) {
-        this.spaces.add(space);
-    }
-
-    public List<String> getAgentIds() {
-        return this.agentIds;
-    }
-
-    public List<String> getPropertyNames() {
+    public Set<String> getPropertyNames() {
         return this.propertyNames;
     }
 
-    public List<String> getSpaces() {
+    public Set<String> getSpaces() {
         return this.spaces;
     }
 
-    public void setAgentIds(List<String> agentIds) {
-        this.agentIds = agentIds;
+    public Set<String> getSystems() {
+        return this.systems;
     }
 
-    public void setPropertyNames(List<String> propertyNames) {
+    public void setAgentDescriptions(List<AgentDescription> agentDescriptions) {
+        this.agentDescriptions = agentDescriptions;
+    }
+
+    public void setPropertyNames(Set<String> propertyNames) {
         this.propertyNames = propertyNames;
     }
 
-    public void setSpaces(List<String> spaces) {
+    public void setSpaces(Set<String> spaces) {
         this.spaces = spaces;
     }
+
+    public void setSystems(Set<String> systems) {
+        this.systems = systems;
+    }
+
 }

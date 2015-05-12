@@ -7,16 +7,8 @@
  */
 package io.logspace.hq.core.api;
 
-import io.logspace.agent.api.event.Event;
+public interface Spaces {
 
-import java.util.Collection;
-
-public interface EventService {
-
-    void store(Collection<? extends Event> events, String space);
-
-    Suggestion getSuggestion(SuggestionInput input);
-
-    Object[] getData(DataDefinition dataDefinition);
+    String getSpaceForAuthenticationToken(String authenticationToken);
 
 }
