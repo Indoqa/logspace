@@ -39,8 +39,8 @@ public class JvmEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_OPEN_FILE_DESCRIPTOR_COUNT = "open_file_descriptor_count";
     public static final String PROPERTY_MAX_FILE_DESCRIPTOR_COUNT = "max_file_descriptor_count";
 
-    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system_cpu_load";
-    public static final String PROPERTY_SYSTEM_LOAD_AVERAGE = "system_load_average";
+    public static final String PROPERTY_PROCESS_CPU_LOAD = "process_cpu_load";
+    public static final String PROPERTY_PROCESS_CPU_TIME = "process_cpu_time";
 
     private static final Optional<String> JVM_EVENT_TYPE = Optional.of("jvm");
 
@@ -108,12 +108,12 @@ public class JvmEventBuilder extends AbstractEventBuilder {
         this.addProperty(PROPERTY_OPEN_FILE_DESCRIPTOR_COUNT, openFileDescriptorCount);
     }
 
-    public void setSystemCpuLoad(double systemCpuLoad) {
-        this.addProperty(PROPERTY_SYSTEM_CPU_LOAD, systemCpuLoad);
+    public void setProcessCpuLoad(double processCpuLoad) {
+        this.addProperty(PROPERTY_PROCESS_CPU_LOAD, processCpuLoad);
     }
 
-    public void setSystemLoadAverage(double systemLoadAverage) {
-        this.addProperty(PROPERTY_SYSTEM_LOAD_AVERAGE, systemLoadAverage);
+    public void setProcessCpuTime(double processCpuTime) {
+        this.addProperty(PROPERTY_PROCESS_CPU_TIME, processCpuTime);
     }
 
     public void setThreadCount(int threadCount) {

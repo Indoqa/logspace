@@ -94,15 +94,17 @@ public class JvmAgent extends AbstractAgent {
     }
 
     private void addOperatingSystemProperties(JvmEventBuilder eventBuilder) {
-        OperatingSystemMXBean operatingSystem = ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean operatingSystemBean = ManagementFactory.getOperatingSystemMXBean();
 
-        eventBuilder.setSystemLoadAverage(operatingSystem.getSystemLoadAverage());
-
-        if (operatingSystem instanceof UnixOperatingSystemMXBean) {
-            UnixOperatingSystemMXBean unixOperatingSystem = (UnixOperatingSystemMXBean) operatingSystem;
+        if (operatingSystemBean instanceof com.sun.management.OperatingSystemMXBean) {
+            com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
+            eventBuilder.setProcessCpuLoad(operatingSystem.getProcessCpuLoad());
+            eventBuilder.setProcessCpuTime(operatingSystem.getProcessCpuTime());
+        }
+        if (operatingSystemBean instanceof UnixOperatingSystemMXBean) {
+            UnixOperatingSystemMXBean unixOperatingSystem = (UnixOperatingSystemMXBean) operatingSystemBean;
             eventBuilder.setMaxFileDescriptorCount(unixOperatingSystem.getMaxFileDescriptorCount());
             eventBuilder.setOpenFileDescriptorCount(unixOperatingSystem.getOpenFileDescriptorCount());
-            eventBuilder.setSystemCpuLoad(unixOperatingSystem.getSystemCpuLoad());
         }
     }
 
