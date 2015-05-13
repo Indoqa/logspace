@@ -22,6 +22,7 @@ import org.apache.solr.core.SolrInfoMBean;
 
 public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
 
+    private static final int INDEX_SIZE_UNIT_FACTOR = 1024;
     private static final String FIELD_SIZE = "size";
     private static final String FIELD_CUMULATIVE_HITS = "cumulative_hits";
 
@@ -32,30 +33,24 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
     private static long getIndexSize(NamedList<?> statistics) {
         Object indexSize = statistics.get("indexSize");
 
-        if (indexSize instanceof String) {
-            String indexSizeString = (String) indexSize;
-
-            if (indexSizeString.endsWith(" GB")) {
-                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
-                return (long) (value * 1024 * 1024 * 1024);
-            }
-
-            if (indexSizeString.endsWith(" MB")) {
-                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
-                return (long) (value * 1024 * 1024);
-            }
-
-            if (indexSizeString.endsWith(" KB")) {
-                double value = parse(indexSizeString.substring(0, indexSizeString.length() - 3));
-                return (long) (value * 1024);
-            }
-
-            if (indexSizeString.endsWith(" bytes")) {
-                return (long) parse(indexSizeString.substring(0, indexSizeString.length() - 6));
-            }
+        if (!(indexSize instanceof String)) {
+            return 0;
         }
 
-        return 0;
+        String indexSizeString = (String) indexSize;
+        long factor = 1;
+        double value = 0;
+
+        for (IndexUnit eachIndexUnit : IndexUnit.values()) {
+            if (indexSizeString.endsWith(eachIndexUnit.name())) {
+                value = parse(indexSizeString.substring(0, indexSizeString.length() - eachIndexUnit.name().length()));
+                break;
+            }
+
+            factor *= INDEX_SIZE_UNIT_FACTOR;
+        }
+
+        return (long) (factor * value);
     }
 
     private static double parse(String value) {
@@ -172,5 +167,10 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
         solrEventBuilder.setUpdates(getLong(statistics, "cumulative_adds"));
         solrEventBuilder.setDeletes(getLong(statistics, "cumulative_deletesByQuery") + getLong(statistics, "cumulative_deletesById"));
         solrEventBuilder.setCommits(getLong(statistics, "commits"));
+    }
+
+    private static enum IndexUnit {
+
+        bytes, KB, MB, GB;
     }
 }

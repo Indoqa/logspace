@@ -15,11 +15,13 @@ import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 
 public class AgentControllerOrderResponseHandler implements ResponseHandler<AgentControllerOrder> {
+
+    private static final int HTTP_3XX = 300;
+    private static final int HTTP_NOT_MODIFIED = 304;
 
     private String lastModified;
 
@@ -28,15 +30,15 @@ public class AgentControllerOrderResponseHandler implements ResponseHandler<Agen
     }
 
     @Override
-    public AgentControllerOrder handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public AgentControllerOrder handleResponse(HttpResponse response) throws IOException {
         StatusLine statusLine = response.getStatusLine();
         HttpEntity entity = response.getEntity();
 
-        if (statusLine.getStatusCode() == 304) {
+        if (statusLine.getStatusCode() == HTTP_NOT_MODIFIED) {
             return null;
         }
 
-        if (statusLine.getStatusCode() >= 300) {
+        if (statusLine.getStatusCode() >= HTTP_3XX) {
             throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
         }
 

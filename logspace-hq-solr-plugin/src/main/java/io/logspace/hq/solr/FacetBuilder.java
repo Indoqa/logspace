@@ -78,7 +78,7 @@ public class FacetBuilder {
         return stringBuilder.toString();
     }
 
-    public static abstract class Facet {
+    public abstract static class Facet {
 
         private String name;
         private List<Facet> children;

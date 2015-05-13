@@ -10,13 +10,12 @@ package io.logspace.agent.hq;
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 
 public class UploadEventsResponseHandler implements ResponseHandler<Void> {
 
     @Override
-    public Void handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
+    public Void handleResponse(final HttpResponse response) throws IOException {
         return null;
     }
 }

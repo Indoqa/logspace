@@ -37,6 +37,7 @@ import com.squareup.tape.FileObjectQueue;
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
     private static final int DEFAULT_FAILURE_COMMIT_DELAY = 1000;
+    private static final int DEFAULT_UPLOAD_SIZE = 1000;
     private static final int DEFAULT_MAX_COMMIT = 300;
 
     private static final String BASE_URL_PARAMETER = "base-url";
@@ -56,7 +57,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private AgentScheduler agentScheduler;
 
     private CommitRunnable commitRunnable;
-    private int uploadSize = 1000;
+    private int uploadSize = DEFAULT_UPLOAD_SIZE;
     private long maxCommitDelay = SECONDS.toMillis(DEFAULT_MAX_COMMIT);
     private long failureCommitDelay = DEFAULT_FAILURE_COMMIT_DELAY;
 

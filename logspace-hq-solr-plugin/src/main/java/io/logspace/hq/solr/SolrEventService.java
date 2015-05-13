@@ -60,6 +60,7 @@ import org.springframework.beans.factory.annotation.Value;
 @Named
 public class SolrEventService implements EventService {
 
+    private static final int SLICE_UPDATE_DELAY = 1000;
     private static final String FACETS_NAME = "facets";
     private static final String VALUE_FACET_NAME = "value";
     private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
@@ -79,7 +80,6 @@ public class SolrEventService implements EventService {
 
     @Inject
     private SolrClient solrClient;
-    // private SolrServer solrServer;
 
     @Inject
     private CapabilitiesService capabilitiesService;
@@ -115,7 +115,7 @@ public class SolrEventService implements EventService {
 
             return result;
         } catch (SolrServerException | IOException e) {
-            // TODO: property exception class
+            // TODO: proper exception class
             throw new RuntimeException("Could not extract data.");
         }
     }
@@ -338,7 +338,7 @@ public class SolrEventService implements EventService {
         CloudSolrClient cloudSolrClient = (CloudSolrClient) this.solrClient;
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
-            this.nextSliceUpdate = System.currentTimeMillis() + 1000;
+            this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_DELAY;
             this.activeSlicesMap = cloudSolrClient.getZkStateReader().getClusterState()
                     .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }

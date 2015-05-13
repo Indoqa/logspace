@@ -7,7 +7,6 @@
  */
 package io.logspace.agent.cxf;
 
-import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -21,7 +20,7 @@ public class CxfInAgent extends AbstractPhaseInterceptor<Message> {
     }
 
     @Override
-    public void handleMessage(Message message) throws Fault {
+    public void handleMessage(Message message) {
         message.getExchange().put(CXF_AGENT_DURATION_KEY, System.nanoTime());
     }
 }

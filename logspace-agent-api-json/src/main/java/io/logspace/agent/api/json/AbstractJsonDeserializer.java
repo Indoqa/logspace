@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.Date;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -60,7 +59,7 @@ public abstract class AbstractJsonDeserializer {
         return this.jsonParser.nextBooleanValue();
     }
 
-    protected double nextDoubleValue() throws IOException, JsonParseException {
+    protected double nextDoubleValue() throws IOException {
         if (this.jsonParser.nextToken() == JsonToken.VALUE_NUMBER_FLOAT) {
             return this.jsonParser.getDoubleValue();
         }
@@ -68,7 +67,7 @@ public abstract class AbstractJsonDeserializer {
         return 0;
     }
 
-    protected int nextIntValue() throws IOException, JsonParseException {
+    protected int nextIntValue() throws IOException {
         return this.jsonParser.nextIntValue(0);
     }
 

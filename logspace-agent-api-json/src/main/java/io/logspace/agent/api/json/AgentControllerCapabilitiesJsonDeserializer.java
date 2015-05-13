@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-
 public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJsonDeserializer {
 
     private AgentControllerCapabilitiesJsonDeserializer(byte[] data) throws IOException {
@@ -182,7 +180,7 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         return result;
     }
 
-    private PropertyUnit readPropertyUnit() throws IOException, JsonParseException {
+    private PropertyUnit readPropertyUnit() throws IOException {
         PropertyUnit result = new PropertyUnit();
 
         result.setName(this.getCurrentName());

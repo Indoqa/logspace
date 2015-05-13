@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletRequestWrapper;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.jaxrs.utils.HttpUtils;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
@@ -59,7 +58,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
     }
 
     @Override
-    public void handleMessage(Message message) throws Fault {
+    public void handleMessage(Message message) {
         this.delegateAgent.sendCxfEvent(message);
     }
 
