@@ -5,10 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.agent.impl;
+package io.logspace.agent.logging;
 
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.impl.AbstractAgentController;
 
 import java.util.Collection;
 

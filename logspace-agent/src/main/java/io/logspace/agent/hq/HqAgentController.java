@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.agent.impl;
+package io.logspace.agent.hq;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -17,8 +17,10 @@ import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.hq.HqClient;
-import io.logspace.agent.hq.TapeEventConverter;
+import io.logspace.agent.impl.AbstractAgentController;
+import io.logspace.agent.impl.AgentControllerException;
+import io.logspace.agent.impl.AgentControllerInitializationException;
+import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.scheduling.AgentExecutor;
 import io.logspace.agent.scheduling.AgentScheduler;
 

@@ -494,6 +494,10 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>com.indoqa.commons</groupId>
+        <artifactId>indoqa-commons-cycle-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>

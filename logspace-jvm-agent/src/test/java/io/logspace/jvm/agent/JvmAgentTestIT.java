@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.impl.AgentControllerProvider;
-import io.logspace.agent.impl.TestAgentController;
+import io.logspace.agent.test.TestAgentController;
 
 import java.io.File;
 import java.io.FilenameFilter;

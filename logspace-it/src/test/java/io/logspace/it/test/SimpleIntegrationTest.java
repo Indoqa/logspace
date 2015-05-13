@@ -15,8 +15,8 @@ import io.logspace.agent.api.event.DefaultEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.hq.HqAgentController;
 import io.logspace.agent.impl.AgentControllerProvider;
-import io.logspace.agent.impl.HqAgentController;
 import io.logspace.it.AbstractLogspaceTest;
 
 import java.util.UUID;

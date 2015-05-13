@@ -11,6 +11,7 @@ import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.test.TestAgentController;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

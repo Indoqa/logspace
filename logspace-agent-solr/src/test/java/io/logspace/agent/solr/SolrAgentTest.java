@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.impl.AgentControllerProvider;
-import io.logspace.agent.impl.TestAgentController;
+import io.logspace.agent.test.TestAgentController;
 
 import java.io.IOException;
 import java.util.Collection;
