@@ -49,7 +49,15 @@ public final class LogspaceMonitor {
 
     private static void runEndless() {
         while (true) {
-            // run endless
+            sleepSilent(10000);
+        }
+    }
+
+    private static void sleepSilent(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // ignore
         }
     }
 }
