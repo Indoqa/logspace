@@ -13,17 +13,15 @@ import io.logspace.agent.api.event.Optional;
 
 public class OsEventBuilder extends AbstractEventBuilder {
 
-    public static final String PROPERTY_LOAD_AVERAGE = "load_average";
-    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system_cpu_load";
     public static final String PROPERTY_PROCESSOR_COUNT = "processor_count";
 
-    public static final String PROPERTY_PROCESS_CPU_LOAD = "process_cpu_load";
-    public static final String PROPERTY_PROCESS_CPU_TIME = "process_cpu_time";
+    public static final String PROPERTY_SYSTEM_CPU_LOAD = "system_cpu_load";
+    public static final String PROPERTY_SYSTEM_LOAD_AVERAGE = "system_load_average";
 
-    private static final String PROPERTY_MAX_MEMORY = "max_memory";
     private static final String PROPERTY_TOTAL_MEMORY = "total_memory";
     private static final String PROPERTY_FREE_MEMORY = "free_memory";
     private static final String PROPERTY_USED_MEMORY = "used_memory";
+    private static final String PROPERTY_COMMITTED_VIRTUAL_MEMORY = "committed_virtual_memory";
 
     private static final String PROPERTY_DISK_PATH = "disk_path";
     private static final String PROPERTY_DISK_TOTAL_SPACE = "disk_total_space";
@@ -73,6 +71,11 @@ public class OsEventBuilder extends AbstractEventBuilder {
         return new OsEventBuilder(agentId, system, SYSTEM_LOAD_EVENT_TYPE);
     }
 
+    public OsEventBuilder setCommittedVirtualMemory(long maxMemory) {
+        this.addProperty(PROPERTY_COMMITTED_VIRTUAL_MEMORY, maxMemory);
+        return this;
+    }
+
     public OsEventBuilder setDiskPath(String diskPath) {
         this.addProperty(PROPERTY_DISK_PATH, diskPath);
         return this;
@@ -88,30 +91,6 @@ public class OsEventBuilder extends AbstractEventBuilder {
         return this;
     }
 
-    /**
-     * @param loadAverage The value of the average load.
-     * @return This event builder.
-     */
-    public OsEventBuilder setLoadAverage(double loadAverage) {
-        this.addProperty(PROPERTY_LOAD_AVERAGE, loadAverage);
-        return this;
-    }
-
-    public OsEventBuilder setMaxMemory(long maxMemory) {
-        this.addProperty(PROPERTY_MAX_MEMORY, maxMemory);
-        return this;
-    }
-
-    public OsEventBuilder setProcessCpuLoad(double processCpuLoad) {
-        this.addProperty(PROPERTY_PROCESS_CPU_LOAD, processCpuLoad);
-        return this;
-    }
-
-    public OsEventBuilder setProcessCpuTime(long processCpuTime) {
-        this.addProperty(PROPERTY_PROCESS_CPU_TIME, processCpuTime);
-        return this;
-    }
-
     public OsEventBuilder setProcessorCount(int processorCount) {
         this.addProperty(PROPERTY_PROCESSOR_COUNT, processorCount);
         return this;
@@ -119,6 +98,11 @@ public class OsEventBuilder extends AbstractEventBuilder {
 
     public OsEventBuilder setSystemCpuLoad(double systemCpuLoad) {
         this.addProperty(PROPERTY_SYSTEM_CPU_LOAD, systemCpuLoad);
+        return this;
+    }
+
+    public OsEventBuilder setSystemLoadAverage(double systemLoadAverage) {
+        this.addProperty(PROPERTY_SYSTEM_LOAD_AVERAGE, systemLoadAverage);
         return this;
     }
 

@@ -45,7 +45,6 @@ public class CpuAgent extends AbstractAgent {
             return;
         }
 
-        eventBuilder.setProcessCpuLoad(operatingSystemMXBean.getProcessCpuLoad());
-        eventBuilder.setProcessCpuTime(operatingSystemMXBean.getProcessCpuTime());
+        eventBuilder.setSystemCpuLoad(operatingSystemMXBean.getSystemCpuLoad());
     }
 }

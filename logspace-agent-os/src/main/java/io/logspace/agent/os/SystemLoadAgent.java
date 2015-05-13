@@ -32,7 +32,7 @@ public class SystemLoadAgent extends AbstractAgent {
     public void execute(AgentOrder agentOrder) {
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem()).setLoadAverage(
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem()).setSystemLoadAverage(
                 operatingSystemMXBean.getSystemLoadAverage());
 
         this.addAdditionalProperties(eventBuilder);

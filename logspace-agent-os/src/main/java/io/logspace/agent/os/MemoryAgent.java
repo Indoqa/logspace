@@ -9,10 +9,13 @@ package io.logspace.agent.os;
 
 import static io.logspace.agent.os.api.OsEventBuilder.createMemoryBuilder;
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AgentControllerProvider;
+import io.logspace.agent.os.api.OsEventBuilder;
+
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 
 public class MemoryAgent extends AbstractAgent {
 
@@ -28,13 +31,20 @@ public class MemoryAgent extends AbstractAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        long maxMemory = Runtime.getRuntime().maxMemory();
-        long totalMemory = Runtime.getRuntime().totalMemory();
-        long freeMemory = Runtime.getRuntime().freeMemory();
-        long usedMemory = totalMemory - freeMemory;
+        OperatingSystemMXBean operatingSystemBean = ManagementFactory.getOperatingSystemMXBean();
 
-        Event event = createMemoryBuilder(this.getId(), this.getSystem()).setMaxMemory(maxMemory).setTotalMemory(totalMemory)
-                .setFreeMemory(freeMemory).setUsedMemory(usedMemory).toEvent();
-        this.sendEvent(event);
+        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem());
+        if (operatingSystemBean instanceof com.sun.management.OperatingSystemMXBean) {
+            com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
+
+            osEventBuilder.setTotalMemory(operatingSystem.getTotalPhysicalMemorySize());
+            osEventBuilder.setFreeMemory(operatingSystem.getFreePhysicalMemorySize());
+            osEventBuilder.setUsedMemory(operatingSystem.getTotalPhysicalMemorySize() - operatingSystem.getFreePhysicalMemorySize());
+            osEventBuilder.setCommittedVirtualMemory(operatingSystem.getCommittedVirtualMemorySize());
+        } else {
+            return;
+        }
+
+        this.sendEvent(osEventBuilder.toEvent());
     }
 }
