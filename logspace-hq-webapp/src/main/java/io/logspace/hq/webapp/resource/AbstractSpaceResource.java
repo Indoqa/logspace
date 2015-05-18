@@ -7,6 +7,7 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import io.logspace.hq.core.api.AbstractLogspaceResourceException;
 import io.logspace.hq.core.api.InvalidSpaceTokenException;
 import io.logspace.hq.core.api.MissingSpaceTokenException;
 import io.logspace.hq.core.api.Spaces;
@@ -35,15 +36,14 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
 
     @PostConstruct
     public void mapExceptions() {
-        Spark.exception(MissingSpaceTokenException.class, (e, req, res) -> this.mapMissingSpaceTokenException(res));
-        Spark.exception(InvalidSpaceTokenException.class,
-                (e, req, res) -> this.mapInvalidSpaceTokenException((InvalidSpaceTokenException) e, res));
+        Spark.exception(AbstractLogspaceResourceException.class,
+                (e, req, res) -> this.mapLogspaceException(res, (AbstractLogspaceResourceException) e));
     }
 
     protected String getSpace(Request req) {
         String spaceToken = req.headers(SPACE_TOKEN_HEADER);
         if (StringUtils.isBlank(spaceToken)) {
-            throw new MissingSpaceTokenException();
+            throw new MissingSpaceTokenException("Missing header '" + SPACE_TOKEN_HEADER + "'.");
         }
 
         String space = this.spaces.getSpaceForAuthenticationToken(spaceToken);
@@ -58,13 +58,9 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
         this.getSpace(req);
     }
 
-    private void mapInvalidSpaceTokenException(InvalidSpaceTokenException exception, Response response) {
-        response.status(403);
-        response.body("Unrecognized space-token '" + exception.getSpaceToken() + "'.");
-    }
-
-    private void mapMissingSpaceTokenException(Response response) {
-        response.status(403);
-        response.body("Missing header '" + SPACE_TOKEN_HEADER + "'.");
+    private void mapLogspaceException(Response res, AbstractLogspaceResourceException e) {
+        res.status(e.getResponseCode());
+        res.type("application/json");
+        res.body(this.getTransformer().render(e.getErrorData()));
     }
 }

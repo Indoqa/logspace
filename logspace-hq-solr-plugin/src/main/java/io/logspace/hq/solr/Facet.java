@@ -5,13 +5,16 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api;
+package io.logspace.hq.solr;
 
-public class MissingSpaceTokenException extends AbstractLogspaceResourceException {
+public interface Facet {
 
-    private static final long serialVersionUID = 1L;
+    String getName();
 
-    public MissingSpaceTokenException(String message) {
-        super(message, 403, "MISSING_SPACE_TOKEN");
-    }
+    void addChild(Facet facet);
+
+    void setName(String name);
+
+    void append(StringBuilder stringBuilder);
+
 }

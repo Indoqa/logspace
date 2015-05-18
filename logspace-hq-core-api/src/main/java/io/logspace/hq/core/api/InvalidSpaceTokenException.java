@@ -11,14 +11,9 @@ public class InvalidSpaceTokenException extends AbstractLogspaceResourceExceptio
 
     private static final long serialVersionUID = 1L;
 
-    private final String spaceToken;
-
     public InvalidSpaceTokenException(String spaceToken) {
-        super();
-        this.spaceToken = spaceToken;
-    }
+        super("Unrecognized space-token '" + spaceToken + "'.", 403, "INVALID_SPACE_TOKEN");
 
-    public String getSpaceToken() {
-        return this.spaceToken;
+        this.setParameter("space-token", spaceToken);
     }
 }

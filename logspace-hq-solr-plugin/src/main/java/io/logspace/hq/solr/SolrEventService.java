@@ -24,9 +24,6 @@ import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.Suggestion;
 import io.logspace.hq.core.api.SuggestionInput;
-import io.logspace.hq.solr.FacetBuilder.Facet;
-import io.logspace.hq.solr.FacetBuilder.QueryFacet;
-import io.logspace.hq.solr.FacetBuilder.StatisticFacet;
 
 import java.io.IOException;
 import java.text.MessageFormat;
