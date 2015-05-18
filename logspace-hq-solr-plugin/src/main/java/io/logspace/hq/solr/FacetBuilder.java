@@ -135,14 +135,14 @@ public class FacetBuilder {
 
         private String query;
 
-        public static QueryFacet with(String name, String query, Facet... children) {
+        public static QueryFacet with(String name, String query, Facet child) {
             QueryFacet result = new QueryFacet();
 
             result.setName(name);
             result.setQuery(query);
 
-            for (Facet eachChild : children) {
-                result.addChild(eachChild);
+            if (child != null) {
+                result.addChild(child);
             }
 
             return result;

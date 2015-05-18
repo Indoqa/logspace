@@ -29,8 +29,6 @@ import org.apache.cxf.jaxrs.utils.HttpUtils;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Agent {
 
@@ -73,8 +71,6 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
 
     private class DelegateAgent extends AbstractAgent {
 
-        private final Logger logger = LoggerFactory.getLogger(CxfOutAgent.class);
-
         private static final String AGENT_ID = "CXF";
 
         public DelegateAgent(String id) {
@@ -96,19 +92,24 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             this.sendEvent(cxfEventBuilder.toEvent());
         }
 
-        private <T> T getProtocolHeaderValue(Message message, String header, Class<T> type) {
+        private String getProtocolHeaderValue(Message message, String header) {
             @SuppressWarnings("unchecked")
             Map<String, List<?>> headers = (Map<String, List<?>>) message.get(Message.PROTOCOL_HEADERS);
-            if (headers == null || !headers.containsKey(header)) {
+            if (headers == null) {
                 return null;
             }
 
-            try {
-                return type.cast(headers.get(0));
-            } catch (ClassCastException e) {
-                this.logger.warn("Could not extract header '{}':", header, e);
+            List<?> headerValues = headers.get(header);
+            if (headerValues == null || headerValues.isEmpty()) {
+                return null;
             }
-            return null;
+
+            Object headerValue = headerValues.get(0);
+            if (headerValue == null) {
+                return null;
+            }
+
+            return String.valueOf(headerValue);
         }
 
         private void logDuration(CxfEventBuilder cxfEventBuilder, Message message) {
@@ -140,7 +141,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             cxfEventBuilder.setQueryString((String) inMessage.get(Message.QUERY_STRING));
             cxfEventBuilder.setPath((String) inMessage.get(Message.REQUEST_URI));
 
-            cxfEventBuilder.setRequestId(this.getProtocolHeaderValue(inMessage, "Request-ID", String.class));
+            cxfEventBuilder.setRequestId(this.getProtocolHeaderValue(inMessage, "Request-ID"));
 
             this.logIpAddress(cxfEventBuilder, inMessage);
 
@@ -163,7 +164,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             Message outMessage = message.getExchange().getOutMessage();
 
             cxfEventBuilder.setResponseCode((Integer) outMessage.get(Message.RESPONSE_CODE));
-            cxfEventBuilder.setLocation(this.getProtocolHeaderValue(outMessage, HttpHeaders.LOCATION, String.class));
+            cxfEventBuilder.setLocation(this.getProtocolHeaderValue(outMessage, HttpHeaders.LOCATION));
         }
     }
 }

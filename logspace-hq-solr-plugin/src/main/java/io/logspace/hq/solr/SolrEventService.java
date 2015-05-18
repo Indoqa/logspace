@@ -19,6 +19,7 @@ import io.logspace.agent.api.order.PropertyDescription.PropertyType;
 import io.logspace.hq.core.api.AgentDescription;
 import io.logspace.hq.core.api.CapabilitiesService;
 import io.logspace.hq.core.api.DataDefinition;
+import io.logspace.hq.core.api.DataDefinition.Aggregate;
 import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.Suggestion;
@@ -61,8 +62,11 @@ import org.springframework.beans.factory.annotation.Value;
 public class SolrEventService implements EventService {
 
     private static final int SLICE_UPDATE_DELAY = 1000;
+
     private static final String FACETS_NAME = "facets";
     private static final String VALUE_FACET_NAME = "value";
+    private static final String COUNT_FACET_NAME = "count";
+
     private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
     private static final String FIELD_SPACE = "space";
     private static final String FIELD_SYSTEM = "system";
@@ -100,6 +104,8 @@ public class SolrEventService implements EventService {
         solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getDateRange()));
         solrQuery.set("json.facet", this.createJsonFacets(dataDefinition));
 
+        this.logger.info("Executing query " + solrQuery);
+
         try {
             QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
 
@@ -108,7 +114,13 @@ public class SolrEventService implements EventService {
 
             for (int i = 1; i < facets.size(); i++) {
                 int index = Integer.parseInt(facets.getName(i));
-                Object value = ((NamedList<?>) facets.getVal(i)).get(VALUE_FACET_NAME);
+
+                Object value;
+                if (dataDefinition.getAggregate() == Aggregate.count) {
+                    value = ((NamedList<?>) facets.getVal(i)).get(COUNT_FACET_NAME);
+                } else {
+                    value = ((NamedList<?>) facets.getVal(i)).get(VALUE_FACET_NAME);
+                }
 
                 result[index] = value;
             }
@@ -273,7 +285,10 @@ public class SolrEventService implements EventService {
     private String createJsonFacets(DataDefinition dataDefinition) {
         FacetBuilder facetBuilder = new FacetBuilder();
 
-        Facet valueFacet = StatisticFacet.with(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
+        Facet valueFacet = null;
+        if (dataDefinition.getAggregate() != Aggregate.count) {
+            valueFacet = StatisticFacet.with(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
+        }
 
         Date startDate = dataDefinition.getDateRange().getStart();
         Date endDate = dataDefinition.getDateRange().getEnd();

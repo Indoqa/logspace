@@ -76,6 +76,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         this.commitRunnable = new CommitRunnable();
         new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
+        this.commitRunnable.schedule(this.maxCommitDelay);
 
         try {
             String queueFile = agentControllerDescription.getParameterValue(QUEUE_FILE_PARAMETER);

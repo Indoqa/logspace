@@ -26,7 +26,7 @@ public class EventResource extends AbstractSpaceResource {
     private EventService eventService;
 
     @PostConstruct
-    public void mapExceptions() {
+    public void mount() {
         this.post("/events", (req, res) -> this.logEvents(req, res));
     }
 

@@ -77,7 +77,7 @@ public class OrdersResource extends AbstractSpaceResource {
     }
 
     @PostConstruct
-    public void mapExceptions() {
+    public void mount() {
         Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
     }
 
