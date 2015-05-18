@@ -7,7 +7,6 @@
  */
 package io.logspace.agent.hq;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
@@ -38,15 +37,15 @@ import com.squareup.tape.FileObjectQueue;
 
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
-    private static final int DEFAULT_FAILURE_COMMIT_DELAY = 1000;
     private static final int DEFAULT_UPLOAD_SIZE = 1000;
-    private static final int DEFAULT_MAX_COMMIT = 300;
 
     private static final String BASE_URL_PARAMETER = "base-url";
     private static final String SPACE_TOKEN_PARAMETER = "space-token";
     private static final String QUEUE_FILE_PARAMETER = "queue-file";
     private static final String HQ_COMMUNICATION_INTERVAL_PARAMETER = "hq-communication-interval";
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
+
+    private static final int DEFAULT_COMMIT_DELAY = 300;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -60,8 +59,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     private CommitRunnable commitRunnable;
     private int uploadSize = DEFAULT_UPLOAD_SIZE;
-    private long maxCommitDelay = SECONDS.toMillis(DEFAULT_MAX_COMMIT);
-    private long failureCommitDelay = DEFAULT_FAILURE_COMMIT_DELAY;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
         this.setId(agentControllerDescription.getId());
@@ -74,10 +71,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                 HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
 
-        this.commitRunnable = new CommitRunnable();
-        new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
-        this.commitRunnable.schedule(this.maxCommitDelay);
-
         try {
             String queueFile = agentControllerDescription.getParameterValue(QUEUE_FILE_PARAMETER);
             if (queueFile == null) {
@@ -86,14 +79,13 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             }
 
             this.persistentQueue = new FileObjectQueue<Event>(new File(queueFile), new TapeEventConverter());
-
-            if (this.persistentQueue.size() != 0) {
-                this.logger.info("Found {} events in the persistent queue. Scheduling commit.", this.persistentQueue.size());
-                this.commitRunnable.schedule(DEFAULT_FAILURE_COMMIT_DELAY);
-            }
         } catch (Exception e) {
             throw new AgentControllerInitializationException("Could not initialize queue file.", e);
         }
+
+        this.commitRunnable = new CommitRunnable();
+        this.setCommitDelay(DEFAULT_COMMIT_DELAY);
+        new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
     }
 
     public static void install(String id, String baseUrl, String queueFile, String spaceToken) {
@@ -142,10 +134,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
             if (this.persistentQueue.size() >= this.uploadSize) {
                 this.commitRunnable.commit();
-                return;
             }
-
-            this.commitRunnable.schedule(this.maxCommitDelay);
         }
     }
 
@@ -156,10 +145,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
             if (this.persistentQueue.size() >= this.uploadSize) {
                 this.commitRunnable.commit();
-                return;
             }
-
-            this.commitRunnable.schedule(this.maxCommitDelay);
         }
     }
 
@@ -218,6 +204,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
+    protected int getQueueSize() {
+        return this.persistentQueue.size();
+    }
+
     @Override
     protected void onAgentRegistered(Agent agent) {
         super.onAgentRegistered(agent);
@@ -240,9 +230,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             }
 
             this.uploadEvents(eventsForUpload);
-
             this.purgeUploadedEvents(eventsForUpload);
-            this.failureCommitDelay = DEFAULT_FAILURE_COMMIT_DELAY;
         } catch (IOException ioex) {
             if (ioex instanceof ConnectException) {
                 this.logger.error("Could not upload events because the HQ was not available: {}", ioex.getMessage());
@@ -250,9 +238,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                 this.logger.error("Failed to download order.", ioex);
             }
 
-            this.commitRunnable.schedule(this.failureCommitDelay);
-            this.logger.error("Will retry uploading events in {}s", MILLISECONDS.toSeconds(this.failureCommitDelay));
-            this.failureCommitDelay = Math.min(this.failureCommitDelay * 2, this.maxCommitDelay);
+            this.logger.error("Will retry uploading events in the next commit.");
         }
     }
 
@@ -264,9 +250,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
 
-        this.maxCommitDelay = SECONDS.toMillis(agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_MAX_COMMIT));
-        this.logger.info("Committing after {} seconds.", MILLISECONDS.toSeconds(this.maxCommitDelay));
-        this.failureCommitDelay = Math.min(this.failureCommitDelay, this.maxCommitDelay);
+        Integer commitDelay = agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);
+        this.logger.info("Committing after {} seconds.", commitDelay);
+        this.setCommitDelay(commitDelay);
     }
 
     private List<Event> getEventsForUpload() {
@@ -289,6 +275,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
+    private void setCommitDelay(int commitDelay) {
+        this.commitRunnable.setCommitDelay(SECONDS.toMillis(commitDelay));
+    }
+
     private void uploadCapabilities() throws IOException {
         if (!this.modifiedAgents) {
             return;
@@ -308,12 +298,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private class CommitRunnable implements Runnable {
 
         private boolean run = true;
-        private long nextCommitTime = 0;
         private Thread executorThread;
+        private long commitDelay;
 
         public void commit() {
-            this.nextCommitTime = System.currentTimeMillis();
-
             this.wakeUp();
         }
 
@@ -322,34 +310,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             this.executorThread = Thread.currentThread();
 
             while (this.run) {
-                if (this.nextCommitTime == 0) {
-                    HqAgentController.this.logger.debug("CommitRunnable: Sleeping");
-                    this.sleep(0);
-                    continue;
-                }
-
-                long delay = this.nextCommitTime - System.currentTimeMillis();
-                if (delay > 0) {
-                    HqAgentController.this.logger.debug("CommitRunnable: Waiting {} ms for next commit", delay);
-                    this.sleep(delay);
-                    continue;
-                }
-
-                this.nextCommitTime = 0;
                 HqAgentController.this.performCommit();
+                this.sleep(this.commitDelay);
             }
 
             HqAgentController.this.logger.debug("CommitRunnable: Stopped.");
         }
 
-        public void schedule(long maxDelay) {
-            long commitTime = System.currentTimeMillis() + maxDelay;
-            if (this.nextCommitTime > 0 && this.nextCommitTime <= commitTime) {
-                return;
-            }
-
-            this.nextCommitTime = commitTime;
-            this.wakeUp();
+        public void setCommitDelay(long commitDelay) {
+            this.commitDelay = commitDelay;
         }
 
         public void stop() {
@@ -376,7 +345,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
 
         private synchronized void wakeUp() {
-            this.notify();
+            this.notifyAll();
         }
     }
 }
