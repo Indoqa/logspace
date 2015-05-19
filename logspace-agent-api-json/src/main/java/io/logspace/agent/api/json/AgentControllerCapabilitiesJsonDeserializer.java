@@ -16,8 +16,8 @@ import static io.logspace.agent.api.order.AgentControllerCapabilities.*;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyDescription.PropertyType;
 import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
+import io.logspace.agent.api.order.PropertyType;
 import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;

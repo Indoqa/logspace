@@ -33,7 +33,7 @@ public class CapabilitiesResource extends AbstractSpaceResource {
         this.put("/capabilities/:" + PARAMETER_CONTROLLER_ID, (req, res) -> this.saveCapabilities(req));
     }
 
-    private String saveCapabilities(Request req) throws IOException {
+    private Void saveCapabilities(Request req) throws IOException {
         String space = this.getSpace(req);
 
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
@@ -44,8 +44,7 @@ public class CapabilitiesResource extends AbstractSpaceResource {
         agentControllerCapabilities.setSpace(Optional.of(space));
 
         if (!controllerId.equals(agentControllerCapabilities.getId())) {
-            // TODO: proper exception class
-            throw new RuntimeException("Ids do not match");
+            throw new InvalidControllerIdException("The ID in the path does not match the ID in the payload.");
         }
 
         this.capabilitiesService.save(agentControllerCapabilities);

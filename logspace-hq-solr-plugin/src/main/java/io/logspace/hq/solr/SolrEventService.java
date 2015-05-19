@@ -14,12 +14,13 @@ import static java.util.Calendar.YEAR;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyDescription.PropertyType;
+import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.AgentDescription;
 import io.logspace.hq.core.api.CapabilitiesService;
 import io.logspace.hq.core.api.DataDefinition;
-import io.logspace.hq.core.api.DataDefinition.Aggregate;
+import io.logspace.hq.core.api.DataRetrievalException;
 import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.Suggestion;
@@ -48,6 +49,7 @@ import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.cloud.Slice;
 import org.apache.solr.common.util.NamedList;
@@ -101,7 +103,7 @@ public class SolrEventService implements EventService {
         solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getDateRange()));
         solrQuery.set("json.facet", this.createJsonFacets(dataDefinition));
 
-        this.logger.info("Executing query " + solrQuery);
+        this.logger.debug("Executing query {}", solrQuery);
 
         try {
             QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
@@ -123,9 +125,8 @@ public class SolrEventService implements EventService {
             }
 
             return result;
-        } catch (SolrServerException | IOException e) {
-            // TODO: proper exception class
-            throw new RuntimeException("Could not extract data.");
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Could not retrieve data.", e);
         }
     }
 
@@ -189,9 +190,8 @@ public class SolrEventService implements EventService {
             }
 
             return result;
-        } catch (SolrServerException | IOException e) {
-            // TODO: proper exception class
-            throw new RuntimeException("Failed to create suggestions", e);
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Failed to create suggestions", e);
         }
     }
 
@@ -278,6 +278,12 @@ public class SolrEventService implements EventService {
     }
 
     private String createJsonFacets(DataDefinition dataDefinition) {
+        PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
+        if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
+            throw InvalidDataDefinitionException
+                    .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
+        }
+
         FacetBuilder facetBuilder = new FacetBuilder();
 
         Facet valueFacet = null;

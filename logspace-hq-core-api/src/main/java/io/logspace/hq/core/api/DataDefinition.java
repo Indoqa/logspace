@@ -7,6 +7,8 @@
  */
 package io.logspace.hq.core.api;
 
+import io.logspace.agent.api.order.Aggregate;
+
 public class DataDefinition {
 
     private DateRange dateRange;
@@ -57,9 +59,5 @@ public class DataDefinition {
 
     public void setPropertyId(String propertyId) {
         this.propertyId = propertyId;
-    }
-
-    public static enum Aggregate {
-        max, min, avg, count, sum;
     }
 }

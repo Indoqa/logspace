@@ -9,7 +9,7 @@ package io.logspace.agent.api;
 
 public enum HttpStatusCode {
 
-    Accepted(202), NotModified(304), Forbidden(403), NotFound(404);
+    Accepted(202), NotModified(304), BadRequest(400), Forbidden(403), NotFound(404), InternalServerError(500);
 
     private final int code;
 

@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.api.order;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class PropertyDescription {
 
@@ -52,27 +50,6 @@ public class PropertyDescription {
 
     public void setUnits(PropertyUnit[] units) {
         this.units = units;
-    }
-
-    public static enum PropertyType {
-
-        BOOLEAN, DATE, INTEGER, LONG, FLOAT, DOUBLE, STRING;
-
-        private static final Map<String, PropertyType> PROPERTY_TYPES = new HashMap<String, PropertyType>();
-
-        static {
-            for (PropertyType eachValue : PropertyType.values()) {
-                PROPERTY_TYPES.put(eachValue.name().toLowerCase(), eachValue);
-            }
-        }
-
-        public static PropertyType get(String name) {
-            if (name == null) {
-                return null;
-            }
-
-            return PROPERTY_TYPES.get(name.toLowerCase());
-        }
     }
 
     public static class PropertyUnit {
