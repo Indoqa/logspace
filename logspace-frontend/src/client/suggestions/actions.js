@@ -9,6 +9,10 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
+export function onShowSuggestions() {
+  dispatch(onShowSuggestions);
+}
+
 export function onNewSuggestionQuery(newSuggestionQuery) {
   dispatch(onNewSuggestionQuery, newSuggestionQuery);
 }
@@ -40,5 +44,5 @@ export function onPropertyCleared() {
   
 setToString('suggestions', {
   onNewSuggestionQuery, onSystemSelected, onSystemCleared, onSpaceSelected, onSpaceCleared, 
-  onPropertySelected, onPropertyCleared
+  onPropertySelected, onPropertyCleared, onShowSuggestions
 });  

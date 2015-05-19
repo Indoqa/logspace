@@ -9,16 +9,10 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
-export function onShowTimeWindowForm() {
-  dispatch(onShowTimeWindowForm);
+export function onCloseDrawer() {
+  dispatch(onCloseDrawer);
 }
-
-export function onTimeWindowChange(newTimeWindowData) {
-  dispatch(onTimeWindowChange, newTimeWindowData);
-}
-
-// Override actions toString for logging.
-setToString('timeWindow', {
-  onTimeWindowChange, onShowTimeWindowForm
-});
   
+setToString('result', {
+  onCloseDrawer
+});  
