@@ -43,20 +43,12 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
       refreshSelections(); 
       break;      
     case actions.onPropertySelected:
-<<<<<<< HEAD
       updateRequest("property", data);
-=======
-      updateRequest("propertyId", data);
->>>>>>> c266c3d1f47ad2475359908ffb1da38233ea205c
       refreshSelections(); 
       break;  
 
     case actions.onPropertyCleared:
-<<<<<<< HEAD
       updateRequest("property", null);
-=======
-      updateRequest("propertyId", null);
->>>>>>> c266c3d1f47ad2475359908ffb1da38233ea205c
       refreshSelections(); 
       break;      
   }
@@ -64,21 +56,13 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
 
 function updateRequest(key, value) {
   suggestionCursor(suggestions => {
-<<<<<<< HEAD
     return suggestions.setIn(["request", key], Immutable.fromJS(value));
-=======
-    return suggestions.setIn(["request", key], value)
->>>>>>> c266c3d1f47ad2475359908ffb1da38233ea205c
   });    
 }
 
 function refreshSelections() {
   var request = getSuggestions().get("request").toJS();
-<<<<<<< HEAD
- 
-=======
-  
->>>>>>> c266c3d1f47ad2475359908ffb1da38233ea205c
+
   if (request.text == null || request.text.length < 3) {
     storeEmptyResult()  
     return
@@ -86,7 +70,6 @@ function refreshSelections() {
 
   suggestionCursor(suggestions => {
     return suggestions.setIn(["result", "loading"], true)
-<<<<<<< HEAD
   });
 
   var translatedRequest = {
@@ -97,11 +80,6 @@ function refreshSelections() {
   }
 
   axios.post(getRestUrl('/suggest'), translatedRequest)
-=======
-  });  
-
-  axios.post(getRestUrl('/suggest'), request)
->>>>>>> c266c3d1f47ad2475359908ffb1da38233ea205c
   .then(function (response) {
     storeSuccessResult(response.data)  
   })
