@@ -17,13 +17,13 @@ export function getTimeWindow() {
 
 export const TIMEWINDOW_CONSTANTS = {
   gap: {
-    second: 1000,
-    minute: 60000,
-    hour: 3600000,
-    day: 86400000,
-    week: 604800000,
-    month: 2629740000,
-    year: 31556900000
+    second: 1,
+    minute: 60,
+    hour: 3600,
+    day: 86400,
+    week: 604800,
+    month: 2629740,
+    year: 31556900
   }
 }
 

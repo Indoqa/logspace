@@ -8,18 +8,18 @@
 
 export default {
   "timeWindow": {
-    "start": "2015-04-16",
-    "end": "2015-04-17",
-    "gap": 86400000  
+    "start": "2014-01-01",
+    "end": "2014-01-02",
+    "gap": 3600
  },
  "timeSeries": [
-   
- ],  
+
+ ],
  "result": {
    "translatedResult": {
    	 "error": false,
-     "empty": true,	
-     "series": null	
+     "empty": true,
+     "series": null
    }
  },
   "suggestions": {
@@ -34,8 +34,8 @@ export default {
       "systems": [],
       "propertyNames": [],
       "agentDescriptions": [],
-      "loading": false  
+      "loading": false
     }
-  	
+
   }
 };
