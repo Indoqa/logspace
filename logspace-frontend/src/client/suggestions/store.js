@@ -43,12 +43,12 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
       refreshSelections(); 
       break;      
     case actions.onPropertySelected:
-      updateRequest("propertyId", data);
+      updateRequest("property", data);
       refreshSelections(); 
       break;  
 
     case actions.onPropertyCleared:
-      updateRequest("propertyId", null);
+      updateRequest("property", null);
       refreshSelections(); 
       break;      
   }
@@ -62,6 +62,12 @@ function updateRequest(key, value) {
 
 function refreshSelections() {
   var request = getSuggestions().get("request").toJS();
+  var translatedRequest = {
+    text: request.text,
+    systemId: request.text,
+    text: request.text,
+    text: request.text
+  }
   
   if (request.text == null || request.text.length < 3) {
     storeEmptyResult()  

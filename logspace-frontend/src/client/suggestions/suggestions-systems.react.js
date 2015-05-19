@@ -16,7 +16,7 @@ export default class SuggestionSystems extends PureComponent {
       return (
         <div>
           <ul>
-              <li> {this.props.selected} (<a onClick={() => onSystemCleared()}>x</a>) </li>
+              <li> {this.props.selected.get('name')} (<a onClick={() => onSystemCleared()}>x</a>) </li>
            </ul> 
         </div>
       );
@@ -26,7 +26,7 @@ export default class SuggestionSystems extends PureComponent {
       <div>
         <ul>
           {this.props.systems.map(function(item, index) {
-            return <li key={index}> <a onClick={() => onSystemSelected(item)}>{item}</a> </li>;
+            return <li key={index}> <a onClick={() => onSystemSelected(item)}>{item.get('name')}</a> </li>;
           })}    
         </ul>
       </div>
