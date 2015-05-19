@@ -28,6 +28,10 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       setActivePanel(Panels.TIME_WINDOW);
       break;  
 
+    case timeSeriesActions.onNewTimeSeriesEdited:  
+      setActivePanel(Panels.TIMESERIES_NEW);
+      break;  
+
     case timeWindowActions.onTimeWindowChange:
       setActivePanel(null);
       break;

@@ -6,8 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
+import Immutable from 'immutable';
 import * as actions from './actions';
 import {timeSeriesCursor} from '../state';
+import {editedTimeSeriesCursor} from '../state';
 import {register} from '../dispatcher';
 import {Record} from 'immutable';
 import {getRandomString} from '../../lib/getrandomstring';
@@ -37,7 +39,11 @@ const colors = [
 
 export function getTimeSeries() {
   return timeSeriesCursor()
-}
+} 
+
+export function getEditedTimeSeries() {
+  return editedTimeSeriesCursor()
+} 
 
 export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   switch (action) {
@@ -58,6 +64,12 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       case actions.onTimeSeriesDeleted:
         timeSeriesCursor(timeSeries => {
           return timeSeries.delete(timeSeries.indexOf(data))
+        });
+      break;
+
+      case actions.onNewTimeSeriesEdited:
+        editedTimeSeriesCursor(editedTimeSeries => {
+          return editedTimeSeries.set("agentDescription",  Immutable.fromJS(data))
         });
       break;
   }

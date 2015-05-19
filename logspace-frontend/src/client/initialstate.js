@@ -15,6 +15,9 @@ export default {
  "timeSeries": [
 
  ],
+ "editedTimeSeries": {
+
+ },
  "result": {
    "translatedResult": {
    	 "error": false,

@@ -22,7 +22,13 @@ export default class AddTimeSerie extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {agentId: "deep-search-wwkswm/commit", propertyId: "long_property_warmup_time", aggregate: "sum"};
+    var agent = props.editedTimeSeries.get("agentDescription").toJS();
+
+    this.state = {
+      agentId: agent.globalId, 
+      propertyId: agent.propertyDescriptions[0].id, 
+      aggregate: "sum"
+    };
   }
 
   addTimeSeries() {
@@ -36,15 +42,17 @@ export default class AddTimeSerie extends PureComponent {
     this.setState(newState);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !shallowEqual(this.state, nextState);
-  }
-
   render() {
     return (
       <div>
-        <input name="agentId" value={this.state.agentId} onChange={this.handleChange.bind(this)}/> <br/>
-        <input name="propertyId" value={this.state.propertyId} onChange={this.handleChange.bind(this)}/> <br/>
+        <span> {this.state.agentId} </span>
+        <br/>
+        <select name="propertyId" value={this.state.propertyId} onChange={this.handleChange.bind(this)}>
+           {this.props.editedTimeSeries.get("agentDescription").get("propertyDescriptions").map(function(property) {
+            return <option value={property.get("id")}> {property.get("name")} </option>;
+          })}
+        </select>
+        <br/>
         <select name="aggregate" value={this.state.aggregate} onChange={this.handleChange.bind(this)}>
           <option value="max">max</option>
           <option value="min">min</option>

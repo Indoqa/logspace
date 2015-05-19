@@ -7,22 +7,20 @@
  */
 import React from 'react'
 import {Link} from 'react-router'
+<<<<<<< HEAD
 import classnames from 'classnames'
 
 import AddTimeSerie from '../time-series/add-time-series.react'
-<<<<<<< HEAD
-import TimeSeriesList  from '../time-series/time-series-list.react'
-import Chart from '../result/result-chart.react'
-import Drawer from '../drawer/drawer.react'
-import Header from '../header/header.react'
-import TimeWindowValues from '../time-window/time-window-values.react'
-
-import {getTimeSeries} from '../time-series/store'
-import {getActivePanel} from '../drawer/store'
-import {getResult} from '../result/store'
-import {getSuggestions} from '../suggestions/store'
-import {getTimeWindow} from '../time-window/store'
-import {onShowSuggestions} from '../suggestions/actions'
+import classnames from 'classnames';
+import TimeSeriesList  from '../time-series/time-series-list.react.js'
+import Chart  from '../result/result-chart.react.js'
+import Drawer  from '../drawer/drawer.react.js'
+import {getTimeWindow} from '../time-window/store';
+import {getTimeSeries, getEditedTimeSeries} from '../time-series/store';
+import {getActivePanel} from '../drawer/store';
+import {getResult} from '../result/store';
+import {getSuggestions} from '../suggestions/store';
+import {onShowSuggestions} from '../suggestions/actions';
 import {onShowTimeWindowForm} from '../time-window/actions';
 
 require('./time-series.styl')
@@ -77,10 +75,11 @@ export default class TimeSeries extends React.Component {
 
           </div>
           <div className="right">
-            <Drawer
-              activePanel={getActivePanel()}
-              suggestions={getSuggestions()}
-              timeWindow={getTimeWindow()}
+            <Drawer 
+              activePanel={getActivePanel()} 
+              suggestions={getSuggestions()} 
+              timeWindow={getTimeWindow()} 
+              editedTimeSeries={getEditedTimeSeries()}
               toggle={() => this.toggleNavigationDrawer()} />
           </div>
         </div>

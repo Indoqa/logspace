@@ -9,6 +9,7 @@ import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import Suggestions  from '../suggestions/suggestions.react.js'
 import TimeWindow  from '../time-window/time-window.react.js'
+import AddTimeSerie from '../time-series/add-time-series.react'
 import * as Panels from './constants';
 
 require('./drawer.styl')
@@ -42,8 +43,13 @@ export default class Drawer extends PureComponent {
     	);
   	}
 
-  	return (<div> unsupported panel: {this.props.activePanel} </div>)
-
+    if (this.props.activePanel == Panels.TIMESERIES_NEW) {
+      return (
+        <AddTimeSerie editedTimeSeries={this.props.editedTimeSeries} />
+      );
+    }
     
+
+  	return (<div> unsupported panel: {this.props.activePanel} </div>)
   }
 }

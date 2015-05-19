@@ -10,7 +10,7 @@ import PureComponent from '../components/purecomponent.react';
 import SuggestionSystems from './suggestions-systems.react';
 import SuggestionSpaces from './suggestions-spaces.react';
 import SuggestionProperties from './suggestions-properties.react';
-import {onTimeSeriesAdded} from '../time-series/actions';
+import {onNewTimeSeriesEdited} from '../time-series/actions';
 
 export default class SuggestionResult extends PureComponent {
 
@@ -35,7 +35,7 @@ export default class SuggestionResult extends PureComponent {
               var agent = item.toJS();
               return (
                 <li key={index}>
-                  <a onClick={() => onTimeSeriesAdded(agent.globalId, agent.propertyDescriptions[0].id, 'sum')}> {item.get('globalId')} </a>
+                  <a onClick={() => onNewTimeSeriesEdited(agent)}> {item.get('globalId')} </a>s 
                 </li>
               );
             })}
