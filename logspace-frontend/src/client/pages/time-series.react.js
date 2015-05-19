@@ -11,19 +11,29 @@ import {Link} from 'react-router'
 import classnames from 'classnames'
 
 import AddTimeSerie from '../time-series/add-time-series.react'
+<<<<<<< HEAD
 import classnames from 'classnames';
+=======
+>>>>>>> 77617067d83ef5625733158f8c7c28232f6fc331
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
 import Chart  from '../result/result-chart.react.js'
 import Drawer  from '../drawer/drawer.react.js'
 import {getTimeWindow} from '../time-window/store';
+<<<<<<< HEAD
 import {getTimeSeries, getEditedTimeSeries} from '../time-series/store';
+=======
+import {getTimeSeries} from '../time-series/store';
+>>>>>>> 77617067d83ef5625733158f8c7c28232f6fc331
 import {getActivePanel} from '../drawer/store';
 import {getResult} from '../result/store';
 import {getSuggestions} from '../suggestions/store';
 import {onShowSuggestions} from '../suggestions/actions';
 import {onShowTimeWindowForm} from '../time-window/actions';
+<<<<<<< HEAD
 
 require('./time-series.styl')
+=======
+>>>>>>> 77617067d83ef5625733158f8c7c28232f6fc331
 
 export default class TimeSeries extends React.Component {
 
@@ -60,7 +70,17 @@ export default class TimeSeries extends React.Component {
 
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
+<<<<<<< HEAD
             <TimeWindowValues />
+=======
+            <div> {timeWindow.get('start')} </div>
+            <div> {timeWindow.get('end')} </div>
+            <div> {timeWindow.get('gap')} </div>
+            <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />  
+            <hr/>
+            <button onClick={() => onShowSuggestions()}>+</button>
+            <hr/>
+>>>>>>> 77617067d83ef5625733158f8c7c28232f6fc331
             <TimeSeriesList items={getTimeSeries()} />
 
             <div className='add-series-entry'>
@@ -79,9 +99,14 @@ export default class TimeSeries extends React.Component {
               activePanel={getActivePanel()} 
               suggestions={getSuggestions()} 
               timeWindow={getTimeWindow()} 
+<<<<<<< HEAD
               editedTimeSeries={getEditedTimeSeries()}
               toggle={() => this.toggleNavigationDrawer()} />
           </div>
+=======
+              toggle={() => this.toggleNavigationDrawer()} />
+          </div>  
+>>>>>>> 77617067d83ef5625733158f8c7c28232f6fc331
         </div>
 
         <div className={classnames(this.state.mainCss)}>

@@ -48,7 +48,6 @@ export default class SuggestionResult extends PureComponent {
           systems:
           <SuggestionSystems systems={systems} selected={request.get('system')}/>
           <hr/>
-           properties:
           <SuggestionProperties properties={properties} selected={request.get('property')}/>
         </div>
       </div>

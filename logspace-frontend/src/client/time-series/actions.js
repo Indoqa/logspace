@@ -15,8 +15,7 @@ export function onTimeSeriesAdded(data) {
 
 export function onNewTimeSeriesEdited(agentDescriptions) {
   dispatch(onNewTimeSeriesEdited, agentDescriptions);
-}
-  
+
 export function onTimeSeriesDeleted(deletedTimeSeries) {
   dispatch(onTimeSeriesDeleted, deletedTimeSeries);
 }
