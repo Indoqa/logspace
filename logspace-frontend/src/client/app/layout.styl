@@ -56,11 +56,12 @@ body
       width: $navigation-drawer-width
       position: absolute
     .right
-      width: $navigation-drawer-width
-      position: absolute
-      left: $navigation-drawer-width
-      border-left: 1px solid #eee
-      height: 100%
+      width $navigation-drawer-width-expanded-only
+      position absolute
+      left $navigation-drawer-width
+      border-left 1px solid #eee
+      padding 0 10px
+      height 100%
 
   .navigation-drawer-expanded
     width $navigation-drawer-width-expanded

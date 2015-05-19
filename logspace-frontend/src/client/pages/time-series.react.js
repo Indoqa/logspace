@@ -23,6 +23,8 @@ import {getSuggestions} from '../suggestions/store';
 import {onShowSuggestions} from '../suggestions/actions';
 import {onShowTimeWindowForm} from '../time-window/actions';
 
+require('./time-series.styl')
+
 export default class TimeSeries extends React.Component {
 
   constructor(props) {
@@ -63,9 +65,19 @@ export default class TimeSeries extends React.Component {
             <div> {timeWindow.get('gap')} </div>
             <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />
             <hr/>
+            
             <button onClick={() => onShowSuggestions()}>+</button>
             <hr/>
+
             <TimeSeriesList items={getTimeSeries()} />
+            <hr />
+
+            <div className='add-series-entry'>
+              <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => this.toggleNavigationDrawer()}>
+                <i>+</i>
+              </button>
+            </div>
+
             <div className='tools'>
               Tools
             </div>

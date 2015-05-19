@@ -35,20 +35,20 @@ export default class SuggestionResult extends PureComponent {
               var agent = item.toJS();
               return (
                 <li key={index}>
-                  <a onClick={() => onTimeSeriesAdded(agent.globalId, agent.propertyDescriptions[0].id, 'sum')}> {item.get('globalId')} </a>s 
+                  <a onClick={() => onTimeSeriesAdded(agent.globalId, agent.propertyDescriptions[0].id, 'sum')}> {item.get('globalId')} </a>
                 </li>
               );
             })}
-          </ul> 
-        </div>    
+          </ul>
+        </div>
         <div className={'facets'}>
-          spaces: 
+          spaces:
           <SuggestionSpaces spaces={spaces} selected={request.get('space')}/>
           <hr/>
           systems:
           <SuggestionSystems systems={systems} selected={request.get('system')}/>
           <hr/>
-           properties: 
+           properties:
           <SuggestionProperties properties={properties} selected={request.get('property')}/>
         </div>
       </div>
