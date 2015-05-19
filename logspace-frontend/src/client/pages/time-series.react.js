@@ -10,6 +10,7 @@ import {Link} from 'react-router'
 import classnames from 'classnames'
 
 import AddTimeSerie from '../time-series/add-time-series.react'
+<<<<<<< HEAD
 import TimeSeriesList  from '../time-series/time-series-list.react'
 import Chart from '../result/result-chart.react'
 import Drawer from '../drawer/drawer.react'
@@ -22,6 +23,7 @@ import {getResult} from '../result/store'
 import {getSuggestions} from '../suggestions/store'
 import {getTimeWindow} from '../time-window/store'
 import {onShowSuggestions} from '../suggestions/actions'
+import {onShowTimeWindowForm} from '../time-window/actions';
 
 require('./time-series.styl')
 
@@ -52,6 +54,8 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
+    var timeWindow = getTimeWindow();
+
     return (
       <div className='time-series'>
         <Header />
@@ -59,7 +63,6 @@ export default class TimeSeries extends React.Component {
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
             <TimeWindowValues />
-
             <TimeSeriesList items={getTimeSeries()} />
 
             <div className='add-series-entry'>
@@ -80,7 +83,6 @@ export default class TimeSeries extends React.Component {
               timeWindow={getTimeWindow()}
               toggle={() => this.toggleNavigationDrawer()} />
           </div>
-
         </div>
 
         <div className={classnames(this.state.mainCss)}>
