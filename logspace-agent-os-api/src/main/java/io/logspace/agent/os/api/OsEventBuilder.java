@@ -11,7 +11,7 @@ import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.Optional;
 
-public class OsEventBuilder extends AbstractEventBuilder {
+public final class OsEventBuilder extends AbstractEventBuilder {
 
     public static final String PROPERTY_PROCESSOR_COUNT = "processor_count";
 

@@ -157,12 +157,6 @@ public final class AgentControllerProvider {
             } catch (MalformedURLException e) {
                 // do nothing
             }
-        } else {
-            System.out.println(file.getAbsolutePath() + " does not exists.");
-        }
-
-        if (agentControllerDescription != null) {
-            return;
         }
 
         for (String eachConfigLocation : CONFIG_LOCATIONS) {

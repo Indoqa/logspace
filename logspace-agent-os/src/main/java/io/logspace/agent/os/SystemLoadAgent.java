@@ -16,7 +16,7 @@ import io.logspace.agent.os.api.OsEventBuilder;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 
-public class SystemLoadAgent extends AbstractAgent {
+public final class SystemLoadAgent extends AbstractAgent {
 
     private SystemLoadAgent(String agentId) {
         super(agentId, "os/system-load", TriggerType.Off, TriggerType.Cron);

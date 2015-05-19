@@ -17,7 +17,7 @@ import java.lang.management.ManagementFactory;
 
 import com.sun.management.OperatingSystemMXBean;
 
-public class SwapAgent extends AbstractAgent {
+public final class SwapAgent extends AbstractAgent {
 
     private SwapAgent(String agentId) {
         super(agentId, "os/swap", TriggerType.Off, TriggerType.Cron);

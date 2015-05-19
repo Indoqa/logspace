@@ -18,7 +18,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class DiskAgent extends AbstractAgent {
+public final class DiskAgent extends AbstractAgent {
 
     private DiskAgent(String agentId) {
         super(agentId, "os/disk", TriggerType.Off, TriggerType.Cron);
@@ -38,9 +38,10 @@ public class DiskAgent extends AbstractAgent {
     }
 
     private void sendDiskEvent(Path root) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem());
         try {
             FileStore store = Files.getFileStore(root);
+
+            OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem());
 
             eventBuilder.setDiskPath(root.toString());
             eventBuilder.setTotalDiskSpace(store.getTotalSpace());

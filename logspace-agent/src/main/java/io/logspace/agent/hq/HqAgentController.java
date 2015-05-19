@@ -30,8 +30,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.http.client.HttpResponseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.squareup.tape.FileObjectQueue;
 
@@ -46,8 +44,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
 
     private static final int DEFAULT_COMMIT_DELAY = 300;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean modifiedAgents;
 
@@ -111,6 +107,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     @Override
     public void flush() {
+        this.logger.info("{} - Flushing events", this.getId());
         this.commitRunnable.commit();
     }
 
@@ -204,10 +201,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
-    protected int getQueueSize() {
-        return this.persistentQueue.size();
-    }
-
     @Override
     protected void onAgentRegistered(Agent agent) {
         super.onAgentRegistered(agent);
@@ -224,13 +217,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     protected void performCommit() {
         try {
-            List<Event> eventsForUpload = this.getEventsForUpload();
-            if (eventsForUpload == null || eventsForUpload.isEmpty()) {
-                return;
-            }
+            do {
+                List<Event> eventsForUpload = this.getEventsForUpload();
+                if (eventsForUpload == null || eventsForUpload.isEmpty()) {
+                    return;
+                }
 
-            this.uploadEvents(eventsForUpload);
-            this.purgeUploadedEvents(eventsForUpload);
+                this.uploadEvents(eventsForUpload);
+                this.purgeUploadedEvents(eventsForUpload);
+            } while (this.persistentQueue.size() >= this.uploadSize);
         } catch (IOException ioex) {
             if (ioex instanceof ConnectException) {
                 this.logger.error("Could not upload events because the HQ was not available: {}", ioex.getMessage());
@@ -268,10 +263,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         synchronized (this.persistentQueue) {
             this.persistentQueue.remove(events.size());
-
-            if (this.persistentQueue.size() > 0) {
-                this.flush();
-            }
         }
     }
 
@@ -309,22 +300,37 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         public void run() {
             this.executorThread = Thread.currentThread();
 
-            while (this.run) {
+            while (true) {
                 HqAgentController.this.performCommit();
-                this.sleep(this.commitDelay);
+
+                synchronized (this) {
+                    if (!this.run) {
+                        break;
+                    }
+                    this.sleep(this.commitDelay);
+                }
             }
 
             HqAgentController.this.logger.debug("CommitRunnable: Stopped.");
         }
 
         public void setCommitDelay(long commitDelay) {
+            boolean commitDelayChanged = this.commitDelay != commitDelay;
+
             this.commitDelay = commitDelay;
+
+            if (commitDelayChanged) {
+                this.wakeUp();
+            }
         }
 
         public void stop() {
             HqAgentController.this.logger.debug("CommitRunnable: Stopping");
-            this.run = false;
-            this.wakeUp();
+
+            synchronized (this) {
+                this.run = false;
+                this.wakeUp();
+            }
 
             while (true) {
                 try {
@@ -336,7 +342,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             }
         }
 
-        private synchronized void sleep(long duration) {
+        private void sleep(long duration) {
             try {
                 this.wait(duration);
             } catch (InterruptedException e) {

@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  *
  * @see http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html
  */
-public class Optional<T> {
+public final class Optional<T> {
 
     private static final Optional<?> EMPTY = new Optional<Object>();
 

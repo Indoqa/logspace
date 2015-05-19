@@ -17,7 +17,7 @@ import java.lang.management.ManagementFactory;
 
 import com.sun.management.OperatingSystemMXBean;
 
-public class CpuAgent extends AbstractAgent {
+public final class CpuAgent extends AbstractAgent {
 
     private CpuAgent(String agentId) {
         super(agentId, "os/cpu", TriggerType.Off, TriggerType.Cron);
@@ -31,20 +31,15 @@ public class CpuAgent extends AbstractAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem()).setProcessorCount(
-                Runtime.getRuntime().availableProcessors());
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem());
 
-        this.addAdditionalProperties(eventBuilder);
+        eventBuilder.setProcessorCount(Runtime.getRuntime().availableProcessors());
 
-        this.sendEvent(eventBuilder.toEvent());
-    }
-
-    private void addAdditionalProperties(OsEventBuilder eventBuilder) {
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-        if (operatingSystemMXBean == null) {
-            return;
+        if (operatingSystemMXBean != null) {
+            eventBuilder.setSystemCpuLoad(operatingSystemMXBean.getSystemCpuLoad());
         }
 
-        eventBuilder.setSystemCpuLoad(operatingSystemMXBean.getSystemCpuLoad());
+        this.sendEvent(eventBuilder.toEvent());
     }
 }

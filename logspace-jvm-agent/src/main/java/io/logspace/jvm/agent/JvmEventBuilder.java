@@ -10,7 +10,7 @@ package io.logspace.jvm.agent;
 import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Optional;
 
-public class JvmEventBuilder extends AbstractEventBuilder {
+public final class JvmEventBuilder extends AbstractEventBuilder {
 
     public static final String PROPERTY_JVM_IDENTIFIER = "jvm-identifier";
 

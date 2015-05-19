@@ -33,17 +33,18 @@ public class MemoryAgent extends AbstractAgent {
     public void execute(AgentOrder agentOrder) {
         OperatingSystemMXBean operatingSystemBean = ManagementFactory.getOperatingSystemMXBean();
 
-        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem());
-        if (operatingSystemBean instanceof com.sun.management.OperatingSystemMXBean) {
-            com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
-
-            osEventBuilder.setTotalMemory(operatingSystem.getTotalPhysicalMemorySize());
-            osEventBuilder.setFreeMemory(operatingSystem.getFreePhysicalMemorySize());
-            osEventBuilder.setUsedMemory(operatingSystem.getTotalPhysicalMemorySize() - operatingSystem.getFreePhysicalMemorySize());
-            osEventBuilder.setCommittedVirtualMemory(operatingSystem.getCommittedVirtualMemorySize());
-        } else {
+        if (!(operatingSystemBean instanceof com.sun.management.OperatingSystemMXBean)) {
             return;
         }
+
+        com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
+
+        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem());
+
+        osEventBuilder.setTotalMemory(operatingSystem.getTotalPhysicalMemorySize());
+        osEventBuilder.setFreeMemory(operatingSystem.getFreePhysicalMemorySize());
+        osEventBuilder.setUsedMemory(operatingSystem.getTotalPhysicalMemorySize() - operatingSystem.getFreePhysicalMemorySize());
+        osEventBuilder.setCommittedVirtualMemory(operatingSystem.getCommittedVirtualMemorySize());
 
         this.sendEvent(osEventBuilder.toEvent());
     }

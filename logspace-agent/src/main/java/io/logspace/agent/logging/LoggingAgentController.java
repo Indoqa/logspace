@@ -13,17 +13,12 @@ import io.logspace.agent.impl.AbstractAgentController;
 
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class LoggingAgentController extends AbstractAgentController {
 
     public static final String MESSAGE_PATTERN_PARAMETER_NAME = "message-pattern";
 
     private static final String DEFAULT_MESSAGE_PATTERN = "{id} ({global-id}, {parent-id}) - [{type}] - {timestamp}: {properties}";
     private static final String[] PARAMETERS = {"{id}", "{global-id}", "{parent-id}", "{type}", "{timestamp}", "{properties}"};
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String messagePattern = DEFAULT_MESSAGE_PATTERN;
 

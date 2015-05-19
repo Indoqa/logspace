@@ -51,8 +51,8 @@ public final class JacksonUtils {
         try {
             return getTimeFormat().parse(value);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but value '" + value
-                    + "'.");
+            throw new IllegalArgumentException("Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but found value '"
+                    + value + "'.", e);
         }
     }
 

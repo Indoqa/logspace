@@ -10,7 +10,7 @@ package io.logspace.agent.solr;
 import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Optional;
 
-public class SolrEventBuilder extends AbstractEventBuilder {
+public final class SolrEventBuilder extends AbstractEventBuilder {
 
     public static final String PROPERTY_CORE_NAME = "core_name";
     public static final String PROPERTY_DOCUMENT_COUNT = "document_count";
