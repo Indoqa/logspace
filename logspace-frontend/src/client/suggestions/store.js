@@ -62,6 +62,7 @@ function updateRequest(key, value) {
 
 function refreshSelections() {
   var request = getSuggestions().get("request").toJS();
+
   if (request.text == null || request.text.length < 3) {
     storeEmptyResult()
     return
