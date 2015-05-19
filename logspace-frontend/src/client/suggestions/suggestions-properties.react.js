@@ -16,7 +16,7 @@ export default class SuggestionProperties extends PureComponent {
       return (
         <div>
           <ul>
-              <li> {this.props.selected} (<a onClick={() => onPropertyCleared()}>x</a>) </li>
+              <li> {this.props.selected.get('name')} (<a onClick={() => onPropertyCleared()}>x</a>) </li>
            </ul> 
         </div>
       );
@@ -26,7 +26,7 @@ export default class SuggestionProperties extends PureComponent {
       <div>
         <ul>
           {this.props.properties.map(function(item, index) {
-            return <li key={index}> <a onClick={() => onPropertySelected(item)}>{item}</a> </li>;
+            return <li key={index}> <a onClick={() => onPropertySelected(item)}>{item.get('name')}</a> </li>;
           })}    
         </ul>
       </div>
