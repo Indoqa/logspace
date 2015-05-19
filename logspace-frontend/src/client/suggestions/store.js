@@ -20,51 +20,50 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onNewSuggestionQuery:
       updateRequest("text", data);
-      refreshSelections(); 
-      break;  
+      refreshSelections();
+      break;
 
     case actions.onSystemSelected:
       updateRequest("system", data);
-      refreshSelections(); 
-      break;  
+      refreshSelections();
+      break;
 
     case actions.onSystemCleared:
       updateRequest("system", null);
-      refreshSelections(); 
-      break;    
+      refreshSelections();
+      break;
 
     case actions.onSpaceSelected:
       updateRequest("space", data);
-      refreshSelections(); 
-      break;  
+      refreshSelections();
+      break;
 
     case actions.onSpaceCleared:
       updateRequest("space", null);
-      refreshSelections(); 
-      break;      
+      refreshSelections();
+      break;
     case actions.onPropertySelected:
       updateRequest("property", data);
-      refreshSelections(); 
-      break;  
+      refreshSelections();
+      break;
 
     case actions.onPropertyCleared:
       updateRequest("property", null);
-      refreshSelections(); 
-      break;      
+      refreshSelections();
+      break;
   }
 });
 
 function updateRequest(key, value) {
   suggestionCursor(suggestions => {
     return suggestions.setIn(["request", key], Immutable.fromJS(value));
-  });    
+  });
 }
 
 function refreshSelections() {
   var request = getSuggestions().get("request").toJS();
- 
   if (request.text == null || request.text.length < 3) {
-    storeEmptyResult()  
+    storeEmptyResult()
     return
   }
 
@@ -81,12 +80,12 @@ function refreshSelections() {
 
   axios.post(getRestUrl('/suggest'), translatedRequest)
   .then(function (response) {
-    storeSuccessResult(response.data)  
+    storeSuccessResult(response.data)
   })
   .catch(function (response) {
-    storeErrorResult(response)  
+    storeErrorResult(response)
   });
-}  
+}
 
 function storeErrorResult(serverResponse) {
   suggestionCursor(suggestions => {
@@ -98,7 +97,7 @@ function storeErrorResult(serverResponse) {
         propertyNames: [],
         agentDescriptions: []
     }));
-  });  
+  });
 }
 
 function storeEmptyResult() {
@@ -111,7 +110,7 @@ function storeEmptyResult() {
         propertyNames: [],
         agentDescriptions: []
     }));
-  });  
+  });
 }
 
 function storeSuccessResult(responseJson) {
@@ -124,7 +123,5 @@ function storeSuccessResult(responseJson) {
         propertyNames: responseJson.propertyNames,
         agentDescriptions: responseJson.agentDescriptions
     }));
-  });  
+  });
 }
-
-
