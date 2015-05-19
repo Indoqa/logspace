@@ -21,7 +21,7 @@ export default class SuggestionResult extends PureComponent {
       return  <div>  <div className={'facets'}> loading </div> </div>
     }
 
-    var request = this.props.request.toJS();
+    var request = this.props.request;
     var systems = this.props.result.get("systems");
     var spaces = this.props.result.get("spaces");
     var properties = this.props.result.get("propertyNames");
@@ -43,13 +43,13 @@ export default class SuggestionResult extends PureComponent {
         </div>    
         <div className={'facets'}>
           spaces: 
-          <SuggestionSpaces spaces={spaces} selected={request.space}/>
+          <SuggestionSpaces spaces={spaces} selected={request.get('space')}/>
           <hr/>
           systems:
-          <SuggestionSystems systems={systems} selected={request.system}/>
+          <SuggestionSystems systems={systems} selected={request.get('system')}/>
           <hr/>
            properties: 
-          <SuggestionProperties properties={properties} selected={request.propertyId}/>
+          <SuggestionProperties properties={properties} selected={request.get('property')}/>
         </div>
       </div>
     );

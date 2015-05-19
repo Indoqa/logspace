@@ -16,7 +16,7 @@ export default class SuggestionSpaces extends PureComponent {
       return (
         <div>
           <ul>
-              <li> {this.props.selected} (<a onClick={() => onSpaceCleared()}>x</a>) </li>
+              <li> {this.props.selected.get('name')} (<a onClick={() => onSpaceCleared()}>x</a>) </li>
            </ul> 
         </div>
       );
