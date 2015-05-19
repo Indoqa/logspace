@@ -7,11 +7,14 @@
  */
 import React from 'react'
 import {Link} from 'react-router'
-import classnames from 'classnames';
+import classnames from 'classnames'
+
 import AddTimeSerie from '../time-series/add-time-series.react'
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
-import Chart  from '../result/result-chart.react.js'
-import Drawer  from '../drawer/drawer.react.js'
+import Chart from '../result/result-chart.react.js'
+import Drawer from '../drawer/drawer.react.js'
+import Header from '../header/header.react'
+
 import {getTimeWindow} from '../time-window/store';
 import {getTimeSeries} from '../time-series/store';
 import {getActivePanel} from '../drawer/store';
@@ -24,7 +27,7 @@ export default class TimeSeries extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       navDrawerCss: 'navigation-drawer',
       mainCss: 'main'
@@ -43,7 +46,7 @@ export default class TimeSeries extends React.Component {
           'main-reduced' : !this.state.mainCss['main-reduced']
         }
       });
-    this.forceUpdate();
+    this.forceUpdate()
   }
 
   render() {
@@ -51,16 +54,14 @@ export default class TimeSeries extends React.Component {
 
     return (
       <div className='time-series'>
-        <div className='header'>
-          logspace.io
-        </div>
+        <Header />
 
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
             <div> {timeWindow.get('start')} </div>
             <div> {timeWindow.get('end')} </div>
             <div> {timeWindow.get('gap')} </div>
-            <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />  
+            <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />
             <hr/>
             <button onClick={() => onShowSuggestions()}>+</button>
             <hr/>
@@ -70,12 +71,13 @@ export default class TimeSeries extends React.Component {
             </div>
           </div>
           <div className="right">
-            <Drawer 
-              activePanel={getActivePanel()} 
-              suggestions={getSuggestions()} 
-              timeWindow={getTimeWindow()} 
+            <Drawer
+              activePanel={getActivePanel()}
+              suggestions={getSuggestions()}
+              timeWindow={getTimeWindow()}
               toggle={() => this.toggleNavigationDrawer()} />
-          </div>  
+          </div>
+
         </div>
 
         <div className={classnames(this.state.mainCss)}>
