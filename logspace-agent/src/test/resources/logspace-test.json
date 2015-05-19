@@ -1,6 +1,6 @@
 {
   "id" : "logspace-test",
-  "class-name" : "io.logspace.agent.impl.TestAgentController",
+  "class-name" : "io.logspace.agent.test.TestAgentController",
   "parameters" : {
     "output-file" : "./target/logspace-events.json"
   }
