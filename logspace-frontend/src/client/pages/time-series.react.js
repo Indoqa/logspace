@@ -63,11 +63,6 @@ export default class TimeSeries extends React.Component {
             </div>
           </div>
           <div className="right">
-            <AddTimeSerie onSuccess={() => this.toggleNavigationDrawer()}/>
-            <hr/>
-            <br/>
-            <br/>
-            <br/>
             <Suggestions suggestions={getSuggestions()}/>
           </div>  
         </div>

@@ -19,17 +19,60 @@ export function getSuggestions() {
 export const SuggestionStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onNewSuggestionQuery:
-      refreshSelections(data); 
-    break;  
+      updateRequest("text", data);
+      refreshSelections(); 
+      break;  
+
+    case actions.onSystemSelected:
+      updateRequest("system", data);
+      refreshSelections(); 
+      break;  
+
+    case actions.onSystemCleared:
+      updateRequest("system", null);
+      refreshSelections(); 
+      break;    
+
+    case actions.onSpaceSelected:
+      updateRequest("space", data);
+      refreshSelections(); 
+      break;  
+
+    case actions.onSpaceCleared:
+      updateRequest("space", null);
+      refreshSelections(); 
+      break;      
+    case actions.onPropertySelected:
+      updateRequest("propertyId", data);
+      refreshSelections(); 
+      break;  
+
+    case actions.onPropertyCleared:
+      updateRequest("propertyId", null);
+      refreshSelections(); 
+      break;      
   }
 });
 
-function refreshSelections(query) {
-  if (query == null || query.length == 0) {
+function updateRequest(key, value) {
+  suggestionCursor(suggestions => {
+    return suggestions.setIn(["request", key], value)
+  });    
+}
+
+function refreshSelections() {
+  var request = getSuggestions().get("request").toJS();
+  
+  if (request.text == null || request.text.length < 3) {
     storeEmptyResult()  
+    return
   }
 
-  axios.get(getRestUrl('/suggest/') + query)
+  suggestionCursor(suggestions => {
+    return suggestions.setIn(["result", "loading"], true)
+  });  
+
+  axios.post(getRestUrl('/suggest'), request)
   .then(function (response) {
     storeSuccessResult(response.data)  
   })
@@ -39,37 +82,42 @@ function refreshSelections(query) {
 }  
 
 function storeErrorResult(serverResponse) {
-  suggestionCursor(result => {
-    return suggestionCursor.set("error", true);
-  });
+  suggestionCursor(suggestions => {
+    return suggestions.set("result", Immutable.fromJS({
+        error: true,
+        loading: false,
+        spaces: [],
+        systems: [],
+        propertyNames: [],
+        agentDescriptions: []
+    }));
+  });  
 }
 
 function storeEmptyResult() {
   suggestionCursor(suggestions => {
-    return suggestions.set("spaces", [])
-  });
-
-  suggestionCursor(suggestions => {
-    return suggestions.set("agentIds", [])
-  });
-
-  suggestionCursor(suggestions => {
-    return suggestions.set("propertyNames", [])
-  });
+    return suggestions.set("result", Immutable.fromJS({
+        error: false,
+        loading: false,
+        spaces: [],
+        systems: [],
+        propertyNames: [],
+        agentDescriptions: []
+    }));
+  });  
 }
 
 function storeSuccessResult(responseJson) {
   suggestionCursor(suggestions => {
-    return suggestions.set("spaces", Immutable.fromJS(responseJson.spaces))
-  });
-
-  suggestionCursor(suggestions => {
-    return suggestions.set("agentIds", Immutable.fromJS(responseJson.agentIds))
-  });
-
-  suggestionCursor(suggestions => {
-    return suggestions.set("propertyNames", Immutable.fromJS(responseJson.propertyNames))
-  });
+    return suggestions.set("result", Immutable.fromJS({
+        error: false,
+        loading: false,
+        spaces: responseJson.spaces,
+        systems: responseJson.systems,
+        propertyNames: responseJson.propertyNames,
+        agentDescriptions: responseJson.agentDescriptions
+    }));
+  });  
 }
 
 
