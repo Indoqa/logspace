@@ -7,6 +7,8 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import io.logspace.hq.core.api.NotModifiedException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -93,14 +95,12 @@ public class OrdersResource extends AbstractSpaceResource {
 
         File file = this.getConfigFile(controllerId);
         if (!file.exists()) {
-            res.status(404);
-            return "";
+            throw new OrderNotFoundException("There is no order for controller with ID '" + controllerId + "'.");
         }
 
         Date ifModifiedSince = parseHttpDate(req.headers("If-Modified-Since"));
         if (ifModifiedSince != null && ifModifiedSince.getTime() / 1000 == file.lastModified() / 1000) {
-            res.status(304);
-            return "";
+            throw new NotModifiedException();
         }
 
         try (InputStream inputStream = new FileInputStream(file)) {

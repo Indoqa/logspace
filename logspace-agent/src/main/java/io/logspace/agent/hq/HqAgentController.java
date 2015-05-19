@@ -7,6 +7,7 @@
  */
 package io.logspace.agent.hq;
 
+import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
@@ -191,7 +192,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         } catch (ConnectException cex) {
             this.logger.error("Could not download orders because the HQ was not available: {}", cex.getMessage());
         } catch (HttpResponseException hrex) {
-            if (hrex.getStatusCode() == 404) {
+            if (NotFound.equals(hrex.getStatusCode())) {
                 this.logger.error("There was no order available: {}", hrex.getMessage());
             } else {
                 this.logger.error("Failed to download order.", hrex);

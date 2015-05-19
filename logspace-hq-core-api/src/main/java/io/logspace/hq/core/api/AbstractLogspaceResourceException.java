@@ -7,6 +7,8 @@
  */
 package io.logspace.hq.core.api;
 
+import io.logspace.agent.api.HttpStatusCode;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,20 +16,20 @@ public abstract class AbstractLogspaceResourceException extends RuntimeException
 
     private static final long serialVersionUID = 1L;
 
-    private final int responseCode;
+    private final HttpStatusCode statusCode;
     private final ErrorData errorData;
 
-    public AbstractLogspaceResourceException(String message, int responseCode, String type) {
+    public AbstractLogspaceResourceException(String message, HttpStatusCode statusCode, String type) {
         super(message);
 
-        this.responseCode = responseCode;
+        this.statusCode = statusCode;
         this.errorData = ErrorData.create(type, message);
     }
 
-    public AbstractLogspaceResourceException(String message, int responseCode, String type, Throwable cause) {
+    public AbstractLogspaceResourceException(String message, HttpStatusCode statusCode, String type, Throwable cause) {
         super(message, cause);
 
-        this.responseCode = responseCode;
+        this.statusCode = statusCode;
         this.errorData = ErrorData.create(type, message);
     }
 
@@ -35,8 +37,8 @@ public abstract class AbstractLogspaceResourceException extends RuntimeException
         return this.errorData;
     }
 
-    public int getResponseCode() {
-        return this.responseCode;
+    public HttpStatusCode getStatusCode() {
+        return this.statusCode;
     }
 
     public void setParameter(String name, Object value) {

@@ -8,8 +8,6 @@
 package io.logspace.hq.webapp.resource;
 
 import io.logspace.hq.core.api.AbstractLogspaceResourceException;
-import io.logspace.hq.core.api.InvalidSpaceTokenException;
-import io.logspace.hq.core.api.MissingSpaceTokenException;
 import io.logspace.hq.core.api.Spaces;
 
 import javax.annotation.PostConstruct;
@@ -59,7 +57,7 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
     }
 
     private void mapLogspaceException(Response res, AbstractLogspaceResourceException e) {
-        res.status(e.getResponseCode());
+        res.status(e.getStatusCode().getCode());
         res.type("application/json");
         res.body(this.getTransformer().render(e.getErrorData()));
     }

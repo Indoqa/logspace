@@ -21,11 +21,11 @@ public abstract class AbstractEventProperty<T> implements EventProperty<T> {
 
     protected AbstractEventProperty(String key, T value) {
         if (key == null) {
-            throw new NullPointerException("The key must not be null.");
+            throw new IllegalArgumentException("The key must not be null.");
         }
 
         if (value == null) {
-            throw new NullPointerException("The value must not be null.");
+            throw new IllegalArgumentException("The value must not be null.");
         }
 
         this.key = key;

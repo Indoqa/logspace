@@ -7,6 +7,7 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import static io.logspace.agent.api.HttpStatusCode.Accepted;
 import io.logspace.agent.api.json.EventJsonDeserializer;
 import io.logspace.hq.core.api.EventService;
 
@@ -35,7 +36,7 @@ public class EventResource extends AbstractSpaceResource {
 
         this.eventService.store(EventJsonDeserializer.fromJson(req.bodyAsBytes()), space);
 
-        res.status(202);
+        res.status(Accepted.getCode());
         return null;
     }
 }
