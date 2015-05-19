@@ -17,7 +17,7 @@ import io.logspace.agent.os.api.OsEventBuilder;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 
-public class MemoryAgent extends AbstractAgent {
+public final class MemoryAgent extends AbstractAgent {
 
     private MemoryAgent(String agentId) {
         super(agentId, "os/memory", TriggerType.Off, TriggerType.Cron);

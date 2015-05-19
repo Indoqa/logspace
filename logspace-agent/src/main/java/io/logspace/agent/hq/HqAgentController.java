@@ -178,26 +178,26 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     public void update() {
         try {
             this.uploadCapabilities();
+        } catch (ConnectException cex) {
+            this.logger.error("Could not upload capabilities because the HQ was not available: {}", cex.getMessage());
+            // no need to try downloading as well
+            return;
         } catch (IOException ioex) {
-            if (ioex instanceof ConnectException) {
-                this.logger.error("Could not upload capabilities because the HQ was not available: {}", ioex.getMessage());
-                // no need to try downloading as well
-                return;
-            }
-
             this.logger.error("Failed to upload capabilities.", ioex);
         }
 
         try {
             this.downloadOrder();
-        } catch (IOException ioex) {
-            if (ioex instanceof ConnectException) {
-                this.logger.error("Could not download orders because the HQ was not available: {}", ioex.getMessage());
-            } else if (ioex instanceof HttpResponseException && ((HttpResponseException) ioex).getStatusCode() == 404) {
-                this.logger.error("There was no order available: {}", ioex.getMessage());
+        } catch (ConnectException cex) {
+            this.logger.error("Could not download orders because the HQ was not available: {}", cex.getMessage());
+        } catch (HttpResponseException hrex) {
+            if (hrex.getStatusCode() == 404) {
+                this.logger.error("There was no order available: {}", hrex.getMessage());
             } else {
-                this.logger.error("Failed to download order.", ioex);
+                this.logger.error("Failed to download order.", hrex);
             }
+        } catch (IOException ioex) {
+            this.logger.error("Failed to download order.", ioex);
         }
     }
 
@@ -226,14 +226,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                 this.uploadEvents(eventsForUpload);
                 this.purgeUploadedEvents(eventsForUpload);
             } while (this.persistentQueue.size() >= this.uploadSize);
+        } catch (ConnectException cex) {
+            this.logger.error("Could not upload events because the HQ was not available: {}", cex.getMessage());
         } catch (IOException ioex) {
-            if (ioex instanceof ConnectException) {
-                this.logger.error("Could not upload events because the HQ was not available: {}", ioex.getMessage());
-            } else {
-                this.logger.error("Failed to download order.", ioex);
-            }
-
-            this.logger.error("Will retry uploading events in the next commit.");
+            this.logger.error("Failed to download order.", ioex);
         }
     }
 
