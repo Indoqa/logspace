@@ -56,19 +56,13 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
 
 function updateRequest(key, value) {
   suggestionCursor(suggestions => {
-    return suggestions.setIn(["request", key], value)
+    return suggestions.setIn(["request", key], Immutable.fromJS(value));
   });    
 }
 
 function refreshSelections() {
   var request = getSuggestions().get("request").toJS();
-  var translatedRequest = {
-    text: request.text,
-    systemId: request.text,
-    text: request.text,
-    text: request.text
-  }
-  
+ 
   if (request.text == null || request.text.length < 3) {
     storeEmptyResult()  
     return
@@ -76,9 +70,16 @@ function refreshSelections() {
 
   suggestionCursor(suggestions => {
     return suggestions.setIn(["result", "loading"], true)
-  });  
+  });
 
-  axios.post(getRestUrl('/suggest'), request)
+  var translatedRequest = {
+    text: request.text,
+    systemId: (request.system)?request.system.id:null,
+    spaceId: (request.space)?request.space.id:null,
+    propertyId: (request.property)?request.property.id:null,
+  }
+
+  axios.post(getRestUrl('/suggest'), translatedRequest)
   .then(function (response) {
     storeSuccessResult(response.data)  
   })
