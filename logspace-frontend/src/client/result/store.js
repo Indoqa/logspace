@@ -75,8 +75,7 @@ function createRestRequest(timeSeries, timeWindow) {
             "end": timeWindow.get('end'),
             "gap": timeWindow.get('gap')
       },
-      "space": "development",
-      "agentId": item.get("agentId"),        
+      "globalAgentId": item.get("agentId"),        
       "propertyId": item.get("propertyId"),
       "aggregate": item.get("aggregate")     
     });
