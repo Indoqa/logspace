@@ -6,6 +6,26 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-.add-series-entry
-  margin-top 30px
-  text-align center
+@require '../app/variables'
+
+#app
+  .header
+    z-index 99
+    background none repeat scroll 0 0 $color-primary
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
+
+  .navigation-drawer
+    z-index 1
+    background-color $color3
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
+
+  .time-window-values
+    background-color #bbdefb
+
+  .tools
+    background-color $color5
+    display none
+
+  .add-series-entry
+    margin-top 30px
+    text-align center

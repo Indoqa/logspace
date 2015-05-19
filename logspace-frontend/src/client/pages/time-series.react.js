@@ -10,18 +10,18 @@ import {Link} from 'react-router'
 import classnames from 'classnames'
 
 import AddTimeSerie from '../time-series/add-time-series.react'
-import TimeSeriesList  from '../time-series/time-series-list.react.js'
-import Chart from '../result/result-chart.react.js'
-import Drawer from '../drawer/drawer.react.js'
+import TimeSeriesList  from '../time-series/time-series-list.react'
+import Chart from '../result/result-chart.react'
+import Drawer from '../drawer/drawer.react'
 import Header from '../header/header.react'
+import TimeWindowValues from '../time-window/time-window-values.react'
 
-import {getTimeWindow} from '../time-window/store';
-import {getTimeSeries} from '../time-series/store';
-import {getActivePanel} from '../drawer/store';
-import {getResult} from '../result/store';
-import {getSuggestions} from '../suggestions/store';
-import {onShowSuggestions} from '../suggestions/actions';
-import {onShowTimeWindowForm} from '../time-window/actions';
+import {getTimeSeries} from '../time-series/store'
+import {getActivePanel} from '../drawer/store'
+import {getResult} from '../result/store'
+import {getSuggestions} from '../suggestions/store'
+import {getTimeWindow} from '../time-window/store'
+import {onShowSuggestions} from '../suggestions/actions'
 
 require('./time-series.styl')
 
@@ -52,27 +52,18 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    var timeWindow = getTimeWindow();
-
     return (
       <div className='time-series'>
         <Header />
 
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
-            <div> {timeWindow.get('start')} </div>
-            <div> {timeWindow.get('end')} </div>
-            <div> {timeWindow.get('gap')} </div>
-            <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />
-            <hr/>
-
-            <button onClick={() => onShowSuggestions()}>+</button>
-            <hr/>
+            <TimeWindowValues />
 
             <TimeSeriesList items={getTimeSeries()} />
 
             <div className='add-series-entry'>
-              <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => this.toggleNavigationDrawer()}>
+              <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
                 <i>+</i>
               </button>
             </div>

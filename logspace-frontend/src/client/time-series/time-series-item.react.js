@@ -18,8 +18,18 @@ export default class TimeSeriesItem extends PureComponent {
     onTimeSeriesDeleted(this.props.item);
   }
 
+  getPropertyName() {
+    const id = this.props.item.get("propertyId");
+    const pattern = /[\w]*?_[\w]*?_(.*)/
+    const result = pattern.exec(id)
+    if(result != null) {
+      return result[1]
+    }
+    return id
+  }
+
   render() {
-    var bgStyle = {
+    const bgStyle = {
       backgroundColor: this.props.item.get("color")
     }
 
@@ -27,10 +37,9 @@ export default class TimeSeriesItem extends PureComponent {
       <div className='time-series-item'>
         <div className='color' style={bgStyle}></div>
         <div className='inner'>
-          {this.props.item.get("id")}<br/>
           {this.props.item.get("agentId")}<br/>
-          {this.props.item.get("propertyId")}<br/>
-          {this.props.item.get("aggregate")}<br/>
+          {this.props.item.get("aggregate")} of {this.getPropertyName()}
+          <br/>
           <button onClick={() => this.deleteTimeSeries()}>delete</button>
         </div>
       </div>

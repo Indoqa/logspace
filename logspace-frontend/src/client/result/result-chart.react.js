@@ -15,84 +15,81 @@ require ('./result-chart.css')
 export default class Chart extends PureComponent {
 
   componentDidMount() {
-    this.chart = c3.generate(this.chartOptions());
+    this.chart = c3.generate(this.chartOptions())
   }
 
   componentWillUnmount() {
-    this.chart.destroy();
+    this.chart.destroy()
   }
 
   componentDidUpdate() {
     if (this.props.result.get("empty") || this.props.result.get("error")) {
       this.chart.unload()
-      return;
+      return
     }
 
-    var chartData = this.props.result.get("chartData").toJS();
-    var currentData = this.chart.data();
+    const chartData = this.props.result.get("chartData").toJS()
+    const currentData = this.chart.data()
 
-    var keysToUnload = currentData.map(function(item) {
+    const keysToUnload = currentData.map(function(item) {
       if (chartData.columnKeys.indexOf(item.id) > -1 ) {
-        return null;  
-      } 
-      return item.id;
-    }); 
+        return null
+      }
+      return item.id
+    })
 
     this.chart.load(
       {
-          colors: chartData.colors,
-          columns: chartData.columns,
-          unload: keysToUnload
-      }  
+        colors: chartData.colors,
+        columns: chartData.columns,
+        unload: keysToUnload
+      }
     );
 
     this.chart.xgrids([
-        {value: 0, text:chartData.columns[0][1]},
-        {value: chartData.columns[0].length - 2, text: chartData.columns[0][chartData.columns[0].length - 1]}
-      ]);
-    }  
+      {value: 0, text:chartData.columns[0][1]},
+      {value: chartData.columns[0].length - 2, text: chartData.columns[0][chartData.columns[0].length - 1]}
+    ])
+  }
 
   transform(type) {
-    this.chart.transform(type);
+    this.chart.transform(type)
   }
 
   render() {
     return (
-        <div>
-          <div id="chart"  / >
-          <br/>
-          <button onClick={() => this.transform('bar')}>bar</button>
-          <button onClick={() => this.transform('line')}>line</button>
-          <button onClick={() => this.transform('spline')}>spline</button>
-          <button onClick={() => this.transform('step')}>step</button>
-          <button onClick={() => this.transform('area')}>area</button>
-          <button onClick={() => this.transform('area-spline')}>area-spline</button>
-          <button onClick={() => this.transform('area-step')}>area-step</button>
-          <button onClick={() => this.transform('scatter')}>scatter</button>
-          <button onClick={() => this.transform('pie')}>pie</button>
-          <button onClick={() => this.transform('donut')}>donut</button>
-          <button onClick={() => this.transform('gauge')}>gauge</button>
-        </div>
-    );
+      <div>
+        <div id="chart"  / >
+        <br/>
+        <button onClick={() => this.transform('bar')}>bar</button>
+        <button onClick={() => this.transform('line')}>line</button>
+        <button onClick={() => this.transform('spline')}>spline</button>
+        <button onClick={() => this.transform('step')}>step</button>
+        <button onClick={() => this.transform('area')}>area</button>
+        <button onClick={() => this.transform('area-spline')}>area-spline</button>
+        <button onClick={() => this.transform('area-step')}>area-step</button>
+        <button onClick={() => this.transform('scatter')}>scatter</button>
+      </div>
+    )
   }
 
   chartOptions() {
     return {
       data: {
           x: 'x',
-          columns: [          ],        
+          columns: [],
         },
       axis: {
         x: {
-            type: 'category',
-            tick: {
-              culling: true
-            }
-        },
-         y: {
-            show: false
+          type: 'category',
+          tick: {
+            culling: true
           }
         },
+        y: {
+          show: false
+        }
+      },
       grid: {
         x: {
           show: false
@@ -105,7 +102,7 @@ export default class Chart extends PureComponent {
         show: false
       },
       point: {
-         r: 2
+        r: 2
       },
       size: {
         height: 480

@@ -23,16 +23,22 @@ const TimeSeriesItem = Record({
   space: ''
 });
 
-const colors = ['blue', 'red', 'green', 'rgb(247, 191, 255)', 'rgb(194, 191, 255)',
-  'rgb(213, 191, 255)', 'rgb(191, 255, 218)', 'rgb(255, 209, 191)', 'rgb(247, 191, 255)', 'rgb(213, 191, 255)', 'rgb(191, 255, 218)',
-  'rgb(255, 209, 191)', 'rgb(247, 191, 255)', 'rgb(213, 191, 255)', 'rgb(191, 255, 218)', 'rgb(255, 209, 191)',
-  'rgb(247, 191, 255)'
-];
-  
+const colors = [
+  '#e51c23',
+  '#5677fc',
+  '#ffeb3b',
+  '#259b24',
+  '#673ab7',  
+  '#009688',
+  '#e91e63',
+  '#00bcd4',
+  '#ff5722'
+]
+
 export function getTimeSeries() {
   return timeSeriesCursor()
-} 
-  
+}
+
 export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onTimeSeriesAdded:
@@ -48,12 +54,11 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
         return timeSeries.push(item);
       });
       break;
-      
+
       case actions.onTimeSeriesDeleted:
         timeSeriesCursor(timeSeries => {
           return timeSeries.delete(timeSeries.indexOf(data))
         });
       break;
   }
-});    
-  
+});
