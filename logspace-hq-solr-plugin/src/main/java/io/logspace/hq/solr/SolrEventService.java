@@ -175,8 +175,6 @@ public class SolrEventService implements EventService {
                             agentDescription.setSystem(system);
                             agentDescription.setSpace(space);
 
-                            result.addAgentDescription(agentDescription);
-
                             List<NamedList<?>> propertyIdBuckets = this.getSubFacetBuckets(eachGlobalAgentIdBucket,
                                     "property_id-facet");
                             for (NamedList<?> eachPropertyIdBucket : propertyIdBuckets) {
@@ -374,7 +372,7 @@ public class SolrEventService implements EventService {
         stringBuilder.append(formatSolrDate(start));
         stringBuilder.append(" TO ");
         stringBuilder.append(formatSolrDate(end));
-        stringBuilder.append("]");
+        stringBuilder.append("}");
 
         return stringBuilder.toString();
     }
