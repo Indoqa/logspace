@@ -8,7 +8,7 @@
 
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
-import {onTimeSeriesDeleted} from './actions';
+import {onTimeSeriesDeleted, onEditTimeSeries} from './actions';
 
 require('./time-series-item.styl')
 
@@ -22,6 +22,7 @@ export default class TimeSeriesItem extends PureComponent {
     const id = this.props.item.get("propertyId");
     const pattern = /[\w]*?_[\w]*?_(.*)/
     const result = pattern.exec(id)
+    
     if(result != null) {
       return result[1]
     }
@@ -40,6 +41,7 @@ export default class TimeSeriesItem extends PureComponent {
           {this.props.item.get("agentId")}<br/>
           {this.props.item.get("aggregate")} of {this.getPropertyName()}
           <br/>
+          <button onClick={() => onEditTimeSeries(this.props.item)}>edit</button>
           <button onClick={() => this.deleteTimeSeries()}>delete</button>
         </div>
       </div>

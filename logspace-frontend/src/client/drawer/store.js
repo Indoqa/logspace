@@ -28,9 +28,13 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       setActivePanel(Panels.TIME_WINDOW);
       break;  
 
-    case timeSeriesActions.onNewTimeSeriesEdited:  
-      setActivePanel(Panels.TIMESERIES_NEW);
+    case timeSeriesActions.onNewTimeSeries:  
+      setActivePanel(Panels.TIMESERIES);
       break;  
+
+    case timeSeriesActions.onEditTimeSeries:  
+      setActivePanel(Panels.TIMESERIES);
+      break;    
 
     case timeWindowActions.onTimeWindowChange:
       setActivePanel(null);
@@ -40,7 +44,7 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       setActivePanel(null);
       break;
 
-    case timeSeriesActions.onTimeSeriesAdded:
+    case timeSeriesActions.onTimeSeriesSaved:
       setActivePanel(null);  
       break;
   }

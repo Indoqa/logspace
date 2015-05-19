@@ -6,7 +6,14 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-export const SUGGESTIONS = "suggestions";
-export const TIME_WINDOW = "time-window";
-export const TIMESERIES = "time-series";
-
+export const COLORS = [
+  '#e51c23',
+  '#5677fc',
+  '#ffeb3b',
+  '#259b24',
+  '#673ab7',  
+  '#009688',
+  '#e91e63',
+  '#00bcd4',
+  '#ff5722'
+]

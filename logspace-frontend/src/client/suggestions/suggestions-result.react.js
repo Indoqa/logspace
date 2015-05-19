@@ -10,7 +10,7 @@ import PureComponent from '../components/purecomponent.react';
 import SuggestionSystems from './suggestions-systems.react';
 import SuggestionSpaces from './suggestions-spaces.react';
 import SuggestionProperties from './suggestions-properties.react';
-import {onNewTimeSeriesEdited} from '../time-series/actions';
+import {onNewTimeSeries} from '../time-series/actions';
 
 export default class SuggestionResult extends PureComponent {
 
@@ -29,25 +29,28 @@ export default class SuggestionResult extends PureComponent {
     return (
       <div>
         <div className={'result'}>
-          result:
           <ul>
            {this.props.result.get('agentDescriptions').map(function(item, index) {
               var agent = item.toJS();
               return (
                 <li key={index}>
-                  <a onClick={() => onNewTimeSeriesEdited(agent)}> {item.get('globalId')} </a>s 
+                  <a onClick={() => onNewTimeSeries(agent)}> 
+                    {item.get('name')} <br/>
+                    {item.get('space')};{item.get('system')} 
+                  </a>
                 </li>
               );
             })}
           </ul>
         </div>
         <div className={'facets'}>
-          spaces:
+          <b>spaces:</b>
           <SuggestionSpaces spaces={spaces} selected={request.get('space')}/>
-          <hr/>
-          systems:
+          <br/>
+          <b>systems:</b>
           <SuggestionSystems systems={systems} selected={request.get('system')}/>
-          <hr/>
+          <br/>
+          <b>properties</b>
           <SuggestionProperties properties={properties} selected={request.get('property')}/>
         </div>
       </div>

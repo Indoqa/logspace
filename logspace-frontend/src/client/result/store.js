@@ -30,7 +30,7 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
       refreshResult()
       break
 
-    case timeSeriesActions.onTimeSeriesAdded:
+    case timeSeriesActions.onTimeSeriesSaved:
       waitFor(TimeSeriesStore_dispatchToken)
       refreshResult()
       break

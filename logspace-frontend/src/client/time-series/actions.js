@@ -9,17 +9,27 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
-export function onTimeSeriesAdded(data) {
-  dispatch(onTimeSeriesAdded, data);
+export function onTimeSeriesPropertyChanged(key, value) {
+  var data ={key: key, value: value}	
+  dispatch(onTimeSeriesPropertyChanged, data);
 }
 
-export function onNewTimeSeriesEdited(agentDescriptions) {
-  dispatch(onNewTimeSeriesEdited, agentDescriptions);
+export function onTimeSeriesSaved() {
+  dispatch(onTimeSeriesSaved);
+}
+
+export function onNewTimeSeries(agentDescriptions) {
+  dispatch(onNewTimeSeries, agentDescriptions);
+}
+
+export function onEditTimeSeries(timeSeries) {
+  dispatch(onEditTimeSeries, timeSeries);
+}
 
 export function onTimeSeriesDeleted(deletedTimeSeries) {
   dispatch(onTimeSeriesDeleted, deletedTimeSeries);
 }
 
 setToString('timeSeries', {
-  onTimeSeriesAdded, onNewTimeSeriesEdited, onTimeSeriesDeleted
+  onTimeSeriesSaved, onNewTimeSeries, onTimeSeriesDeleted, onEditTimeSeries, onTimeSeriesPropertyChanged
 });  
