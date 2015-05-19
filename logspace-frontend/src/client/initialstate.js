@@ -23,8 +23,19 @@ export default {
    }
  },
   "suggestions": {
-  	"spaces": [],
-    "agentIds": [],
-    "propertyNames": []
+    "request" : {
+      "text": null,
+      "system": null,
+      "space": null,
+      "propertyId": null
+    },
+    "result": {
+      "spaces": [],
+      "systems": [],
+      "propertyNames": [],
+      "agentDescriptions": [],
+      "loading": false  
+    }
+  	
   }
 };

@@ -9,8 +9,9 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
-export function onTimeSeriesAdded(newTimeSeriesData) {
-  dispatch(onTimeSeriesAdded, newTimeSeriesData);
+export function onTimeSeriesAdded(agentId, propertyId, aggregate) {
+  var data = {agentId: agentId, propertyId: propertyId, aggregate: aggregate};
+  dispatch(onTimeSeriesAdded, data);
 }
   
 export function onTimeSeriesDeleted(deletedTimeSeries) {
