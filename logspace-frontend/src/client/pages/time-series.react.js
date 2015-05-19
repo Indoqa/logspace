@@ -65,12 +65,11 @@ export default class TimeSeries extends React.Component {
             <div> {timeWindow.get('gap')} </div>
             <input type="button" value="change time" onClick={() => onShowTimeWindowForm()} />
             <hr/>
-            
+
             <button onClick={() => onShowSuggestions()}>+</button>
             <hr/>
 
             <TimeSeriesList items={getTimeSeries()} />
-            <hr />
 
             <div className='add-series-entry'>
               <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => this.toggleNavigationDrawer()}>
@@ -81,6 +80,7 @@ export default class TimeSeries extends React.Component {
             <div className='tools'>
               Tools
             </div>
+
           </div>
           <div className="right">
             <Drawer

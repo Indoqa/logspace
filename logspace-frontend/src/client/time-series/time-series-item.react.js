@@ -6,12 +6,14 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
- import React from 'react';
- import PureComponent from '../components/purecomponent.react';
- import {onTimeSeriesDeleted} from './actions';
+import React from 'react';
+import PureComponent from '../components/purecomponent.react';
+import {onTimeSeriesDeleted} from './actions';
 
- export default class TimeSeriesItem extends PureComponent {
-  
+require('./time-series-item.styl')
+
+export default class TimeSeriesItem extends PureComponent {
+
   deleteTimeSeries() {
     onTimeSeriesDeleted(this.props.item);
   }
@@ -20,16 +22,18 @@
     var bgStyle = {
       backgroundColor: this.props.item.get("color")
     }
-    
-    return (
-      <div style={bgStyle}>
-        {this.props.item.get("id")}<br/>
-        {this.props.item.get("agentId")}<br/>
-        {this.props.item.get("propertyId")}<br/>
-        {this.props.item.get("aggregate")}<br/>
-        <button onClick={() => this.deleteTimeSeries()}>delete</button>
-      </div>
-      );
-  }
 
+    return (
+      <div className='time-series-item'>
+        <div className='color' style={bgStyle}></div>
+        <div className='inner'>
+          {this.props.item.get("id")}<br/>
+          {this.props.item.get("agentId")}<br/>
+          {this.props.item.get("propertyId")}<br/>
+          {this.props.item.get("aggregate")}<br/>
+          <button onClick={() => this.deleteTimeSeries()}>delete</button>
+        </div>
+      </div>
+    )
+  }
 }

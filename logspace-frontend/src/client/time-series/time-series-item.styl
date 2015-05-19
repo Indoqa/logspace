@@ -6,6 +6,23 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-.add-series-entry
-  margin-top 30px
-  text-align center
+@require '../app/variables'
+
+.time-series-item
+  height 160px
+  margin-top 15px
+
+  .color
+    float left
+    width 7px
+    margin-left 10px;
+    height 160px
+
+  .inner
+    float left
+    font-size 1.4rem
+    width $navigation-drawer-width - 37px
+    overflow hidden
+    height 150px
+    padding 5px
+    background-color $color6

@@ -11,12 +11,14 @@ import immutable from 'immutable';
 import PureComponent from '../components/purecomponent.react';
 import TimeSeriesItem  from '../time-series/time-series-item.react.js'
 
+require('./time-series-list.styl')
+
 export default class TimeSeriesList extends PureComponent {
   render() {
     const items = this.props.items;
-    
+
     return (
-      <div>
+      <div className='time-series-list'>
         {items.map(function(item) {
           return <TimeSeriesItem key={item.get("id")} item={item} />;
         })}

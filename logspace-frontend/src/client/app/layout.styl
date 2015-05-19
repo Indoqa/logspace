@@ -41,7 +41,7 @@ body
     position absolute
 
   .header
-    height: $header-height
+    height $header-height
 
   .navigation-drawer
     float left
@@ -52,9 +52,11 @@ body
     overflow-x hidden
     z-index 999
     slide-navigation-drawer-transformation()
+
     .left
       width: $navigation-drawer-width
       position: absolute
+
     .right
       width $navigation-drawer-width-expanded-only
       position absolute
@@ -74,6 +76,7 @@ body
 
   .main
     margin-left $navigation-drawer-width
+    padding 20px
     position relative
     height s("calc(100% - %s)", $header-height)
     slide-navigation-drawer-transformation()
