@@ -146,8 +146,8 @@ public class SolrEventService implements EventService {
         }
 
         this.addFilterQuery(solrQuery, FIELD_PROPERTY_ID, input.getPropertyId());
-        this.addFilterQuery(solrQuery, FIELD_SPACE, input.getSpace());
-        this.addFilterQuery(solrQuery, FIELD_SYSTEM, input.getSystem());
+        this.addFilterQuery(solrQuery, FIELD_SPACE, input.getSpaceId());
+        this.addFilterQuery(solrQuery, FIELD_SYSTEM, input.getSystemId());
 
         try {
             QueryResponse response = this.solrClient.query(solrQuery);

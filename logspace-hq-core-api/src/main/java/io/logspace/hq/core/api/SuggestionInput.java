@@ -11,19 +11,19 @@ public class SuggestionInput {
 
     private String text;
     private String propertyId;
-    private String system;
-    private String space;
+    private String systemId;
+    private String spaceId;
 
     public String getPropertyId() {
         return this.propertyId;
     }
 
-    public String getSpace() {
-        return this.space;
+    public String getSpaceId() {
+        return this.spaceId;
     }
 
-    public String getSystem() {
-        return this.system;
+    public String getSystemId() {
+        return this.systemId;
     }
 
     public String getText() {
@@ -34,12 +34,12 @@ public class SuggestionInput {
         this.propertyId = propertyId;
     }
 
-    public void setSpace(String space) {
-        this.space = space;
+    public void setSpaceId(String spaceId) {
+        this.spaceId = spaceId;
     }
 
-    public void setSystem(String system) {
-        this.system = system;
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 
     public void setText(String text) {
