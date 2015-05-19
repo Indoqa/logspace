@@ -36,6 +36,8 @@ export default {
       "agentDescriptions": [],
       "loading": false
     }
-
+  },
+  "drawer": {
+    "activePanel": null
   }
 };

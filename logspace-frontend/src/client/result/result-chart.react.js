@@ -108,7 +108,7 @@ export default class Chart extends PureComponent {
          r: 2
       },
       size: {
-        height: 680
+        height: 480
       }
     }
   }

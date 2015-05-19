@@ -8,8 +8,8 @@
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import SuggestionResult from './suggestions-result.react';
-
 import {onNewSuggestionQuery} from './actions';
+import {onCloseDrawer} from '../drawer/actions';
 
 require('./suggestions.styl')
 
@@ -23,9 +23,13 @@ export default class Suggestions extends PureComponent {
     return (
       <div className={'suggestions'}>
         <div className={'query'}>
-           <input onChange={this.handleQueryChange.bind(this)} /> <br/>
+           <input onChange={this.handleQueryChange.bind(this)} value={this.props.suggestions.get("request").get("text")}/>
+           <input type="button" value="cancel" onClick={() => onCloseDrawer()}/> 
         </div>
-        <SuggestionResult result={this.props.suggestions.get("result")} request={this.props.suggestions.get("request") }/>
+        <SuggestionResult 
+          result={this.props.suggestions.get("result")} 
+          request={this.props.suggestions.get("request")}
+        />
       </div>
     );
   }
