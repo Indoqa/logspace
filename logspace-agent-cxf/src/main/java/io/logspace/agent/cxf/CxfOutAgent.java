@@ -69,7 +69,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
         this.agentId = agentId;
     }
 
-    private class DelegateAgent extends AbstractAgent {
+    private static class DelegateAgent extends AbstractAgent {
 
         private static final String AGENT_ID = "CXF";
 

@@ -192,7 +192,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         } catch (ConnectException cex) {
             this.logger.error("Could not download orders because the HQ was not available: {}", cex.getMessage());
         } catch (HttpResponseException hrex) {
-            if (NotFound.equals(hrex.getStatusCode())) {
+            if (NotFound.matches(hrex.getStatusCode())) {
                 this.logger.error("There was no order available: {}", hrex.getMessage());
             } else {
                 this.logger.error("Failed to download order.", hrex);

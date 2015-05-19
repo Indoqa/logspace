@@ -26,7 +26,7 @@ public final class Optional<T> {
 
     private Optional(T value) {
         if (value == null) {
-            throw new NullPointerException("The value must not be null.");
+            throw new IllegalArgumentException("The value must not be null.");
         }
 
         this.value = value;

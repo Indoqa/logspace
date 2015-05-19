@@ -17,11 +17,11 @@ public enum HttpStatusCode {
         this.code = code;
     }
 
-    public boolean equals(int statusCode) {
-        return this.code == statusCode;
-    }
-
     public int getCode() {
         return this.code;
+    }
+
+    public boolean matches(int statusCode) {
+        return this.code == statusCode;
     }
 }
