@@ -9,9 +9,9 @@ package io.logspace.agent.os;
 
 import static io.logspace.agent.os.OsEventBuilder.createMemoryBuilder;
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.impl.AgentControllerProvider;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;

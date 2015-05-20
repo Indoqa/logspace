@@ -8,12 +8,12 @@
 package io.logspace.agent.hq;
 
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
+import io.logspace.agent.api.AgentControllerInitializationException;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
 import io.logspace.agent.api.json.EventJsonSerializer;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.impl.AgentControllerInitializationException;
 
 import java.io.IOException;
 import java.util.Collection;

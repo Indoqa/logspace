@@ -67,7 +67,6 @@
     <module>logspace-agent-cxf</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-solr</module>
-    <module>logspace-agent-web</module>
     <module>logspace-frontend</module>
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
@@ -417,11 +416,6 @@
             <artifactId>indoqa-commons-solr-server-factory</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
-        <artifactId>logspace-agent-web</artifactId>
-        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>

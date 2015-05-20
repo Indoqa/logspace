@@ -8,8 +8,8 @@
 package io.logspace.agent.solr;
 
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.impl.AgentControllerProvider;
 
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;

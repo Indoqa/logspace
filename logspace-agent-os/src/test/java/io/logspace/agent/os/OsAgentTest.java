@@ -9,7 +9,7 @@ package io.logspace.agent.os;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import io.logspace.agent.impl.AgentControllerProvider;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.test.TestAgentController;
 
 import org.junit.Test;

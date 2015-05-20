@@ -24,11 +24,15 @@ import java.util.Date;
 public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
     private EventJsonDeserializer(byte[] data) throws IOException {
-        super(data);
+        super();
+
+        this.setData(data);
     }
 
     private EventJsonDeserializer(InputStream inputStream) throws IOException {
-        super(inputStream);
+        super();
+
+        this.setInputStream(inputStream);
     }
 
     public static Event eventFromJson(byte[] data) throws IOException {

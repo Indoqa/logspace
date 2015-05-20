@@ -8,6 +8,7 @@
 package io.logspace.agent.impl;
 
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.order.TriggerType;

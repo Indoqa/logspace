@@ -5,11 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.agent.impl;
-
-import io.logspace.agent.api.AgentController;
-import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer;
+package io.logspace.agent.api;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +55,7 @@ public final class AgentControllerProvider {
 
     public static synchronized void setDescription(InputStream inputStream) {
         try {
-            setDescription(AgentControllerDescriptionJsonDeserializer.fromJson(inputStream));
+            setDescription(AgentControllerDescriptionFactory.fromJson(inputStream));
         } catch (IOException ioex) {
             throw new AgentControllerException("Could not load description.", ioex);
         } finally {

@@ -11,12 +11,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.DefaultEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.hq.HqAgentController;
-import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.it.AbstractLogspaceTest;
 
 import java.util.UUID;

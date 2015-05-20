@@ -8,12 +8,12 @@
 package io.logspace.agent.test;
 
 import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerException;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonSerializer;
 import io.logspace.agent.impl.AbstractAgentController;
-import io.logspace.agent.impl.AgentControllerException;
-import io.logspace.agent.impl.AgentControllerProvider;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,7 +47,8 @@ public class TestAgentController extends AbstractAgentController {
             return;
         }
 
-        AgentControllerDescription description = AgentControllerDescription.withClass(TestAgentController.class);
+        AgentControllerDescription description = new AgentControllerDescription();
+        description.setClassName(TestAgentController.class.getName());
         description.setParameters(Arrays.asList(Parameter.create(OUTPUT_FILE_PARAMETER, outputFile)));
         AgentControllerProvider.setDescription(description);
     }

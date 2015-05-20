@@ -26,6 +26,10 @@
   <dependencies>
     <dependency>
       <groupId>io.logspace</groupId>
+      <artifactId>logspace-agent-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
       <artifactId>logspace-agent-os</artifactId>
     </dependency>
 

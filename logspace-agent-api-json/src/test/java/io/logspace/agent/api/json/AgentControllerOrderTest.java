@@ -13,6 +13,7 @@ import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,8 @@ public class AgentControllerOrderTest {
             expected.setAgentOrders(this.getRandomAgentOrders());
 
             String json = AgentControllerOrdersJsonSerializer.toJson(expected);
-            AgentControllerOrder actual = AgentControllerOrdersJsonDeserializer.fromJson(json.getBytes("UTF-8"));
+            AgentControllerOrder actual = AgentControllerOrdersJsonDeserializer.fromJson(new ByteArrayInputStream(json
+                    .getBytes("UTF-8")));
 
             this.compare(expected, actual);
         }

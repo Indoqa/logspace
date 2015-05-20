@@ -11,9 +11,9 @@ import static io.logspace.agent.api.order.TriggerType.Event;
 import static io.logspace.agent.api.order.TriggerType.Off;
 import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.impl.AgentControllerProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;

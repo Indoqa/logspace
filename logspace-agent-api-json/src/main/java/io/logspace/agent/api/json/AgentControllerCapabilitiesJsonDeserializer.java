@@ -28,11 +28,15 @@ import java.util.List;
 public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJsonDeserializer {
 
     private AgentControllerCapabilitiesJsonDeserializer(byte[] data) throws IOException {
-        super(data);
+        super();
+
+        this.setData(data);
     }
 
     private AgentControllerCapabilitiesJsonDeserializer(InputStream inputStream) throws IOException {
-        super(inputStream);
+        super();
+
+        this.setInputStream(inputStream);
     }
 
     public static AgentControllerCapabilities fromJson(byte[] data) throws IOException {

@@ -9,10 +9,10 @@ package io.logspace.agent.cxf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.cxf.resource.TestCxfResource;
-import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.test.TestAgentController;
 
 import java.util.ArrayList;

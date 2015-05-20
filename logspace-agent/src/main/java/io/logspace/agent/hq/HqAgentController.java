@@ -11,6 +11,9 @@ import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerException;
+import io.logspace.agent.api.AgentControllerInitializationException;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
@@ -18,9 +21,6 @@ import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AbstractAgentController;
-import io.logspace.agent.impl.AgentControllerException;
-import io.logspace.agent.impl.AgentControllerInitializationException;
-import io.logspace.agent.impl.AgentControllerProvider;
 import io.logspace.agent.scheduling.AgentExecutor;
 import io.logspace.agent.scheduling.AgentScheduler;
 
@@ -90,7 +90,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     public static void install(String id, String baseUrl, String queueFile, String spaceToken) {
-        AgentControllerDescription description = AgentControllerDescription.withClass(HqAgentController.class);
+        AgentControllerDescription description = new AgentControllerDescription();
+
+        description.setClassName(HqAgentController.class.getName());
         description.setId(id);
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
         description.addParameter(Parameter.create(QUEUE_FILE_PARAMETER, queueFile));

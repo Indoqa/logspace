@@ -8,9 +8,9 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.impl.AgentControllerProvider;
 
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.GarbageCollectorMXBean;

@@ -25,14 +25,6 @@ public class AgentControllerDescription {
 
     private List<Parameter> parameters = new ArrayList<Parameter>();
 
-    public static AgentControllerDescription withClass(Class<? extends AgentController> agentControllerClass) {
-        AgentControllerDescription result = new AgentControllerDescription();
-
-        result.setClassName(agentControllerClass.getName());
-
-        return result;
-    }
-
     public void addParameter(Parameter parameter) {
         this.parameters.add(parameter);
     }

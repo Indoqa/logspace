@@ -30,16 +30,10 @@ import java.util.List;
 
 public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDeserializer {
 
-    private AgentControllerOrdersJsonDeserializer(byte[] data) throws IOException {
-        super(data);
-    }
-
     private AgentControllerOrdersJsonDeserializer(InputStream inputStream) throws IOException {
-        super(inputStream);
-    }
+        super();
 
-    public static AgentControllerOrder fromJson(byte[] data) throws IOException {
-        return new AgentControllerOrdersJsonDeserializer(data).deserialize();
+        this.setInputStream(inputStream);
     }
 
     public static AgentControllerOrder fromJson(InputStream inputStream) throws IOException {

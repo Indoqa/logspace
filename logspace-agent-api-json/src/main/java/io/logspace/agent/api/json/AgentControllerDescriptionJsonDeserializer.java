@@ -14,29 +14,27 @@ import static io.logspace.agent.api.AgentControllerDescription.FIELD_CLASS_NAME;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_ID;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETERS;
 import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerDescriptionDeserializer;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AgentControllerDescriptionJsonDeserializer extends AbstractJsonDeserializer {
-
-    private AgentControllerDescriptionJsonDeserializer(byte[] data) throws IOException {
-        super(data);
-    }
-
-    private AgentControllerDescriptionJsonDeserializer(InputStream inputStream) throws IOException {
-        super(inputStream);
-    }
+public final class AgentControllerDescriptionJsonDeserializer extends AbstractJsonDeserializer implements
+        AgentControllerDescriptionDeserializer {
 
     public static AgentControllerDescription fromJson(byte[] data) throws IOException {
-        return new AgentControllerDescriptionJsonDeserializer(data).deserialize();
+        AgentControllerDescriptionJsonDeserializer deserializer = new AgentControllerDescriptionJsonDeserializer();
+        return deserializer.fromJson(new ByteArrayInputStream(data));
     }
 
-    public static AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
-        return new AgentControllerDescriptionJsonDeserializer(inputStream).deserialize();
+    @Override
+    public AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
+        this.setInputStream(inputStream);
+        return this.deserialize();
     }
 
     private AgentControllerDescription deserialize() throws IOException {

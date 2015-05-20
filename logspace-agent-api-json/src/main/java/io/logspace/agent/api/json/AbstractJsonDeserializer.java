@@ -21,15 +21,7 @@ public abstract class AbstractJsonDeserializer {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
-    private final JsonParser jsonParser;
-
-    protected AbstractJsonDeserializer(byte[] data) throws IOException {
-        this.jsonParser = JSON_FACTORY.createParser(data);
-    }
-
-    protected AbstractJsonDeserializer(InputStream inputStream) throws IOException {
-        this.jsonParser = JSON_FACTORY.createParser(inputStream);
-    }
+    private JsonParser jsonParser;
 
     protected void advance() throws IOException {
         this.jsonParser.nextToken();
@@ -97,6 +89,14 @@ public abstract class AbstractJsonDeserializer {
 
     protected String readString() throws IOException {
         return this.jsonParser.getText();
+    }
+
+    protected void setData(byte[] data) throws IOException {
+        this.jsonParser = JSON_FACTORY.createParser(data);
+    }
+
+    protected void setInputStream(InputStream inputStream) throws IOException {
+        this.jsonParser = JSON_FACTORY.createParser(inputStream);
     }
 
     protected void validateEnd() {
