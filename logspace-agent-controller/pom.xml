@@ -19,9 +19,9 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-agent</artifactId>
+  <artifactId>logspace-agent-controller</artifactId>
 
-  <name>Logspace Agent</name>
+  <name>Logspace Agent Controller</name>
 
   <properties>
     <!-- The agent should be usable in environments running on older JVMs. -->
