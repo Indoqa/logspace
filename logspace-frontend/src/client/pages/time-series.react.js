@@ -85,7 +85,7 @@ export default class TimeSeries extends React.Component {
           </div>
         </div>
 
-        <div className={classnames(this.state.mainCss)}>
+        <div id='main' className={classnames(this.state.mainCss)}>
           <div className='chart-header'>
             <span className='title'>New logspace.io chart</span>
             <span className='edit'>[edit]</span>
