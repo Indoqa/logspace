@@ -62,9 +62,10 @@ export default class Chart extends PureComponent {
     const minWindowWidth = 1024
     const sidebarWidth = 250
     const chartPadding = 20 * 2
+    const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = width * 0.45
+    const height = width * heightWidthRatio
 
     return {
       width : width,
