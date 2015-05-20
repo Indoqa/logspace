@@ -14,23 +14,20 @@ import io.logspace.agent.api.order.TriggerType;
 
 public abstract class AbstractAgent implements Agent {
 
-    private String id;
-    private String type;
+    private final String id;
+    private final String type;
 
     private AgentCapabilities capabilities;
     private AgentController agentController;
-
-    protected AbstractAgent() {
-        super();
-    }
 
     protected AbstractAgent(String id, String type, TriggerType... triggerType) {
         super();
 
         this.id = id;
         this.type = type;
-
         this.updateCapabilities(triggerType);
+
+        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     @Override
@@ -69,7 +66,17 @@ public abstract class AbstractAgent implements Agent {
         this.agentController.send(event);
     }
 
-    protected final void setAgentController(AgentController agentController) {
+    protected final void updateCapabilities(TriggerType... triggerTypes) {
+        AgentCapabilities agentCapabilities = new AgentCapabilities();
+
+        agentCapabilities.setId(this.getId());
+        agentCapabilities.setType(this.getType());
+        agentCapabilities.setSupportedTriggerTypes(triggerTypes);
+
+        this.capabilities = agentCapabilities;
+    }
+
+    private void setAgentController(AgentController agentController) {
         if (this.agentController != null) {
             this.agentController.unregister(this);
         }
@@ -79,23 +86,5 @@ public abstract class AbstractAgent implements Agent {
         if (this.agentController != null) {
             this.agentController.register(this);
         }
-    }
-
-    protected final void setId(String id) {
-        this.id = id;
-    }
-
-    protected final void setType(String type) {
-        this.type = type;
-    }
-
-    protected final void updateCapabilities(TriggerType... triggerTypes) {
-        AgentCapabilities agentCapabilities = new AgentCapabilities();
-
-        agentCapabilities.setId(this.getId());
-        agentCapabilities.setType(this.getType());
-        agentCapabilities.setSupportedTriggerTypes(triggerTypes);
-
-        this.capabilities = agentCapabilities;
     }
 }

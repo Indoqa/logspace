@@ -8,7 +8,6 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -28,8 +27,6 @@ public class JvmAgent extends AbstractAgent {
 
     protected JvmAgent() {
         super("jvm-" + getJvmIdentifier(), "jvm", TriggerType.Off, TriggerType.Cron);
-
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     private static String getJvmIdentifier() {

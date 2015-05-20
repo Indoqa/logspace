@@ -49,8 +49,6 @@ public class ApplicationTest {
 
         public TestAgent() {
             super("test", "test", TriggerType.Off, TriggerType.Event);
-
-            this.setAgentController(AgentControllerProvider.getAgentController());
         }
 
         public void triggerEvent() {

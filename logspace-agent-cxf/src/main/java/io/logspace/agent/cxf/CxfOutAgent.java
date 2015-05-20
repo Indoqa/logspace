@@ -11,7 +11,6 @@ import static io.logspace.agent.api.order.TriggerType.Event;
 import static io.logspace.agent.api.order.TriggerType.Off;
 import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
 
@@ -75,8 +74,6 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
 
         public DelegateAgent(String id) {
             super(id, AGENT_ID, Off, Event);
-
-            this.setAgentController(AgentControllerProvider.getAgentController());
         }
 
         public void sendCxfEvent(Message message) {

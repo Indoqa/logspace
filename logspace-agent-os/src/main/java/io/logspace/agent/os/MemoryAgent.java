@@ -9,7 +9,6 @@ package io.logspace.agent.os;
 
 import static io.logspace.agent.os.OsEventBuilder.createMemoryBuilder;
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -20,8 +19,6 @@ public final class MemoryAgent extends AbstractAgent {
 
     private MemoryAgent(String agentId) {
         super(agentId, "os/memory", TriggerType.Off, TriggerType.Cron);
-
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     public static MemoryAgent create(String agentId) {
