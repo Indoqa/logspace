@@ -36,11 +36,11 @@
     <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent</artifactId>
+      <artifactId>logspace-agent-api</artifactId>
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent-os-api</artifactId>
+      <artifactId>logspace-agent</artifactId>
     </dependency>
 
     <!-- Test -->

@@ -409,11 +409,6 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-agent-os-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
         <artifactId>logspace-agent-solr</artifactId>
         <version>${project.version}</version>
         <exclusions>
