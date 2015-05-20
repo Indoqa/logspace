@@ -8,47 +8,21 @@
 package io.logspace.agent.logging;
 
 import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.impl.AbstractAgentController;
+import io.logspace.agent.console.ConsoleAgentController;
 
-import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class LoggingAgentController extends AbstractAgentController {
+public class LoggingAgentController extends ConsoleAgentController {
 
-    public static final String MESSAGE_PATTERN_PARAMETER_NAME = "message-pattern";
-
-    private static final String DEFAULT_MESSAGE_PATTERN = "{id} ({global-id}, {parent-id}) - [{type}] - {timestamp}: {properties}";
-    private static final String[] PARAMETERS = {"{id}", "{global-id}", "{parent-id}", "{type}", "{timestamp}", "{properties}"};
-
-    private String messagePattern = DEFAULT_MESSAGE_PATTERN;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public LoggingAgentController(AgentControllerDescription agentControllerDescription) {
-        super();
-
-        this.messagePattern = agentControllerDescription.getParameterValue(MESSAGE_PATTERN_PARAMETER_NAME, DEFAULT_MESSAGE_PATTERN);
+        super(agentControllerDescription);
     }
 
     @Override
-    public void send(Collection<Event> events) {
-        for (Event eachEvent : events) {
-            this.logger.error(this.fillInParameters(this.messagePattern, eachEvent));
-        }
-    }
-
-    private String fillInParameters(String message, Event event) {
-        StringBuilder stringBuilder = new StringBuilder(message);
-
-        for (String eachParameter : PARAMETERS) {
-            while (true) {
-                int start = stringBuilder.indexOf(eachParameter);
-                if (start == -1) {
-                    break;
-                }
-                int end = start + eachParameter.length();
-                stringBuilder.replace(start, end, event.getId());
-            }
-        }
-
-        return stringBuilder.toString();
+    protected void writeEvent(String formattedEvent) {
+        this.logger.info(formattedEvent);
     }
 }

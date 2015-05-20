@@ -19,12 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public abstract class AbstractAgentController implements AgentController {
-
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Map<String, Agent> agents = new ConcurrentHashMap<String, Agent>();
 
@@ -135,7 +130,7 @@ public abstract class AbstractAgentController implements AgentController {
         try {
             this.system = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            this.logger.error("Failed to retrieve host name.", e);
+            System.err.println("Failed to retrieve host name: " + e);
         }
     }
 }

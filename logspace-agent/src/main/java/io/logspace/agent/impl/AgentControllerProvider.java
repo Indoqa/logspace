@@ -17,10 +17,8 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class AgentControllerProvider {
 
@@ -28,8 +26,6 @@ public final class AgentControllerProvider {
 
     private static AgentController agentController;
     private static AgentControllerDescription agentControllerDescription;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AgentControllerProvider.class);
 
     private AgentControllerProvider() {
         // hide utility class constructor
@@ -77,7 +73,7 @@ public final class AgentControllerProvider {
         }
 
         try {
-            LOGGER.info("Loading AgentControllerDescription from {}.", descriptionURL);
+            System.out.println(MessageFormat.format("Loading AgentControllerDescription from ''{0}''.", descriptionURL));
             setDescription(descriptionURL.openStream());
         } catch (IOException ioex) {
             throw new AgentControllerException("Could not load description from URL '" + descriptionURL + "'.", ioex);

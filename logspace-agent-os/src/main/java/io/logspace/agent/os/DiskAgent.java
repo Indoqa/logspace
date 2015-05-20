@@ -11,7 +11,6 @@ import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.impl.AgentControllerProvider;
-import io.logspace.agent.os.api.OsEventBuilder;
 
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;

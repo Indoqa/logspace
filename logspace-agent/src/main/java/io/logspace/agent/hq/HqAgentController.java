@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.http.client.HttpResponseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.squareup.tape.FileObjectQueue;
 
@@ -45,6 +47,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
 
     private static final int DEFAULT_COMMIT_DELAY = 300;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean modifiedAgents;
 
