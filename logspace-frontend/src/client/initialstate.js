@@ -8,23 +8,39 @@
 
 export default {
   "timeWindow": {
-    "start": "2015-04-16",
-    "end": "2015-04-17",
-    "gap": 86400000  
+    "start": "2014-01-01",
+    "end": "2014-01-02",
+    "gap": 3600
  },
  "timeSeries": [
-   
- ],  
+
+ ],
+ "editedTimeSeries": {
+
+ },
  "result": {
    "translatedResult": {
    	 "error": false,
-     "empty": true,	
-     "series": null	
+     "empty": true,
+     "series": null
    }
  },
   "suggestions": {
-  	"spaces": [],
-    "agentIds": [],
-    "propertyNames": []
+    "request" : {
+      "text": null,
+      "system": null,
+      "space": null,
+      "propertyId": null
+    },
+    "result": {
+      "spaces": [],
+      "systems": [],
+      "propertyNames": [],
+      "agentDescriptions": [],
+      "loading": false
+    }
+  },
+  "drawer": {
+    "activePanel": null
   }
 };

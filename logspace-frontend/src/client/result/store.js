@@ -5,61 +5,64 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import Immutable from 'immutable';
-import axios from 'axios';
-import * as timeWindowActions from '../time-window/actions';
-import * as timeSeriesActions from '../time-series/actions';
-import * as resultActions from './actions';
-import {resultCursor} from '../state';
-import {register,waitFor} from '../dispatcher';
-import {getRestUrl} from '../rest';
-import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store';
-import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store';
+import Immutable from 'immutable'
+import axios from 'axios'
+
+import {resultCursor} from '../state'
+import {register,waitFor} from '../dispatcher'
+
+import * as timeWindowActions from '../time-window/actions'
+import * as timeSeriesActions from '../time-series/actions'
+import * as resultActions from './actions'
+
+import {getRestUrl} from '../rest'
+import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store'
+import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store'
 
 export function getResult() {
-  return resultCursor().get("translatedResult");
+  return resultCursor().get("translatedResult")
 }
 
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.onTimeWindowChange:
-      waitFor(TimeWindowStore_dispatchToken);
-      refreshResult();  
-      break;
-      
-    case timeSeriesActions.onTimeSeriesAdded:
-      waitFor(TimeSeriesStore_dispatchToken);
-      refreshResult();  
-      break;  
-      
+      waitFor(TimeWindowStore_dispatchToken)
+      refreshResult()
+      break
+
+    case timeSeriesActions.onTimeSeriesSaved:
+      waitFor(TimeSeriesStore_dispatchToken)
+      refreshResult()
+      break
+
     case timeSeriesActions.onTimeSeriesDeleted:
-      waitFor(TimeSeriesStore_dispatchToken);
-      refreshResult();  
-      break;    
+      waitFor(TimeSeriesStore_dispatchToken)
+      refreshResult()
+      break
 
     case resultActions.onResultRefreshed:
-      refreshResult();  
-      break;      
+      refreshResult()
+      break
   }
-});  
+})
 
 function refreshResult() {
-  var timeSeries = getTimeSeries();
-  var timeWindow = getTimeWindow();
+  var timeSeries = getTimeSeries()
+  var timeWindow = getTimeWindow()
 
   if (timeSeries.isEmpty()) {
     storeEmptyResult()
-    return;
+    return
   }
 
   axios.post(getRestUrl('/query'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
-    storeSuccessResult(timeSeries, response.data)  
+    storeSuccessResult(timeSeries, response.data)
   })
   .catch(function (response) {
     console.log(response)
-    storeErrorResult(response)  
-  });
+    storeErrorResult(response)
+  })
 }
 
 
@@ -67,22 +70,21 @@ function createRestRequest(timeSeries, timeWindow) {
   var request = {
     "dataDefinitions": []
   }
-  
-  timeSeries.forEach(function(item) { 
+
+  timeSeries.forEach(function(item) {
     request.dataDefinitions.push({
       "dateRange": {
-            "start": timeWindow.get('start'),
-            "end": timeWindow.get('end'),
-            "gap": timeWindow.get('gap')
+        "start": timeWindow.get('start'),
+        "end": timeWindow.get('end'),
+        "gap": timeWindow.get('gap')
       },
-      "space": "development",
-      "agentId": item.get("agentId"),        
+      "globalAgentId": item.get("agentId"),
       "propertyId": item.get("propertyId"),
-      "aggregate": item.get("aggregate")     
-    });
+      "aggregate": item.get("aggregate")
+    })
   })
 
-  return request;  
+  return request
 }
 
 function storeEmptyResult() {
@@ -90,8 +92,8 @@ function storeEmptyResult() {
     return result.set("translatedResult", Immutable.fromJS({
       empty: true,
       error: false
-    }));
-  });  
+    }))
+  })
 }
 
 function storeErrorResult(serverResponse) {
@@ -100,21 +102,21 @@ function storeErrorResult(serverResponse) {
       empty: true,
       error: true,
       errorStatus: serverResponse.status,
-      errorText: serverResponse.statusText 
-    }));
-  });
+      errorText: serverResponse.statusText
+    }))
+  })
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  var columns = [createXAxisLabals(responseJson)];
-  var columnKeys = [];
-  var colors = {};
-  
-  {timeSeries.forEach(function(item, index) {
-      columnKeys.push(item.get("id")),
-      columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")));  
-      colors[item.get("id")] = item.get("color");
-  })}  
+  var columns = [createXAxisLabals(responseJson)]
+  var columnKeys = []
+  var colors = {}
+
+  timeSeries.forEach(function(item, index) {
+      columnKeys.push(item.get("id"))
+      columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")))
+      colors[item.get("id")] = item.get("color")
+  })
 
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
   var chartData = {
@@ -122,45 +124,44 @@ function storeSuccessResult(timeSeries, responseJson) {
       columnKeys: columnKeys,
       columns: columns
   }
- 
+
   resultCursor(result => {
     return result.set("translatedResult", Immutable.fromJS( {
       empty: false,
       error: false,
       chartData: chartData
-    }));
-  });
-} 
+    }))
+  })
+}
 
 function createXAxisLabals(responseJson) {
-  var labels = ['x'];
+  let labels = ['x']
 
-  var start = new Date(responseJson.dateRange.start).getTime();
-  var end = new Date(responseJson.dateRange.end).getTime();
-  var gap = responseJson.dateRange.gap;
+  const start = new Date(responseJson.dateRange.start).getTime()
+  const end = new Date(responseJson.dateRange.end).getTime()
+  const gap = responseJson.dateRange.gap
 
-  for (var i = start; i < end; i = i + gap) {
+  for (let i = start; i < end; i = i + gap) {
     labels.push(new Date(i).toJSON());
   }
-  
-  return labels;  
+
+  return labels
 }
 
 
 function normalizeData(array, id, scaleMin, scaleMax) {
-  const scaleRange = scaleMax - scaleMin;
+  const scaleRange = scaleMax - scaleMin
 
   var values =  array.map(function(item) {
      if (item != null) {
-       return item ; 
+       return item
      }
 
-     return null;
-   });  
+     return null
+   })
 
    // add id as first value of data array, see http://c3js.org/reference.html#data-columns
-   values.unshift(id);
+   values.unshift(id)
 
-  return values;
-} 
-
+  return values
+}

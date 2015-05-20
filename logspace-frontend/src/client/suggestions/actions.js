@@ -9,10 +9,40 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
+export function onShowSuggestions() {
+  dispatch(onShowSuggestions);
+}
+
 export function onNewSuggestionQuery(newSuggestionQuery) {
   dispatch(onNewSuggestionQuery, newSuggestionQuery);
 }
+
+export function onSystemSelected(selectedSystem) {
+  dispatch(onSystemSelected, selectedSystem);
+}
+
+export function onSystemCleared() {
+  dispatch(onSystemCleared);
+}
+
+export function onSpaceSelected(selectedSpace) {
+  dispatch(onSpaceSelected, selectedSpace);
+}
+
+export function onSpaceCleared() {
+  dispatch(onSpaceCleared);
+}
+
+export function onPropertySelected(selectedProperty) {
+  dispatch(onPropertySelected, selectedProperty);
+}
+
+export function onPropertyCleared() {
+  dispatch(onPropertyCleared);
+}
+
   
 setToString('suggestions', {
-  onNewSuggestionQuery
+  onNewSuggestionQuery, onSystemSelected, onSystemCleared, onSpaceSelected, onSpaceCleared, 
+  onPropertySelected, onPropertyCleared, onShowSuggestions
 });  

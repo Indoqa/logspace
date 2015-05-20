@@ -10,5 +10,7 @@ import State from '../lib/state';
 export const state = new State(require('./initialstate'));
 export const timeWindowCursor = state.cursor(['timeWindow']);
 export const timeSeriesCursor = state.cursor(['timeSeries']);
+export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries']);
 export const resultCursor = state.cursor(['result']);
 export const suggestionCursor = state.cursor(['suggestions']);
+export const drawerCursor = state.cursor(['drawer']);

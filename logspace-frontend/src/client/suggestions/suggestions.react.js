@@ -7,36 +7,29 @@
  */
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
+import SuggestionResult from './suggestions-result.react';
 import {onNewSuggestionQuery} from './actions';
+import {onCloseDrawer} from '../drawer/actions';
+
+require('./suggestions.styl')
 
 export default class Suggestions extends PureComponent {
   
   handleQueryChange(event) {
       onNewSuggestionQuery(event.target.value)
   }
-  
+
   render() {
     return (
-      <div>
-        <input onChange={this.handleQueryChange.bind(this)} /> <br/>
-        spaces: 
-        <ul>
-          {this.props.suggestions.get('spaces').map(function(item, index) {
-            return <li key={index}> {item} </li>;
-          })}
-        </ul>
-         agents: 
-        <ul>
-          {this.props.suggestions.get('agentIds').map(function(item, index) {
-            return <li key={index}> {item} </li>;
-          })}
-        </ul>
-         properties: 
-        <ul>
-          {this.props.suggestions.get('propertyNames').map(function(item, index) {
-            return <li key={index}> {item} </li>;
-          })}
-        </ul>
+      <div className={'suggestions'}>
+        <div className={'query'}>
+           <input onChange={this.handleQueryChange.bind(this)} value={this.props.suggestions.get("request").get("text")}/>
+           <input type="button" value="cancel" onClick={() => onCloseDrawer()}/> 
+        </div>
+        <SuggestionResult 
+          result={this.props.suggestions.get("result")} 
+          request={this.props.suggestions.get("request")}
+        />
       </div>
     );
   }

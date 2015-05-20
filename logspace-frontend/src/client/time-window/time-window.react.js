@@ -10,6 +10,7 @@ import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import {onTimeWindowChange} from './actions';
 import {TIMEWINDOW_CONSTANTS} from './store'
+import {onCloseDrawer} from '../drawer/actions';
 
 export default class TimeWindow extends PureComponent {
   
@@ -55,6 +56,7 @@ export default class TimeWindow extends PureComponent {
             <option value={TIMEWINDOW_CONSTANTS.gap.year}>pro Jahr</option>
           </select>  
           <input type="button" value="set time" onClick={this.handleSubmit.bind(this)} />  
+          <input type="button" value="cancel" onClick={() => onCloseDrawer()}/> 
         </form>
       </div>
     );

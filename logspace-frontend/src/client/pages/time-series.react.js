@@ -7,22 +7,30 @@
  */
 import React from 'react'
 import {Link} from 'react-router'
-import classnames from 'classnames';
-import AddTimeSerie from '../time-series/add-time-series.react'
-import TimeWindow  from '../time-window/time-window.react.js'
+import classnames from 'classnames'
+
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
-import Suggestions  from '../suggestions/suggestions.react.js'
+import TimeWindowValues  from '../time-window/time-window-values.react.js'
 import Chart  from '../result/result-chart.react.js'
-import {getTimeWindow} from '../time-window/store';
-import {getTimeSeries} from '../time-series/store';
-import {getResult} from '../result/store';
-import {getSuggestions} from '../suggestions/store';
+import Drawer  from '../drawer/drawer.react.js'
+import Header  from '../header/header.react.js'
+
+import {getTimeWindow} from '../time-window/store'
+import {getTimeSeries, getEditedTimeSeries} from '../time-series/store'
+import {getActivePanel} from '../drawer/store'
+import {getResult} from '../result/store'
+import {getSuggestions} from '../suggestions/store'
+
+import {onShowSuggestions} from '../suggestions/actions'
+import {onShowTimeWindowForm} from '../time-window/actions'
+
+require('./time-series.styl')
 
 export default class TimeSeries extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       navDrawerCss: 'navigation-drawer',
       mainCss: 'main'
@@ -41,42 +49,50 @@ export default class TimeSeries extends React.Component {
           'main-reduced' : !this.state.mainCss['main-reduced']
         }
       });
-    this.forceUpdate();
+    this.forceUpdate()
   }
 
   render() {
+    var timeWindow = getTimeWindow();
+
     return (
       <div className='time-series'>
-        <div className='header'>
-          logspace.io
-        </div>
+        <Header />
 
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
-            <TimeWindow timeWindow={getTimeWindow()} />
-            <hr/>
-            <button onClick={() => this.toggleNavigationDrawer()}>+</button>
-            <hr/>
+            <TimeWindowValues />
             <TimeSeriesList items={getTimeSeries()} />
+
+            <div className='add-series-entry'>
+              <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
+                <i>+</i>
+              </button>
+            </div>
+
             <div className='tools'>
               Tools
             </div>
+
           </div>
           <div className="right">
-            <AddTimeSerie onSuccess={() => this.toggleNavigationDrawer()}/>
-            <hr/>
-            <br/>
-            <br/>
-            <br/>
-            <Suggestions suggestions={getSuggestions()}/>
-          </div>  
+            <Drawer
+              activePanel={getActivePanel()}
+              suggestions={getSuggestions()}
+              timeWindow={getTimeWindow()}
+              editedTimeSeries={getEditedTimeSeries()}
+              toggle={() => this.toggleNavigationDrawer()} />
+          </div>
         </div>
 
         <div className={classnames(this.state.mainCss)}>
+          <div className='chart-header'>
+            <span className='title'>New logspace.io chart</span>
+            <span className='edit'>[edit]</span>
+          </div>
           <Chart series={getTimeSeries()} result={getResult()}/>
         </div>
       </div>
     )
   }
-
 }

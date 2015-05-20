@@ -6,96 +6,22 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 @import '../../../node_modules/normalize.css/normalize.css'
-// @import './skeleton.css'
-@import url(http://fonts.googleapis.com/css?family=Raleway);
+@import url(http://fonts.googleapis.com/css?family=Roboto:300,400,700);
 
-$header-height = 50px
-$tools-height = 50px
-$navigation-drawer-width = 250px
-$navigation-drawer-width-expanded = 500px
-$app-min-width = 1024px
+@import './variables'
+@import './layout'
+@import './buttons'
 
-calc(prop, val, fallback) {
-  if (fallback) {
-   {prop}: fallback;
-  }
-  {prop}: s("calc(%s)", val);
-}
-
-slide-navigation-drawer-transformation() {
-  transition all 0.15s ease-out
-}
+html
+  font-size 62.5%
 
 body
-  background-color #fff
-  color #000
-  overflow hidden
+  font-family $font-main
 
 #app
-  background-color yellow
-  height 100%
-  width 100%
-  min-width $app-min-width
-  position absolute
-  overflow hidden
-
-.page
-  height 100%
-  width 100%
-  position absolute
-  overflow hidden
-
-.time-series
-  height 100%
-  width 100%
-  position absolute
-  background-color magenta
-
-.header
-  height: $header-height
-
-.navigation-drawer
-  background-color red
-  float left
-  width $navigation-drawer-width
-  height s("calc(100% - %s)", $header-height)
-  position absolute
-  overflow auto
-  slide-navigation-drawer-transformation()
-  .left
-    width: $navigation-drawer-width
-    position: absolute
-  .right
-    width: $navigation-drawer-width
-    position: absolute
-    left: $navigation-drawer-width
-    border-left: 1px solid black
-    height: 100%
-    background: blue
-  
-.navigation-drawer:hover
-  width 700px
-
-.navigation-drawer-expanded
-  width $navigation-drawer-width-expanded
-
-.tools
-  background-color lime
-  position fixed
-  bottom 0px
-  height $tools-height
-  width 100%
-
-.main
-  background-color white
-  margin-left $navigation-drawer-width
-  position relative
-  height s("calc(100% - %s)", $header-height)
-  slide-navigation-drawer-transformation()
-
-.main-reduced
-  margin-left $navigation-drawer-width-expanded
-
-  
-
-  
+  font-size 1.5em
+  line-height 1.6
+  font-weight 400
+  font-family $font-main
+  background-color $color6
+  color $color-text
