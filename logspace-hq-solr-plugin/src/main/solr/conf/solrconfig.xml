@@ -525,8 +525,8 @@
          (DocList) based on a query, a sort, and the range of documents requested.  
       -->
     <queryResultCache class="solr.LRUCache"
-                     size="0"
-                     initialSize="0"
+                     size="512"
+                     initialSize="512"
                      autowarmCount="0"/>
    
     <!-- Document Cache

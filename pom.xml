@@ -61,6 +61,7 @@
   </properties>
 
   <modules>
+    <module>logspace-agent-all</module>
     <module>logspace-agent-api</module>
     <module>logspace-agent-api-json</module>
     <module>logspace-agent-controller</module>
@@ -399,6 +400,11 @@
       <dependency>
         <groupId>io.logspace</groupId>
         <artifactId>logspace-agent-api-json</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
+        <artifactId>logspace-agent-cxf</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

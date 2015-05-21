@@ -11,6 +11,7 @@ import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -31,10 +32,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +51,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
@@ -57,26 +62,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.indoqa.commons.lang.util.TimeTracker;
+
 @Named
 public class SolrEventService implements EventService {
 
-    private static final int SLICE_UPDATE_DELAY = 1000;
+    private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
+    private static final long SLICE_UPDATE_INTERVAL = 1000L;
 
     private static final String FACETS_NAME = "facets";
+
     private static final String VALUE_FACET_NAME = "value";
     private static final String COUNT_FACET_NAME = "count";
-
     private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
+
     private static final String FIELD_SPACE = "space";
     private static final String FIELD_SYSTEM = "system";
     private static final String FIELD_AGENT_ID = "agent_id";
     private static final String FIELD_GLOBAL_AGENT_ID = "global_agent_id";
-
     private static final String FIELD_TYPE = "type";
+
     private static final String FIELD_GLOBAL_ID = "global_id";
     private static final String FIELD_PARENT_ID = "parent_id";
     private static final String FIELD_TIMESTAMP = "timestamp";
-
     private static final String FIELD_PROPERTY_ID = "property_id";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -91,13 +99,17 @@ public class SolrEventService implements EventService {
     private String fallbackShard;
 
     private boolean isCloud;
+
     private Map<String, Slice> activeSlicesMap;
     private long nextSliceUpdate;
+    private final Map<String, AgentDescription> cachedAgentDescriptions = new ConcurrentHashMap<>();
 
     @Override
     @SuppressWarnings("unchecked")
     public Object[] getData(DataDefinition dataDefinition) {
         SolrQuery solrQuery = new SolrQuery("*:*");
+
+        solrQuery.setRows(0);
 
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
         solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getDateRange()));
@@ -130,17 +142,12 @@ public class SolrEventService implements EventService {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Suggestion getSuggestion(SuggestionInput input) {
-        Suggestion result = new Suggestion();
+        TimeTracker timeTracker = new TimeTracker();
 
         SolrQuery solrQuery = new SolrQuery("*:*");
-
         solrQuery.setRows(0);
-        solrQuery
-                .set("json.facet",
-                        "{space-facet:{terms:{field:space,facet:{system-facet:{terms:{field:system,facet:{global_agent_id-facet:{terms:{field:global_agent_id,facet:{property_id-facet:{terms:{field:property_id}}}}}}}}}}}}");
 
         if (!StringUtils.isBlank(input.getText())) {
             solrQuery.addFilterQuery(FIELD_TOKENIZED_SEARCH_FIELD + ":" + escapeSolr(input.getText()) + "*");
@@ -150,45 +157,22 @@ public class SolrEventService implements EventService {
         this.addFilterQuery(solrQuery, FIELD_SPACE, input.getSpaceId());
         this.addFilterQuery(solrQuery, FIELD_SYSTEM, input.getSystemId());
 
+        solrQuery.setFacetMinCount(1);
+        solrQuery.addFacetField(FIELD_GLOBAL_AGENT_ID);
+
         try {
+            Suggestion result = new Suggestion();
+
             QueryResponse response = this.solrClient.query(solrQuery);
 
-            NamedList<Object> facets = (NamedList<Object>) response.getResponse().get(FACETS_NAME);
+            FacetField globalAgentIdFacetField = response.getFacetField(FIELD_GLOBAL_AGENT_ID);
+            for (Count eachValue : globalAgentIdFacetField.getValues()) {
+                String globalAgentId = eachValue.getName();
 
-            List<NamedList<?>> spaceBuckets = this.getSubFacetBuckets(facets, "space-facet");
-            for (NamedList<?> eachSpaceBucket : spaceBuckets) {
-                String space = this.getValue(eachSpaceBucket);
-
-                List<NamedList<?>> systemBuckets = this.getSubFacetBuckets(eachSpaceBucket, "system-facet");
-                for (NamedList<?> eachSystemBucket : systemBuckets) {
-                    String system = this.getValue(eachSystemBucket);
-
-                    List<NamedList<?>> globalAgentIdBuckets = this.getSubFacetBuckets(eachSystemBucket, "global_agent_id-facet");
-                    for (NamedList<?> eachGlobalAgentIdBucket : globalAgentIdBuckets) {
-                        String globalAgentId = this.getValue(eachGlobalAgentIdBucket);
-
-                        AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
-
-                        if (agentDescription == null) {
-                            agentDescription = new AgentDescription();
-                            agentDescription.setGlobalId(globalAgentId);
-                            agentDescription.setName(this.capabilitiesService.getAgentId(globalAgentId));
-                            agentDescription.setSystem(system);
-                            agentDescription.setSpace(space);
-
-                            List<NamedList<?>> propertyIdBuckets = this.getSubFacetBuckets(eachGlobalAgentIdBucket,
-                                    "property_id-facet");
-                            for (NamedList<?> eachPropertyIdBucket : propertyIdBuckets) {
-                                String propertyId = this.getValue(eachPropertyIdBucket);
-                                agentDescription.addPropertyDescription(this.createPropertyDescription(propertyId));
-                            }
-                        }
-
-                        result.addAgentDescription(agentDescription);
-                    }
-                }
+                result.addAgentDescription(this.getAgentDescription(globalAgentId));
             }
 
+            result.setExecutionTime(timeTracker.getElapsed(MILLISECONDS));
             return result;
         } catch (SolrException | SolrServerException | IOException e) {
             throw new DataRetrievalException("Failed to create suggestions", e);
@@ -202,6 +186,9 @@ public class SolrEventService implements EventService {
         if (this.isCloud) {
             ((CloudSolrClient) this.solrClient).connect();
         }
+
+        new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
+                AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     @Override
@@ -217,6 +204,16 @@ public class SolrEventService implements EventService {
             this.solrClient.add(inputDocuments);
         } catch (SolrServerException | IOException e) {
             this.logger.error("Failed to store events.", e);
+        }
+    }
+
+    protected void refreshAgentDescriptionCache() {
+        for (String eachGlobalAgentId : this.cachedAgentDescriptions.keySet()) {
+            try {
+                this.cachedAgentDescriptions.put(eachGlobalAgentId, this.loadAgentDescription(eachGlobalAgentId));
+            } catch (Exception e) {
+                this.cachedAgentDescriptions.remove(eachGlobalAgentId);
+            }
         }
     }
 
@@ -332,18 +329,34 @@ public class SolrEventService implements EventService {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    private List<NamedList<?>> getSubFacetBuckets(NamedList<?> namedList, String facetName) {
-        if (namedList == null) {
-            return Collections.emptyList();
+    private AgentDescription getAgentDescription(String globalAgentId) throws SolrServerException, IOException {
+        AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
+
+        if (agentDescription == null) {
+            agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
-        NamedList<?> facet = (NamedList<?>) namedList.get(facetName);
-        if (facet == null) {
-            return Collections.emptyList();
+        if (agentDescription == null) {
+            agentDescription = this.loadAgentDescription(globalAgentId);
+            this.cachedAgentDescriptions.put(globalAgentId, agentDescription);
         }
 
-        return (List<NamedList<?>>) facet.get("buckets");
+        return agentDescription;
+    }
+
+    private String getFirstFacetValue(QueryResponse response, String fieldName) {
+        FacetField facetField = response.getFacetField(fieldName);
+
+        if (facetField == null) {
+            return null;
+        }
+
+        List<Count> values = facetField.getValues();
+        if (values == null || values.isEmpty()) {
+            return null;
+        }
+
+        return values.get(0).getName();
     }
 
     private String getTargetShard(Date timestamp) {
@@ -354,7 +367,7 @@ public class SolrEventService implements EventService {
         CloudSolrClient cloudSolrClient = (CloudSolrClient) this.solrClient;
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
-            this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_DELAY;
+            this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
             this.activeSlicesMap = cloudSolrClient.getZkStateReader().getClusterState()
                     .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
@@ -387,7 +400,36 @@ public class SolrEventService implements EventService {
         return this.getTimestampRangeQuery(dateRange.getStart(), dateRange.getEnd());
     }
 
-    private String getValue(NamedList<?> bucket) {
-        return (String) bucket.get("val");
+    private AgentDescription loadAgentDescription(String globalAgentId) throws SolrServerException, IOException {
+        SolrQuery query = new SolrQuery("*:*");
+        query.setRows(0);
+
+        query.setFilterQueries(FIELD_GLOBAL_AGENT_ID + ":\"" + globalAgentId + "\"");
+
+        query.setFacetMinCount(1);
+        query.addFacetField(FIELD_SPACE, FIELD_SYSTEM, FIELD_PROPERTY_ID);
+
+        QueryResponse response = this.solrClient.query(query);
+
+        AgentDescription result = new AgentDescription();
+        result.setGlobalId(globalAgentId);
+        result.setName(this.capabilitiesService.getAgentId(globalAgentId));
+        result.setSpace(this.getFirstFacetValue(response, FIELD_SPACE));
+        result.setSystem(this.getFirstFacetValue(response, FIELD_SYSTEM));
+
+        FacetField facetField = response.getFacetField(FIELD_PROPERTY_ID);
+        for (Count eachValue : facetField.getValues()) {
+            result.addPropertyDescription(this.createPropertyDescription(eachValue.getName()));
+        }
+
+        return result;
+    }
+
+    protected class RefreshAgentDescriptionCacheTask extends TimerTask {
+
+        @Override
+        public void run() {
+            SolrEventService.this.refreshAgentDescriptionCache();
+        }
     }
 }

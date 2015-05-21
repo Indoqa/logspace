@@ -16,6 +16,8 @@ import java.util.TreeSet;
 
 public class Suggestion {
 
+    private long executionTime;
+
     private Set<FacetValue> spaces = new TreeSet<>();
     private Set<FacetValue> systems = new TreeSet<>();
     private Set<FacetValue> propertyNames = new TreeSet<>();
@@ -37,6 +39,10 @@ public class Suggestion {
         return this.agentDescriptions;
     }
 
+    public long getExecutionTime() {
+        return this.executionTime;
+    }
+
     public Set<FacetValue> getPropertyNames() {
         return this.propertyNames;
     }
@@ -51,6 +57,10 @@ public class Suggestion {
 
     public void setAgentDescriptions(List<AgentDescription> agentDescriptions) {
         this.agentDescriptions = agentDescriptions;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
     }
 
     public void setPropertyNames(Set<FacetValue> propertyNames) {
