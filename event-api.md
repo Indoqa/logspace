@@ -1,0 +1,150 @@
+---
+layout: default
+title: Event API
+---
+#Event API
+
+* [Store Events](#store-events)<br/>
+
+
+##Store Events
+
+  Stores multiple events in Logspace.
+
+* **URL:** /events
+
+* **Method:**
+  `POST`
+ 
+*  **URL Parameters:** None
+
+* **Header Parameters**
+
+   * **Required:**
+
+       `logspace.space-token`=[space-token]
+ 
+       This header serves as an authentication token for the caller to use this API.
+       The supplied space-token must be configured in the Logspace HQ to be accepted.
+
+* **Data Parameters**
+
+```json
+[
+  { 
+    "id" : "Unique ID for this event (e.g. UUID)",
+    "type" : "Specific type of this event (e.g. os/cpu)",
+    "system" : "System identifier (e.g. hostname)",
+    "agent-id" : "Agent ID (e.g. hostname/cpu)",
+    "timestamp" : "Timestamp of the creation of this event (e.g. 2015-05-21T11:30:00Z)",
+    "pid" : "Optional Parent Event ID",
+    "gid" : "Optional Global Event ID",
+    
+    "boolean-properties" : { 
+	"property_name" : "boolean-value [true|false]"
+    },
+    
+    "date-properties" : { 
+	"property_name" : "date-value [YYYY-MM-ddTHH:mm:ssZ]"
+    },
+    
+    "double-properties" : { 
+	"property_name" : "double-value [json number]"
+    },
+    
+    "float-properties" : { 
+	"property_name" : "float-value [json number]"
+    },
+    
+    "integer-properties" : {
+	"property_name" : "integer-value [json number]"
+    },
+    
+    "long-properties" : {
+	"property_name" : "long-value [json number]"
+    },
+    
+    "string-properties" : {
+	"property_name" : "string-value [json string]"
+    }
+  }
+]
+```
+
+* **Success Response:** <br/>
+  There will be *no* data returned.
+ 
+    * **Code:** 202 Accepted
+        * **Content:** `None`
+
+
+* **Error Response:**
+
+    * **Code:** 403 Forbidden:
+        * **Content:** If the request did not contain the space-token header:
+ 
+        ```json
+        { 
+          "type" : "MISSING_SPACE_TOKEN",
+          "message" : "Missing header 'logspace.space-token'." 
+        }
+        ```
+
+        * **Content:** If the supplied space-token is not configured:
+
+        ```json
+        { 
+          "type" : "INVALID_SPACE_TOKEN",
+          "message" : "Unrecognized space-token '{provided space-token}'.",
+          "parameters" : 
+            {
+              "space-token": "{provided space-token}"
+            }
+        }
+        ```
+
+
+* **Sample Call:**
+
+  ```
+  curl 'http://<logspace-hq.server>:4567/events' -X POST -d @request.json --header "Content-Type:application/json" --header "logspace.space-token:development" 
+  ```
+
+  request.json
+  
+```js
+[
+  {  
+    "id" : "bbcca991-1070-4325-b719-dc9014816a2e",
+    "type" : "os/cpu",
+    "system" : "localhost",
+    "agent-id" : "localhost/cpu",
+    "timestamp" : "2015-05-18T14:07:00Z",
+    
+    "double-properties" :
+      {
+        "system_cpu_load" : 0.44324237001029815
+      },
+      
+    "integer-properties" :
+      {  
+        "processor_count" : 4
+      }
+  },
+  {  
+    "id" : "a00f812e-ea08-4d38-9ce0-fa5973f0d411",
+    "type" : "os/memory",
+    "system" : "localhost",
+    "agent-id" : "localhost/memory",
+    "timestamp" : "2015-05-18T14:07:00Z",
+    
+    "long-properties" :
+      {  
+        "total_memory" : 16490561536,
+        "free_memory" : 2074169344,
+        "used_memory" : 14416392192,
+        "committed_virtual_memory" : 5659140096
+      }
+  }
+]
+```
