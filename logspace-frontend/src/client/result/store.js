@@ -141,7 +141,7 @@ function createXAxisLabals(responseJson) {
   const end = new Date(responseJson.dateRange.end).getTime()
   const gap = responseJson.dateRange.gap
 
-  for (let i = start; i < end; i = i + gap) {
+  for (let i = start; i < end; i = i + (gap * 1000)) {
     labels.push(new Date(i).toJSON());
   }
 

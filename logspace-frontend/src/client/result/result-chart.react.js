@@ -5,10 +5,13 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react';
-import PureComponent from '../components/purecomponent.react';
-import {onResultRefreshed} from './actions';
+import React from 'react'
 import c3 from 'c3'
+
+import PureComponent from '../components/purecomponent.react'
+import debounceFunc from '../../lib/debounce'
+
+import {onResultRefreshed} from './actions'
 
 require ('./result-chart.css')
 
@@ -46,10 +49,32 @@ export default class Chart extends PureComponent {
       }
     );
 
+/*
     this.chart.xgrids([
       {value: 0, text:chartData.columns[0][1]},
       {value: chartData.columns[0].length - 2, text: chartData.columns[0][chartData.columns[0].length - 1]}
     ])
+*/
+  }
+
+  calculateChartSize() {
+    const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+    const minWindowWidth = 1024
+    const sidebarWidth = 250
+    const chartPadding = 20 * 2
+    const heightWidthRatio = 0.45
+
+    const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
+    const height = width * heightWidthRatio
+
+    return {
+      width : width,
+      height : height
+    }
+  }
+
+  resizeChart() {
+    this.chart.resize(this.calculateChartSize())
   }
 
   transform(type) {
@@ -59,7 +84,7 @@ export default class Chart extends PureComponent {
   render() {
     return (
       <div>
-        <div id="chart"  / >
+        <div id="chart" / >
         <br/>
         <button onClick={() => this.transform('bar')}>bar</button>
         <button onClick={() => this.transform('line')}>line</button>
@@ -74,6 +99,11 @@ export default class Chart extends PureComponent {
   }
 
   chartOptions() {
+    const chartSize = this.calculateChartSize()
+    const me = this
+
+    const debouncedChartResize = debounceFunc(this.resizeChart.bind(me), 350)
+
     return {
       data: {
           x: 'x',
@@ -87,7 +117,7 @@ export default class Chart extends PureComponent {
           }
         },
         y: {
-          show: false
+          show: true
         }
       },
       grid: {
@@ -105,8 +135,10 @@ export default class Chart extends PureComponent {
         r: 2
       },
       size: {
-        height: 480
-      }
+        height: chartSize.height,
+        width: chartSize.width
+      },
+      onresized: debouncedChartResize
     }
   }
 }
