@@ -7,5 +7,10 @@
  */
 export default {
   en: {
+  	"drawer-panel-null": "",
+  	"drawer-panel-suggestions": "Select Agent",
+  	"drawer-panel-time-window": "Change Time Window",
+  	"drawer-panel-time-series-edit": "Edit Time Series",
+  	"drawer-panel-time-series-add": "Add new Time Series",
   }
 }

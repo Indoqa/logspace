@@ -45,7 +45,7 @@ export default class DrawerPanel extends PureComponent {
     	);
   	}
 
-    if (this.props.activePanel == Panels.TIMESERIES) {
+    if (this.props.activePanel == Panels.ADD_TIMESERIES || this.props.activePanel == Panels.EDIT_TIMESERIES) {
       return (
         <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} />
       );

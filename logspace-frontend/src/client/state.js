@@ -8,6 +8,7 @@
 import State from '../lib/state';
 
 export const state = new State(require('./initialstate'));
+export const i18nCursor = state.cursor(['i18n']);
 export const timeWindowCursor = state.cursor(['timeWindow']);
 export const timeSeriesCursor = state.cursor(['timeSeries']);
 export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries']);

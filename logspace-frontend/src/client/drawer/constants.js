@@ -8,5 +8,6 @@
 
 export const SUGGESTIONS = "suggestions";
 export const TIME_WINDOW = "time-window";
-export const TIMESERIES = "time-series";
+export const EDIT_TIMESERIES = "time-series-edit";
+export const ADD_TIMESERIES = "time-series-add";
 

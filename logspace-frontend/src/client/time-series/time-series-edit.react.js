@@ -22,18 +22,11 @@ export default class EditTimeSeries extends PureComponent {
 
     var agentDescription = this.props.editedTimeSeries.get("newItem");
     var me = this;
-    var header = "Edit Time Series";
-
-    if (agentDescription.get("id") == null) {
-      header = "New Time Series";
-    }
-
+ 
     return (
       <div>
-        <h2> {header} </h2>
-        <div> Agent: {agentDescription.get("name")} </div>
-        <div> Space: {agentDescription.get("space")} </div>
-        <div> System: {agentDescription.get("system")} </div>
+        <div> {agentDescription.get("space")} {agentDescription.get("system")} </div>
+        <div> {agentDescription.get("name")} </div>
         <br/>
         <b>Select Property:</b>
         <br/>

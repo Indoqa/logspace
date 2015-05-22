@@ -9,6 +9,7 @@ import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import DrawerPanel  from './drawer-panel.react.js'
 import {onCloseDrawer} from './actions';
+import {msg} from '../intl/store';
 
 require('./drawer.styl')
 
@@ -19,7 +20,7 @@ export default class Drawer extends PureComponent {
       <div className="drawer">
         <div className="header"> 
           <div className="close"> <input type="button" value="close" onClick={() => onCloseDrawer()}/> </div>
-          <div className="title"> > {this.props.activePanel} </div>
+          <div className="title"> > {msg('drawer-panel-' + this.props.activePanel)} </div>
         </div>
         <div className="panel">
           <DrawerPanel
