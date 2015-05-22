@@ -4,74 +4,59 @@ title: Getting Started
 ---
 
 # Getting Started
-Aenean enim ipsum, lobortis in lorem sed, interdum egestas libero. Vivamus mauris dolor, tincidunt sed pellentesque ut, pretium nec eros. Mauris porta ipsum id nulla ullamcorper ornare. Aenean condimentum, lacus sed sollicitudin auctor, justo mauris scelerisque lacus, ac tincidunt lectus ipsum a lectus. Aenean facilisis dolor ac tortor vehicula scelerisque. Phasellus venenatis lorem in augue cursus, vitae semper risus cursus. Aliquam erat volutpat. Aenean ultrices ex non ligula placerat, in facilisis urna suscipit. In hac habitasse platea dictumst. Nam sed neque ac purus volutpat fermentum.
+Using logspace is as easy as using a logging framework:
+Just add the logspace-agent-all.jar to your application's classpath and you are ready to go.
 
-- [Minified code (v{{site.data.logspace.version}})](/dist/hammer.min.js)
-- [Uncompressed code (v{{site.data.hammer.version}})](/dist/hammer.js)
-- [Changelog](/changelog)
-- [Browse the source on GitHub](https://github.com/hammerjs/hammer.js/tree/master/)
-- Looking for the 1.1 version? [You can find it here.](https://github.com/hammerjs/hammer.js/tree/1.1.x)
-
-> ##### What's new in 2.0?
-It's completely rewritten, with reusable gesture recognizers, and improved support for the recent mobile
-browsers by making use of the touch-action css property when possible. Also support for multiple Hammer
-instances the same time, so multi-user became possible.
-
----
 
 ## Usage
 
-It's easy to use, just include the library and create a new instance.
+In logspace you use *Agents* to collect relevant data and package it into *Events*.<br/>
+Doing this is a simple method call:
 
-````js
-var hammertime = new Hammer(myElement, myOptions);
-hammertime.on('pan', function(ev) {
-	console.log(ev);
-});
+````java
+public static void main(String[] args) {
+  MemoryAgent memoryAgent = MemoryAgent.create();
+  memoryAgent.execute();
+}
 ````
 
-By default it adds a set of `tap`, `doubletap`, `press`, _horizontal_ `pan` and `swipe`, and the
-multi-touch `pinch` and `rotate` recognizers. The pinch and rotate recognizers are disabled by default
-because they would make the element blocking, but you can enable them by calling:
+You just measured your computer's memory utilization and packaged it into an *Event*.
 
-````js
-hammertime.get('pinch').set({ enable: true });
-hammertime.get('rotate').set({ enable: true });
+On your console you saw something like this:
+
+>30f19237-4134-46af-ae6d-277837daed4d (gid:none, pid:none) - os/memory [os/memory] - 2015-05-22 13:29:03.100: {total_memory=16754085888, free_memory=11813036032, used_memory=4941049856, committed_virtual_memory=462962688}
+
+What is that output?<br/>
+In the background logspace created an *AgentController* and the *MemoryAgent* forwarded the *Event* with the memory utilization data to it. logspace comes with different implementations of *AgentController*, each handling *Events* in a different way.<br/>
+In our example above, logspace used the *ConsoleAgentController* which writes all *Events* to the console.
+
+The chapter "Configuration" explains how you can use other *AgentControllers*.
+
+## Configuration
+
+If you just want to write your *Events* to console you don't need any configuration at all.
+logspace will do this by default to make sure none of your *Events* are lost. It is convenient during development but sometimes you might want something else.
+
+You can provide a configuration to define which *AgentController* is used:<br/>
+Create a file called "logspace.json" and put it in your working directory or the application's classpath.<br/>
+The file contains a simple configuration object written in JSON. The default configuration looks like this:
+
+````json
+{
+  "id" : "logspace-default",
+  "class-name" : "io.logspace.agent.console.ConsoleAgentController"
+}
 ````
 
-Enabling vertical or all directions for the `pan` and `swipe` recognizers:
+If you are using slf4j you could use the *LoggingAgentController* to write all *Events* to you application's logfile.
+The configuration looks like this:
 
-````js
-hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-hammertime.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+````json
+{
+  "id" : "logspace-logging",
+  "class-name" : "io.logspace.agent.logging.LoggingAgentController"
+}
 ````
 
-Also the viewport meta tag is recommended, it gives more control back to the webpage by disabling the
-doubletap/pinch zoom. More recent browsers that support the touch-action property don't require this.
-
-````html
-<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-````
-
-### More control
-You can setup your own set of recognizers for your instance. This requires a bit more code, but it gives you more
-control about the gestures that are being recognized.
-
-````js
-var mc = new Hammer.Manager(myElement, myOptions);
-
-mc.add( new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 }) );
-mc.add( new Hammer.Tap({ event: 'quadrupletap', taps: 4 }) );
-
-mc.on("pan", handlePan);
-mc.on("quadrupletap", handleTaps);
-````
-The example above creates an instance containing a `pan` and a `quadrupletap` gesture. The recognizer instances you
-create are being executed in the order they are added, and only one can be recognized at the time.
-
-See the pages about the [`recognizeWith`](/recognize-with) and [`requireFailure`](/require-failure) for
-more details.
-
-### Notes
-Built by [Jorik Tangelder](https://twitter.com/jorikdelaporik). It's recommended to listen to [this loop](http://soundcloud.com/eightmedia/hammerhammerhammer) while using hammer.js.
-Follow [@jorikdelaporik](https://twitter.com/jorikdelaporik) for some tweets about this library.
+Whatever *AgentController* you chose, your application's code does not need to change.<br/>
+You simply invoke *Agents* and logspace takes care of handling the *Events* for you.
