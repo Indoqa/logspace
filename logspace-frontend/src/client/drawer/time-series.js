@@ -5,22 +5,8 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
- 
- @require '../app/variables'
 
- .drawer
- 	height 100%
- 	overflow: hidden
- 	.header .title
-	  padding 3px 0 0 10px
-	  color $color3
-	  font-size 2rem
-	  font-weight 700
-	  text-transform uppercase
-	 .header .close
-	  position absolute
-	  right 5px
-	  top 5px 		 
- 	.panel
- 		padding 10px
- 		height 100%
+export const SUGGESTIONS = "suggestions";
+export const TIME_WINDOW = "time-window";
+export const TIMESERIES = "time-series";
+

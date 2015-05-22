@@ -5,18 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-/*
-* Logspace
-* Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-* This program and the accompanying materials are made available under the terms of
-* the Eclipse Public License Version 1.0, which accompanies this distribution and
-* is available at http://www.eclipse.org/legal/epl-v10.html.
-*/
 
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import shallowEqual from 'react/lib/shallowEqual';
-import {COLORS} from './constants';
+import {COLORS, TYPES} from './constants';
 import {onTimeSeriesSaved, onTimeSeriesPropertyChanged} from './actions';
 
 export default class EditTimeSeries extends PureComponent {
@@ -69,6 +62,14 @@ export default class EditTimeSeries extends PureComponent {
           <option value="average">average</option>
           <option value="count">count</option>
           <option value="sum">sum</option>
+        </select>
+        <br/>
+        <b>Select Chart Type: </b>
+        <br/>
+        <select name="type" value={agentDescription.get("type")} onChange={this.handleChange.bind(this)}>
+           {TYPES.map(function(type) {
+            return <option value={type}>{type}</option>
+          })}
         </select>
         <br/>
         <br/>

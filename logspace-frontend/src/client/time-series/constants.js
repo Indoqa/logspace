@@ -17,3 +17,9 @@ export const COLORS = [
   '#00bcd4',
   '#ff5722'
 ]
+
+export const TYPES = [
+  'bar',
+  'line',
+  'area'
+]

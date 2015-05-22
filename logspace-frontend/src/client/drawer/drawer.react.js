@@ -7,49 +7,30 @@
  */
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
-import Suggestions  from '../suggestions/suggestions.react.js'
-import TimeWindow  from '../time-window/time-window.react.js'
-import EditTimeSeries from '../time-series/time-series-edit.react'
-import * as Panels from './constants';
+import DrawerPanel  from './drawer-panel.react.js'
+import {onCloseDrawer} from './actions';
 
 require('./drawer.styl')
 
 export default class Drawer extends PureComponent {
 
-  componentDidUpdate(prevProps, prevState) {
-  	if (prevProps.activePanel == this.props.activePanel ) {
-  		return;
-  	}
-
-  	if (prevProps.activePanel == null || this.props.activePanel == null) {
-  		this.props.toggle(); 	
-  	}
-  }
-
   render() {
-  	if (this.props.activePanel == null) {
-  		return <div/>
-  	}
+  	return (
+      <div className="drawer">
+        <div className="header"> 
+          <div className="close"> <input type="button" value="close" onClick={() => onCloseDrawer()}/> </div>
+          <div className="title"> > {this.props.activePanel} </div>
+        </div>
+        <div className="panel">
+          <DrawerPanel
+              activePanel={this.props.activePanel}
+              suggestions={this.props.suggestions}
+              timeWindow={this.props.timeWindow}
+              editedTimeSeries={this.props.editedTimeSeries}
+              toggle={this.props.toggle} />
+        </div>   
+      </div>
+      )
 
-  	if (this.props.activePanel == Panels.SUGGESTIONS) {
-  		return (
-    		<Suggestions suggestions={this.props.suggestions}/>  
-    	);
-  	}
-
-  	if (this.props.activePanel == Panels.TIME_WINDOW) {
-  		return (
-    		<TimeWindow timeWindow={this.props.timeWindow} />
-    	);
-  	}
-
-    if (this.props.activePanel == Panels.TIMESERIES) {
-      return (
-        <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} />
-      );
-    }
-    
-
-  	return (<div> unsupported panel: {this.props.activePanel} </div>)
   }
 }

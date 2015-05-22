@@ -16,6 +16,7 @@ export default class Header extends PureComponent {
   render() {
     return (
       <div className='header'>
+        <div className="close"> <input type="button" value="..." onClick={() => onCloseDrawer()}/> </div>
         <div className='logo'>logspace.io</div>
       </div>
     )

@@ -55,6 +55,8 @@ function refreshResult() {
     return
   }
 
+  storeLoadingResult()
+
   axios.post(getRestUrl('/query'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
     storeSuccessResult(timeSeries, response.data)
@@ -91,6 +93,17 @@ function storeEmptyResult() {
   resultCursor(result => {
     return result.set("translatedResult", Immutable.fromJS({
       empty: true,
+      loading: false,
+      error: false
+    }))
+  })
+}
+
+function storeLoadingResult() {
+  resultCursor(result => {
+    return result.set("translatedResult", Immutable.fromJS({
+      empty: false,
+      loading: true,
       error: false
     }))
   })
@@ -101,6 +114,7 @@ function storeErrorResult(serverResponse) {
     return result.set("translatedResult", Immutable.fromJS({
       empty: true,
       error: true,
+      loading: false,
       errorStatus: serverResponse.status,
       errorText: serverResponse.statusText
     }))
@@ -108,18 +122,33 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  var columns = [createXAxisLabals(responseJson)]
-  var columnKeys = []
-  var colors = {}
+  const columns = [createXAxisLabals(responseJson)]
+  const columnKeys = []
+  const colors = {}
+  const axis = [];
+  const types = {};
 
   timeSeries.forEach(function(item, index) {
       columnKeys.push(item.get("id"))
       columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")))
       colors[item.get("id")] = item.get("color")
+
+      let typeArray = types[item.get("type")];
+      if (typeArray == null) {
+        types[item.get("type")] = [];
+      }
+
+      types[item.get("type")].push(item.get("id"));
+
+      axis.push({
+        id: item.get("id"),
+        min: item.get("scaleMin"),
+        max: item.get("scaleMax")
+      });
   })
 
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
-  var chartData = {
+  const chartData = {
       colors: colors,
       columnKeys: columnKeys,
       columns: columns
@@ -129,6 +158,9 @@ function storeSuccessResult(timeSeries, responseJson) {
     return result.set("translatedResult", Immutable.fromJS( {
       empty: false,
       error: false,
+      loading: false,
+      axis: axis,
+      types: types,
       chartData: chartData
     }))
   })

@@ -24,7 +24,9 @@ const TimeSeriesItem = Record({
   aggregate: '',
   scaleMin: 0,
   scaleMax: 100,
+  type: 'line',
   space: '',
+  system: '',
   propertyDescriptions: []
 });
 
@@ -63,6 +65,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           agentId: data.globalId,
           propertyId: data.propertyDescriptions[0].id,
           space: data.space,
+          system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
           aggregate: "sum",
           color: COLORS[timeSeriesCursor().size]
