@@ -19,12 +19,12 @@ public final class Premain {
 
     @SuppressWarnings("unused")
     public static void agentmain(String args, Instrumentation inst) {
-        agent = new JvmAgent();
+        agent = JvmAgent.create();
     }
 
     @SuppressWarnings("unused")
     public static void premain(String args, Instrumentation inst) {
-        agent = new JvmAgent();
+        agent = JvmAgent.create();
     }
 
     protected static JvmAgent getAgent() {

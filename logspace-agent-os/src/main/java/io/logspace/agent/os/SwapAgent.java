@@ -7,22 +7,22 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.lang.management.ManagementFactory;
 
 import com.sun.management.OperatingSystemMXBean;
 
-public final class SwapAgent extends AbstractAgent {
+public final class SwapAgent extends AbstractOsAgent {
 
-    private SwapAgent(String agentId) {
-        super(agentId, "os/swap", TriggerType.Off, TriggerType.Cron);
+    public static final String TYPE = "os/swap";
+
+    private SwapAgent() {
+        super(TYPE);
     }
 
-    public static SwapAgent create(String agentId) {
-        return new SwapAgent(agentId);
+    public static SwapAgent create() {
+        return new SwapAgent();
     }
 
     @Override
@@ -32,11 +32,11 @@ public final class SwapAgent extends AbstractAgent {
             return;
         }
 
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem());
-
         long totalSwapSpace = operatingSystemMXBean.getTotalSwapSpaceSize();
         long freeSwapSpace = operatingSystemMXBean.getFreeSwapSpaceSize();
         long usedSwapSpace = totalSwapSpace - freeSwapSpace;
+
+        OsEventBuilder eventBuilder = OsEventBuilder.createSwapBuilder(this.getId(), this.getSystem());
 
         eventBuilder.setTotalSwapSpace(totalSwapSpace);
         eventBuilder.setFreeSwapSpace(freeSwapSpace);

@@ -8,21 +8,21 @@
 package io.logspace.agent.os;
 
 import static io.logspace.agent.os.OsEventBuilder.createMemoryBuilder;
-import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 
-public final class MemoryAgent extends AbstractAgent {
+public final class MemoryAgent extends AbstractOsAgent {
 
-    private MemoryAgent(String agentId) {
-        super(agentId, "os/memory", TriggerType.Off, TriggerType.Cron);
+    public static final String TYPE = "os/memory";
+
+    private MemoryAgent() {
+        super(TYPE);
     }
 
-    public static MemoryAgent create(String agentId) {
-        return new MemoryAgent(agentId);
+    public static MemoryAgent create() {
+        return new MemoryAgent();
     }
 
     @Override

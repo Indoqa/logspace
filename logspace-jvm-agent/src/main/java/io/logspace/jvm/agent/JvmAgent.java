@@ -25,8 +25,12 @@ public class JvmAgent extends AbstractAgent {
 
     public static final String SYSTEM_PROPERTY_JVM_IDENTIFIER = "io.logspace.jvm-identifier";
 
-    protected JvmAgent() {
-        super("jvm-" + getJvmIdentifier(), "jvm", TriggerType.Off, TriggerType.Cron);
+    private JvmAgent() {
+        super("jvm/" + getJvmIdentifier(), "jvm", TriggerType.Off, TriggerType.Cron);
+    }
+
+    public static JvmAgent create() {
+        return new JvmAgent();
     }
 
     private static String getJvmIdentifier() {

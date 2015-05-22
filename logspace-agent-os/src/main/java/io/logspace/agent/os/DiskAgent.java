@@ -7,29 +7,29 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class DiskAgent extends AbstractAgent {
+public final class DiskAgent extends AbstractOsAgent {
 
-    private DiskAgent(String agentId) {
-        super(agentId, "os/disk", TriggerType.Off, TriggerType.Cron);
+    public static final String TYPE = "os/disk";
+
+    private DiskAgent() {
+        super(TYPE);
     }
 
-    public static DiskAgent create(String agentId) {
-        return new DiskAgent(agentId);
+    public static DiskAgent create() {
+        return new DiskAgent();
     }
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        for (Path root : FileSystems.getDefault().getRootDirectories()) {
-            this.sendDiskEvent(root);
+        for (Path eachRoot : FileSystems.getDefault().getRootDirectories()) {
+            this.sendDiskEvent(eachRoot);
         }
     }
 
@@ -37,13 +37,17 @@ public final class DiskAgent extends AbstractAgent {
         try {
             FileStore store = Files.getFileStore(root);
 
+            long totalSpace = store.getTotalSpace();
+            long usableSpace = store.getUsableSpace();
+            long unallocatedSpace = store.getUnallocatedSpace();
+
             OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem());
 
             eventBuilder.setDiskPath(root.toString());
-            eventBuilder.setTotalDiskSpace(store.getTotalSpace());
-            eventBuilder.setUsableDiskSpace(store.getUsableSpace());
-            eventBuilder.setUnallocatedDiskSpace(store.getUnallocatedSpace());
-            eventBuilder.setUsedDiskSpace(store.getTotalSpace() - store.getUnallocatedSpace());
+            eventBuilder.setTotalDiskSpace(totalSpace);
+            eventBuilder.setUsableDiskSpace(usableSpace);
+            eventBuilder.setUnallocatedDiskSpace(unallocatedSpace);
+            eventBuilder.setUsedDiskSpace(totalSpace - unallocatedSpace);
 
             this.sendEvent(eventBuilder.toEvent());
         } catch (Exception e) {

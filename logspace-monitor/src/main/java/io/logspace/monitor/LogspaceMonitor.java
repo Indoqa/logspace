@@ -11,40 +11,24 @@ import io.logspace.agent.os.CpuAgent;
 import io.logspace.agent.os.DiskAgent;
 import io.logspace.agent.os.MemoryAgent;
 import io.logspace.agent.os.SwapAgent;
-import io.logspace.agent.os.SystemLoadAgent;
 
 public final class LogspaceMonitor {
-
-    public static final String SYSTEM_PROPERTY_SYSTEM_IDENTIFIER = "io.logspace.system-identifier";
 
     private LogspaceMonitor() {
         // hide utility class constructor
     }
 
     public static void main(String[] args) {
-        String systemIdentifier = getSystemIdentifier();
-        installAgents(systemIdentifier);
+        installAgents();
 
         runEndless();
     }
 
-    private static String getSystemIdentifier() {
-        String jvmIdentifier = System.getProperty(SYSTEM_PROPERTY_SYSTEM_IDENTIFIER);
-
-        if (jvmIdentifier == null || jvmIdentifier.isEmpty()) {
-            throw new IllegalArgumentException("System Property: '" + SYSTEM_PROPERTY_SYSTEM_IDENTIFIER
-                    + "' not defined. Please set this property to a unique value.");
-        }
-
-        return jvmIdentifier;
-    }
-
-    private static void installAgents(String systemIdentifier) {
-        CpuAgent.create(systemIdentifier + "/cpu");
-        DiskAgent.create(systemIdentifier + "/disk");
-        MemoryAgent.create(systemIdentifier + "/memory");
-        SwapAgent.create(systemIdentifier + "/swap");
-        SystemLoadAgent.create(systemIdentifier + "-system-load");
+    private static void installAgents() {
+        CpuAgent.create();
+        DiskAgent.create();
+        MemoryAgent.create();
+        SwapAgent.create();
     }
 
     private static void runEndless() {

@@ -7,33 +7,33 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 
-import com.sun.management.OperatingSystemMXBean;
+public final class CpuAgent extends AbstractOsAgent {
 
-public final class CpuAgent extends AbstractAgent {
+    public static final String TYPE = "os/cpu";
 
-    private CpuAgent(String agentId) {
-        super(agentId, "os/cpu", TriggerType.Off, TriggerType.Cron);
+    private CpuAgent() {
+        super(TYPE);
     }
 
-    public static CpuAgent create(String agentId) {
-        return new CpuAgent(agentId);
+    public static CpuAgent create() {
+        return new CpuAgent();
     }
 
     @Override
     public void execute(AgentOrder agentOrder) {
         OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem());
 
-        eventBuilder.setProcessorCount(Runtime.getRuntime().availableProcessors());
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+        eventBuilder.setProcessorCount(operatingSystemMXBean.getAvailableProcessors());
+        eventBuilder.setSystemLoadAverage(operatingSystemMXBean.getSystemLoadAverage());
 
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-        if (operatingSystemMXBean != null) {
-            eventBuilder.setSystemCpuLoad(operatingSystemMXBean.getSystemCpuLoad());
+        if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean) {
+            eventBuilder.setSystemCpuLoad(((com.sun.management.OperatingSystemMXBean) operatingSystemMXBean).getSystemCpuLoad());
         }
 
         this.sendEvent(eventBuilder.toEvent());

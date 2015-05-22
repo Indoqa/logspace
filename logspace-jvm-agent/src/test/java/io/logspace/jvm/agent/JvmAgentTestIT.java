@@ -51,7 +51,7 @@ public class JvmAgentTestIT {
         assertEquals(1, collectedEvents.size());
 
         Event event = collectedEvents.get(0);
-        assertEquals("jvm-" + JVM_IDENTIFIER, event.getAgentId());
+        assertEquals("jvm/" + JVM_IDENTIFIER, event.getAgentId());
         assertTrue("Expected at least 1 double property, but received " + event.getDoubleProperties().size(), event
                 .getDoubleProperties().size() >= 1);
         assertEquals(4, event.getIntegerProperties().size());

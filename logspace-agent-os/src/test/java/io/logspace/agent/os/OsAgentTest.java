@@ -8,13 +8,54 @@
 package io.logspace.agent.os;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
 import io.logspace.agent.test.TestAgentController;
+
+import java.io.IOException;
+import java.nio.file.FileStore;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 
 public class OsAgentTest {
+
+    @SuppressWarnings("unused")
+    private static int getRootDirectoryCount() {
+        int result = 0;
+
+        for (Path eachRootDirectory : FileSystems.getDefault().getRootDirectories()) {
+            try {
+                FileStore store = Files.getFileStore(eachRootDirectory);
+                result++;
+            } catch (IOException e) {
+                // root is not available, do not count it
+            }
+        }
+
+        return result;
+    }
+
+    private static Collection<Event> removeEvents(Collection<Event> events, String type) {
+        List<Event> result = new ArrayList<Event>();
+
+        for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
+            Event eachEvent = iterator.next();
+
+            if (type.equals(eachEvent.getType().orElse(""))) {
+                result.add(eachEvent);
+                iterator.remove();
+            }
+        }
+
+        return result;
+    }
 
     @Test
     public void test() {
@@ -23,13 +64,24 @@ public class OsAgentTest {
 
         assertEquals(0, agentController.getCollectedEvents().size());
 
-        CpuAgent.create("cpu-agent").execute(null);
-        DiskAgent.create("disk-agent").execute(null);
-        MemoryAgent.create("memory-agent").execute(null);
-        SwapAgent.create("swap-agent").execute(null);
-        SystemLoadAgent.create("system-load-agent").execute(null);
+        CpuAgent.create().execute();
+        DiskAgent.create().execute();
+        MemoryAgent.create().execute();
+        SwapAgent.create().execute();
 
-        assertTrue("Expected at least 5 events.", agentController.getCollectedEvents().size() >= 5);
+        Collection<Event> cpuEvents = removeEvents(agentController.getCollectedEvents(), CpuAgent.TYPE);
+        assertEquals("Expected one CPU event.", 1, cpuEvents.size());
+
+        Collection<Event> diskEvents = removeEvents(agentController.getCollectedEvents(), DiskAgent.TYPE);
+        assertEquals("Expected one disk event per file-system root.", getRootDirectoryCount(), diskEvents.size());
+
+        Collection<Event> memoryEvents = removeEvents(agentController.getCollectedEvents(), MemoryAgent.TYPE);
+        assertEquals("Expected one memory event.", 1, memoryEvents.size());
+
+        Collection<Event> swapEvents = removeEvents(agentController.getCollectedEvents(), SwapAgent.TYPE);
+        assertEquals("Expected one swap event.", 1, swapEvents.size());
+
+        assertEquals("Found unexpected events.", 0, agentController.getCollectedEvents().size());
 
         AgentControllerProvider.shutdown();
     }
