@@ -19,7 +19,7 @@ import java.util.Date;
 public class ConsoleAgentController extends AbstractAgentController {
 
     private static final String MESSAGE_PATTERN_PARAMETER_NAME = "message-pattern";
-    private static final String DEFAULT_MESSAGE_PATTERN = "{id} (gid:{global-id}, pid:{parent-id}) - [{type}] - {timestamp}: {properties}";
+    private static final String DEFAULT_MESSAGE_PATTERN = "{id} (gid:{global-id}, pid:{parent-id}) - {agent-id} [{type}] - {timestamp}: {properties}";
 
     private final String messagePattern;
 
@@ -48,8 +48,9 @@ public class ConsoleAgentController extends AbstractAgentController {
         StringBuilder stringBuilder = new StringBuilder(this.messagePattern);
 
         this.replace(stringBuilder, "{id}", event.getId());
-        this.replace(stringBuilder, "{global-id}", event.getGlobalEventId().orElse(null));
-        this.replace(stringBuilder, "{parent-id}", event.getParentEventId().orElse(null));
+        this.replace(stringBuilder, "{global-id}", event.getGlobalEventId().orElse("none"));
+        this.replace(stringBuilder, "{parent-id}", event.getParentEventId().orElse("none"));
+        this.replace(stringBuilder, "{agent-id}", event.getAgentId());
         this.replace(stringBuilder, "{type}", event.getType().orElse(null));
         this.replace(stringBuilder, "{timestamp}", this.formatDate(event.getTimestamp()));
         this.replace(stringBuilder, "{properties}", this.formatProperties(event));
@@ -97,9 +98,7 @@ public class ConsoleAgentController extends AbstractAgentController {
     }
 
     private void writeProperty(StringBuilder stringBuilder, EventProperty<?> property) {
-        stringBuilder.append('"');
         stringBuilder.append(property.getKey());
-        stringBuilder.append('"');
         stringBuilder.append('=');
 
         if (property.getValue() instanceof String) {
