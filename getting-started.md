@@ -24,13 +24,15 @@ You just measured your computer's memory utilization and packaged it into an *Ev
 
 On your console you saw something like this:
 
->30f19237-4134-46af-ae6d-277837daed4d (gid:none, pid:none) - os/memory [os/memory] - 2015-05-22 13:29:03.100: {total_memory=16754085888, free_memory=11813036032, used_memory=4941049856, committed_virtual_memory=462962688}
+````
+a00f812e-ea08-4d38-9ce0-fa5973f0d411 (gid:none, pid:none) - os/memory [os/memory] - 2015-05-18 14:07:00.100: {total_memory=16490561536, free_memory=2074169344, used_memory=14416392192, committed_virtual_memory=5659140096}
+````
 
 What is that output?<br/>
 In the background logspace created an *AgentController* and the *MemoryAgent* forwarded the *Event* with the memory utilization data to it. logspace comes with different implementations of *AgentController*, each handling *Events* in a different way.<br/>
 In our example above, logspace used the *ConsoleAgentController* which writes all *Events* to the console.
 
-The chapter "Configuration" explains how you can use other *AgentControllers*.
+The next chapter explains how you can use other *AgentControllers*.
 
 ## Configuration
 

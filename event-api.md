@@ -112,13 +112,13 @@ title: Event API
 
   request.json
   
-```js
+```json
 [
   {  
     "id" : "bbcca991-1070-4325-b719-dc9014816a2e",
     "type" : "os/cpu",
     "system" : "localhost",
-    "agent-id" : "localhost/cpu",
+    "agent-id" : "os/cpu",
     "timestamp" : "2015-05-18T14:07:00Z",
     
     "double-properties" :
@@ -135,7 +135,7 @@ title: Event API
     "id" : "a00f812e-ea08-4d38-9ce0-fa5973f0d411",
     "type" : "os/memory",
     "system" : "localhost",
-    "agent-id" : "localhost/memory",
+    "agent-id" : "os/memory",
     "timestamp" : "2015-05-18T14:07:00Z",
     
     "long-properties" :
