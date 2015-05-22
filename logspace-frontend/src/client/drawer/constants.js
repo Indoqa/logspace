@@ -7,7 +7,7 @@
  */
 
 export const SUGGESTIONS = "suggestions";
-export const TIME_WINDOW = "time-window";
-export const EDIT_TIMESERIES = "time-series-edit";
-export const ADD_TIMESERIES = "time-series-add";
+export const TIME_WINDOW = "timeWindow";
+export const EDIT_TIMESERIES = "timeSeriesEdit";
+export const ADD_TIMESERIES = "timeSeriesAdd";
 

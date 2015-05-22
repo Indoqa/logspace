@@ -20,7 +20,7 @@ export default class Drawer extends PureComponent {
       <div className="drawer">
         <div className="header"> 
           <div className="close"> <input type="button" value="close" onClick={() => onCloseDrawer()}/> </div>
-          <div className="title"> > {msg('drawer-panel-' + this.props.activePanel)} </div>
+          <div className="title"> > {msg('drawer.header.' + this.props.activePanel)} </div>
         </div>
         <div className="panel">
           <DrawerPanel
