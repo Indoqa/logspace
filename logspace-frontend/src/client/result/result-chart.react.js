@@ -28,18 +28,11 @@ export default class Chart extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.result.get("loading")) {
-      this.chart.unload()
       this.toggleLoading(true);
-
       return
     }
 
     this.toggleLoading(false);
-
-    if (nextProps.result.get("empty") || nextProps.result.get("error")) {
-      this.chart.unload()
-      return
-    }
   }
 
 
@@ -57,6 +50,7 @@ export default class Chart extends PureComponent {
     }
 
     if (this.props.result.get("empty") || this.props.result.get("error")) {
+      this.chart.unload()
       return
     }
 

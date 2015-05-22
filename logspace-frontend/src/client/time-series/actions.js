@@ -26,8 +26,8 @@ export function onEditTimeSeries(timeSeries) {
   dispatch(onEditTimeSeries, timeSeries);
 }
 
-export function onTimeSeriesDeleted(deletedTimeSeries) {
-  dispatch(onTimeSeriesDeleted, deletedTimeSeries);
+export function onTimeSeriesDeleted(id) {
+  dispatch(onTimeSeriesDeleted, id);
 }
 
 setToString('timeSeries', {

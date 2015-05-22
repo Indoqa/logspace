@@ -53,7 +53,9 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
 
     case actions.onTimeSeriesDeleted:
       timeSeriesCursor(timeSeries => {
-        return timeSeries.delete(timeSeries.indexOf(data))
+        var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data });
+        var index = timeSeries.indexOf(itemToDelete);
+        return timeSeries.delete(timeSeries.indexOf(itemToDelete))
       });
       break;
 
@@ -99,7 +101,7 @@ function addItem(item) {
 
 function updateItem(item) {
   timeSeriesCursor(timeSeries => {
-    var itemToUpdate = timeSeries.find(function(obj){return obj.get('id') === item.id;});
+    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id });
     var index = timeSeries.indexOf(itemToUpdate);
     return timeSeries.set(index, Immutable.fromJS(item))
   });

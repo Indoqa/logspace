@@ -90,7 +90,7 @@ export default class EditTimeSeries extends PureComponent {
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
         <button 
           className={(agentDescription.get("id") != null) ? 'delete-visible' : 'delete-hidden'} 
-          onClick={() =>  onTimeSeriesDeleted(this.props.item)}>Delete time series
+          onClick={() =>  onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
         </button>
       </div>
     );
