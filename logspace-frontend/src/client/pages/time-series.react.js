@@ -57,11 +57,11 @@ export default class TimeSeries extends React.Component {
 
     return (
       <div className='time-series'>
-        <Header />
-
+        
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
-            <TimeWindowValues />
+            <Header/>
+            <TimeWindowValues timeWindow={timeWindow}/>
             <TimeSeriesList items={getTimeSeries()} />
 
             <div className='add-series-entry'>
@@ -87,8 +87,10 @@ export default class TimeSeries extends React.Component {
 
         <div className={classnames(this.state.mainCss)}>
           <div className='chart-header'>
-            <span className='title'>New logspace.io chart</span>
-            <span className='edit'>[edit]</span>
+            <div className="header">
+              <span className='title'>New logspace.io chart</span>
+              <span className='edit'>[edit]</span>
+            </div>
           </div>
           <Chart series={getTimeSeries()} result={getResult()}/>
         </div>

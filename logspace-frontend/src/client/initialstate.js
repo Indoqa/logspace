@@ -6,7 +6,16 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
+import messages from './messages';
+
+const initialLocale = 'en';
+
 export default {
+  i18n: {
+    formats: {},
+    locales: initialLocale,
+    messages: messages[initialLocale]
+  },
   "timeWindow": {
     "start": "2014-01-01",
     "end": "2014-01-02",

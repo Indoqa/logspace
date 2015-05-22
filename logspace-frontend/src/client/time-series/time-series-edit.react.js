@@ -5,18 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-/*
-* Logspace
-* Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-* This program and the accompanying materials are made available under the terms of
-* the Eclipse Public License Version 1.0, which accompanies this distribution and
-* is available at http://www.eclipse.org/legal/epl-v10.html.
-*/
 
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import shallowEqual from 'react/lib/shallowEqual';
-import {COLORS} from './constants';
+import {COLORS, TYPES} from './constants';
 import {onTimeSeriesSaved, onTimeSeriesPropertyChanged} from './actions';
 
 export default class EditTimeSeries extends PureComponent {
@@ -29,18 +22,11 @@ export default class EditTimeSeries extends PureComponent {
 
     var agentDescription = this.props.editedTimeSeries.get("newItem");
     var me = this;
-    var header = "Edit Time Series";
-
-    if (agentDescription.get("id") == null) {
-      header = "New Time Series";
-    }
-
+ 
     return (
       <div>
-        <h2> {header} </h2>
-        <div> Agent: {agentDescription.get("name")} </div>
-        <div> Space: {agentDescription.get("space")} </div>
-        <div> System: {agentDescription.get("system")} </div>
+        <div> {agentDescription.get("space")} {agentDescription.get("system")} </div>
+        <div> {agentDescription.get("name")} </div>
         <br/>
         <b>Select Property:</b>
         <br/>
@@ -69,6 +55,14 @@ export default class EditTimeSeries extends PureComponent {
           <option value="avg">average</option>
           <option value="count">count</option>
           <option value="sum">sum</option>
+        </select>
+        <br/>
+        <b>Select Chart Type: </b>
+        <br/>
+        <select name="type" value={agentDescription.get("type")} onChange={this.handleChange.bind(this)}>
+           {TYPES.map(function(type) {
+            return <option value={type}>{type}</option>
+          })}
         </select>
         <br/>
         <br/>

@@ -9,7 +9,6 @@
 import React from 'react'
 import PureComponent from '../components/purecomponent.react'
 
-import {getTimeWindow} from './store'
 import {onShowTimeWindowForm} from './actions';
 
 require('./time-window-values.styl')
@@ -17,13 +16,11 @@ require('./time-window-values.styl')
 export default class TimeWindowValues extends PureComponent {
 
   render() {
-    const timeWindow = getTimeWindow()
-
     return (
       <div className='time-window-values'>
-        <div>from: {timeWindow.get('start')} </div>
-        <div>to: {timeWindow.get('end')} </div>
-        <div>gap: {timeWindow.get('gap')} seconds</div>
+        <div>from: {this.props.timeWindow.get('start')} </div>
+        <div>to: {this.props.timeWindow.get('end')} </div>
+        <div>gap: {this.props.timeWindow.get('gap')} seconds</div>
         <button onClick={() => onShowTimeWindowForm()}>change</button>
       </div>
     )

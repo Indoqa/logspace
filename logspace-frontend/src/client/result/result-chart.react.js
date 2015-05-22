@@ -7,15 +7,41 @@
  */
 import React from 'react'
 import c3 from 'c3'
+import classnames from 'classnames'
 
 import PureComponent from '../components/purecomponent.react'
 import debounceFunc from '../../lib/debounce'
 
 import {onResultRefreshed} from './actions'
 
-require ('./result-chart.css')
+require ('./result-chart.styl')
 
 export default class Chart extends PureComponent {
+
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      loadingCss: 'loading'
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.result.get("loading")) {
+      this.chart.unload()
+      this.toggleLoading(true);
+
+      return
+    }
+
+    this.toggleLoading(false);
+
+    if (nextProps.result.get("empty") || nextProps.result.get("error")) {
+      this.chart.unload()
+      return
+    }
+  }
+
 
   componentDidMount() {
     this.chart = c3.generate(this.chartOptions())
@@ -26,12 +52,18 @@ export default class Chart extends PureComponent {
   }
 
   componentDidUpdate() {
+    if (this.props.result.get("loading")) {
+      return
+    }
+
     if (this.props.result.get("empty") || this.props.result.get("error")) {
-      this.chart.unload()
       return
     }
 
     const chartData = this.props.result.get("chartData").toJS()
+    const axisInformation = this.props.result.get("axis").toJS()
+    const typeInformation = this.props.result.get("types").toJS()
+    
     const currentData = this.chart.data()
 
     const keysToUnload = currentData.map(function(item) {
@@ -48,24 +80,31 @@ export default class Chart extends PureComponent {
         unload: keysToUnload
       }
     );
+  }
 
-/*
-    this.chart.xgrids([
-      {value: 0, text:chartData.columns[0][1]},
-      {value: chartData.columns[0].length - 2, text: chartData.columns[0][chartData.columns[0].length - 1]}
-    ])
-*/
+  toggleLoading(show) {
+   this.setState(
+      {
+        loadingCss: {
+          'loading' : true,
+          'active' : show
+        }
+      });
   }
 
   calculateChartSize() {
     const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+    const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    
     const minWindowWidth = 1024
+    const minWindowHeight = windowHeight - 200;
+    
     const sidebarWidth = 250
     const chartPadding = 20 * 2
     const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = width * heightWidthRatio
+    const height = Math.min(width * heightWidthRatio, minWindowHeight)
 
     return {
       width : width,
@@ -84,6 +123,7 @@ export default class Chart extends PureComponent {
   render() {
     return (
       <div>
+        <div className={classnames(this.state.loadingCss)}> <span>loading....</span> </div>
         <div id="chart" / >
         <br/>
         <button onClick={() => this.transform('bar')}>bar</button>
@@ -118,6 +158,9 @@ export default class Chart extends PureComponent {
         },
         y: {
           show: true
+        },
+        y2: {
+          show: false
         }
       },
       grid: {

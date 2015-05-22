@@ -7,5 +7,14 @@
  */
 export default {
   en: {
+  	drawer : {
+  		header: {
+  			null: "",
+		  	suggestions: "Select Agent",
+		  	timeWindow: "Change Time Window",
+		  	timeSeriesEdit: "Edit Time Series",
+		  	timeSeriesAdd: "Add new Time Series"
+  		}	
+  	}
   }
 }
