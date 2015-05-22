@@ -8,7 +8,6 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -20,8 +19,6 @@ public final class CpuAgent extends AbstractAgent {
 
     private CpuAgent(String agentId) {
         super(agentId, "os/cpu", TriggerType.Off, TriggerType.Cron);
-
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     public static CpuAgent create(String agentId) {

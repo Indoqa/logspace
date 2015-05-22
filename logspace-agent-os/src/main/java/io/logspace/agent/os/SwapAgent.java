@@ -8,7 +8,6 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -20,8 +19,6 @@ public final class SwapAgent extends AbstractAgent {
 
     private SwapAgent(String agentId) {
         super(agentId, "os/swap", TriggerType.Off, TriggerType.Cron);
-
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     public static SwapAgent create(String agentId) {

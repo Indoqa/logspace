@@ -8,7 +8,6 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -19,8 +18,6 @@ public final class SystemLoadAgent extends AbstractAgent {
 
     private SystemLoadAgent(String agentId) {
         super(agentId, "os/system-load", TriggerType.Off, TriggerType.Cron);
-
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     public static SystemLoadAgent create(String agentId) {

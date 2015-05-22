@@ -40,17 +40,17 @@ export default class EditTimeSeries extends PureComponent {
         {agentDescription.get("propertyDescriptions").map(function(property) {
           return (
             <div>
-              <input 
-                type="radio" 
-                name="propertyId" 
-                value={property.get("id")} 
+              <input
+                type="radio"
+                name="propertyId"
+                value={property.get("id")}
                 checked={property.get("id") == agentDescription.get("propertyId")}
-                onChange={me.handleChange.bind(me)}> 
+                onChange={me.handleChange.bind(me)}>
                 </input>
                 <nbsp/>
                 <span> {property.get("name")} </span>
               <br/>
-            </div>  
+            </div>
           )
         })}
         <br/>
@@ -59,7 +59,7 @@ export default class EditTimeSeries extends PureComponent {
         <select name="aggregate" value={agentDescription.get("aggregate")} onChange={this.handleChange.bind(this)}>
           <option value="max">max</option>
           <option value="min">min</option>
-          <option value="average">average</option>
+          <option value="avg">average</option>
           <option value="count">count</option>
           <option value="sum">sum</option>
         </select>
@@ -78,16 +78,16 @@ export default class EditTimeSeries extends PureComponent {
         {COLORS.map(function(color) {
           return (
             <span>
-              <input 
-                type="radio" 
-                name="color" 
-                value={color} 
+              <input
+                type="radio"
+                name="color"
+                value={color}
                 checked={color == agentDescription.get("color")}
-                onChange={me.handleChange.bind(me)}> 
+                onChange={me.handleChange.bind(me)}>
                 </input>
                 <nbsp/>
                 <span> {color} </span>
-            </span>  
+            </span>
           )
         })}
         <br/>

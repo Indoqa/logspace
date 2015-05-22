@@ -106,13 +106,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         private int eventCount;
 
         public TestAgent() {
-            super();
-
-            this.setId("TEST-AGENT-001");
-            this.setType("TEST-AGENT");
-            this.updateCapabilities(TriggerType.Off, TriggerType.Cron);
-
-            this.setAgentController(AgentControllerProvider.getAgentController());
+            super("TEST-AGENT-001", "TEST-AGENT", TriggerType.Off, TriggerType.Cron);
         }
 
         @Override

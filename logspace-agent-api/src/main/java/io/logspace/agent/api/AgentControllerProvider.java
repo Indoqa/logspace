@@ -18,6 +18,8 @@ import java.util.Arrays;
 
 public final class AgentControllerProvider {
 
+    private static final String PROPERTY_LOGSPACE_CONFIG = "logspace.config";
+
     private static final String[] CONFIG_LOCATIONS = {"/logspace-test.json", "/logspace.json", "/logspace-default.json"};
 
     private static AgentController agentController;
@@ -57,7 +59,7 @@ public final class AgentControllerProvider {
         try {
             setDescription(AgentControllerDescriptionFactory.fromJson(inputStream));
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load description.", ioex);
+            throw new AgentControllerException("Could not load logspace configuration.", ioex);
         } finally {
             closeQuietly(inputStream);
         }
@@ -69,10 +71,10 @@ public final class AgentControllerProvider {
         }
 
         try {
-            System.out.println(MessageFormat.format("Loading AgentControllerDescription from ''{0}''.", descriptionURL));
             setDescription(descriptionURL.openStream());
+            System.out.println(MessageFormat.format("Loaded logspace configuration from ''{0}''.", descriptionURL));
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load description from URL '" + descriptionURL + "'.", ioex);
+            throw new AgentControllerException("Could not load logspace configuration from URL '" + descriptionURL + "'.", ioex);
         }
     }
 
@@ -117,6 +119,10 @@ public final class AgentControllerProvider {
         return null;
     }
 
+    private static boolean hasDescription() {
+        return agentControllerDescription != null;
+    }
+
     private static AgentController initialize() {
         initializeDescription();
 
@@ -138,25 +144,75 @@ public final class AgentControllerProvider {
     }
 
     private static void initializeDescription() {
-        if (agentControllerDescription != null) {
+        if (hasDescription()) {
             return;
         }
 
-        File file = new File("logspace.json");
-        if (file.exists()) {
-            try {
-                setDescription(file.toURI().toURL());
-            } catch (MalformedURLException e) {
-                // do nothing
-            }
+        initializeDescriptionFromSetting();
+
+        if (hasDescription()) {
+            return;
         }
 
+        initializeDescriptionFromFile();
+
+        if (hasDescription()) {
+            return;
+        }
+
+        initializeDescriptionFromClasspath();
+    }
+
+    private static void initializeDescriptionFromClasspath() {
         for (String eachConfigLocation : CONFIG_LOCATIONS) {
-            if (agentControllerDescription != null) {
-                break;
+            if (hasDescription()) {
+                return;
             }
 
             setDescription(AgentControllerProvider.class.getResource(eachConfigLocation));
+        }
+    }
+
+    private static void initializeDescriptionFromFile() {
+        File file = new File("logspace.json");
+        if (!file.exists()) {
+            return;
+        }
+
+        try {
+            setDescription(file.toURI().toURL());
+        } catch (MalformedURLException e) {
+            // do nothing
+        }
+    }
+
+    private static void initializeDescriptionFromSetting() {
+        String logspaceConfig = System.getProperty(PROPERTY_LOGSPACE_CONFIG);
+        if (logspaceConfig == null) {
+            return;
+        }
+
+        try {
+            setDescription(new URL(logspaceConfig));
+        } catch (MalformedURLException e) {
+            // do nothing
+        }
+
+        if (hasDescription()) {
+            return;
+        }
+
+        // assume the location is a file path
+        File file = new File(logspaceConfig);
+        if (!file.exists()) {
+            throw new AgentControllerInitializationException("Could not load logspace configuration from the configured location '"
+                    + logspaceConfig + "'. Is the value correct?");
+        }
+
+        try {
+            setDescription(file.toURI().toURL());
+        } catch (MalformedURLException e) {
+            // do nothing
         }
     }
 

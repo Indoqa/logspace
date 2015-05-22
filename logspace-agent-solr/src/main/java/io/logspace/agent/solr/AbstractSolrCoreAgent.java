@@ -8,7 +8,6 @@
 package io.logspace.agent.solr;
 
 import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.TriggerType;
 
 import org.apache.solr.common.util.NamedList;
@@ -24,9 +23,7 @@ public abstract class AbstractSolrCoreAgent extends AbstractAgent implements Sol
         super(solrCore.getName() + type, "solr/core" + type, triggerType);
 
         SolrCore.log.info("Initializing " + this.getClass().getSimpleName() + " for Core '" + solrCore + "'.");
-
         this.solrCore = solrCore;
-        this.setAgentController(AgentControllerProvider.getAgentController());
     }
 
     protected static boolean getBoolean(NamedList<?> namedList, String name) {
