@@ -21,7 +21,7 @@ import {getActivePanel} from '../drawer/store'
 import {getResult} from '../result/store'
 import {getSuggestions} from '../suggestions/store'
 
-import {onShowSuggestions} from '../suggestions/actions'
+import {onShowSuggestions, onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
 
 require('./time-series.styl')
@@ -35,6 +35,10 @@ export default class TimeSeries extends React.Component {
       navDrawerCss: 'navigation-drawer',
       mainCss: 'main'
     };
+  }
+
+  componentDidMount() {
+    onNewSuggestionQuery(null)
   }
 
   toggleNavigationDrawer() {

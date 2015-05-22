@@ -13,9 +13,9 @@ import {onNewSuggestionQuery} from './actions';
 require('./suggestions.styl')
 
 export default class Suggestions extends PureComponent {
-  
+
   handleQueryChange(event) {
-      onNewSuggestionQuery(event.target.value)
+    onNewSuggestionQuery(event.target.value)
   }
 
   render() {
