@@ -47,6 +47,10 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
     case timeSeriesActions.onTimeSeriesSaved:
       setActivePanel(null);  
       break;
+
+    case timeSeriesActions.onTimeSeriesDeleted:
+      setActivePanel(null);  
+      break;  
   }
 });  
 

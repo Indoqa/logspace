@@ -10,7 +10,9 @@ import React from 'react';
 import PureComponent from '../components/purecomponent.react';
 import shallowEqual from 'react/lib/shallowEqual';
 import {COLORS, TYPES} from './constants';
-import {onTimeSeriesSaved, onTimeSeriesPropertyChanged} from './actions';
+import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} from './actions';
+
+require('./time-series-edit.styl')
 
 export default class EditTimeSeries extends PureComponent {
   handleChange(event) {
@@ -86,6 +88,10 @@ export default class EditTimeSeries extends PureComponent {
         <br/>
         <hr/>
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
+        <button 
+          className={(agentDescription.get("id") != null) ? 'delete-visible' : 'delete-hidden'} 
+          onClick={() =>  onTimeSeriesDeleted(this.props.item)}>Delete time series
+        </button>
       </div>
     );
   }

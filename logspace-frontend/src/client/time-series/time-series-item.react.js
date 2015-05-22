@@ -14,10 +14,6 @@ require('./time-series-item.styl')
 
 export default class TimeSeriesItem extends PureComponent {
 
-  deleteTimeSeries() {
-    onTimeSeriesDeleted(this.props.item);
-  }
-
   getPropertyName() {
     const id = this.props.item.get("propertyId");
     const pattern = /[\w]*?_[\w]*?_(.*)/
@@ -35,14 +31,11 @@ export default class TimeSeriesItem extends PureComponent {
     }
 
     return (
-      <div className='time-series-item'>
+      <div className='time-series-item' onClick={() => onEditTimeSeries(this.props.item)}>
         <div className='color' style={bgStyle}></div>
         <div className='inner'>
           {this.props.item.get("agentId")}<br/>
           {this.props.item.get("aggregate")} of {this.getPropertyName()}
-          <br/>
-          <button onClick={() => onEditTimeSeries(this.props.item)}>edit</button>
-          <button onClick={() => this.deleteTimeSeries()}>delete</button>
         </div>
       </div>
     )
