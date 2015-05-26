@@ -12,6 +12,8 @@ import PureComponent from '../components/purecomponent.react';
 import SuggestionSystems from './suggestions-systems.react';
 import SuggestionSpaces from './suggestions-spaces.react';
 import SuggestionProperties from './suggestions-properties.react';
+import TimeSeriesLabel from '../time-series/time-series-label.react';
+
 import {onNewTimeSeries} from '../time-series/actions';
 
 export default class SuggestionResult extends PureComponent {
@@ -41,8 +43,15 @@ export default class SuggestionResult extends PureComponent {
               return (
                 <li key={index}>
                   <a onClick={() => onNewTimeSeries(agent)}> 
-                    {item.get('name')} <br/>
-                    {item.get('space')};{item.get('system')} 
+                    <div className='color'></div>
+                    <div className='inner'>
+                     <TimeSeriesLabel timeSeries={item} />
+                     <div className={'properties'}>
+                        {agent.propertyDescriptions.map(function(item, index) {
+                          return <span> {item.name} |</span>    
+                        })}  
+                      </div>
+                    </div>
                   </a>
                 </li>
               );
@@ -50,13 +59,13 @@ export default class SuggestionResult extends PureComponent {
           </ul>
         </div>
         <div className={'facets'}>
-          <b>spaces:</b>
+          <b>Spaces</b>
           <SuggestionSpaces spaces={spaces} selected={request.get('space')}/>
           <br/>
-          <b>systems:</b>
+          <b>Systems</b>
           <SuggestionSystems systems={systems} selected={request.get('system')}/>
           <br/>
-          <b>properties</b>
+          <b>Properties</b>
           <SuggestionProperties properties={properties} selected={request.get('property')}/>
         </div>
       </div>

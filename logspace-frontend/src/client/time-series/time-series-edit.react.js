@@ -8,6 +8,8 @@
 
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
+import TimeSeriesLabel from './time-series-label.react';
+
 import shallowEqual from 'react/lib/shallowEqual';
 import {COLORS, TYPES} from './constants';
 import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} from './actions';
@@ -27,9 +29,8 @@ export default class EditTimeSeries extends PureComponent {
  
     return (
       <div>
-        <div> {agentDescription.get("space")} {agentDescription.get("system")} </div>
-        <div> {agentDescription.get("name")} </div>
-        <br/>
+        <TimeSeriesLabel timeSeries={agentDescription} />
+        <hr/>
         <b>Select Property:</b>
         <br/>
         {agentDescription.get("propertyDescriptions").map(function(property) {
@@ -59,15 +60,8 @@ export default class EditTimeSeries extends PureComponent {
           <option value="sum">sum</option>
         </select>
         <br/>
-        <b>Select Chart Type: </b>
         <br/>
-        <select name="type" value={agentDescription.get("type")} onChange={this.handleChange.bind(this)}>
-           {TYPES.map(function(type) {
-            return <option value={type}>{type}</option>
-          })}
-        </select>
-        <br/>
-        <br/>
+       
         <b>Select Color: </b>
         <br/>
         {COLORS.map(function(color) {

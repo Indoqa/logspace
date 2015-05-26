@@ -8,6 +8,7 @@
 
 import React from 'react';
 import PureComponent from '../components/purecomponent.react';
+import TimeSeriesLabel from './time-series-label.react';
 import {onTimeSeriesDeleted, onEditTimeSeries} from './actions';
 
 require('./time-series-item.styl')
@@ -34,7 +35,7 @@ export default class TimeSeriesItem extends PureComponent {
       <div className='time-series-item' onClick={() => onEditTimeSeries(this.props.item)}>
         <div className='color' style={bgStyle}></div>
         <div className='inner'>
-          {this.props.item.get("agentId")}<br/>
+          <TimeSeriesLabel timeSeries={this.props.item} />
           {this.props.item.get("aggregate")} of {this.getPropertyName()}
         </div>
       </div>

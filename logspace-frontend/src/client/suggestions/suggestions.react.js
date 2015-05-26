@@ -41,7 +41,7 @@ export default class Suggestions extends PureComponent {
     return (
       <div className={'suggestions'}>
         <div className={'query'}>
-           <input onChange={this.handleQueryChange.bind(this)} value={this.state.input}/>
+           <input onChange={this.handleQueryChange.bind(this)} value={this.state.input} placeholder="Filter by agent, space, system or property name"/>
         </div>
         <SuggestionResult 
           result={this.props.suggestions.get("result")} 
