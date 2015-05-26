@@ -6,7 +6,8 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import PureComponent from '../components/purecomponent.react'
+import Options  from '../options/options.react.js'
 import Suggestions  from '../suggestions/suggestions.react.js'
 import TimeWindow  from '../time-window/time-window.react.js'
 import EditTimeSeries from '../time-series/time-series-edit.react'
@@ -48,6 +49,12 @@ export default class DrawerPanel extends PureComponent {
     if (this.props.activePanel == Panels.ADD_TIMESERIES || this.props.activePanel == Panels.EDIT_TIMESERIES) {
       return (
         <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} />
+      );
+    }
+
+    if (this.props.activePanel == Panels.OPTIONS) {
+      return (
+        <Options />
       );
     }
     

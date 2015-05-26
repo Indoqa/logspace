@@ -136,7 +136,7 @@ export default class Chart extends PureComponent {
             <option value={'scatter'}>scatter</option>
           </select>
         </div>
-        <div className="header">
+        <div className="chart-title">
           <span className='title'>New logspace.io chart</span>
           <span className='edit'>[edit]</span>
         </div>

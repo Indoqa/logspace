@@ -5,17 +5,16 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-export default {
-  en: {
-  	drawer : {
-  		header: {
-  			null: "",
-        options: "Options",
-		  	suggestions: "Select Agent",
-		  	timeWindow: "Change Time Window",
-		  	timeSeriesEdit: "Edit Time Series",
-		  	timeSeriesAdd: "Add new Time Series"
-  		}	
-  	}
-  }
+
+import {dispatch} from '../dispatcher';
+import setToString from '../../lib/settostring';
+
+export function onShowOptions() {
+  dispatch(onShowOptions);
 }
+
+// Override actions toString for logging.
+setToString('options', {
+  onShowOptions
+});
+  

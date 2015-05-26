@@ -9,6 +9,7 @@ import Immutable from 'immutable';
 import * as timeWindowActions from '../time-window/actions';
 import * as timeSeriesActions from '../time-series/actions';
 import * as suggestionsActions from '../suggestions/actions';
+import * as optionsActions from '../options/actions';
 import * as drawerActions from './actions';
 import * as Panels from './constants';
 import {drawerCursor} from '../state';
@@ -35,6 +36,10 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
     case timeSeriesActions.onEditTimeSeries:  
       setActivePanel(Panels.EDIT_TIMESERIES);
       break;    
+
+    case optionsActions.onShowOptions:  
+      setActivePanel(Panels.OPTIONS);
+      break;      
 
     case timeWindowActions.onTimeWindowChange:
       setActivePanel(null);
