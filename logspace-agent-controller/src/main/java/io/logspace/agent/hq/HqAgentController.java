@@ -11,10 +11,10 @@ import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.AgentControllerException;
 import io.logspace.agent.api.AgentControllerInitializationException;
 import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
@@ -236,7 +236,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         } catch (ConnectException cex) {
             this.logger.error("Could not upload events because the HQ was not available: {}", cex.getMessage());
         } catch (IOException ioex) {
-            this.logger.error("Failed to download order.", ioex);
+            this.logger.error("Failed to upload events.", ioex);
         }
     }
 
@@ -284,8 +284,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     private void uploadEvents(Collection<Event> events) throws IOException {
-        this.logger.info("Committing {} events to HQ.", events.size());
-
+        this.logger.debug("Uploading {} events to HQ.", events.size());
         this.hqClient.uploadEvents(events);
     }
 
@@ -314,7 +313,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                 }
             }
 
-            HqAgentController.this.logger.debug("CommitRunnable: Stopped.");
+            HqAgentController.this.logger.info("CommitRunnable: Stopped.");
         }
 
         public void setCommitDelay(long commitDelay) {
@@ -328,7 +327,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
 
         public void stop() {
-            HqAgentController.this.logger.debug("CommitRunnable: Stopping");
+            HqAgentController.this.logger.info("CommitRunnable: Stopping");
 
             synchronized (this) {
                 this.run = false;
@@ -347,7 +346,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         private void sleep(long duration) {
             try {
+                HqAgentController.this.logger.debug("CommitRunnable: Waiting for {} ms", duration);
                 this.wait(duration);
+                HqAgentController.this.logger.debug("CommitRunnable: Resuming");
             } catch (InterruptedException e) {
                 // do nothing
             }

@@ -18,6 +18,7 @@ import io.logspace.agent.api.order.AgentControllerOrder;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -28,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HqClient {
+
+    private static final int TIMEOUT = 3000;
 
     private CloseableHttpClient httpClient;
 
@@ -50,7 +53,9 @@ public class HqClient {
         this.agentControllerId = agentControllerId;
         this.spaceToken = spaceToken;
 
-        this.httpClient = HttpClients.createDefault();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
+                .setSocketTimeout(TIMEOUT).build();
+        this.httpClient = HttpClients.custom().disableAutomaticRetries().setDefaultRequestConfig(requestConfig).build();
     }
 
     private static StringEntity toJsonEntity(Collection<Event> event) throws IOException {

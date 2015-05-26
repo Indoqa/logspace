@@ -8,10 +8,12 @@
 package io.logspace.hq.webapp.resource;
 
 import static io.logspace.agent.api.HttpStatusCode.Accepted;
+import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonDeserializer;
 import io.logspace.hq.core.api.EventService;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,10 +33,10 @@ public class EventResource extends AbstractSpaceResource {
         this.post("/events", (req, res) -> this.logEvents(req, res));
     }
 
-    private Void logEvents(Request req, Response res) throws IOException {
+    private String logEvents(Request req, Response res) throws IOException {
         String space = this.getSpace(req);
-
-        this.eventService.store(EventJsonDeserializer.fromJson(req.bodyAsBytes()), space);
+        Collection<? extends Event> events = EventJsonDeserializer.fromJson(req.bodyAsBytes());
+        this.eventService.store(events, space);
 
         res.status(Accepted.getCode());
         return null;

@@ -197,7 +197,7 @@ public class SolrEventService implements EventService {
             return;
         }
 
-        this.logger.info("Storing {} event(s).", events.size());
+        this.logger.info("Storing {} event(s) for space '{}'.", events.size(), space);
 
         try {
             Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
