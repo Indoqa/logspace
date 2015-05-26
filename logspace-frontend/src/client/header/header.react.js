@@ -8,6 +8,7 @@
 
 import React from 'react'
 import PureComponent from '../components/purecomponent.react'
+import {onShowOptions} from '../options/actions'
 
 require('./header.styl')
 
@@ -16,7 +17,7 @@ export default class Header extends PureComponent {
   render() {
     return (
       <div className='header'>
-        <div className="close"> <input type="button" value="..." onClick={() => onCloseDrawer()}/> </div>
+        <div className="close"> <input type="button" value="..." onClick={() => onShowOptions()}/> </div>
         <div className='logo'>logspace.io</div>
       </div>
     )

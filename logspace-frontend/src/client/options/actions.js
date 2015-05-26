@@ -6,19 +6,15 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-export const COLORS = [
-  '#e51c23',
-  '#5677fc',
-  '#ffeb3b',
-  '#259b24',
-  '#673ab7',  
-  '#009688',
-  '#e91e63',
-  '#00bcd4'
-]
+import {dispatch} from '../dispatcher';
+import setToString from '../../lib/settostring';
 
-export const TYPES = [
-  'bar',
-  'line',
-  'area'
-]
+export function onShowOptions() {
+  dispatch(onShowOptions);
+}
+
+// Override actions toString for logging.
+setToString('options', {
+  onShowOptions
+});
+  

@@ -6,19 +6,22 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-export const COLORS = [
-  '#e51c23',
-  '#5677fc',
-  '#ffeb3b',
-  '#259b24',
-  '#673ab7',  
-  '#009688',
-  '#e91e63',
-  '#00bcd4'
-]
+@require '../app/variables'
 
-export const TYPES = [
-  'bar',
-  'line',
-  'area'
-]
+.delete-visible 
+	display inline
+	
+.delete-hidden
+	display none
+	
+.color-option
+	float left
+	width 30px
+	padding-top 10px
+	padding-left 10px
+	input
+		width 20px
+		height 20px	
+
+.clearer 
+	clear both		

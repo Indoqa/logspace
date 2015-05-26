@@ -27,6 +27,7 @@ export default class Drawer extends PureComponent {
               activePanel={this.props.activePanel}
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
+              timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
               toggle={this.props.toggle} />
         </div>   

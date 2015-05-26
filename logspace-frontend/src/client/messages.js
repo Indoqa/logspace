@@ -10,6 +10,7 @@ export default {
   	drawer : {
   		header: {
   			null: "",
+        options: "Options",
 		  	suggestions: "Select Agent",
 		  	timeWindow: "Change Time Window",
 		  	timeSeriesEdit: "Edit Time Series",

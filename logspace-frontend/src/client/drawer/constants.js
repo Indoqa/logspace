@@ -10,4 +10,5 @@ export const SUGGESTIONS = "suggestions";
 export const TIME_WINDOW = "timeWindow";
 export const EDIT_TIMESERIES = "timeSeriesEdit";
 export const ADD_TIMESERIES = "timeSeriesAdd";
+export const OPTIONS = "options";
 

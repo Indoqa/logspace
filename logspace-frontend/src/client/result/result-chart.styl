@@ -6,30 +6,49 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-/*-- loading --*/
-.loading  
-  display none;
-  position absolute;
-  top 0x;
-  left 0px;
-  width 100%
-  height 100%
-  background #00000060
-  z-index 1000000
-  span
-    display block
-    position relative
-    width 200px
-    left 50%
-    top 50%
-    margin-left: -100px
-    margin-top: -100px
-    color #FFFFFF
-    font-size 3em
-    
-.loading.active 
-  display block
+@require '../app/variables'
 
+.chart-header
+   background-color $color-primary
+   color $color3
+   text-align center
+   height $header-height
+   .chart-title 
+     padding-top 4px
+    .title
+      font-weight 700
+      font-size 2.1rem
+    .edit
+      font-size 1.2rem
+      margin-left 10px
+  .chart-options 
+    position absolute
+    right 10px
+    top 5px
+    
+.resultChart
+  .loading  
+    display none;
+    position absolute;
+    top 0x;
+    left 0px;
+    width 100%
+    height 100%
+    background #FFFFFFC8
+    z-index 1000000
+    span
+      display block
+      position relative
+      width 200px
+      left 50%
+      top 50%
+      margin-left: -100px
+      margin-top: -100px
+      color #FFFFFF
+      font-size 3em
+  .loading.active 
+    display block
+  
 
 /*-- Chart --*/
 .c3 svg {

@@ -53,22 +53,27 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
 
     case actions.onTimeSeriesDeleted:
       timeSeriesCursor(timeSeries => {
-        return timeSeries.delete(timeSeries.indexOf(data))
+        var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data });
+        var index = timeSeries.indexOf(itemToDelete);
+        return timeSeries.delete(timeSeries.indexOf(itemToDelete))
       });
       break;
 
     case actions.onNewTimeSeries:
+      var nextColor = getNextColor();
+      var defaultProperty = getDefaultProperty(data.propertyDescriptions);
+
       editedTimeSeriesCursor(editedTimeSeries => {
         const item = new TimeSeriesItem({
           id: null,
           name: data.name,
           agentId: data.globalId,
-          propertyId: data.propertyDescriptions[0].id,
+          propertyId: defaultProperty,
           space: data.space,
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
           aggregate: "sum",
-          color: COLORS[timeSeriesCursor().size]
+          color: nextColor
         }).toMap();
         
         return editedTimeSeries.set("newItem",  item)
@@ -89,6 +94,31 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   }
 });
 
+function getNextColor() {
+  var usedColors = getTimeSeries().map(function(item) {
+      return item.get("color")
+  });
+
+  var allColors = COLORS.slice();
+  
+  var freeColors = allColors.filter(function(item) {
+    return usedColors.indexOf(item) === -1;
+  });
+
+  return freeColors[0]
+}
+
+function getDefaultProperty(propertyDescriptions) {
+  for (var i = 0; i < propertyDescriptions.length; i++) {
+    let propertyDescription = propertyDescriptions[0]
+    if (propertyDescription.propertyType != "STRING") {
+      return propertyDescription.id;
+    }
+  }
+
+  return null;
+}
+
 function addItem(item) {
   item.id = getRandomString() 
   
@@ -99,7 +129,7 @@ function addItem(item) {
 
 function updateItem(item) {
   timeSeriesCursor(timeSeries => {
-    var itemToUpdate = timeSeries.find(function(obj){return obj.get('id') === item.id;});
+    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id });
     var index = timeSeries.indexOf(itemToUpdate);
     return timeSeries.set(index, Immutable.fromJS(item))
   });
