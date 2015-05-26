@@ -14,8 +14,7 @@ export const COLORS = [
   '#673ab7',  
   '#009688',
   '#e91e63',
-  '#00bcd4',
-  '#ff5722'
+  '#00bcd4'
 ]
 
 export const TYPES = [

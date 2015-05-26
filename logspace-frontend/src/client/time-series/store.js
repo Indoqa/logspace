@@ -60,6 +60,8 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       break;
 
     case actions.onNewTimeSeries:
+      var nextColor = getNextColor();
+
       editedTimeSeriesCursor(editedTimeSeries => {
         const item = new TimeSeriesItem({
           id: null,
@@ -70,7 +72,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
           aggregate: "sum",
-          color: COLORS[timeSeriesCursor().size]
+          color: nextColor
         }).toMap();
         
         return editedTimeSeries.set("newItem",  item)
@@ -90,6 +92,20 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     break;
   }
 });
+
+function getNextColor() {
+  var usedColors = getTimeSeries().map(function(item) {
+      return item.get("color")
+  });
+
+  var allColors = COLORS.slice();
+  
+  var freeColors = allColors.filter(function(item) {
+    return usedColors.indexOf(item) === -1;
+  });
+
+  return freeColors[0]
+}
 
 function addItem(item) {
   item.id = getRandomString() 

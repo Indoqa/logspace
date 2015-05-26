@@ -76,6 +76,7 @@ export default class TimeSeries extends React.Component {
               activePanel={getActivePanel()}
               suggestions={getSuggestions()}
               timeWindow={getTimeWindow()}
+              timeSeries={timeSeries}
               editedTimeSeries={getEditedTimeSeries()}
               toggle={() => this.toggleNavigationDrawer()} />
           </div>

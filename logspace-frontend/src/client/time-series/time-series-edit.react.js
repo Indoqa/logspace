@@ -22,10 +22,16 @@ export default class EditTimeSeries extends PureComponent {
   }
 
   render() {
-    console.log("render")
-
     var agentDescription = this.props.editedTimeSeries.get("newItem");
     var me = this;
+
+    var usedColors = this.props.timeSeries.map(function(item) {
+      if (item.get("id") === agentDescription.get("id")) {
+        return ""
+      }
+
+      return item.get("color")
+    });
  
     return (
       <div>
@@ -65,21 +71,23 @@ export default class EditTimeSeries extends PureComponent {
         <b>Select Color: </b>
         <br/>
         {COLORS.map(function(color) {
+          var colorSyle = {
+            backgroundColor: color
+          }
           return (
-            <span>
+            <div className='color-option' style={colorSyle} >
               <input
                 type="radio"
                 name="color"
                 value={color}
                 checked={color == agentDescription.get("color")}
-                onChange={me.handleChange.bind(me)}>
+                onChange={me.handleChange.bind(me)}
+                disabled={color != agentDescription.get("color") && usedColors.indexOf(color) > -1}>
                 </input>
-                <nbsp/>
-                <span> {color} </span>
-            </span>
+            </div>
           )
         })}
-        <br/>
+        <div className='clearer'/>
         <hr/>
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
         <button 
