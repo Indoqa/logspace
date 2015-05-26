@@ -47,7 +47,8 @@ export default class EditTimeSeries extends PureComponent {
                 name="propertyId"
                 value={property.get("id")}
                 checked={property.get("id") == agentDescription.get("propertyId")}
-                onChange={me.handleChange.bind(me)}>
+                onChange={me.handleChange.bind(me)}
+                disabled={property.get("propertyType")==="STRING"}>
                 </input>
                 <nbsp/>
                 <span> {property.get("name")} </span>

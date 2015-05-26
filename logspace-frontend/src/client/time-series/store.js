@@ -61,13 +61,14 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
 
     case actions.onNewTimeSeries:
       var nextColor = getNextColor();
+      var defaultProperty = getDefaultProperty(data.propertyDescriptions);
 
       editedTimeSeriesCursor(editedTimeSeries => {
         const item = new TimeSeriesItem({
           id: null,
           name: data.name,
           agentId: data.globalId,
-          propertyId: data.propertyDescriptions[0].id,
+          propertyId: defaultProperty,
           space: data.space,
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
@@ -105,6 +106,17 @@ function getNextColor() {
   });
 
   return freeColors[0]
+}
+
+function getDefaultProperty(propertyDescriptions) {
+  for (var i = 0; i < propertyDescriptions.length; i++) {
+    let propertyDescription = propertyDescriptions[0]
+    if (propertyDescription.propertyType != "STRING") {
+      return propertyDescription.id;
+    }
+  }
+
+  return null;
 }
 
 function addItem(item) {
