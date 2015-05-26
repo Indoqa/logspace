@@ -23,7 +23,8 @@ export default class Chart extends PureComponent {
     super(props);
     
     this.state = {
-      loadingCss: 'loading'
+      loadingCss: 'loading',
+      type: 'line'
     };
   }
 
@@ -113,24 +114,39 @@ export default class Chart extends PureComponent {
 
   transform(type) {
     this.chart.transform(type)
+    this.setState(
+      {
+        type: type
+      });
   }
 
   render() {
     return (
-      <div className={'resultChart'}>
-        <div className={classnames(this.state.loadingCss)}> 
-          <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
+      <div>
+       <div className='chart-header'>
+        <div className='chart-options'>
+           <select onChange={(e) => this.transform(e.target.value)} value={this.state.type} >
+            <option value={'bar'}>bar</option>
+            <option value={'line'}>line</option>
+            <option value={'spline'}>spline</option>
+            <option value={'step'}>step</option>
+            <option value={'area'}>area</option>
+            <option value={'area-spline'}>area-spline</option>
+            <option value={'area-step'}>area-step</option>
+            <option value={'scatter'}>scatter</option>
+          </select>
         </div>
-        <div id="chart" / >
-        <br/>
-        <button onClick={() => this.transform('bar')}>bar</button>
-        <button onClick={() => this.transform('line')}>line</button>
-        <button onClick={() => this.transform('spline')}>spline</button>
-        <button onClick={() => this.transform('step')}>step</button>
-        <button onClick={() => this.transform('area')}>area</button>
-        <button onClick={() => this.transform('area-spline')}>area-spline</button>
-        <button onClick={() => this.transform('area-step')}>area-step</button>
-        <button onClick={() => this.transform('scatter')}>scatter</button>
+        <div className="header">
+          <span className='title'>New logspace.io chart</span>
+          <span className='edit'>[edit]</span>
+        </div>
+        </div>
+        <div className={'resultChart'}>
+          <div className={classnames(this.state.loadingCss)}> 
+            <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
+          </div>
+          <div id="chart" / >
+        </div>
       </div>
     )
   }
