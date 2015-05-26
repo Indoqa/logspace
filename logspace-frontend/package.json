@@ -38,6 +38,7 @@
     "gulp-replace": "^0.5.3",
     "gulp-util": "^3.0.2",
     "harmonize": "^1.4.1",
+		"halogen": "^0.1.8",
     "immutable": "^3.6.4",
     "intl": "^0.1.4",
     "intl-messageformat": "^1.1.0",

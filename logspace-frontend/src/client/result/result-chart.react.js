@@ -8,6 +8,7 @@
 import React from 'react'
 import c3 from 'c3'
 import classnames from 'classnames'
+import Halogen from 'halogen';
 
 import PureComponent from '../components/purecomponent.react'
 import debounceFunc from '../../lib/debounce'
@@ -116,8 +117,10 @@ export default class Chart extends PureComponent {
 
   render() {
     return (
-      <div>
-        <div className={classnames(this.state.loadingCss)}> <span>loading....</span> </div>
+      <div className={'resultChart'}>
+        <div className={classnames(this.state.loadingCss)}> 
+          <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
+        </div>
         <div id="chart" / >
         <br/>
         <button onClick={() => this.transform('bar')}>bar</button>

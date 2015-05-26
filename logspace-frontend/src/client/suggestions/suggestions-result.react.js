@@ -6,6 +6,8 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
+import Halogen from 'halogen';
+
 import PureComponent from '../components/purecomponent.react';
 import SuggestionSystems from './suggestions-systems.react';
 import SuggestionSpaces from './suggestions-spaces.react';
@@ -18,7 +20,11 @@ export default class SuggestionResult extends PureComponent {
     var isLoading = this.props.result.get("loading");
 
     if (isLoading) {
-      return  <div>  <div className={'facets'}> loading </div> </div>
+      return <div className={'result'}>  
+        <div className={'loading'}> 
+          <span> <Halogen.PulseLoader color={'#BBDEFB'}/> </span> 
+        </div> 
+      </div>
     }
 
     var request = this.props.request;
