@@ -56,8 +56,17 @@ export default class TimeSeries extends React.Component {
     this.forceUpdate()
   }
 
+  getAddButtonStyle(timeWindow) {
+    if (timeWindow.length < 8) {
+      return {visibility: 'visible'}
+    }
+
+    return {visibility: 'hidden'}
+  }
+
   render() {
     var timeWindow = getTimeWindow();
+    var addButtonStyle = this.getAddButtonStyle(getTimeSeries());
 
     return (
       <div className='time-series'>
@@ -69,7 +78,8 @@ export default class TimeSeries extends React.Component {
             <TimeSeriesList items={getTimeSeries()} />
 
             <div className='add-series-entry'>
-              <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
+              <button style={addButtonStyle}
+                className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
                 <i>+</i>
               </button>
             </div>
