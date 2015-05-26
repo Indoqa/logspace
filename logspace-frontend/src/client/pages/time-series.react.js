@@ -9,6 +9,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import classnames from 'classnames'
 
+import AddTimeSeries  from '../time-series/time-series-add.react.js'
 import TimeSeriesList  from '../time-series/time-series-list.react.js'
 import TimeWindowValues  from '../time-window/time-window-values.react.js'
 import Chart  from '../result/result-chart.react.js'
@@ -21,7 +22,7 @@ import {getActivePanel} from '../drawer/store'
 import {getResult} from '../result/store'
 import {getSuggestions} from '../suggestions/store'
 
-import {onShowSuggestions, onNewSuggestionQuery} from '../suggestions/actions'
+import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
 
 require('./time-series.styl')
@@ -56,18 +57,10 @@ export default class TimeSeries extends React.Component {
     this.forceUpdate()
   }
 
-  getAddButtonStyle(timeWindow) {
-    if (timeWindow.length < 8) {
-      return {visibility: 'visible'}
-    }
-
-    return {visibility: 'hidden'}
-  }
-
   render() {
     var timeWindow = getTimeWindow();
-    var addButtonStyle = this.getAddButtonStyle(getTimeSeries());
-
+    var timeSeries = getTimeSeries();
+ 
     return (
       <div className='time-series'>
         
@@ -75,19 +68,8 @@ export default class TimeSeries extends React.Component {
           <div className="left">
             <Header/>
             <TimeWindowValues timeWindow={timeWindow}/>
-            <TimeSeriesList items={getTimeSeries()} />
-
-            <div className='add-series-entry'>
-              <button style={addButtonStyle}
-                className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
-                <i>+</i>
-              </button>
-            </div>
-
-            <div className='tools'>
-              Tools
-            </div>
-
+            <TimeSeriesList items={timeSeries} />
+            <AddTimeSeries count={timeSeries.length} />
           </div>
           <div className="right">
             <Drawer
