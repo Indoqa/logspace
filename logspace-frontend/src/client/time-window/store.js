@@ -15,17 +15,7 @@ export function getTimeWindow() {
   return timeWindowCursor();
 }
 
-export const TIMEWINDOW_CONSTANTS = {
-  gap: {
-    second: 1,
-    minute: 60,
-    hour: 3600,
-    day: 86400,
-    week: 604800,
-    month: 2629740,
-    year: 31556900
-  }
-}
+
 
 export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 

@@ -7,6 +7,7 @@
  */
 import Immutable from 'immutable'
 import axios from 'axios'
+import moment from 'moment'
 
 import {resultCursor} from '../state'
 import {register,waitFor} from '../dispatcher'
@@ -122,9 +123,11 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  const columns = [createXAxisLabals(responseJson)]
+  const xvalues = createXAxisLabals(responseJson)
+  const columns = []
   const columnKeys = []
   const colors = {}
+  const names = {}
   const axis = [];
   const types = {};
 
@@ -132,6 +135,7 @@ function storeSuccessResult(timeSeries, responseJson) {
       columnKeys.push(item.get("id"))
       columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")))
       colors[item.get("id")] = item.get("color")
+      names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " " + item.get("propertyId")
 
       let typeArray = types[item.get("type")];
       if (typeArray == null) {
@@ -148,6 +152,10 @@ function storeSuccessResult(timeSeries, responseJson) {
   })
 
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
+  var xdata = xvalues.slice();
+  xdata.unshift('x')
+  columns.unshift(xdata)
+  
   const chartData = {
       colors: colors,
       columnKeys: columnKeys,
@@ -161,20 +169,23 @@ function storeSuccessResult(timeSeries, responseJson) {
       loading: false,
       axis: axis,
       types: types,
+      xvalues: xvalues,
+      xgap: responseJson.dateRange.gap,
+      names: names,
       chartData: chartData
     }))
   })
 }
 
 function createXAxisLabals(responseJson) {
-  let labels = ['x']
+  let labels = []
 
   const start = new Date(responseJson.dateRange.start).getTime()
   const end = new Date(responseJson.dateRange.end).getTime()
   const gap = responseJson.dateRange.gap
 
   for (let i = start; i < end; i = i + (gap * 1000)) {
-    labels.push(new Date(i).toJSON());
+    labels.push(moment.utc(new Date(i)))
   }
 
   return labels
