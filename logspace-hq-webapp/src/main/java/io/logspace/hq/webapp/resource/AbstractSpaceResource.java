@@ -58,7 +58,12 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
 
     private void mapLogspaceException(Response res, AbstractLogspaceResourceException e) {
         res.status(e.getStatusCode().getCode());
-        res.type("application/json");
-        res.body(this.getTransformer().render(e.getErrorData()));
+
+        if (e.getStatusCode().hasBody()) {
+            res.type("application/json");
+            res.body(this.getTransformer().render(e.getErrorData()));
+        } else {
+            res.body("");
+        }
     }
 }

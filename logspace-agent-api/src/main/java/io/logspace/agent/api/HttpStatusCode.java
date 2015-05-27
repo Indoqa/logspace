@@ -9,16 +9,23 @@ package io.logspace.agent.api;
 
 public enum HttpStatusCode {
 
-    Accepted(202), NotModified(304), BadRequest(400), Forbidden(403), NotFound(404), InternalServerError(500);
+    Accepted(202, true), NotModified(304, false), BadRequest(400, true), Forbidden(403, true), NotFound(404, true),
+    InternalServerError(500, true);
 
     private final int code;
+    private final boolean hasBody;
 
-    private HttpStatusCode(int code) {
+    private HttpStatusCode(int code, boolean hasBody) {
         this.code = code;
+        this.hasBody = hasBody;
     }
 
     public int getCode() {
         return this.code;
+    }
+
+    public boolean hasBody() {
+        return this.hasBody;
     }
 
     public boolean matches(int statusCode) {
