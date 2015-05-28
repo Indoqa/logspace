@@ -118,17 +118,12 @@ export default class Chart extends PureComponent {
 
   transform(type) {
     this.chart.transform(type)
-    this.setState(
-      {
-        type: type
-      });
+    this.setState({ type: type });
   }
 
   formatXAxis(index) {
     const date = this.props.result.get('xvalues').get(index)
     const gap = this.props.result.get("xgap")
-
-    let options;
 
     switch (gap) {
       case GAPS.second:
@@ -159,8 +154,6 @@ export default class Chart extends PureComponent {
   formatXTooltip(index) {
     const date = this.props.result.get('xvalues').get(index)
     const gap = this.props.result.get("xgap")
-
-    let options;
 
     switch (gap) {
       case GAPS.second:
