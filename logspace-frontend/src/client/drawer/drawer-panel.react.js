@@ -28,8 +28,6 @@ export default class DrawerPanel extends PureComponent {
   }
 
   render() {
-    console.log(this.props.activePanel )
-
   	if (this.props.activePanel == null) {
   		return <div/>
   	}

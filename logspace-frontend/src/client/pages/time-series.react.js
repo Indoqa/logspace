@@ -69,7 +69,7 @@ export default class TimeSeries extends React.Component {
             <Header/>
             <TimeWindowValues timeWindow={timeWindow}/>
             <TimeSeriesList items={timeSeries} />
-            <AddTimeSeries count={timeSeries.length} />
+            <AddTimeSeries count={timeSeries.size} />
           </div>
           <div className="right">
             <Drawer

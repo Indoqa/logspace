@@ -9,11 +9,13 @@ import React from 'react'
 import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen';
+import moment from 'moment';
 
 import PureComponent from '../components/purecomponent.react'
 import debounceFunc from '../../lib/debounce'
 
 import {onResultRefreshed} from './actions'
+import {GAPS} from '../time-window/constants'
 
 require ('./result-chart.styl')
 
@@ -57,11 +59,11 @@ export default class Chart extends PureComponent {
     }
 
     const chartData = this.props.result.get("chartData").toJS()
+    const names = this.props.result.get("names").toJS()
     const axisInformation = this.props.result.get("axis").toJS()
     const typeInformation = this.props.result.get("types").toJS()
-    
-    const currentData = this.chart.data()
 
+    const currentData = this.chart.data()
     const keysToUnload = currentData.map(function(item) {
       if (chartData.columnKeys.indexOf(item.id) > -1 ) {
         return null
@@ -76,6 +78,8 @@ export default class Chart extends PureComponent {
         unload: keysToUnload
       }
     );
+
+    this.chart.data.names(names);
   }
 
   toggleLoading(show) {
@@ -114,10 +118,67 @@ export default class Chart extends PureComponent {
 
   transform(type) {
     this.chart.transform(type)
-    this.setState(
-      {
-        type: type
-      });
+    this.setState({ type: type });
+  }
+
+  formatXAxis(index) {
+    const date = this.props.result.get('xvalues').get(index)
+    const gap = this.props.result.get("xgap")
+
+    switch (gap) {
+      case GAPS.second:
+        return date.format('HH:mm:ss')
+        
+      case GAPS.minute:
+        return date.format('HH:mm')
+
+      case GAPS.hour:
+        return date.format('HH:00')
+        
+      case GAPS.day:
+        return date.format('DD.MM.')
+
+      case GAPS.week:
+        return date.format('DD.MM.')
+
+      case GAPS.month:
+        return date.format('MMMM')
+
+      case GAPS.year:
+        return date.format('YYYY')    
+    }
+   
+    return gap
+  }
+
+  formatXTooltip(index) {
+    const date = this.props.result.get('xvalues').get(index)
+    const gap = this.props.result.get("xgap")
+
+    switch (gap) {
+      case GAPS.second:
+        return date.format('dd DD.MM.YYYY - HH:mm:ss')
+        
+      case GAPS.minute:
+        return date.format('dd DD.MM.YYYY - HH:mm')
+
+      case GAPS.hour:
+        return date.format('dd DD.MM.YYYY - HH:00')
+        
+      case GAPS.day:
+        return date.format('dd DD.MM.YYYY')
+
+      case GAPS.week:
+        return date.format('dd DD.MM.YYYY')
+
+      case GAPS.month:
+        return date.format('MMMM YYYY')
+
+      case GAPS.year:
+        return date.format('YYYY')    
+    }
+   
+    return gap
   }
 
   render() {
@@ -156,6 +217,8 @@ export default class Chart extends PureComponent {
     const me = this
 
     const debouncedChartResize = debounceFunc(this.resizeChart.bind(me), 350)
+    const formatXAxisCallback = this.formatXAxis.bind(me) 
+    const formatXTooltipCallback = this.formatXTooltip.bind(me) 
 
     return {
       data: {
@@ -166,7 +229,10 @@ export default class Chart extends PureComponent {
         x: {
           type: 'category',
           tick: {
-            culling: true
+            count: 10,
+            height: 130,
+            rotate: 0,
+            format: formatXAxisCallback
           }
         },
         y: {
@@ -182,6 +248,11 @@ export default class Chart extends PureComponent {
         },
         y: {
           show: false
+        }
+      },
+      tooltip: {
+        format: {
+          title: formatXTooltipCallback
         }
       },
       legend: {
