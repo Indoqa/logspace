@@ -10,11 +10,15 @@ package io.logspace.agent.api;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AgentControllerDescriptionFactory {
+public final class AgentControllerDescriptionFactory {
 
     private static final String IMPLEMENTATION_PROPERTY_NAME = "logspace.configuration-deserializer";
 
     private static final String DEFAULT_IMPLEMENTATION = "io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer";
+
+    private AgentControllerDescriptionFactory() {
+        // hide utility class constructor
+    }
 
     public static AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
         AgentControllerDescriptionDeserializer deserializer = getDeserializer();
