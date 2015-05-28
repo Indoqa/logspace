@@ -31,7 +31,8 @@ export default {
    "translatedResult": {
    	 "error": false,
      "empty": true,
-     "series": null
+     "series": null,
+     "xvalues": []
    }
  },
   "suggestions": {
