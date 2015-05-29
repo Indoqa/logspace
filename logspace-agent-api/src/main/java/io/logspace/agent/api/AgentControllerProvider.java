@@ -7,6 +7,8 @@
  */
 package io.logspace.agent.api;
 
+import io.logspace.agent.api.util.ConsoleWriter;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +74,7 @@ public final class AgentControllerProvider {
 
         try {
             setDescription(descriptionURL.openStream());
-            System.out.println(MessageFormat.format("Loaded logspace configuration from ''{0}''.", descriptionURL));
+            ConsoleWriter.writeSystem(MessageFormat.format("Loaded logspace configuration from ''{0}''.", descriptionURL));
         } catch (IOException ioex) {
             throw new AgentControllerException("Could not load logspace configuration from URL '" + descriptionURL + "'.", ioex);
         }
