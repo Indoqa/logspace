@@ -79,20 +79,26 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
         this.eventType = eventType;
     }
 
-    public static JvmEventBuilder createJvmAgentAttachedBuilder(String agentId, String system) {
-        return new JvmEventBuilder(agentId, system, JVM_AGENT_ATTACHED_EVENT_TYPE);
+    public static JvmEventBuilder createJvmAgentAttachedBuilder(String agentId, String system, String globalEventId) {
+        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_AGENT_ATTACHED_EVENT_TYPE);
+        jvmEventBuilder.setGlobalEventId(globalEventId);
+        return jvmEventBuilder;
     }
 
     public static JvmEventBuilder createJvmBuilder(String agentId, String system) {
         return new JvmEventBuilder(agentId, system, JVM_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmStartBuilder(String agentId, String system) {
-        return new JvmEventBuilder(agentId, system, JVM_START_EVENT_TYPE);
+    public static JvmEventBuilder createJvmStartBuilder(String agentId, String system, String globalEventId) {
+        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_START_EVENT_TYPE);
+        jvmEventBuilder.setGlobalEventId(globalEventId);
+        return jvmEventBuilder;
     }
 
-    public static JvmEventBuilder createJvmStopBuilder(String agentId, String system) {
-        return new JvmEventBuilder(agentId, system, JVM_STOP_EVENT_TYPE);
+    public static JvmEventBuilder createJvmStopBuilder(String agentId, String system, String globalEventId) {
+        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_STOP_EVENT_TYPE);
+        jvmEventBuilder.setGlobalEventId(globalEventId);
+        return jvmEventBuilder;
     }
 
     public void setAvailableProcessors(int availableProcessors) {
