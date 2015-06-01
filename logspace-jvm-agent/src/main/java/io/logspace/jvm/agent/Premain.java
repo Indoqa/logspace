@@ -8,10 +8,13 @@
 package io.logspace.jvm.agent;
 
 import java.lang.instrument.Instrumentation;
+import java.util.UUID;
 
 public final class Premain {
 
     private static JvmAgent agent;
+
+    private static String globalEventId;
 
     private Premain() {
         // hide utility class constructor
@@ -20,8 +23,9 @@ public final class Premain {
     @SuppressWarnings("unused")
     public static void agentmain(String args, Instrumentation inst) {
         agent = JvmAgent.create();
+        globalEventId = createGlobalEventId();
 
-        agent.sendAgentAttachedEvent();
+        agent.sendAgentAttachedEvent(globalEventId);
 
         registerShutdownHook();
     }
@@ -29,14 +33,23 @@ public final class Premain {
     @SuppressWarnings("unused")
     public static void premain(String args, Instrumentation inst) {
         agent = JvmAgent.create();
+        globalEventId = createGlobalEventId();
 
-        agent.sendJvmStartEvent();
+        agent.sendJvmStartEvent(globalEventId);
 
         registerShutdownHook();
     }
 
     protected static JvmAgent getAgent() {
         return agent;
+    }
+
+    protected static String getGlobalEventId() {
+        return globalEventId;
+    }
+
+    private static String createGlobalEventId() {
+        return UUID.randomUUID().toString();
     }
 
     private static void registerShutdownHook() {
@@ -51,7 +64,7 @@ public final class Premain {
 
         @Override
         public void run() {
-            Premain.getAgent().sendJvmStopEvent();
+            Premain.getAgent().sendJvmStopEvent(Premain.getGlobalEventId());
         }
     }
 }

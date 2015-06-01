@@ -8,6 +8,7 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -60,36 +61,39 @@ public final class JvmAgent extends AbstractAgent {
         this.sendEvent(eventBuilder.toEvent());
     }
 
-    public void sendAgentAttachedEvent() {
+    public void sendAgentAttachedEvent(String globalEventId) {
         if (!this.isEnabled()) {
             return;
         }
 
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem());
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem(), globalEventId);
 
         this.addSystemInformation(eventBuilder);
 
         this.sendEvent(eventBuilder.toEvent());
     }
 
-    public void sendJvmStartEvent() {
+    public String sendJvmStartEvent(String globalEventId) {
         if (!this.isEnabled()) {
-            return;
+            return "";
         }
 
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem());
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem(), globalEventId);
 
         this.addSystemInformation(eventBuilder);
 
-        this.sendEvent(eventBuilder.toEvent());
+        Event event = eventBuilder.toEvent();
+        this.sendEvent(event);
+        return event.getId();
     }
 
-    public void sendJvmStopEvent() {
+    public void sendJvmStopEvent(String globalEventId) {
         if (!this.isEnabled()) {
             return;
         }
 
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem());
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem(), globalEventId);
+        eventBuilder.setGlobalEventId(globalEventId);
         this.sendEvent(eventBuilder.toEvent());
     }
 
