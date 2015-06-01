@@ -11,21 +11,60 @@ import PureComponent from '../components/purecomponent.react';
 import TimeSeriesLabel from './time-series-label.react';
 
 import shallowEqual from 'react/lib/shallowEqual';
-import {COLORS, TYPES} from './constants';
+import {COLORS, TYPES, SCALES} from './constants';
 import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} from './actions';
 
 require('./time-series-edit.styl')
 
 export default class EditTimeSeries extends PureComponent {
+  
   handleChange(event) {
     onTimeSeriesPropertyChanged(event.target.name, event.target.value)
   }
 
-  render() {
-    var agentDescription = this.props.editedTimeSeries.get("newItem");
-    var me = this;
+  getCustomScaleInput(agentDescription) {
+    if (agentDescription.get("scaleType") != 'custom') {
+      return <div/>
+    }
 
-    var usedColors = this.props.timeSeries.map(function(item) {
+    return (<span>
+      <input name='scaleMin' value={agentDescription.get("scaleMin")} onChange={this.handleChange.bind(this)}/> <nbsp/>-<nbsp/> <input name='scaleMax' value={agentDescription.get("scaleMax")} onChange={this.handleChange.bind(this)}/>
+      </span>)      
+  }
+
+   getPropertyScaleInput(agentDescription) {
+    const propertyScale = SCALES[agentDescription.get("propertyId")]
+
+    if (propertyScale == null) {
+      return <div/>
+    }
+
+    const savePropertyScale = () => {
+      onTimeSeriesPropertyChanged('scaleType', 'property')
+      onTimeSeriesPropertyChanged('scaleMin', propertyScale.min)
+      onTimeSeriesPropertyChanged('scaleMax', propertyScale.max)
+    }
+
+    return (<div>
+        <input
+          type="radio"
+          name="scaleMin"
+          value={'auto'}
+          checked={agentDescription.get("scaleType") === 'property'}
+          onChange={savePropertyScale}
+          >
+        </input> {propertyScale.label} ({propertyScale.min} - {propertyScale.max})
+      </div>)      
+  }
+
+  render() {
+    const agentDescription = this.props.editedTimeSeries.get("newItem");
+    const me = this;
+
+    const propertyScaleInput = this.getPropertyScaleInput(agentDescription)
+    const customScaleInput = this.getCustomScaleInput(agentDescription)
+
+    const usedColors = this.props.timeSeries.map(function(item) {
       if (item.get("id") === agentDescription.get("id")) {
         return ""
       }
@@ -34,6 +73,7 @@ export default class EditTimeSeries extends PureComponent {
     });
  
     return (
+      
       <div>
         <TimeSeriesLabel timeSeries={agentDescription} />
         <hr/>
@@ -92,7 +132,22 @@ export default class EditTimeSeries extends PureComponent {
         <br/>
         <b>Define Scale: </b>
         <br/>
-        <input name='scaleMin' value={agentDescription.get("scaleMin")} onChange={this.handleChange.bind(this)}/> <nbsp/>-<nbsp/> <input name='scaleMax' value={agentDescription.get("scaleMax")} onChange={this.handleChange.bind(this)}/>
+        <input
+          type="radio"
+          name="scaleType"
+          value={'auto'}
+          checked={agentDescription.get("scaleType") == 'auto'}
+          onChange={me.handleChange.bind(me)}>
+        </input> Data (use min/max of result) 
+        <br/>
+        {propertyScaleInput}
+        <input
+          type="radio"
+          name="scaleType"
+          value={'custom'}
+          checked={agentDescription.get("scaleType") == 'custom'}
+          onChange={me.handleChange.bind(me)}>
+        </input> Custom {customScaleInput}
         <hr/>
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
         <button 

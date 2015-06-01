@@ -84,8 +84,6 @@ export default class Chart extends PureComponent {
     this.chart.axis.range(axisRanges);
 
     this.originalColumns = chartData.originalColumns 
-
-    document.getElementById('warnings').innerHTML = chartData.columns.pop() + '<br/>' + JSON.stringify(chartData.axes) ;
   }
 
   toggleLoading(show) {
@@ -217,7 +215,6 @@ export default class Chart extends PureComponent {
             <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
           </div>
           <div id="chart" / >
-          <div id="warnings" />
         </div>
       </div>
     )

@@ -17,6 +17,14 @@ export const COLORS = [
   '#00bcd4'
 ]
 
+export const SCALES = {
+  "integer_property_response_code": {
+    label: 'HTTP Status codes',
+    min: 0,
+    max: 500
+  }
+}
+
 export const TYPES = [
   'bar',
   'line',

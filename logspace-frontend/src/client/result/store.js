@@ -152,39 +152,39 @@ function storeSuccessResult(timeSeries, responseJson) {
       types[item.get("type")].push(item.get("id"));
 
       // apply to scale
-      const scaleMin = parseInt(item.get("scaleMin"))
-      const scaleMax = parseInt(item.get("scaleMax"))
+      const scale = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
       let normalizer;
 
       if (axisRanges.max.y == 0) {
-        axisRanges.min.y = scaleMin
-        axisRanges.max.y = scaleMax 
+        axisRanges.min.y = scale.min
+        axisRanges.max.y = scale.max 
         dataAxes[item.get("id")] = 'y'; 
         timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
-      } else if (axisRanges.min.y == scaleMin && axisRanges.max.y == scaleMax)  {
+      } else if (axisRanges.min.y == scale.min && axisRanges.max.y == scale.max)  {
         dataAxes[item.get("id")] = 'y'
         timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
       } else if (axisRanges.max.y2 == 0) {
-        axisRanges.min.y2 = scaleMin
-        axisRanges.max.y2 = scaleMax
+        axisRanges.min.y2 = scale.min
+        axisRanges.max.y2 = scale.max
         dataAxes[item.get("id")] = 'y2'
         timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
-      } else if (axisRanges.min.y2 == scaleMin && axisRanges.max.y2 == scaleMax)  {
+      } else if (axisRanges.min.y2 == scale.min && axisRanges.max.y2 == scale.max)  {
         dataAxes[item.get("id")] = 'y2'
         timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
       } else {
         dataAxes[item.get("id")] = 'y'
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y!')  
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y*')  
 
         normalizer = (value) => {
-          const onePercentOfOriginal = (scaleMax - scaleMin) / 100
-          const percentOfOriginal = value / onePercentOfOriginal
+          const onePercentOfOriginal = (scale.max - scale.min) / 100
+          const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
           const targetRange = axisRanges.max.y - axisRanges.min.y
           const onePercentOfTarget = targetRange / 100
+          console.log(targetRange + "/" + onePercentOfTarget + "/" + onePercentOfOriginal + "/" + scale.max + "/" + scale.min)
           return onePercentOfTarget * percentOfOriginal
         }
       }
@@ -235,6 +235,14 @@ function createXAxisLabals(responseJson) {
   }
 
   return labels
+}
+
+function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
+  if (scaleType === 'auto') {
+    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }   
+  } 
+
+  return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
 }
 
 

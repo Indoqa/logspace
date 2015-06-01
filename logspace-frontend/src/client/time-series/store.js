@@ -22,6 +22,7 @@ const TimeSeriesItem = Record({
   agentId: '',
   propertyId: '',
   aggregate: '',
+  scaleType: 'auto',
   scaleMin: 0,
   scaleMax: 100,
   type: 'line',
@@ -91,6 +92,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.setIn(["newItem", data.key],  data.value)
       });
+    break;  
 
     case actions.onAxisChanged:
       timeSeriesCursor(timeSeries => {
