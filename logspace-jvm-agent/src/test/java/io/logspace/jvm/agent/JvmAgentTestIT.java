@@ -43,15 +43,19 @@ public class JvmAgentTestIT {
         jvmAgent = Premain.getAgent();
         assertNotNull(jvmAgent);
 
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(1, agentController.getCollectedEvents().size());
 
         jvmAgent.execute(null);
 
         List<Event> collectedEvents = agentController.getCollectedEvents();
-        assertEquals(1, collectedEvents.size());
+        assertEquals(2, collectedEvents.size());
 
         Event event = collectedEvents.get(0);
         assertEquals("jvm/" + JVM_IDENTIFIER, event.getAgentId());
+        assertTrue("Expected at least 16 string properties, but received " + event.getStringProperties().size(), event
+                .getStringProperties().size() >= 16);
+
+        event = collectedEvents.get(1);
         assertTrue("Expected at least 1 double property, but received " + event.getDoubleProperties().size(), event
                 .getDoubleProperties().size() >= 1);
         assertEquals(4, event.getIntegerProperties().size());

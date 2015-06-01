@@ -46,6 +46,9 @@ public final class JvmAgent extends AbstractAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
+        if (!this.isEnabled()) {
+            return;
+        }
         JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmBuilder(this.getId(), this.getSystem());
 
         this.addOperatingSystemProperties(eventBuilder);
@@ -54,6 +57,39 @@ public final class JvmAgent extends AbstractAgent {
         this.addMemoryProperties(eventBuilder);
         this.addClassLoadingProperties(eventBuilder);
 
+        this.sendEvent(eventBuilder.toEvent());
+    }
+
+    public void sendAgentAttachedEvent() {
+        if (!this.isEnabled()) {
+            return;
+        }
+
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem());
+
+        this.addSystemInformation(eventBuilder);
+
+        this.sendEvent(eventBuilder.toEvent());
+    }
+
+    public void sendJvmStartedEvent() {
+        if (!this.isEnabled()) {
+            return;
+        }
+
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem());
+
+        this.addSystemInformation(eventBuilder);
+
+        this.sendEvent(eventBuilder.toEvent());
+    }
+
+    public void sendShutdownEvent() {
+        if (!this.isEnabled()) {
+            return;
+        }
+
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem());
         this.sendEvent(eventBuilder.toEvent());
     }
 
@@ -107,6 +143,30 @@ public final class JvmAgent extends AbstractAgent {
             eventBuilder.setMaxFileDescriptorCount(unixOperatingSystem.getMaxFileDescriptorCount());
             eventBuilder.setOpenFileDescriptorCount(unixOperatingSystem.getOpenFileDescriptorCount());
         }
+    }
+
+    private void addSystemInformation(JvmEventBuilder eventBuilder) {
+        eventBuilder.setAvailableProcessors(Runtime.getRuntime().availableProcessors());
+        eventBuilder.setCpuEndian(System.getProperty("sun.cpu.endian"));
+
+        eventBuilder.setJavaRuntimeName(System.getProperty("java.runtime.name"));
+        eventBuilder.setJavaRuntimeVersion(System.getProperty("java.runtime.version"));
+
+        eventBuilder.setJvmVersion(System.getProperty("java.vm.version"));
+        eventBuilder.setJvmVendor(System.getProperty("java.vm.vendor"));
+        eventBuilder.setJvmName(System.getProperty("java.vm.name"));
+        eventBuilder.setJvmInfo(System.getProperty("java.vm.info"));
+
+        eventBuilder.setOsName(System.getProperty("os.name"));
+        eventBuilder.setOsArchitecture(System.getProperty("os.arch"));
+        eventBuilder.setOsVersion(System.getProperty("os.version"));
+
+        eventBuilder.setUserCountry(System.getProperty("user.country"));
+        eventBuilder.setUserDirectory(System.getProperty("user.dir"));
+        eventBuilder.setUserHome(System.getProperty("user.home"));
+        eventBuilder.setUserLanguage(System.getProperty("user.language"));
+        eventBuilder.setUserName(System.getProperty("user.name"));
+        eventBuilder.setUserTimezone(System.getProperty("user.timezone"));
     }
 
     private void addThreadProperties(JvmEventBuilder eventBuilder) {
