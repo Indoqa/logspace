@@ -10,6 +10,7 @@ package io.logspace.agent.console;
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.util.ConsoleWriter;
 import io.logspace.agent.impl.AbstractAgentController;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ public class ConsoleAgentController extends AbstractAgentController {
     }
 
     protected void writeEvent(String formattedEvent) {
-        System.out.println(formattedEvent);
+        ConsoleWriter.write(formattedEvent);
     }
 
     private String formatDate(Date date) {

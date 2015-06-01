@@ -11,6 +11,7 @@ import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.util.ConsoleWriter;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -130,7 +131,8 @@ public abstract class AbstractAgentController implements AgentController {
         try {
             this.system = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            System.err.println("Failed to retrieve host name: " + e);
+            ConsoleWriter.writeSystem("Failed to retrieve system name: " + e);
+            this.system = "UNKNOWN";
         }
     }
 }

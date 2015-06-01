@@ -21,7 +21,7 @@ import java.lang.management.ThreadMXBean;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
-public class JvmAgent extends AbstractAgent {
+public final class JvmAgent extends AbstractAgent {
 
     public static final String SYSTEM_PROPERTY_JVM_IDENTIFIER = "io.logspace.jvm-identifier";
 
