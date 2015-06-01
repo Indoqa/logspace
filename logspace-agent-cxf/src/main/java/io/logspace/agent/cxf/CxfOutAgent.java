@@ -9,15 +9,17 @@ package io.logspace.agent.cxf;
 
 import static io.logspace.agent.api.order.TriggerType.Event;
 import static io.logspace.agent.api.order.TriggerType.Off;
+import static io.logspace.agent.cxf.CxfEventBuilder.createCxfEventBuilder;
+import static io.logspace.agent.cxf.CxfInAgent.CXF_AGENT_EVENT_CONTEXT;
+import static io.logspace.agent.cxf.CxfMessageHelper.getProtocolHeaderValue;
 import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.event.context.EventContext;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -80,33 +82,14 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             if (!this.isEnabled()) {
                 return;
             }
-            CxfEventBuilder cxfEventBuilder = new CxfEventBuilder(this.getId(), this.getSystem());
+            EventContext eventContext = (EventContext) message.getExchange().remove(CXF_AGENT_EVENT_CONTEXT);
+            CxfEventBuilder cxfEventBuilder = createCxfEventBuilder(this.getId(), this.getSystem(), eventContext);
 
             this.logInMessageUrl(cxfEventBuilder, message);
             this.logOutMessage(cxfEventBuilder, message);
             this.logDuration(cxfEventBuilder, message);
 
             this.sendEvent(cxfEventBuilder.toEvent());
-        }
-
-        private String getProtocolHeaderValue(Message message, String header) {
-            @SuppressWarnings("unchecked")
-            Map<String, List<?>> headers = (Map<String, List<?>>) message.get(Message.PROTOCOL_HEADERS);
-            if (headers == null) {
-                return null;
-            }
-
-            List<?> headerValues = headers.get(header);
-            if (headerValues == null || headerValues.isEmpty()) {
-                return null;
-            }
-
-            Object headerValue = headerValues.get(0);
-            if (headerValue == null) {
-                return null;
-            }
-
-            return String.valueOf(headerValue);
         }
 
         private void logDuration(CxfEventBuilder cxfEventBuilder, Message message) {
@@ -138,7 +121,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             cxfEventBuilder.setQueryString((String) inMessage.get(Message.QUERY_STRING));
             cxfEventBuilder.setPath((String) inMessage.get(Message.REQUEST_URI));
 
-            cxfEventBuilder.setRequestId(this.getProtocolHeaderValue(inMessage, "Request-ID"));
+            cxfEventBuilder.setRequestId(getProtocolHeaderValue(inMessage, "Request-ID"));
 
             this.logIpAddress(cxfEventBuilder, inMessage);
 
@@ -161,7 +144,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
             Message outMessage = message.getExchange().getOutMessage();
 
             cxfEventBuilder.setResponseCode((Integer) outMessage.get(Message.RESPONSE_CODE));
-            cxfEventBuilder.setLocation(this.getProtocolHeaderValue(outMessage, HttpHeaders.LOCATION));
+            cxfEventBuilder.setLocation(getProtocolHeaderValue(outMessage, HttpHeaders.LOCATION));
         }
     }
 }

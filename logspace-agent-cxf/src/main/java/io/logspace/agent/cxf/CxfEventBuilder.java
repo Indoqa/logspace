@@ -10,6 +10,7 @@ package io.logspace.agent.cxf;
 import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.event.context.EventContext;
 
 public class CxfEventBuilder extends AbstractEventBuilder {
 
@@ -29,12 +30,18 @@ public class CxfEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_GLOBAL_REQUEST_ID = "global_request_id";
     public static final String PROPERTY_PARENT_REQUEST_ID = "parent_request_id";
 
-    public CxfEventBuilder(String agentId, String system) {
+    private CxfEventBuilder(String agentId, String system) {
         super(agentId, system);
     }
 
-    public CxfEventBuilder(String agentId, String system, Event parentEvent) {
+    private CxfEventBuilder(String agentId, String system, Event parentEvent) {
         super(agentId, system, parentEvent);
+    }
+
+    public static CxfEventBuilder createCxfEventBuilder(String agentId, String system, EventContext eventContext) {
+        CxfEventBuilder eventBuilder = new CxfEventBuilder(agentId, system);
+        eventBuilder.setEventContext(eventContext);
+        return eventBuilder;
     }
 
     public CxfEventBuilder setDomain(String domain) {
