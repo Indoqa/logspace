@@ -10,7 +10,7 @@ Just add the logspace-agent-all.jar to your application's classpath and you are 
 
 ## Usage
 
-In logspace you use *Agents* to collect relevant data and package it into *Events*.<br/>
+In logspace you use *Agents* to collect relevant information and package it into *Events*.<br/>
 Doing this is a simple method call:
 
 ````java
@@ -29,14 +29,14 @@ a00f812e-ea08-4d38-9ce0-fa5973f0d411 (gid:none, pid:none) - os/memory [os/memory
 ````
 
 What is that output?<br/>
-In the background logspace created an *AgentController* and the *MemoryAgent* forwarded the *Event* with the memory utilization data to it. logspace comes with different implementations of *AgentController*, each handling *Events* in a different way.<br/>
-In our example above, logspace used the *ConsoleAgentController* which writes all *Events* to the console.
+In the background logspace created an *AgentController* and the *MemoryAgent* forwarded the *Event* with the memory utilization data to it.<br/>
+logspace comes with different implementations of *AgentController*, each handling *Events* in a different way. In our example above, logspace used the *ConsoleAgentController* which writes all *Events* to the console.
 
 The next chapter explains how you can use other *AgentControllers*.
 
 ## Configuration
 
-If you just want to write your *Events* to console you don't need any configuration at all.
+If you just want to write your *Events* to the console you don't need any configuration at all.
 logspace will do this by default to make sure none of your *Events* are lost. It is convenient during development but sometimes you might want something else.
 
 You can provide a configuration to define which *AgentController* is used:<br/>
@@ -60,5 +60,5 @@ The configuration looks like this:
 }
 ````
 
-Whatever *AgentController* you chose, your application's code does not need to change.<br/>
+Whatever *AgentController* you choose, your application's code does not need to change.<br/>
 You simply invoke *Agents* and logspace takes care of handling the *Events* for you.
