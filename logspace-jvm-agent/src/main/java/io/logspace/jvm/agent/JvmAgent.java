@@ -105,7 +105,7 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         this.sendEvent(eventBuilder.toEvent());
     }
 
-    public void sendJvmStartedEvent() {
+    public void sendJvmStartEvent() {
         if (!this.isEnabled()) {
             return;
         }
@@ -117,7 +117,7 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         this.sendEvent(eventBuilder.toEvent());
     }
 
-    public void sendShutdownEvent() {
+    public void sendJvmStopEvent() {
         if (!this.isEnabled()) {
             return;
         }
