@@ -7,7 +7,6 @@
  */
 import Immutable from 'immutable'
 import axios from 'axios'
-import moment from 'moment'
 
 import {resultCursor} from '../state'
 import {register,waitFor} from '../dispatcher'
@@ -17,6 +16,7 @@ import * as timeSeriesActions from '../time-series/actions'
 import * as resultActions from './actions'
 
 import {getRestUrl} from '../rest'
+import {transformLogspaceResult} from './c3js-chartplugin'
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store'
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store'
 
@@ -123,144 +123,16 @@ function storeErrorResult(serverResponse) {
 }
 
 function storeSuccessResult(timeSeries, responseJson) {
-  const xvalues = createXAxisLabals(responseJson)
-  const originalColumns = {}
-  const columns = []
-  const columnKeys = []
-  const colors = {}
-  const names = {}
-  const types = {}
-  const dataAxes = {}
-  const warnings = []
-  const axisRanges = {
-    min: {y:0, y2:0},
-    max: {y:0, y2:0}
-  };
-  
-  timeSeries.forEach(function(item, index) {
-      // meta data
-      columnKeys.push(item.get("id"))
-      colors[item.get("id")] = item.get("color")
-      names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " " + item.get("propertyId")
-
-      // type
-      const typeArray = types[item.get("type")];
-      if (typeArray == null) {
-        types[item.get("type")] = [];
-      }
-
-      types[item.get("type")].push(item.get("id"));
-
-      // apply to scale
-      const scale = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
-      let normalizer;
-
-      if (axisRanges.max.y == 0) {
-        axisRanges.min.y = scale.min
-        axisRanges.max.y = scale.max 
-        dataAxes[item.get("id")] = 'y'; 
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
-
-      } else if (axisRanges.min.y == scale.min && axisRanges.max.y == scale.max)  {
-        dataAxes[item.get("id")] = 'y'
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
-
-      } else if (axisRanges.max.y2 == 0) {
-        axisRanges.min.y2 = scale.min
-        axisRanges.max.y2 = scale.max
-        dataAxes[item.get("id")] = 'y2'
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
-
-      } else if (axisRanges.min.y2 == scale.min && axisRanges.max.y2 == scale.max)  {
-        dataAxes[item.get("id")] = 'y2'
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
-
-      } else {
-        dataAxes[item.get("id")] = 'y'
-        timeSeriesActions.onAxisChanged(item.get("id"), 'y*')  
-
-        normalizer = (value) => {
-          const onePercentOfOriginal = (scale.max - scale.min) / 100
-          const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
-          const targetRange = axisRanges.max.y - axisRanges.min.y
-          const onePercentOfTarget = targetRange / 100
-          console.log(targetRange + "/" + onePercentOfTarget + "/" + onePercentOfOriginal + "/" + scale.max + "/" + scale.min)
-          return onePercentOfTarget * percentOfOriginal
-        }
-      }
-
-      // set y values
-      columns.push(getDataColumn(responseJson.data[index], item.get("id"), normalizer))
-      originalColumns[item.get("id")] = responseJson.data[index]
-  })
-
-  // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
-  var xdata = xvalues.slice();
-  xdata.unshift('x')
-  columns.unshift(xdata)
-  
-  const chartData = {
-      colors: colors,
-      columnKeys: columnKeys,
-      columns: columns,
-      originalColumns: originalColumns,
-      axes: dataAxes
-  }
+  const chartData = transformLogspaceResult(timeSeries, responseJson)
 
   resultCursor(result => {
     return result.set("translatedResult", Immutable.fromJS( {
       empty: false,
       error: false,
       loading: false,
-      axisRanges: axisRanges,
-      types: types,
-      xvalues: xvalues,
-      xgap: responseJson.dateRange.gap,
-      names: names,
-      chartData: chartData,
-      warnings: warnings
+      chartData: chartData
     }))
   })
 }
 
-function createXAxisLabals(responseJson) {
-  let labels = []
 
-  const start = new Date(responseJson.dateRange.start).getTime()
-  const end = new Date(responseJson.dateRange.end).getTime()
-  const gap = responseJson.dateRange.gap
-
-  for (let i = start; i < end; i = i + (gap * 1000)) {
-    labels.push(moment.utc(new Date(i)))
-  }
-
-  return labels
-}
-
-function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
-  if (scaleType === 'auto') {
-    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }   
-  } 
-
-  return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
-}
-
-
-function getDataColumn(array, id, normalizer) {
-  var values =  array.map(function(item) {
-     if (item != null && normalizer != null) {
-       return normalizer(item)
-     }
-
-     if (item != null) {
-       return item
-     }
-
-     return null
-   })
-
-   // add id as first value of data array, see http://c3js.org/reference.html#data-columns
-   values.unshift(id)
-
-  return values
-}

@@ -59,10 +59,7 @@ export default class Chart extends PureComponent {
     }
 
     const chartData = this.props.result.get("chartData").toJS()
-    const names = this.props.result.get("names").toJS()
-    const axisRanges = this.props.result.get("axisRanges").toJS()
-    const typeInformation = this.props.result.get("types").toJS()
-
+    
     const currentData = this.chart.data()
     const keysToUnload = currentData.map(function(item) {
       if (chartData.columnKeys.indexOf(item.id) > -1 ) {
@@ -80,8 +77,8 @@ export default class Chart extends PureComponent {
       }
     );
 
-    this.chart.data.names(names);
-    this.chart.axis.range(axisRanges);
+    this.chart.data.names(chartData.names);
+    this.chart.axis.range(chartData.axisRanges);
 
     this.originalColumns = chartData.originalColumns 
   }
@@ -126,8 +123,8 @@ export default class Chart extends PureComponent {
   }
 
   formatXAxis(index) {
-    const date = this.props.result.get('xvalues').get(index)
-    const gap = this.props.result.get("xgap")
+    const date = this.props.result.get('chartData').get('xvalues').get(index)
+    const gap = this.props.result.get('chartData').get("xgap")
 
     switch (gap) {
       case GAPS.second:
@@ -156,8 +153,8 @@ export default class Chart extends PureComponent {
   }
 
   formatXTooltip(index) {
-    const date = this.props.result.get('xvalues').get(index)
-    const gap = this.props.result.get("xgap")
+    const date = this.props.result.get('chartData').get('xvalues').get(index)
+    const gap = this.props.result.get('chartData').get("xgap")
 
     switch (gap) {
       case GAPS.second:
