@@ -27,6 +27,7 @@ const TimeSeriesItem = Record({
   type: 'line',
   space: '',
   system: '',
+  axis: '',
   propertyDescriptions: []
 });
 
@@ -89,6 +90,16 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     case actions.onTimeSeriesPropertyChanged:
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.setIn(["newItem", data.key],  data.value)
+      });
+
+    case actions.onAxisChanged:
+      timeSeriesCursor(timeSeries => {
+        var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id });
+        var index = timeSeries.indexOf(itemToUpdate);
+        
+        itemToUpdate = itemToUpdate.set("axis", data.axis)
+        
+        return timeSeries.update(index, item => itemToUpdate);
       });
     break;
   }

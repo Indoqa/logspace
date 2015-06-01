@@ -68,7 +68,7 @@ export default class EditTimeSeries extends PureComponent {
         </select>
         <br/>
         <br/>
-       
+        
         <b>Select Color: </b>
         <br/>
         {COLORS.map(function(color) {
@@ -89,6 +89,10 @@ export default class EditTimeSeries extends PureComponent {
           )
         })}
         <div className='clearer'/>
+        <br/>
+        <b>Define Scale: </b>
+        <br/>
+        <input name='scaleMin' value={agentDescription.get("scaleMin")} onChange={this.handleChange.bind(this)}/> <nbsp/>-<nbsp/> <input name='scaleMax' value={agentDescription.get("scaleMax")} onChange={this.handleChange.bind(this)}/>
         <hr/>
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
         <button 

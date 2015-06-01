@@ -14,6 +14,11 @@ export function onTimeSeriesPropertyChanged(key, value) {
   dispatch(onTimeSeriesPropertyChanged, data);
 }
 
+export function onAxisChanged(id, axis) {
+  var data ={id: id, axis: axis}	
+  dispatch(onAxisChanged, data);
+}
+
 export function onTimeSeriesSaved() {
   dispatch(onTimeSeriesSaved);
 }
@@ -31,5 +36,5 @@ export function onTimeSeriesDeleted(id) {
 }
 
 setToString('timeSeries', {
-  onTimeSeriesSaved, onNewTimeSeries, onTimeSeriesDeleted, onEditTimeSeries, onTimeSeriesPropertyChanged
+  onTimeSeriesSaved, onNewTimeSeries, onTimeSeriesDeleted, onEditTimeSeries, onTimeSeriesPropertyChanged, onAxisChanged
 });  

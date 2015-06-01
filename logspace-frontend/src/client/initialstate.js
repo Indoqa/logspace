@@ -32,7 +32,8 @@ export default {
    	 "error": false,
      "empty": true,
      "series": null,
-     "xvalues": []
+     "xvalues": [],
+     "warnings": []
    }
  },
   "suggestions": {

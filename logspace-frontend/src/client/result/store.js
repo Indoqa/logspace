@@ -124,31 +124,74 @@ function storeErrorResult(serverResponse) {
 
 function storeSuccessResult(timeSeries, responseJson) {
   const xvalues = createXAxisLabals(responseJson)
+  const originalColumns = {}
   const columns = []
   const columnKeys = []
   const colors = {}
   const names = {}
-  const axis = [];
-  const types = {};
-
+  const types = {}
+  const dataAxes = {}
+  const warnings = []
+  const axisRanges = {
+    min: {y:0, y2:0},
+    max: {y:0, y2:0}
+  };
+  
   timeSeries.forEach(function(item, index) {
+      // meta data
       columnKeys.push(item.get("id"))
-      columns.push(normalizeData(responseJson.data[index], item.get("id"), item.get("scaleMin"), item.get("scaleMax")))
       colors[item.get("id")] = item.get("color")
       names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " " + item.get("propertyId")
 
-      let typeArray = types[item.get("type")];
+      // type
+      const typeArray = types[item.get("type")];
       if (typeArray == null) {
         types[item.get("type")] = [];
       }
 
       types[item.get("type")].push(item.get("id"));
 
-      axis.push({
-        id: item.get("id"),
-        min: item.get("scaleMin"),
-        max: item.get("scaleMax")
-      });
+      // apply to scale
+      const scaleMin = parseInt(item.get("scaleMin"))
+      const scaleMax = parseInt(item.get("scaleMax"))
+      let normalizer;
+
+      if (axisRanges.max.y == 0) {
+        axisRanges.min.y = scaleMin
+        axisRanges.max.y = scaleMax 
+        dataAxes[item.get("id")] = 'y'; 
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
+
+      } else if (axisRanges.min.y == scaleMin && axisRanges.max.y == scaleMax)  {
+        dataAxes[item.get("id")] = 'y'
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
+
+      } else if (axisRanges.max.y2 == 0) {
+        axisRanges.min.y2 = scaleMin
+        axisRanges.max.y2 = scaleMax
+        dataAxes[item.get("id")] = 'y2'
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
+
+      } else if (axisRanges.min.y2 == scaleMin && axisRanges.max.y2 == scaleMax)  {
+        dataAxes[item.get("id")] = 'y2'
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
+
+      } else {
+        dataAxes[item.get("id")] = 'y'
+        timeSeriesActions.onAxisChanged(item.get("id"), 'y!')  
+
+        normalizer = (value) => {
+          const onePercentOfOriginal = (scaleMax - scaleMin) / 100
+          const percentOfOriginal = value / onePercentOfOriginal
+          const targetRange = axisRanges.max.y - axisRanges.min.y
+          const onePercentOfTarget = targetRange / 100
+          return onePercentOfTarget * percentOfOriginal
+        }
+      }
+
+      // set y values
+      columns.push(getDataColumn(responseJson.data[index], item.get("id"), normalizer))
+      originalColumns[item.get("id")] = responseJson.data[index]
   })
 
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
@@ -159,7 +202,9 @@ function storeSuccessResult(timeSeries, responseJson) {
   const chartData = {
       colors: colors,
       columnKeys: columnKeys,
-      columns: columns
+      columns: columns,
+      originalColumns: originalColumns,
+      axes: dataAxes
   }
 
   resultCursor(result => {
@@ -167,12 +212,13 @@ function storeSuccessResult(timeSeries, responseJson) {
       empty: false,
       error: false,
       loading: false,
-      axis: axis,
+      axisRanges: axisRanges,
       types: types,
       xvalues: xvalues,
       xgap: responseJson.dateRange.gap,
       names: names,
-      chartData: chartData
+      chartData: chartData,
+      warnings: warnings
     }))
   })
 }
@@ -192,10 +238,12 @@ function createXAxisLabals(responseJson) {
 }
 
 
-function normalizeData(array, id, scaleMin, scaleMax) {
-  const scaleRange = scaleMax - scaleMin
-
+function getDataColumn(array, id, normalizer) {
   var values =  array.map(function(item) {
+     if (item != null && normalizer != null) {
+       return normalizer(item)
+     }
+
      if (item != null) {
        return item
      }

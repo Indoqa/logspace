@@ -60,7 +60,7 @@ export default class Chart extends PureComponent {
 
     const chartData = this.props.result.get("chartData").toJS()
     const names = this.props.result.get("names").toJS()
-    const axisInformation = this.props.result.get("axis").toJS()
+    const axisRanges = this.props.result.get("axisRanges").toJS()
     const typeInformation = this.props.result.get("types").toJS()
 
     const currentData = this.chart.data()
@@ -75,11 +75,17 @@ export default class Chart extends PureComponent {
       {
         colors: chartData.colors,
         columns: chartData.columns,
+        axes: chartData.axes,
         unload: keysToUnload
       }
     );
 
     this.chart.data.names(names);
+    this.chart.axis.range(axisRanges);
+
+    this.originalColumns = chartData.originalColumns 
+
+    document.getElementById('warnings').innerHTML = chartData.columns.pop() + '<br/>' + JSON.stringify(chartData.axes) ;
   }
 
   toggleLoading(show) {
@@ -181,6 +187,10 @@ export default class Chart extends PureComponent {
     return gap
   }
 
+  formatYTooltip(value, ratio, id, index) {
+    return this.originalColumns[id][index]
+  }  
+
   render() {
     return (
       <div>
@@ -207,6 +217,7 @@ export default class Chart extends PureComponent {
             <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
           </div>
           <div id="chart" / >
+          <div id="warnings" />
         </div>
       </div>
     )
@@ -219,6 +230,7 @@ export default class Chart extends PureComponent {
     const debouncedChartResize = debounceFunc(this.resizeChart.bind(me), 350)
     const formatXAxisCallback = this.formatXAxis.bind(me) 
     const formatXTooltipCallback = this.formatXTooltip.bind(me) 
+    const formatYTooltipCallback = this.formatYTooltip.bind(me) 
 
     return {
       data: {
@@ -236,10 +248,12 @@ export default class Chart extends PureComponent {
           }
         },
         y: {
-          show: true
+          show: true,
+          label: 'y1'
         },
         y2: {
-          show: false
+          show: true,
+          label: 'y2'
         }
       },
       grid: {
@@ -252,7 +266,8 @@ export default class Chart extends PureComponent {
       },
       tooltip: {
         format: {
-          title: formatXTooltipCallback
+          title: formatXTooltipCallback,
+          value: formatYTooltipCallback
         }
       },
       legend: {

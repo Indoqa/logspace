@@ -35,6 +35,7 @@ export default class TimeSeriesItem extends PureComponent {
       <div className='time-series-item' onClick={() => onEditTimeSeries(this.props.item)}>
         <div className='color' style={bgStyle}></div>
         <div className='inner'>
+          <div className='axis'>  {this.props.item.get("axis")} </div>
           <TimeSeriesLabel timeSeries={this.props.item} />
           {this.props.item.get("aggregate")} of {this.getPropertyName()}
         </div>
