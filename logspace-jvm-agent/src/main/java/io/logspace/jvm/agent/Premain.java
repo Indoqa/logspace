@@ -30,7 +30,7 @@ public final class Premain {
     public static void premain(String args, Instrumentation inst) {
         agent = JvmAgent.create();
 
-        agent.sendJvmStartedEvent();
+        agent.sendJvmStartEvent();
 
         registerShutdownHook();
     }
@@ -51,7 +51,7 @@ public final class Premain {
 
         @Override
         public void run() {
-            Premain.getAgent().sendShutdownEvent();
+            Premain.getAgent().sendJvmStopEvent();
         }
     }
 }
