@@ -35,7 +35,7 @@ public class SimpleAgent extends AbstractAgent {
 }
 ````
 
-This is already a valid *Agent* and fully configured with the values provided in its constructor (see [Architecture](/architecture) for what they mean), but it doesn't anything yet.
+This is already a valid *Agent* and fully configured with the values provided in its constructor (see [Architecture](/architecture) for what they mean), but it does not do anything yet.
 
 If you want to create an *Agent* that reacts to a certain event in your application you need a method that you can call.<br/>
 Since you are the only one calling this method, you can choose any signature you like:
@@ -88,7 +88,7 @@ public class SimpleEventBuilder extends AbstractEventBuilder {
         return Optional.of("tutorial/simple-agent");
     }
 }
-```` 
+````
 
 The **Event-ID** and **Timestamp** are generated automatically by the AbstractEventBuilder, the **Agent-ID** and **System** are provided by your *Agent* and the **Event-Type** by your *EventBuilder*.<br/>
 
@@ -125,7 +125,7 @@ public class SimpleAgent extends AbstractAgent {
         this.sendEvent(event);
     }
 }
-```` 
+````
 
 ````
 2bca40c2-fc01-40b0-a70c-16a7d71cd40b (gid:none, pid:none) - simple-agent [tutorial/simple-agent] - 2015-05-27 12:40:10.660: {execution-count=1}

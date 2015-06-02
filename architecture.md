@@ -7,7 +7,7 @@ title: Architecture
 
 logspace relies on simple, standardized HTTP communication between its components.
 Your monitored applications will not need to listen on any ports and will initialize all communication themselves.
- 
+
 ![logspace architecture](/assets/images/architecture.png)
 
 
@@ -19,7 +19,7 @@ The *Agent* is the component that is actually collecting the desired information
 *Agents* are always passive and need to be triggered externally in order to take a measurement. This can either be a timer, which triggers the *Agent* based on a **cron** expression or an **event** inside the application that is monitored with logspace.
 
 In order to transport, store and analyze the collected information, the *Agent* packages it into an object called *Event*. This *Event* carries both the actually collected information as well as when, where and by which *Agent* it was created.<br/>
-All *Events* created by an *Agent* are forwarded to its *AgentController*. 
+All *Events* created by an *Agent* are forwarded to its *AgentController*.
 
 
 ##AgentController
@@ -33,11 +33,11 @@ However only one *AgentController* will be active at any given time in an applic
 * The **HqAgentController** is used to forward all *Events* to the logspace *HQ*. It is also responsible for handling *AgentOrders*, *AgentCapabilities* and triggering cron-based *Agents*
 * The **ConsoleAgentController** is used to write all *Events* directly to the application's console. This *AgentController* works without *HQ*.
 * The **LoggingAgentController** is used to write all *Events* directly to the application's logging framework. This *AgentController* works without *HQ*.
-* The **TestAgentController** is used to collecte and access all *Events* during unit tests. This *AgentController* works without *HQ*.
+* The **TestAgentController** is used to collect and access all *Events* during unit tests. This *AgentController* works without *HQ*.
 
 ##HQ
 
-The *HQ* is a standalone web-application that offers Rest-style APIs for storing and retrieving *Events* as well as collecting *AgentCapabilities* and providing *AgentOrders*.<br/>
+The *HQ* is a standalone web-application that offers REST-style APIs for storing and retrieving *Events* as well as collecting *AgentCapabilities* and providing *AgentOrders*.<br/>
 Together with the **HqAgentController** it can be used to configure the *Agents* in a running application without having to restart or even access that application itself.
 
 The *HQ* is designed to support many **HqAgentControllers** at the same time, separating *Events* from different **HqAgentControllers** into different *Spaces*, that can be configured and analyzed independently from each other.
@@ -50,4 +50,4 @@ It also offers a Javascript driven frontend that allows interactive charting of 
 The *Event Store* is used to permanently store the *Events* forwared to the *HQ* in a way that supports both flexible queries and scalability for handling large numbers of *Events*.
 
 In the current implementation logspace uses [Apache Solr 5](http://lucene.apache.org/solr/).
-Supporting other products as *Event Store* is planned and should be possible with minimal effort. 
+Supporting other products as *Event Store* is planned and should be possible with minimal effort.
