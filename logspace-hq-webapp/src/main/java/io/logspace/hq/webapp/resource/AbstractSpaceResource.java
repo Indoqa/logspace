@@ -7,6 +7,7 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import static io.logspace.agent.api.LogspaceHttpHeaders.SPACE_TOKEN_HEADER;
 import io.logspace.hq.core.api.AbstractLogspaceResourceException;
 import io.logspace.hq.core.api.Spaces;
 
@@ -24,8 +25,6 @@ import spark.Spark;
 import com.indoqa.boot.AbstractJsonResourcesBase;
 
 public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
-
-    private static final String SPACE_TOKEN_HEADER = "logspace.space-token";
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 

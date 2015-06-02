@@ -7,6 +7,7 @@
  */
 package io.logspace.agent.hq;
 
+import static io.logspace.agent.api.LogspaceHttpHeaders.SPACE_TOKEN_HEADER;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import io.logspace.agent.api.AgentControllerInitializationException;
 import io.logspace.agent.api.event.Event;
@@ -74,7 +75,7 @@ public class HqClient {
     public AgentControllerOrder downloadOrder() throws IOException {
         HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.agentControllerId);
         httpGet.addHeader("If-Modified-Since", this.agentControllerOrderResponseHandler.getLastModified());
-        httpGet.addHeader("logspace.space-token", this.spaceToken);
+        httpGet.addHeader(SPACE_TOKEN_HEADER, this.spaceToken);
 
         return this.httpClient.execute(httpGet, this.agentControllerOrderResponseHandler);
     }
@@ -82,7 +83,7 @@ public class HqClient {
     public void uploadCapabilities(AgentControllerCapabilities capabilities) throws IOException {
         HttpPut httpPut = new HttpPut(this.baseUrl + "/capabilities/" + this.agentControllerId);
         httpPut.setEntity(toJSonEntity(capabilities));
-        httpPut.addHeader("logspace.space-token", this.spaceToken);
+        httpPut.addHeader(SPACE_TOKEN_HEADER, this.spaceToken);
 
         this.httpClient.execute(httpPut, new UploadCapabilitiesResponseHandler());
     }
@@ -90,7 +91,7 @@ public class HqClient {
     public void uploadEvents(Collection<Event> events) throws IOException {
         HttpPost httpPost = new HttpPost(this.baseUrl + "/events");
         httpPost.setEntity(toJsonEntity(events));
-        httpPost.addHeader("logspace.space-token", this.spaceToken);
+        httpPost.addHeader(SPACE_TOKEN_HEADER, this.spaceToken);
 
         this.httpClient.execute(httpPost, new UploadEventsResponseHandler());
     }
