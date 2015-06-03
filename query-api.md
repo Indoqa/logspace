@@ -2,26 +2,37 @@
 layout: default
 title: Query API
 ---
-#Query API
+# Query API
 
-* [Retrieve Suggestions](#retrieve-suggestions)
-* [Retrieve and Aggregate Stored Data](#retrieve-and-aggregate-stored-data)
+[Retrieve Suggestions](#retrieve-suggestions) <br/>
+[Retrieve and Aggregate Stored Data](#retrieve-and-aggregate-stored-data)
 
-##Retrieve Suggestions
+## Retrieve Suggestions
 
   Retrieve suggestions for information in stored events like *properties*, *systems* or *spaces*.
   The search term in the field `text` provides partial matching against all information in the stored events, where `propertyId`, `systemId` and `spaceId` allow to filter the suggestions, but the values must be known in advanced no partial matching is provided.
 
-* **URL:** /suggest
+<table>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>/suggest</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td><code>POST</code></td>
+    </tr>
+    <tr>
+      <td>URL Parameters</td>
+      <td><code>None</code></td>
+    </tr>
+  </tbody>
+</table>
 
-* **Method:**
-  `POST`
-  
-*  **URL Parameters:** None
+### Header Parameters
+`None`
 
-* **Header Parameters:** None
-
-* **Data Parameters:**
+### Body
 
 ```json
 { 
@@ -33,107 +44,130 @@ title: Query API
 }
 ```
 
-* **Success Response:** <br/>
-  The suggestion result will return all information about the stored events matching the search or filter criteria by the given input.
+## Success Response
+
+### Header
+Response code: `200 OK`
+
+### Body
+
+The suggestion result will return all information about the stored events matching the search or filter criteria by the given input.
   
-    * **Code:** 200 OK
-  
-        * **Content:** The suggestion result.
-  
-        ```json
+```json
+{
+  "spaces" : [
+    { 
+      "id" : "id of the space (e.g. development)",
+      "name" : "name of the space (e.g. development)"
+    }
+  ],
+  "systems" : [
+    {
+      "id" : "id of the system (e.g. localhost)",
+      "name" : "name of the system (e.g. localhost)"
+    }
+  ],
+  "propertyNames" : [
+    {
+      "id" : "id of the property (e.g. double_property_system_cpu_load)",
+      "name" : "name of the property (e.g. system_cpu_load)"
+    }
+  ],
+  "agentDescriptions" : [
+  {
+      "globalId" : "globalId of the agent (e.g. integrationtest|localhost|dev/cpu)",
+      "name" : "name of the agent (e.g dev/cpu)",
+      "space" : "space (e.g. development)",
+      "system" : "system (e.g. localhost)",
+      "propertyDescriptions" : [
         {
-          "spaces" : [
-            { 
-              "id" : "id of the space (e.g. development)",
-              "name" : "name of the space (e.g. development)"
-            }
-          ],
-          "systems" : [
+          "id" : "Id of the property (e.g. string_property_query)",
+          "name" : "Name of the property (e.g. query) ",
+          "propertyType": "[BOOLEAN | DATE | INTEGER | LONG | FLOAT | DOUBLE | STRING] (e.g. STRING)",
+          "units": [
             {
-              "id" : "id of the system (e.g. localhost)",
-              "name" : "name of the system (e.g. localhost)"
-            }
-          ],
-          "propertyNames" : [
-            {
-              "id" : "id of the property (e.g. double_property_system_cpu_load)",
-              "name" : "name of the property (e.g. system_cpu_load)"
-            }
-          ],
-          "agentDescriptions" : [
-          {
-              "globalId" : "globalId of the agent (e.g. integrationtest|localhost|dev/cpu)",
-              "name" : "name of the agent (e.g dev/cpu)",
-              "space" : "space (e.g. development)",
-              "system" : "system (e.g. localhost)",
-              "propertyDescriptions" : [
-	        {
-	          "id" : "Id of the property (e.g. string_property_query)",
-	          "name" : "Name of the property (e.g. query) ",
-	          "propertyType": "[BOOLEAN | DATE | INTEGER | LONG | FLOAT | DOUBLE | STRING] (e.g. STRING)",
-	          "units": [
-	            {
-	              "name" : "Name of the factor",
-	              "factor" : "Double-value of the factor"
-	            }
-	          ]
-	        }
-              ]
+              "name" : "Name of the factor",
+              "factor" : "Double-value of the factor"
             }
           ]
         }
-        ```
+      ]
+    }
+  ]
+}
+```
+
+## Error Response
+
+### Header
+Response code: ` TODO`
+
+### Body
+TODO
 
 
-* **Error Response:**
+## Sample Call
+This call will retrieve all *spaces*, *systems*, *propertyNames* and *agentDescriptions* found in the stored events.
+
+```
+curl 'http://<logspace-hq.server>:4567/suggest' \
+    -X POST \
+    -d @request.json \
+    --header "Content-Type:application/json" 
+```
 
 
-* **Sample Call:**
+    request.json
 
-    * This call will retrieve all *spaces*, *systems*, *propertyNames* and *agentDescriptions* found in the stored events.
-
-        ```
-        curl 'http://<logspace-hq.server>:4567/suggest' -X POST -d @request.json --header "Content-Type:application/json" 
-        ```
-
-           request.json
-  
-        ```json
-        {
-          "text" : ""
-        }
-        ```
+```json
+{
+  "text" : ""
+}
+```
         
-    * This call will retrieve all *spaces*, *systems*, *propertyNames* and *agentDescriptions* found in the stored events,
-      where the *space* is `development`
+This call will retrieve all *spaces*, *systems*, *propertyNames* and *agentDescriptions* found in the stored events, where the *space* is `development`
 
-        ```
-        curl 'http://<logspace-hq.server>:4567/suggest' -X POST -d @request.json --header "Content-Type:application/json" 
-        ```
+```
+curl 'http://<logspace-hq.server>:4567/suggest' \
+    -X POST \
+    -d @request.json \
+    --header "Content-Type:application/json" 
+```
 
-           request.json
+request.json
+
+```json
+{
+  "spaceId" : "development"
+}
+```        
   
-        ```json
-        {
-          "spaceId" : "development"
-        }
-        ```        
   
-  
-##Retrieve and Aggregate Stored Data
+## Retrieve and Aggregate Stored Data
 
   Retrieve and aggregate stored properties of agents. The retrieval can be restricted by multiple `dateRanges` with an `start` and `end` point and also a `gap`.
 
-* **URL:** /query
+<table>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>/query</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td><code>POST</code></td>
+    </tr>
+    <tr>
+      <td>URL Parameters</td>
+      <td><code>None</code></td>
+    </tr>
+  </tbody>
+</table>
 
-* **Method:**
-  `POST`
-  
-*  **URL Parameters:** None
+### Header Parameters
+`None`
 
-* **Header Parameters:** None
-
-* **Data Parameters:**
+### Body
   
   Multiple dataDefinitions can be provided to query for different data in one request.
 
@@ -156,40 +190,50 @@ title: Query API
 }
 ```
 
-* **Success Response:**
+## Success Response
+
+### Header
+Response code: `200 OK`
+
+### Body
+
+The suggestion result.
   
-    * **Code:** 200 OK
+```json
+{
+  "dateRange" : 
+  {
+    "start" : "Start point of the given dataDefinition.",
+    "end" : "End point of the given dataDefinition.",
+    "gap" : "Gap of the given dataDefinition." 
+  },
   
-        * **Content:** The suggestion result.
-  
-        ```json
-        {
-          "dateRange" : 
-          {
-            "start" : "Start point of the given dataDefinition.",
-            "end" : "End point of the given dataDefinition.",
-            "gap" : "Gap of the given dataDefinition." 
-          },
-          
-          "data":
-          [
-            ["retrieved data", "for each", "dataDefinition"]
-          ]
-        }
-        ```
+  "data":
+  [
+    ["retrieved data", "for each", "dataDefinition"]
+  ]
+}
+```
 
-* **Error Response:**
+## Error Response
 
+### Header
+Response code: ` TODO`
 
-* **Sample Call:**
+### Body
+TODO
 
-  For this call you have to **know** the `globalAgentId` and the `propertyId` you want to query for.
-  Use the /suggest API with the sample call provided earlier to get matching data for your stored events.
-  The property you want to query for must be defined for the agent you provided via the `globalAgentId`. The properties the agent stores are described in the `agentDescription`.
+## Sample Call
+For this call you have to **know** the `globalAgentId` and the `propertyId` you want to query for.
+Use the /suggest API with the sample call provided earlier to get matching data for your stored events.
+The property you want to query for must be defined for the agent you provided via the `globalAgentId`. The properties the agent stores are described in the `agentDescription`.
 
-  ```
-  curl 'http://<logspace-hq.server>:4567/query' -X POST -d @request.json --header "Content-Type:application/json"
-  ```
+```
+curl 'http://<logspace-hq.server>:4567/query' \
+    -X POST \
+    -d @request.json \
+    --header "Content-Type:application/json"
+```
 
   request.json
   
