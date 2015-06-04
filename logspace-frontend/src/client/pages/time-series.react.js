@@ -9,12 +9,12 @@ import React from 'react'
 import {Link} from 'react-router'
 import classnames from 'classnames'
 
-import AddTimeSeries  from '../time-series/time-series-add.react.js'
-import TimeSeriesList  from '../time-series/time-series-list.react.js'
-import TimeWindowValues  from '../time-window/time-window-values.react.js'
-import Chart  from '../result/result-chart.react.js'
-import Drawer  from '../drawer/drawer.react.js'
-import Header  from '../header/header.react.js'
+import AddTimeSeries  from '../time-series/time-series-add.react'
+import TimeSeriesList  from '../time-series/time-series-list.react'
+import TimeWindowValues  from '../time-window/time-window-values.react'
+import Chart  from '../result/result-chart.react'
+import Drawer  from '../drawer/drawer.react'
+import Header  from '../header/header.react'
 
 import {getTimeWindow} from '../time-window/store'
 import {getTimeSeries, getEditedTimeSeries} from '../time-series/store'
@@ -60,10 +60,10 @@ export default class TimeSeries extends React.Component {
   render() {
     var timeWindow = getTimeWindow();
     var timeSeries = getTimeSeries();
- 
+
     return (
       <div className='time-series'>
-        
+
         <div className={classnames(this.state.navDrawerCss)}>
           <div className="left">
             <Header/>

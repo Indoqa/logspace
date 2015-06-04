@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import Component from '../components/component.react';
-import DrawerPanel  from './drawer-panel.react.js'
+import DrawerPanel  from './drawer-panel.react'
 import {onCloseDrawer} from './actions';
 import {msg} from '../intl/store';
 
@@ -18,7 +18,7 @@ export default class Drawer extends Component {
   render() {
   	return (
       <div className="drawer">
-        <div className="header"> 
+        <div className="header">
           <div className="close"> <input type="button" value="close" onClick={() => onCloseDrawer()}/> </div>
           <div className="title"> > {msg('drawer.header.' + this.props.activePanel)} </div>
         </div>
@@ -30,7 +30,7 @@ export default class Drawer extends Component {
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
               toggle={this.props.toggle} />
-        </div>   
+        </div>
       </div>
       )
 
