@@ -33,9 +33,9 @@ export default class App extends React.Component {
       timeWindow: appState.timeWindowCursor(),
       timeSeries: appState.timeSeriesCursor(),
       editedTimeSeries: appState.editedTimeSeriesCursor(),
-      result: appState.resultCursor(),
-      suggestion: appState.suggestionCursor(),
-      drawer: appState.drawerCursor()
+      result: appState.resultCursor().get('translatedResult'),
+      suggestions: appState.suggestionCursor(),
+      activePanel: appState.drawerCursor().get('activePanel')
     };
   }
 

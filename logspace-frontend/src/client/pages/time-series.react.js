@@ -12,15 +12,9 @@ import classnames from 'classnames'
 import AddTimeSeries  from '../time-series/time-series-add.react'
 import TimeSeriesList  from '../time-series/time-series-list.react'
 import TimeWindowValues  from '../time-window/time-window-values.react'
-import Chart  from '../result/result-chart.react'
-import Drawer  from '../drawer/drawer.react'
-import Header  from '../header/header.react'
-
-import {getTimeWindow} from '../time-window/store'
-import {getTimeSeries, getEditedTimeSeries} from '../time-series/store'
-import {getActivePanel} from '../drawer/store'
-import {getResult} from '../result/store'
-import {getSuggestions} from '../suggestions/store'
+import Chart from '../result/result-chart.react'
+import Drawer from '../drawer/drawer.react'
+import Header from '../header/header.react'
 
 import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
@@ -58,33 +52,36 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    var timeWindow = getTimeWindow();
-    var timeSeries = getTimeSeries();
+    console.log('result', this.props.result.toJS())
 
     return (
       <div className='time-series'>
 
         <div className={classnames(this.state.navDrawerCss)}>
+
           <div className="left">
             <Header/>
-            <TimeWindowValues timeWindow={timeWindow}/>
-            <TimeSeriesList items={timeSeries} />
-            <AddTimeSeries count={timeSeries.size} />
+            <TimeWindowValues timeWindow={this.props.timeWindow}/>
+            <TimeSeriesList items={this.props.timeSeries} />
+            <AddTimeSeries count={this.props.timeSeries.size} />
           </div>
+
           <div className="right">
             <Drawer
-              activePanel={getActivePanel()}
-              suggestions={getSuggestions()}
-              timeWindow={getTimeWindow()}
-              timeSeries={timeSeries}
-              editedTimeSeries={getEditedTimeSeries()}
+              activePanel={this.props.activePanel}
+              suggestions={this.props.suggestions}
+              timeWindow={this.props.timeWindow}
+              timeSeries={this.props.timeSeries}
+              editedTimeSeries={this.props.editedTimeSeries}
               toggle={() => this.toggleNavigationDrawer()} />
           </div>
+
         </div>
 
         <div className={classnames(this.state.mainCss)}>
-          <Chart series={getTimeSeries()} result={getResult()}/>
+          <Chart series={this.props.timeSeries} result={this.props.result} />
         </div>
+
       </div>
     )
   }
