@@ -8,35 +8,36 @@
 import React from 'react'
 import c3 from 'c3'
 import classnames from 'classnames'
-import Halogen from 'halogen';
-import moment from 'moment';
+import Halogen from 'halogen'
+import moment from 'moment'
 
 import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
-import {onResultRefreshed} from './actions'
 import {GAPS} from '../time-window/constants'
+
+import {onResultRefreshed} from './actions'
 
 require ('./result-chart.styl')
 
 export default class Chart extends Component {
 
   constructor(props) {
-    super(props);
-    
+    super(props)
+
     this.state = {
       loadingCss: 'loading',
       type: 'line'
-    };
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.result.get("loading")) {
-      this.toggleLoading(true);
+      this.toggleLoading(true)
       return
     }
 
-    this.toggleLoading(false);
+    this.toggleLoading(false)
   }
 
 
@@ -59,7 +60,7 @@ export default class Chart extends Component {
     }
 
     const chartData = this.props.result.get("chartData").toJS()
-    
+
     const currentData = this.chart.data()
     const keysToUnload = currentData.map(function(item) {
       if (chartData.columnKeys.indexOf(item.id) > -1 ) {
@@ -75,12 +76,12 @@ export default class Chart extends Component {
         axes: chartData.axes,
         unload: keysToUnload
       }
-    );
+    )
 
-    this.chart.data.names(chartData.names);
-    this.chart.axis.range(chartData.axisRanges);
+    this.chart.data.names(chartData.names)
+    this.chart.axis.range(chartData.axisRanges)
 
-    this.originalColumns = chartData.originalColumns 
+    this.originalColumns = chartData.originalColumns
   }
 
   toggleLoading(show) {
@@ -90,16 +91,16 @@ export default class Chart extends Component {
           'loading' : true,
           'active' : show
         }
-      });
+      })
   }
 
   calculateChartSize() {
     const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-    
+
     const minWindowWidth = 1024
-    const minWindowHeight = windowHeight - 200;
-    
+    const minWindowHeight = windowHeight - 200
+
     const sidebarWidth = 250
     const chartPadding = 20 * 2
     const heightWidthRatio = 0.45
@@ -119,7 +120,7 @@ export default class Chart extends Component {
 
   transform(type) {
     this.chart.transform(type)
-    this.setState({ type: type });
+    this.setState({ type: type })
   }
 
   formatXAxis(index) {
@@ -129,13 +130,13 @@ export default class Chart extends Component {
     switch (gap) {
       case GAPS.second:
         return date.format('HH:mm:ss')
-        
+
       case GAPS.minute:
         return date.format('HH:mm')
 
       case GAPS.hour:
         return date.format('HH:00')
-        
+
       case GAPS.day:
         return date.format('DD.MM.')
 
@@ -146,9 +147,9 @@ export default class Chart extends Component {
         return date.format('MMMM')
 
       case GAPS.year:
-        return date.format('YYYY')    
+        return date.format('YYYY')
     }
-   
+
     return gap
   }
 
@@ -159,13 +160,13 @@ export default class Chart extends Component {
     switch (gap) {
       case GAPS.second:
         return date.format('dd DD.MM.YYYY - HH:mm:ss')
-        
+
       case GAPS.minute:
         return date.format('dd DD.MM.YYYY - HH:mm')
 
       case GAPS.hour:
         return date.format('dd DD.MM.YYYY - HH:00')
-        
+
       case GAPS.day:
         return date.format('dd DD.MM.YYYY')
 
@@ -176,15 +177,15 @@ export default class Chart extends Component {
         return date.format('MMMM YYYY')
 
       case GAPS.year:
-        return date.format('YYYY')    
+        return date.format('YYYY')
     }
-   
+
     return gap
   }
 
   formatYTooltip(value, ratio, id, index) {
     return this.originalColumns[id][index]
-  }  
+  }
 
   render() {
     return (
@@ -208,8 +209,8 @@ export default class Chart extends Component {
         </div>
         </div>
         <div className={'resultChart'}>
-          <div className={classnames(this.state.loadingCss)}> 
-            <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span> 
+          <div className={classnames(this.state.loadingCss)}>
+            <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span>
           </div>
           <div id="chart" / >
         </div>
@@ -222,9 +223,9 @@ export default class Chart extends Component {
     const me = this
 
     const debouncedChartResize = debounceFunc(this.resizeChart.bind(me), 350)
-    const formatXAxisCallback = this.formatXAxis.bind(me) 
-    const formatXTooltipCallback = this.formatXTooltip.bind(me) 
-    const formatYTooltipCallback = this.formatYTooltip.bind(me) 
+    const formatXAxisCallback = this.formatXAxis.bind(me)
+    const formatXTooltipCallback = this.formatXTooltip.bind(me)
+    const formatYTooltipCallback = this.formatYTooltip.bind(me)
 
     return {
       data: {
