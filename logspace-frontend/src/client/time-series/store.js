@@ -7,18 +7,21 @@
  */
 
 import Immutable from 'immutable';
-import * as actions from './actions';
+import {Record} from 'immutable';
+
+import {register} from '../dispatcher';
+import {getRandomString} from '../../lib/getrandomstring';
+
 import {COLORS} from './constants';
 import {timeSeriesCursor} from '../state';
 import {editedTimeSeriesCursor} from '../state';
-import {register} from '../dispatcher';
-import {Record} from 'immutable';
-import {getRandomString} from '../../lib/getrandomstring';
+
+import * as actions from './actions';
 
 const TimeSeriesItem = Record({
   id: '',
   color: '',
-  name: '', 
+  name: '',
   agentId: '',
   propertyId: '',
   aggregate: '',
@@ -34,23 +37,23 @@ const TimeSeriesItem = Record({
 
 export function getTimeSeries() {
   return timeSeriesCursor()
-} 
+}
 
 export function getEditedTimeSeries() {
   return editedTimeSeriesCursor()
-} 
+}
 
 export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onTimeSeriesSaved:
       var item = getEditedTimeSeries().get("newItem").toJS();
-      
+
       if (item.id == null) {
         addItem(item);
       } else {
         updateItem(item);
       }
-      
+
       break;
 
     case actions.onTimeSeriesDeleted:
@@ -77,7 +80,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           aggregate: "sum",
           color: nextColor
         }).toMap();
-        
+
         return editedTimeSeries.set("newItem",  item)
       });
       break;
@@ -92,15 +95,15 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.setIn(["newItem", data.key],  data.value)
       });
-    break;  
+    break;
 
     case actions.onAxisChanged:
       timeSeriesCursor(timeSeries => {
         var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id });
         var index = timeSeries.indexOf(itemToUpdate);
-        
+
         itemToUpdate = itemToUpdate.set("axis", data.axis)
-        
+
         return timeSeries.update(index, item => itemToUpdate);
       });
     break;
@@ -113,7 +116,7 @@ function getNextColor() {
   });
 
   var allColors = COLORS.slice();
-  
+
   var freeColors = allColors.filter(function(item) {
     return usedColors.indexOf(item) === -1;
   });
@@ -133,8 +136,8 @@ function getDefaultProperty(propertyDescriptions) {
 }
 
 function addItem(item) {
-  item.id = getRandomString() 
-  
+  item.id = getRandomString()
+
   timeSeriesCursor(timeSeries => {
     return timeSeries.push(Immutable.fromJS(item))
   });
