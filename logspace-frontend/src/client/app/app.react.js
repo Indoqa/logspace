@@ -51,7 +51,7 @@ export default class App extends React.Component {
   render() {
     return (
       <DocumentTitle title='logspace.io'>
-        <div className="page">
+        <div className='page'>
           <RouteHandler {...this.state} />
         </div>
       </DocumentTitle>
