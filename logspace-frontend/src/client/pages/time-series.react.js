@@ -52,8 +52,6 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    console.log('result', this.props.result.toJS())
-
     return (
       <div className='time-series'>
 

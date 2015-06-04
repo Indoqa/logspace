@@ -27,8 +27,8 @@ const ComponentState = Immutable.Map({
     'loading' : true,
     'active' : false
   }),
-  type: 'line'
-});
+  type: 'spline'
+})
 
 export default class Chart extends Component {
 
@@ -125,7 +125,9 @@ export default class Chart extends Component {
 
   transform(type) {
     this.chart.transform(type)
-    this.setState({ type: type })
+    this.setState({
+      localState: this.state.localState.updateIn(['type'], () => {return type})
+    })
   }
 
   formatXAxis(index) {
@@ -197,7 +199,7 @@ export default class Chart extends Component {
       <div>
        <div className='chart-header'>
         <div className='chart-options'>
-           <select onChange={(e) => this.transform(e.target.value)} value={this.state.type} >
+           <select onChange={(e) => this.transform(e.target.value)} value={this.state.localState.get('type')} >
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>
             <option value={'spline'}>spline</option>
