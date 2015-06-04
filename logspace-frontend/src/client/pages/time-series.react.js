@@ -48,11 +48,11 @@ export default class TimeSeries extends Component {
 
           <div className="right">
             <Drawer
-              activePanel={this.props.activePanel}
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
-              editedTimeSeries={this.props.editedTimeSeries} />
+              editedTimeSeries={this.props.editedTimeSeries}
+              view={this.props.view} />
           </div>
 
         </div>
