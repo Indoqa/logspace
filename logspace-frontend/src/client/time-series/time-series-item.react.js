@@ -7,13 +7,13 @@
  */
 
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import TimeSeriesLabel from './time-series-label.react';
 import {onTimeSeriesDeleted, onEditTimeSeries} from './actions';
 
 require('./time-series-item.styl')
 
-export default class TimeSeriesItem extends PureComponent {
+export default class TimeSeriesItem extends Component {
 
   getPropertyName() {
     const id = this.props.item.get("propertyId");

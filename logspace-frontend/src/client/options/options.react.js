@@ -6,9 +6,9 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react'
+import Component from '../components/component.react'
 
-export default class Options extends PureComponent {
+export default class Options extends Component {
 
   render() {
     return <div> TODO Options panel </div>

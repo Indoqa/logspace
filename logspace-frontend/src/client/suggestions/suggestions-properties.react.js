@@ -6,10 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import {onPropertySelected, onPropertyCleared} from './actions';
 
-export default class SuggestionProperties extends PureComponent {
+export default class SuggestionProperties extends Component {
   
   render() {
     if (this.props.selected != null) {

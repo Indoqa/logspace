@@ -7,13 +7,13 @@
  */
 
 import React from 'react'
-import PureComponent from '../components/purecomponent.react'
+import Component from '../components/component.react'
 
 import {onShowTimeWindowForm} from './actions';
 
 require('./time-window-values.styl')
 
-export default class TimeWindowValues extends PureComponent {
+export default class TimeWindowValues extends Component {
 
   render() {
     return (

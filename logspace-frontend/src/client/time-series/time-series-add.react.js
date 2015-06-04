@@ -7,12 +7,12 @@
  */
 
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 
 import {onShowSuggestions} from '../suggestions/actions'
 
 
-export default class AddTimeSeries extends PureComponent {
+export default class AddTimeSeries extends Component {
   
   render() {
     if (this.props.count >= 8) {

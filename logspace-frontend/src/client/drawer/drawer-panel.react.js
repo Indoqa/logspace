@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react'
+import Component from '../components/component.react'
 import Options  from '../options/options.react.js'
 import Suggestions  from '../suggestions/suggestions.react.js'
 import TimeWindow  from '../time-window/time-window.react.js'
@@ -15,7 +15,7 @@ import * as Panels from './constants';
 
 require('./drawer.styl')
 
-export default class DrawerPanel extends PureComponent {
+export default class DrawerPanel extends Component {
 
   componentDidUpdate(prevProps, prevState) {
   	if (prevProps.activePanel == this.props.activePanel ) {
@@ -23,7 +23,7 @@ export default class DrawerPanel extends PureComponent {
   	}
 
   	if (prevProps.activePanel == null || this.props.activePanel == null) {
-  		this.props.toggle(); 	
+  		this.props.toggle();
   	}
   }
 
@@ -34,7 +34,7 @@ export default class DrawerPanel extends PureComponent {
 
   	if (this.props.activePanel == Panels.SUGGESTIONS) {
   		return (
-    		<Suggestions suggestions={this.props.suggestions}/>  
+    		<Suggestions suggestions={this.props.suggestions}/>
     	);
   	}
 
@@ -55,7 +55,7 @@ export default class DrawerPanel extends PureComponent {
         <Options />
       );
     }
-    
+
 
   	return (<div> unsupported panel: {this.props.activePanel} </div>)
   }

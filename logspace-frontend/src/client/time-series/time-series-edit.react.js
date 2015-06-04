@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import TimeSeriesLabel from './time-series-label.react';
 
 import shallowEqual from 'react/lib/shallowEqual';
@@ -16,7 +16,7 @@ import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} fro
 
 require('./time-series-edit.styl')
 
-export default class EditTimeSeries extends PureComponent {
+export default class EditTimeSeries extends Component {
   
   handleChange(event) {
     onTimeSeriesPropertyChanged(event.target.name, event.target.value)

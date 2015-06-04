@@ -2,7 +2,7 @@
 bower_components
 build
 node_modules
+node
 npm-debug.log
 *.sublime-workspace
-node
-.sublime-gulp.cache
+.idea

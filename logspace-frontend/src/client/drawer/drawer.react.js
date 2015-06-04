@@ -6,14 +6,14 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import DrawerPanel  from './drawer-panel.react.js'
 import {onCloseDrawer} from './actions';
 import {msg} from '../intl/store';
 
 require('./drawer.styl')
 
-export default class Drawer extends PureComponent {
+export default class Drawer extends Component {
 
   render() {
   	return (

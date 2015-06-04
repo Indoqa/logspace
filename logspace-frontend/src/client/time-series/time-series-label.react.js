@@ -7,11 +7,11 @@
  */
 
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 
 require('./time-series-label.styl')
 
-export default class TimeSeriesLabel extends PureComponent {
+export default class TimeSeriesLabel extends Component {
 
   render() {
     return (

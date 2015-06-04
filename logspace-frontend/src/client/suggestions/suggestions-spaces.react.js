@@ -6,10 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import {onSpaceSelected, onSpaceCleared} from './actions';
 
-export default class SuggestionSpaces extends PureComponent {
+export default class SuggestionSpaces extends Component {
   
   render() {
     if (this.props.selected != null) {
