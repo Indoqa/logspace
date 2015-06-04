@@ -6,6 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react'
+import Immutable from 'immutable'
 import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
@@ -21,36 +22,13 @@ import {onResultRefreshed} from './actions'
 
 require ('./result-chart.styl')
 
-function shallowEqual1(objA, objB) {
-  if (objA === objB) {
-    console.log('--> 1')
-    return true;
-  }
-
-  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-    console.log('--> 2')
-    return false;
-  }
-
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) {
-    console.log('--> 3')
-    return false;
-  }
-
-  // Test for A's keys different from B.
-  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-  for (var i = 0; i < keysA.length; i++) {
-    if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-      console.log('--> 4: ' + keysA[i])
-      return false;
-    }
-  }
-
-  return true;
-}
+const ComponentState = Immutable.Map({
+  loadingCss: Immutable.Map({
+    'loading' : true,
+    'active' : false
+  }),
+  type: 'line'
+});
 
 export default class Chart extends Component {
 
@@ -58,33 +36,8 @@ export default class Chart extends Component {
     super(props)
 
     this.state = {
-      loadingCss: {
-        'loading' : true,
-        'active' : false
-      },
-      type: 'line'
+      localState: ComponentState
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('!!!compare state:' + shallowEqual1(this.state, nextState))
-    console.log('!!!compare props:' + shallowEqual(this.props, nextProps))
-
-    // console.log('this.props keys:', Object.keys(this.props))
-    // console.log('nextProps keys', Object.keys(nextProps))
-    // console.log('compare timeSeries: ' + (nextProps.series === this.props.series))
-    // console.log('compare result: ' + (nextProps.result === this.props.result))
-
-    console.log('this.state keys:', Object.keys(this.state))
-    console.log('nextState keys', Object.keys(nextState))
-
-    console.log('this.state.loadingCss', this.state.loadingCss)
-    console.log('nextState.loadingCss', nextState.loadingCss)
-    console.log('!!!compare loadingCss:' + shallowEqual1(this.state.loadingCss, nextState.loadingCss))
-    console.log('this.state.type', this.state.type)
-    console.log('nextState.type', nextState.type)
-
-    return super.shouldComponentUpdate(nextProps, nextState)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -142,10 +95,7 @@ export default class Chart extends Component {
 
   toggleLoading(show) {
     this.setState({
-      loadingCss: {
-        'loading' : true,
-        'active' : show
-      }
+      localState: this.state.localState.updateIn(['loadingCss', 'active'], () => {return show})
     })
   }
 
@@ -264,7 +214,7 @@ export default class Chart extends Component {
         </div>
         </div>
         <div className={'resultChart'}>
-          <div className={classnames(this.state.loadingCss)}>
+          <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
             <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span>
           </div>
           <div id="chart" / >

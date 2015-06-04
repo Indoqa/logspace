@@ -17,7 +17,7 @@ import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} fro
 require('./time-series-edit.styl')
 
 export default class EditTimeSeries extends Component {
-  
+
   handleChange(event) {
     onTimeSeriesPropertyChanged(event.target.name, event.target.value)
   }
@@ -28,8 +28,14 @@ export default class EditTimeSeries extends Component {
     }
 
     return (<span>
-      <input name='scaleMin' value={agentDescription.get("scaleMin")} onChange={this.handleChange.bind(this)}/> <nbsp/>-<nbsp/> <input name='scaleMax' value={agentDescription.get("scaleMax")} onChange={this.handleChange.bind(this)}/>
-      </span>)      
+      <input name='scaleMin'
+        value={agentDescription.get("scaleMin")}
+        onChange={this.handleChange.bind(this)}/>
+      <nbsp/>-<nbsp/>
+      <input name='scaleMax'
+        value={agentDescription.get("scaleMax")}
+        onChange={this.handleChange.bind(this)}/>
+      </span>)
   }
 
    getPropertyScaleInput(agentDescription) {
@@ -54,7 +60,7 @@ export default class EditTimeSeries extends Component {
           onChange={savePropertyScale}
           >
         </input> {propertyScale.label} ({propertyScale.min} - {propertyScale.max})
-      </div>)      
+      </div>)
   }
 
   render() {
@@ -71,22 +77,23 @@ export default class EditTimeSeries extends Component {
 
       return item.get("color")
     });
- 
+
     return (
-      
+
       <div>
         <TimeSeriesLabel timeSeries={agentDescription} />
         <hr/>
         <b>Select Property:</b>
         <br/>
         {agentDescription.get("propertyDescriptions").map(function(property) {
+          const propertyId = property.get("id")
           return (
-            <div>
+            <div key={propertyId}>
               <input
                 type="radio"
                 name="propertyId"
-                value={property.get("id")}
-                checked={property.get("id") == agentDescription.get("propertyId")}
+                value={propertyId}
+                checked={propertyId == agentDescription.get("propertyId")}
                 onChange={me.handleChange.bind(me)}
                 disabled={property.get("propertyType")==="STRING"}>
                 </input>
@@ -108,15 +115,15 @@ export default class EditTimeSeries extends Component {
         </select>
         <br/>
         <br/>
-        
+
         <b>Select Color: </b>
         <br/>
         {COLORS.map(function(color) {
-          var colorSyle = {
+          const colorSyle = {
             backgroundColor: color
           }
           return (
-            <div className='color-option' style={colorSyle} >
+            <div key={color} className='color-option' style={colorSyle} >
               <input
                 type="radio"
                 name="color"
@@ -138,7 +145,7 @@ export default class EditTimeSeries extends Component {
           value={'auto'}
           checked={agentDescription.get("scaleType") == 'auto'}
           onChange={me.handleChange.bind(me)}>
-        </input> Data (use min/max of result) 
+        </input> Data (use min/max of result)
         <br/>
         {propertyScaleInput}
         <input
@@ -150,8 +157,8 @@ export default class EditTimeSeries extends Component {
         </input> Custom {customScaleInput}
         <hr/>
         <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
-        <button 
-          className={(agentDescription.get("id") != null) ? 'delete-visible' : 'delete-hidden'} 
+        <button
+          className={(agentDescription.get("id") != null) ? 'delete-visible' : 'delete-hidden'}
           onClick={() =>  onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
         </button>
       </div>

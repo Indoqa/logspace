@@ -23,8 +23,8 @@ class Component extends React.Component {
       !shallowEqual(this.props, nextProps) ||
       !shallowEqual(this.state, nextState);
 
-    if (shouldUpdate)
-    this._logShouldUpdateComponents(nextProps, nextState)
+    // if (shouldUpdate)
+      // this._logShouldUpdateComponents(nextProps, nextState)
 
     return shouldUpdate;
   }
@@ -36,6 +36,7 @@ class Component extends React.Component {
     const propsDiff = diff(this.props, nextProps).toJS()
     const stateDiff = diff(this.state, nextState).toJS()
     if (propsDiff.length) console.log('props', propsDiff)
+    if (propsDiff.length) console.log('props', Object.keys(this.props))
     if (stateDiff.length) console.log('state', stateDiff)
   }
 
