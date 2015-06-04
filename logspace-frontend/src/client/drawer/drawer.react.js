@@ -5,11 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react';
-import Component from '../components/component.react';
+import React from 'react'
+import Component from '../components/component.react'
 import DrawerPanel  from './drawer-panel.react'
-import {onCloseDrawer} from './actions';
-import {msg} from '../intl/store';
+import {onCloseDrawer} from './actions'
+import {msg} from '../intl/store'
 
 require('./drawer.styl')
 
