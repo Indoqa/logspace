@@ -22,10 +22,10 @@ export default class SuggestionResult extends Component {
     var isLoading = this.props.result.get("loading");
 
     if (isLoading) {
-      return <div className={'result'}>  
-        <div className={'loading'}> 
-          <span> <Halogen.PulseLoader color={'#BBDEFB'}/> </span> 
-        </div> 
+      return <div className={'result'}>
+        <div className={'loading'}>
+          <span> <Halogen.PulseLoader color={'#BBDEFB'}/> </span>
+        </div>
       </div>
     }
 
@@ -39,17 +39,17 @@ export default class SuggestionResult extends Component {
         <div className={'result'}>
           <ul>
            {this.props.result.get('agentDescriptions').map(function(item, index) {
-              var agent = item.toJS();
+              const agent = item.toJS();
               return (
                 <li key={index}>
-                  <a onClick={() => onNewTimeSeries(agent)}> 
+                  <a onClick={() => onNewTimeSeries(agent)}>
                     <div className='color'></div>
                     <div className='inner'>
                      <TimeSeriesLabel timeSeries={item} />
                      <div className={'properties'}>
                         {agent.propertyDescriptions.map(function(item, index) {
-                          return <span> {item.name} |</span>    
-                        })}  
+                          return <span key={item.name}> {item.name} |</span>    
+                        })}
                       </div>
                     </div>
                   </a>
