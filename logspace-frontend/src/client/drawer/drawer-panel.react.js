@@ -19,16 +19,6 @@ require('./drawer.styl')
 
 export default class DrawerPanel extends Component {
 
-  componentDidUpdate(prevProps, prevState) {
-  	if (prevProps.activePanel == this.props.activePanel ) {
-  		return
-  	}
-
-  	if (prevProps.activePanel == null || this.props.activePanel == null) {
-  		this.props.toggle()
-  	}
-  }
-
   render() {
     switch(this.props.activePanel) {
       case null:
