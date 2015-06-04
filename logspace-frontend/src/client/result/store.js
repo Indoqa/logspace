@@ -8,7 +8,6 @@
 import Immutable from 'immutable'
 import axios from 'axios'
 
-import {resultCursor} from '../state'
 import {register,waitFor} from '../dispatcher'
 
 import * as timeWindowActions from '../time-window/actions'
@@ -17,12 +16,11 @@ import * as resultActions from './actions'
 
 import {getRestUrl} from '../rest'
 import {transformLogspaceResult} from './c3js-chartplugin'
+
+import {resultCursor, timeSeriesCursor, timeWindowCursor} from '../state'
+
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store'
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store'
-
-export function getResult() {
-  return resultCursor().get("translatedResult")
-}
 
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
@@ -48,8 +46,8 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
 })
 
 function refreshResult() {
-  var timeSeries = getTimeSeries()
-  var timeWindow = getTimeWindow()
+  var timeSeries = timeSeriesCursor()
+  var timeWindow = timeWindowCursor()
 
   if (timeSeries.isEmpty()) {
     storeEmptyResult()
@@ -71,19 +69,19 @@ function refreshResult() {
 
 function createRestRequest(timeSeries, timeWindow) {
   var request = {
-    "dataDefinitions": []
+    'dataDefinitions': []
   }
 
   timeSeries.forEach(function(item) {
     request.dataDefinitions.push({
-      "dateRange": {
-        "start": timeWindow.get('start'),
-        "end": timeWindow.get('end'),
-        "gap": timeWindow.get('gap')
+      'dateRange': {
+        'start': timeWindow.get('start'),
+        'end': timeWindow.get('end'),
+        'gap': timeWindow.get('gap')
       },
-      "globalAgentId": item.get("agentId"),
-      "propertyId": item.get("propertyId"),
-      "aggregate": item.get("aggregate")
+      'globalAgentId': item.get('agentId'),
+      'propertyId': item.get('propertyId'),
+      'aggregate': item.get('aggregate')
     })
   })
 
@@ -92,7 +90,7 @@ function createRestRequest(timeSeries, timeWindow) {
 
 function storeEmptyResult() {
   resultCursor(result => {
-    return result.set("translatedResult", Immutable.fromJS({
+    return result.set('translatedResult', Immutable.fromJS({
       empty: true,
       loading: false,
       error: false
@@ -102,7 +100,7 @@ function storeEmptyResult() {
 
 function storeLoadingResult() {
   resultCursor(result => {
-    return result.set("translatedResult", Immutable.fromJS({
+    return result.set('translatedResult', Immutable.fromJS({
       empty: false,
       loading: true,
       error: false
@@ -112,7 +110,7 @@ function storeLoadingResult() {
 
 function storeErrorResult(serverResponse) {
   resultCursor(result => {
-    return result.set("translatedResult", Immutable.fromJS({
+    return result.set('translatedResult', Immutable.fromJS({
       empty: true,
       error: true,
       loading: false,
@@ -126,7 +124,7 @@ function storeSuccessResult(timeSeries, responseJson) {
   const chartData = transformLogspaceResult(timeSeries, responseJson)
 
   resultCursor(result => {
-    return result.set("translatedResult", Immutable.fromJS( {
+    return result.set('translatedResult', Immutable.fromJS( {
       empty: false,
       error: false,
       loading: false,

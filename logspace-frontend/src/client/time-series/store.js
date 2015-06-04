@@ -6,17 +6,18 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import Immutable from 'immutable';
-import {Record} from 'immutable';
+import Immutable from 'immutable'
+import {Record} from 'immutable'
 
-import {register} from '../dispatcher';
-import {getRandomString} from '../../lib/getrandomstring';
+import {register} from '../dispatcher'
+import {getRandomString} from '../../lib/getrandomstring'
 
-import {COLORS} from './constants';
-import {timeSeriesCursor} from '../state';
-import {editedTimeSeriesCursor} from '../state';
+import {COLORS} from './constants'
 
-import * as actions from './actions';
+import {timeSeriesCursor} from '../state'
+import {editedTimeSeriesCursor} from '../state'
+
+import * as actions from './actions'
 
 const TimeSeriesItem = Record({
   id: '',
@@ -33,40 +34,32 @@ const TimeSeriesItem = Record({
   system: '',
   axis: '',
   propertyDescriptions: []
-});
-
-export function getTimeSeries() {
-  return timeSeriesCursor()
-}
-
-export function getEditedTimeSeries() {
-  return editedTimeSeriesCursor()
-}
+})
 
 export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onTimeSeriesSaved:
-      var item = getEditedTimeSeries().get("newItem").toJS();
+      var item = editedTimeSeriesCursor().get("newItem").toJS()
 
       if (item.id == null) {
-        addItem(item);
+        addItem(item)
       } else {
-        updateItem(item);
+        updateItem(item)
       }
 
-      break;
+      break
 
     case actions.onTimeSeriesDeleted:
       timeSeriesCursor(timeSeries => {
-        var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data });
-        var index = timeSeries.indexOf(itemToDelete);
+        var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data })
+        var index = timeSeries.indexOf(itemToDelete)
         return timeSeries.delete(timeSeries.indexOf(itemToDelete))
-      });
-      break;
+      })
+      break
 
     case actions.onNewTimeSeries:
-      var nextColor = getNextColor();
-      var defaultProperty = getDefaultProperty(data.propertyDescriptions);
+      var nextColor = getNextColor()
+      var defaultProperty = getDefaultProperty(data.propertyDescriptions)
 
       editedTimeSeriesCursor(editedTimeSeries => {
         const item = new TimeSeriesItem({
@@ -79,60 +72,58 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
           aggregate: "sum",
           color: nextColor
-        }).toMap();
+        }).toMap()
 
         return editedTimeSeries.set("newItem",  item)
-      });
-      break;
+      })
+      break
 
     case actions.onEditTimeSeries:
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.set("newItem",  data)
-      });
-    break;
+      })
+    break
 
     case actions.onTimeSeriesPropertyChanged:
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.setIn(["newItem", data.key],  data.value)
-      });
-    break;
+      })
+    break
 
     case actions.onAxisChanged:
       timeSeriesCursor(timeSeries => {
-        var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id });
-        var index = timeSeries.indexOf(itemToUpdate);
+        var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id })
+        var index = timeSeries.indexOf(itemToUpdate)
 
         itemToUpdate = itemToUpdate.set("axis", data.axis)
 
-        return timeSeries.update(index, item => itemToUpdate);
-      });
-    break;
+        return timeSeries.update(index, item => itemToUpdate)
+      })
+    break
   }
-});
+})
 
 function getNextColor() {
-  var usedColors = getTimeSeries().map(function(item) {
-      return item.get("color")
-  });
+  const usedColors = timeSeriesCursor().map((item) => item.get('color'))
+  const allColors = COLORS.slice()
 
-  var allColors = COLORS.slice();
-
-  var freeColors = allColors.filter(function(item) {
-    return usedColors.indexOf(item) === -1;
-  });
+  const freeColors = allColors.filter(function(item) {
+    return usedColors.indexOf(item) === -1
+  })
 
   return freeColors[0]
 }
 
+// FIXME rpoetz: Die For-Schleife ist sinnlos
 function getDefaultProperty(propertyDescriptions) {
   for (var i = 0; i < propertyDescriptions.length; i++) {
     let propertyDescription = propertyDescriptions[0]
     if (propertyDescription.propertyType != "STRING") {
-      return propertyDescription.id;
+      return propertyDescription.id
     }
   }
 
-  return null;
+  return null
 }
 
 function addItem(item) {
@@ -140,13 +131,13 @@ function addItem(item) {
 
   timeSeriesCursor(timeSeries => {
     return timeSeries.push(Immutable.fromJS(item))
-  });
+  })
 }
 
 function updateItem(item) {
   timeSeriesCursor(timeSeries => {
-    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id });
-    var index = timeSeries.indexOf(itemToUpdate);
+    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id })
+    var index = timeSeries.indexOf(itemToUpdate)
     return timeSeries.set(index, Immutable.fromJS(item))
-  });
+  })
 }

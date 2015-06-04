@@ -6,30 +6,27 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import * as actions from './actions';
-import {timeWindowCursor} from '../state';
-import {register} from '../dispatcher';
-import {Dispatcher} from 'flux';
+import {Dispatcher} from 'flux'
 
-export function getTimeWindow() {
-  return timeWindowCursor();
-}
+import {register} from '../dispatcher'
 
+import {timeWindowCursor} from '../state'
 
+import * as actions from './actions'
 
 export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
   switch (action) {
     case actions.onTimeWindowChange:
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("start", data.start);
-      });
+        return timeWindow.set("start", data.start)
+      })
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("end", data.end);
-      });
+        return timeWindow.set("end", data.end)
+      })
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("gap", data.gap);
-      });
-      break;
+        return timeWindow.set("gap", data.gap)
+      })
+      break
   }
-});
+})
