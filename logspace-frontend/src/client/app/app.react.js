@@ -8,23 +8,51 @@
 import DocumentTitle from 'react-document-title'
 import React from 'react'
 import {Link, RouteHandler} from 'react-router'
-import {state} from '../state'
+
+import * as appState from '../state'
+
+import '../intl/store'
+import '../time-window/store'
+import '../time-series/store'
+import '../result/store'
+import '../suggestions/store'
+import '../drawer/store'
 
 require('./app.styl');
 
 export default class App extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = this.getState()
+  }
+
+  getState() {
+    return {
+      i18n: appState.i18nCursor(),
+      timeWindow: appState.timeWindowCursor(),
+      timeSeries: appState.timeSeriesCursor(),
+      editedTimeSeries: appState.editedTimeSeriesCursor(),
+      result: appState.resultCursor(),
+      suggestion: appState.suggestionCursor(),
+      drawer: appState.drawerCursor()
+    };
+  }
+
   componentDidMount() {
-    state.on('change', () => {
-      this.forceUpdate();
-    }) 
+    appState.state.on('change', () => {
+      console.time('app render') // eslint-disable-line no-console
+      this.setState(this.getState(), () => {
+        console.timeEnd('app render') // eslint-disable-line no-console
+      })
+    })
   }
 
   render() {
     return (
       <DocumentTitle title='logspace.io'>
         <div className="page">
-          <RouteHandler />
+          <RouteHandler {...this.state} />
         </div>
       </DocumentTitle>
     )
