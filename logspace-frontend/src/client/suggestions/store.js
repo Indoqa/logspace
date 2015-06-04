@@ -17,36 +17,36 @@ import * as actions from './actions'
 export const SuggestionStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onNewSuggestionQuery:
-      updateRequest("text", data)
+      updateRequest('text', data)
       refreshSelections()
       break
 
     case actions.onSystemSelected:
-      updateRequest("system", data)
+      updateRequest('system', data)
       refreshSelections()
       break
 
     case actions.onSystemCleared:
-      updateRequest("system", null)
+      updateRequest('system', null)
       refreshSelections()
       break
 
     case actions.onSpaceSelected:
-      updateRequest("space", data)
+      updateRequest('space', data)
       refreshSelections()
       break
 
     case actions.onSpaceCleared:
-      updateRequest("space", null)
+      updateRequest('space', null)
       refreshSelections()
       break
     case actions.onPropertySelected:
-      updateRequest("property", data)
+      updateRequest('property', data)
       refreshSelections()
       break
 
     case actions.onPropertyCleared:
-      updateRequest("property", null)
+      updateRequest('property', null)
       refreshSelections()
       break
   }
@@ -54,15 +54,15 @@ export const SuggestionStore_dispatchToken = register(({action, data}) => {
 
 function updateRequest(key, value) {
   suggestionCursor(suggestions => {
-    return suggestions.setIn(["request", key], Immutable.fromJS(value))
+    return suggestions.setIn(['request', key], Immutable.fromJS(value))
   })
 }
 
 function refreshSelections() {
-  var request = suggestionCursor().get("request").toJS()
+  var request = suggestionCursor().get('request').toJS()
 
   suggestionCursor(suggestions => {
-    return suggestions.setIn(["result", "loading"], true)
+    return suggestions.setIn(['result', 'loading'], true)
   })
 
   var translatedRequest = {
@@ -83,7 +83,7 @@ function refreshSelections() {
 
 function storeErrorResult(serverResponse) {
   suggestionCursor(suggestions => {
-    return suggestions.set("result", Immutable.fromJS({
+    return suggestions.set('result', Immutable.fromJS({
         error: true,
         loading: false,
         spaces: [],
@@ -96,7 +96,7 @@ function storeErrorResult(serverResponse) {
 
 function storeEmptyResult() {
   suggestionCursor(suggestions => {
-    return suggestions.set("result", Immutable.fromJS({
+    return suggestions.set('result', Immutable.fromJS({
         error: false,
         loading: false,
         spaces: [],
@@ -109,7 +109,7 @@ function storeEmptyResult() {
 
 function storeSuccessResult(responseJson) {
   suggestionCursor(suggestions => {
-    return suggestions.set("result", Immutable.fromJS({
+    return suggestions.set('result', Immutable.fromJS({
         error: false,
         loading: false,
         spaces: responseJson.spaces,

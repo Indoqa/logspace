@@ -19,13 +19,13 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onTimeWindowChange:
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("start", data.start)
+        return timeWindow.set('start', data.start)
       })
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("end", data.end)
+        return timeWindow.set('end', data.end)
       })
       timeWindowCursor(timeWindow => {
-        return timeWindow.set("gap", data.gap)
+        return timeWindow.set('gap', data.gap)
       })
       break
   }

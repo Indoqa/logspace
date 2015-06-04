@@ -39,7 +39,7 @@ const TimeSeriesItem = Record({
 export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onTimeSeriesSaved:
-      var item = editedTimeSeriesCursor().get("newItem").toJS()
+      var item = editedTimeSeriesCursor().get('newItem').toJS()
 
       if (item.id == null) {
         addItem(item)
@@ -70,23 +70,23 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           space: data.space,
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
-          aggregate: "sum",
+          aggregate: 'sum',
           color: nextColor
         }).toMap()
 
-        return editedTimeSeries.set("newItem",  item)
+        return editedTimeSeries.set('newItem',  item)
       })
       break
 
     case actions.onEditTimeSeries:
       editedTimeSeriesCursor(editedTimeSeries => {
-        return editedTimeSeries.set("newItem",  data)
+        return editedTimeSeries.set('newItem',  data)
       })
     break
 
     case actions.onTimeSeriesPropertyChanged:
       editedTimeSeriesCursor(editedTimeSeries => {
-        return editedTimeSeries.setIn(["newItem", data.key],  data.value)
+        return editedTimeSeries.setIn(['newItem', data.key],  data.value)
       })
     break
 
@@ -95,7 +95,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
         var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id })
         var index = timeSeries.indexOf(itemToUpdate)
 
-        itemToUpdate = itemToUpdate.set("axis", data.axis)
+        itemToUpdate = itemToUpdate.set('axis', data.axis)
 
         return timeSeries.update(index, item => itemToUpdate)
       })
@@ -118,7 +118,7 @@ function getNextColor() {
 function getDefaultProperty(propertyDescriptions) {
   for (var i = 0; i < propertyDescriptions.length; i++) {
     let propertyDescription = propertyDescriptions[0]
-    if (propertyDescription.propertyType != "STRING") {
+    if (propertyDescription.propertyType != 'STRING') {
       return propertyDescription.id
     }
   }
