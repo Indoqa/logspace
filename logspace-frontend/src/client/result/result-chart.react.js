@@ -34,7 +34,6 @@ export default class Chart extends Component {
 
   constructor(props) {
     super(props)
-
     this.state = {
       localState: ComponentState
     }
@@ -69,7 +68,6 @@ export default class Chart extends Component {
     }
 
     const chartData = this.props.result.get("chartData").toJS()
-
     const currentData = this.chart.data()
     const keysToUnload = currentData.map(function(item) {
       if (chartData.columnKeys.indexOf(item.id) > -1 ) {
@@ -95,7 +93,7 @@ export default class Chart extends Component {
 
   toggleLoading(show) {
     this.setState({
-      localState: this.state.localState.updateIn(['loadingCss', 'active'], () => {return show})
+      localState: this.state.localState.updateIn(['loadingCss', 'active'], () => { return show })
     })
   }
 
@@ -126,7 +124,7 @@ export default class Chart extends Component {
   transform(type) {
     this.chart.transform(type)
     this.setState({
-      localState: this.state.localState.updateIn(['type'], () => {return type})
+      localState: this.state.localState.updateIn(['type'], () => { return type })
     })
   }
 
@@ -199,7 +197,8 @@ export default class Chart extends Component {
       <div>
        <div className='chart-header'>
         <div className='chart-options'>
-           <select onChange={(e) => this.transform(e.target.value)} value={this.state.localState.get('type')} >
+           <select onChange={(e) => this.transform(e.target.value)}
+                   value={this.state.localState.get('type')} >
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>
             <option value={'spline'}>spline</option>
@@ -217,9 +216,11 @@ export default class Chart extends Component {
         </div>
         <div className={'resultChart'}>
           <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
-            <span> <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'}/> </span>
+            <span>
+              <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'} />
+            </span>
           </div>
-          <div id="chart" / >
+          <div id="chart" />
         </div>
       </div>
     )

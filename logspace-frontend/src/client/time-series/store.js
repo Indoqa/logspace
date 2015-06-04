@@ -29,7 +29,7 @@ const TimeSeriesItem = Record({
   scaleType: 'auto',
   scaleMin: 0,
   scaleMax: 100,
-  type: 'line',
+  type: 'spline',
   space: '',
   system: '',
   axis: '',
