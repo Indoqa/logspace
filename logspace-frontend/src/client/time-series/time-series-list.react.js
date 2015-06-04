@@ -9,7 +9,7 @@
 import React from 'react';
 import immutable from 'immutable';
 import Component from '../components/component.react';
-import TimeSeriesItem  from '../time-series/time-series-item.react.js'
+import TimeSeriesItem  from '../time-series/time-series-item.react'
 
 require('./time-series-list.styl')
 

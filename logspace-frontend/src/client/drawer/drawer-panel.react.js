@@ -7,9 +7,9 @@
  */
 import React from 'react';
 import Component from '../components/component.react'
-import Options  from '../options/options.react.js'
-import Suggestions  from '../suggestions/suggestions.react.js'
-import TimeWindow  from '../time-window/time-window.react.js'
+import Options  from '../options/options.react'
+import Suggestions  from '../suggestions/suggestions.react'
+import TimeWindow  from '../time-window/time-window.react'
 import EditTimeSeries from '../time-series/time-series-edit.react'
 import * as Panels from './constants';
 
