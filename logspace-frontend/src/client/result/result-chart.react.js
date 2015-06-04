@@ -10,6 +10,7 @@ import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
 import moment from 'moment'
+import shallowEqual from 'react-pure-render/shallowEqual';
 
 import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
@@ -20,15 +21,70 @@ import {onResultRefreshed} from './actions'
 
 require ('./result-chart.styl')
 
+function shallowEqual1(objA, objB) {
+  if (objA === objB) {
+    console.log('--> 1')
+    return true;
+  }
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    console.log('--> 2')
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) {
+    console.log('--> 3')
+    return false;
+  }
+
+  // Test for A's keys different from B.
+  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
+  for (var i = 0; i < keysA.length; i++) {
+    if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+      console.log('--> 4: ' + keysA[i])
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export default class Chart extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      loadingCss: 'loading',
+      loadingCss: {
+        'loading' : true,
+        'active' : false
+      },
       type: 'line'
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('!!!compare state:' + shallowEqual1(this.state, nextState))
+    console.log('!!!compare props:' + shallowEqual(this.props, nextProps))
+
+    // console.log('this.props keys:', Object.keys(this.props))
+    // console.log('nextProps keys', Object.keys(nextProps))
+    // console.log('compare timeSeries: ' + (nextProps.series === this.props.series))
+    // console.log('compare result: ' + (nextProps.result === this.props.result))
+
+    console.log('this.state keys:', Object.keys(this.state))
+    console.log('nextState keys', Object.keys(nextState))
+
+    console.log('this.state.loadingCss', this.state.loadingCss)
+    console.log('nextState.loadingCss', nextState.loadingCss)
+    console.log('!!!compare loadingCss:' + shallowEqual1(this.state.loadingCss, nextState.loadingCss))
+    console.log('this.state.type', this.state.type)
+    console.log('nextState.type', nextState.type)
+
+    return super.shouldComponentUpdate(nextProps, nextState)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,13 +141,12 @@ export default class Chart extends Component {
   }
 
   toggleLoading(show) {
-   this.setState(
-      {
-        loadingCss: {
-          'loading' : true,
-          'active' : show
-        }
-      })
+    this.setState({
+      loadingCss: {
+        'loading' : true,
+        'active' : show
+      }
+    })
   }
 
   calculateChartSize() {
