@@ -5,64 +5,61 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import Immutable from 'immutable';
-import * as timeWindowActions from '../time-window/actions';
-import * as timeSeriesActions from '../time-series/actions';
-import * as suggestionsActions from '../suggestions/actions';
-import * as optionsActions from '../options/actions';
-import * as drawerActions from './actions';
-import * as Panels from './constants';
-import {drawerCursor} from '../state';
-import {register,waitFor} from '../dispatcher';
+import Immutable from 'immutable'
 
-export function getActivePanel() {
-  return drawerCursor().get("activePanel");
-}
+import {register,waitFor} from '../dispatcher'
+
+import {drawerCursor} from '../state'
+import * as Panels from './constants'
+
+import * as timeWindowActions from '../time-window/actions'
+import * as timeSeriesActions from '../time-series/actions'
+import * as suggestionsActions from '../suggestions/actions'
+import * as optionsActions from '../options/actions'
+import * as drawerActions from './actions'
 
 export const DrawerStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case suggestionsActions.onShowSuggestions:
-      setActivePanel(Panels.SUGGESTIONS);
-      break;
-    
+      setActivePanel(Panels.SUGGESTIONS)
+      break
+
     case timeWindowActions.onShowTimeWindowForm:
-      setActivePanel(Panels.TIME_WINDOW);
-      break;  
+      setActivePanel(Panels.TIME_WINDOW)
+      break
 
-    case timeSeriesActions.onNewTimeSeries:  
-      setActivePanel(Panels.ADD_TIMESERIES);
-      break;  
+    case timeSeriesActions.onNewTimeSeries:
+      setActivePanel(Panels.ADD_TIMESERIES)
+      break
 
-    case timeSeriesActions.onEditTimeSeries:  
-      setActivePanel(Panels.EDIT_TIMESERIES);
-      break;    
+    case timeSeriesActions.onEditTimeSeries:
+      setActivePanel(Panels.EDIT_TIMESERIES)
+      break
 
-    case optionsActions.onShowOptions:  
-      setActivePanel(Panels.OPTIONS);
-      break;      
+    case optionsActions.onShowOptions:
+      setActivePanel(Panels.OPTIONS)
+      break
 
     case timeWindowActions.onTimeWindowChange:
-      setActivePanel(null);
-      break;
-      
+      setActivePanel(null)
+      break
+
     case drawerActions.onCloseDrawer:
-      setActivePanel(null);
-      break;
+      setActivePanel(null)
+      break
 
     case timeSeriesActions.onTimeSeriesSaved:
-      setActivePanel(null);  
-      break;
+      setActivePanel(null)
+      break
 
     case timeSeriesActions.onTimeSeriesDeleted:
-      setActivePanel(null);  
-      break;  
+      setActivePanel(null)
+      break
   }
-});  
+})
 
 function setActivePanel(panel) {
   drawerCursor(result => {
     return result.set("activePanel", panel)
-  });   
+  })
 }
-
-
