@@ -9,7 +9,7 @@ import Immutable from 'immutable'
 
 import {register,waitFor} from '../dispatcher'
 
-import {drawerCursor, viewCursor} from '../state'
+import {viewCursor} from '../state'
 import * as Panels from './constants'
 
 import * as timeWindowActions from '../time-window/actions'
@@ -69,7 +69,7 @@ function setActivePanel(panel) {
     return view.updateIn(['mainCss', 'main-reduced'], (value) => {return showPanel})
   })
 
-  drawerCursor(result => {
-    return result.set('activePanel', panel)
+  viewCursor(view => {
+    return view.set('activePanel', panel)
   })
 }

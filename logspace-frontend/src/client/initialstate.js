@@ -47,9 +47,6 @@ export default {
       'loading': false
     }
   },
-  'drawer': {
-    'activePanel': null
-  },
   'view': {
     'activePanel': null,
     navDrawerCss: {

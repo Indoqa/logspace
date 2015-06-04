@@ -20,15 +20,15 @@ export default class Drawer extends Component {
       <div className="drawer">
         <div className="header">
           <div className="close"> <input type="button" value="close" onClick={() => onCloseDrawer()}/> </div>
-          <div className="title"> > {msg('drawer.header.' + this.props.activePanel)} </div>
+          <div className="title"> > {msg('drawer.header.' + this.props.view.get('activePanel'))} </div>
         </div>
         <div className="panel">
           <DrawerPanel
-              activePanel={this.props.activePanel}
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
-              editedTimeSeries={this.props.editedTimeSeries} />
+              editedTimeSeries={this.props.editedTimeSeries}
+              view={this.props.view} />
         </div>
       </div>
       )
