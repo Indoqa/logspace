@@ -16,42 +16,38 @@ export default {
     locales: initialLocale,
     messages: messages[initialLocale]
   },
-  "timeWindow": {
-    "start": "2014-01-01",
-    "end": "2014-01-02",
-    "gap": 3600
- },
- "timeSeries": [
-
- ],
- "editedTimeSeries": {
-
- },
- "result": {
-   "translatedResult": {
-   	 "error": false,
-     "empty": true,
-     "series": null,
-     "xvalues": [],
-     "warnings": []
-   }
- },
-  "suggestions": {
-    "request" : {
-      "text": null,
-      "system": null,
-      "space": null,
-      "propertyId": null
+  'timeWindow': {
+    'start': '2014-01-01',
+    'end': '2014-01-02',
+    'gap': 3600
+  },
+  'timeSeries': [],
+  'editedTimeSeries': {},
+  'result': {
+     'translatedResult': {
+       'error': false,
+       'empty': true,
+       'series': null,
+       'xvalues': [],
+       'warnings': []
+     }
+  },
+  'suggestions': {
+    'request' : {
+      'text': null,
+      'system': null,
+      'space': null,
+      'propertyId': null
     },
-    "result": {
-      "spaces": [],
-      "systems": [],
-      "propertyNames": [],
-      "agentDescriptions": [],
-      "loading": false
+    'result': {
+      'spaces': [],
+      'systems': [],
+      'propertyNames': [],
+      'agentDescriptions': [],
+      'loading': false
     }
   },
-  "drawer": {
-    "activePanel": null
+  'drawer': {
+    'activePanel': null
   }
 };
