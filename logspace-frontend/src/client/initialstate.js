@@ -49,5 +49,16 @@ export default {
   },
   'drawer': {
     'activePanel': null
+  },
+  'view': {
+    'activePanel': null,
+    navDrawerCss: {
+      'navigation-drawer' : true,
+      'navigation-drawer-expanded' : false
+    },
+    mainCss: {
+      'main' : true,
+      'main-reduced' : false
+    }
   }
 };

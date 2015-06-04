@@ -5,13 +5,14 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import State from '../lib/state';
+import State from '../lib/state'
 
-export const state = new State(require('./initialstate'));
-export const i18nCursor = state.cursor(['i18n']);
-export const timeWindowCursor = state.cursor(['timeWindow']);
-export const timeSeriesCursor = state.cursor(['timeSeries']);
-export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries']);
-export const resultCursor = state.cursor(['result']);
-export const suggestionCursor = state.cursor(['suggestions']);
-export const drawerCursor = state.cursor(['drawer']);
+export const state = new State(require('./initialstate'))
+export const i18nCursor = state.cursor(['i18n'])
+export const timeWindowCursor = state.cursor(['timeWindow'])
+export const timeSeriesCursor = state.cursor(['timeSeries'])
+export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries'])
+export const resultCursor = state.cursor(['result'])
+export const suggestionCursor = state.cursor(['suggestions'])
+export const drawerCursor = state.cursor(['drawer'])
+export const viewCursor = state.cursor(['view'])

@@ -13,19 +13,19 @@ import {onShowSuggestions} from '../suggestions/actions'
 
 
 export default class AddTimeSeries extends Component {
-  
+
   render() {
     if (this.props.count >= 8) {
       return <div/>
     }
 
     return (
-       <div className='add-series-entry'>
-          <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
-            <i>+</i>
-          </button>
-        </div>
-    );
+      <div className='add-series-entry'>
+        <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
+          <i>+</i>
+        </button>
+      </div>
+    )
   }
 
 }

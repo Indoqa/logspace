@@ -16,46 +16,28 @@ import Chart from '../result/result-chart.react'
 import Drawer from '../drawer/drawer.react'
 import Header from '../header/header.react'
 
+import Component from '../components/component.react'
+
 import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
 
 require('./time-series.styl')
 
-export default class TimeSeries extends React.Component {
+export default class TimeSeries extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      navDrawerCss: 'navigation-drawer',
-      mainCss: 'main'
-    };
   }
 
   componentDidMount() {
     onNewSuggestionQuery(null)
   }
 
-  toggleNavigationDrawer() {
-    this.setState(
-      {
-        navDrawerCss: {
-          'navigation-drawer' : true,
-          'navigation-drawer-expanded' : !this.state.navDrawerCss['navigation-drawer-expanded']
-        },
-        mainCss: {
-          'main' : true,
-          'main-reduced' : !this.state.mainCss['main-reduced']
-        }
-      });
-    this.forceUpdate()
-  }
-
   render() {
     return (
       <div className='time-series'>
 
-        <div className={classnames(this.state.navDrawerCss)}>
+        <div className={classnames(this.props.view.get('navDrawerCss').toJS())}>
 
           <div className="left">
             <Header/>
@@ -70,13 +52,12 @@ export default class TimeSeries extends React.Component {
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
-              editedTimeSeries={this.props.editedTimeSeries}
-              toggle={() => this.toggleNavigationDrawer()} />
+              editedTimeSeries={this.props.editedTimeSeries} />
           </div>
 
         </div>
 
-        <div className={classnames(this.state.mainCss)}>
+        <div className={classnames(this.props.view.get('mainCss').toJS())}>
           <Chart series={this.props.timeSeries} result={this.props.result} />
         </div>
 

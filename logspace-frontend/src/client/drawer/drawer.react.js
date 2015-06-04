@@ -28,8 +28,7 @@ export default class Drawer extends Component {
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
-              editedTimeSeries={this.props.editedTimeSeries}
-              toggle={this.props.toggle} />
+              editedTimeSeries={this.props.editedTimeSeries} />
         </div>
       </div>
       )

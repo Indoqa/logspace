@@ -9,7 +9,7 @@ import Immutable from 'immutable'
 
 import {register,waitFor} from '../dispatcher'
 
-import {drawerCursor} from '../state'
+import {drawerCursor, viewCursor} from '../state'
 import * as Panels from './constants'
 
 import * as timeWindowActions from '../time-window/actions'
@@ -59,7 +59,17 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
 })
 
 function setActivePanel(panel) {
+  const showPanel = panel !== null
+
+  viewCursor(view => {
+    return view.updateIn(['navDrawerCss', 'navigation-drawer-expanded'], (value) => {return showPanel})
+  })
+
+  viewCursor(view => {
+    return view.updateIn(['mainCss', 'main-reduced'], (value) => {return showPanel})
+  })
+
   drawerCursor(result => {
-    return result.set("activePanel", panel)
+    return result.set('activePanel', panel)
   })
 }
