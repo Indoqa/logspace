@@ -30,35 +30,21 @@ export default class DrawerPanel extends Component {
   }
 
   render() {
-  	if (this.props.activePanel == null) {
-  		return <div/>
-  	}
-
-  	if (this.props.activePanel == Panels.SUGGESTIONS) {
-  		return (
-    		<Suggestions suggestions={this.props.suggestions}/>
-    	)
-  	}
-
-  	if (this.props.activePanel == Panels.TIME_WINDOW) {
-  		return (
-    		<TimeWindow timeWindow={this.props.timeWindow} />
-    	)
-  	}
-
-    if (this.props.activePanel == Panels.ADD_TIMESERIES || this.props.activePanel == Panels.EDIT_TIMESERIES) {
-      return (
-        <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} timeSeries={this.props.timeSeries}/>
-      )
+    switch(this.props.activePanel) {
+      case null:
+        return <div/>
+      case Panels.SUGGESTIONS:
+        return <Suggestions suggestions={this.props.suggestions}/>
+      case Panels.TIME_WINDOW:
+        return <TimeWindow timeWindow={this.props.timeWindow} />
+      case Panels.ADD_TIMESERIES:
+        // fall through
+      case Panels.EDIT_TIMESERIES:
+        return <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} timeSeries={this.props.timeSeries}/>
+      case Panels.OPTIONS:
+        return <Options />
+      default:
+        return (<div> unsupported panel: {this.props.activePanel} </div>)
     }
-
-    if (this.props.activePanel == Panels.OPTIONS) {
-      return (
-        <Options />
-      )
-    }
-
-
-  	return (<div> unsupported panel: {this.props.activePanel} </div>)
   }
 }
