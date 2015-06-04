@@ -49,11 +49,11 @@ export default {
   },
   'view': {
     'activePanel': null,
-    navDrawerCss: {
+    'navDrawerCss': {
       'navigation-drawer' : true,
       'navigation-drawer-expanded' : false
     },
-    mainCss: {
+    'mainCss': {
       'main' : true,
       'main-reduced' : false
     }

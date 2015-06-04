@@ -6,43 +6,43 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import {dispatch} from '../dispatcher';
-import setToString from '../../lib/settostring';
+import {dispatch} from '../dispatcher'
+import setToString from '../../lib/settostring'
 
 export function onShowSuggestions() {
-  dispatch(onShowSuggestions);
+  dispatch(onShowSuggestions)
 }
 
 export function onNewSuggestionQuery(newSuggestionQuery) {
-  dispatch(onNewSuggestionQuery, newSuggestionQuery);
+  dispatch(onNewSuggestionQuery, newSuggestionQuery)
 }
 
 export function onSystemSelected(selectedSystem) {
-  dispatch(onSystemSelected, selectedSystem);
+  dispatch(onSystemSelected, selectedSystem)
 }
 
 export function onSystemCleared() {
-  dispatch(onSystemCleared);
+  dispatch(onSystemCleared)
 }
 
 export function onSpaceSelected(selectedSpace) {
-  dispatch(onSpaceSelected, selectedSpace);
+  dispatch(onSpaceSelected, selectedSpace)
 }
 
 export function onSpaceCleared() {
-  dispatch(onSpaceCleared);
+  dispatch(onSpaceCleared)
 }
 
 export function onPropertySelected(selectedProperty) {
-  dispatch(onPropertySelected, selectedProperty);
+  dispatch(onPropertySelected, selectedProperty)
 }
 
 export function onPropertyCleared() {
-  dispatch(onPropertyCleared);
+  dispatch(onPropertyCleared)
 }
 
-  
+
 setToString('suggestions', {
-  onNewSuggestionQuery, onSystemSelected, onSystemCleared, onSpaceSelected, onSpaceCleared, 
+  onNewSuggestionQuery, onSystemSelected, onSystemCleared, onSpaceSelected, onSpaceCleared,
   onPropertySelected, onPropertyCleared, onShowSuggestions
-});  
+})
