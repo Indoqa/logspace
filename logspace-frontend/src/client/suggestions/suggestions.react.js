@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import SuggestionResult from './suggestions-result.react';
 import {onNewSuggestionQuery} from './actions';
 
@@ -14,7 +14,7 @@ import debounceFunc from '../../lib/debounce'
 
 require('./suggestions.styl')
 
-export default class Suggestions extends PureComponent {
+export default class Suggestions extends Component {
 
   constructor(props) {
     super(props);

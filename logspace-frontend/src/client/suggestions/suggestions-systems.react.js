@@ -6,10 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import {onSystemSelected, onSystemCleared} from './actions';
 
-export default class SuggestionSystems extends PureComponent {
+export default class SuggestionSystems extends Component {
   
   render() {
     if (this.props.selected != null) {

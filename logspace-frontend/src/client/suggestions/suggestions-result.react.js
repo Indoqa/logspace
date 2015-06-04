@@ -8,7 +8,7 @@
 import React from 'react';
 import Halogen from 'halogen';
 
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import SuggestionSystems from './suggestions-systems.react';
 import SuggestionSpaces from './suggestions-spaces.react';
 import SuggestionProperties from './suggestions-properties.react';
@@ -16,7 +16,7 @@ import TimeSeriesLabel from '../time-series/time-series-label.react';
 
 import {onNewTimeSeries} from '../time-series/actions';
 
-export default class SuggestionResult extends PureComponent {
+export default class SuggestionResult extends Component {
 
  render() {
     var isLoading = this.props.result.get("loading");

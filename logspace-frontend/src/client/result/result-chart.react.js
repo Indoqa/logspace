@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import Halogen from 'halogen';
 import moment from 'moment';
 
-import PureComponent from '../components/purecomponent.react'
+import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
 import {onResultRefreshed} from './actions'
@@ -19,7 +19,7 @@ import {GAPS} from '../time-window/constants'
 
 require ('./result-chart.styl')
 
-export default class Chart extends PureComponent {
+export default class Chart extends Component {
 
   constructor(props) {
     super(props);

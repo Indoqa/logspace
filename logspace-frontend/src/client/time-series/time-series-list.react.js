@@ -8,12 +8,12 @@
 
 import React from 'react';
 import immutable from 'immutable';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import TimeSeriesItem  from '../time-series/time-series-item.react.js'
 
 require('./time-series-list.styl')
 
-export default class TimeSeriesList extends PureComponent {
+export default class TimeSeriesList extends Component {
   render() {
     const items = this.props.items;
 

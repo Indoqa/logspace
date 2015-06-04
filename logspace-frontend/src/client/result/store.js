@@ -27,17 +27,17 @@ export function getResult() {
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.onTimeWindowChange:
-      waitFor(TimeWindowStore_dispatchToken)
+      waitFor([TimeWindowStore_dispatchToken])
       refreshResult()
       break
 
     case timeSeriesActions.onTimeSeriesSaved:
-      waitFor(TimeSeriesStore_dispatchToken)
+      waitFor([TimeSeriesStore_dispatchToken])
       refreshResult()
       break
 
     case timeSeriesActions.onTimeSeriesDeleted:
-      waitFor(TimeSeriesStore_dispatchToken)
+      waitFor([TimeSeriesStore_dispatchToken])
       refreshResult()
       break
 
@@ -134,5 +134,3 @@ function storeSuccessResult(timeSeries, responseJson) {
     }))
   })
 }
-
-

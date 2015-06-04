@@ -1,34 +1,46 @@
-/*
- * Logspace
- * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
- * This program and the accompanying materials are made available under the terms of
- * the Eclipse Public License Version 1.0, which accompanies this distribution and
- * is available at http://www.eclipse.org/legal/epl-v10.html.
- */
-
 import EventEmitter from 'eventemitter3';
-import Immutable from 'immutable';
+import immutable from 'immutable';
 
 export default class State extends EventEmitter {
 
-  constructor(state, reviver: ?Function) {
+  constructor(state, storesReviver: ?Function) {
     super();
     this._state = null;
-    this._reviver = reviver;
+    this._storesReviver = storesReviver;
     this.load(state || {});
   }
 
   load(state: Object) {
-    this.set(Immutable.Map.isMap(state)
+    const revivedState = immutable.Map.isMap(state)
       ? state
-      : Immutable.fromJS(state, this._reviver)
-    );
+      : this._storesReviver
+        ? immutable.fromJS(state, this.revive_(state, this._storesReviver))
+        : immutable.fromJS(state);
+    this.set(revivedState);
   }
 
-  set(state) {
+  revive_(state, storesReviver) {
+    return function(key, value) {
+      // Revive only top level keys.
+      if (this === state) {
+        const revived = storesReviver(key, value);
+        if (revived) return revived;
+      }
+
+      // This is default fromJS method behavior. Revive [] as List, and {} as Map.
+      return immutable.Iterable.isIndexed(value)
+        ? value.toList()
+        : value.toMap();
+    };
+  }
+
+  set(state, path?) {
     if (this._state === state) return;
+    // Previous state if useful for debugging global app state diff.
+    // It's easy with: https://github.com/intelie/immutable-js-diff
+    const previousState = this._state;
     this._state = state;
-    this.emit('change', this._state);
+    this.emit('change', this._state, previousState, path);
   }
 
   get() {
@@ -43,12 +55,13 @@ export default class State extends EventEmitter {
     console.log(JSON.stringify(this.save())); // eslint-disable-line no-console
   }
 
-  cursor(path) {
-    return (update) => {
-      if (update)
-        this.set(this._state.updateIn(path, update));
-      else
+  cursor(path: Array<string>) {
+    return (arg) => {
+      if (!arg)
         return this._state.getIn(path);
+      if (Array.isArray(arg))
+        return this._state.getIn(path.concat(arg));
+      this.set(this._state.updateIn(path, arg), path);
     };
   }
 

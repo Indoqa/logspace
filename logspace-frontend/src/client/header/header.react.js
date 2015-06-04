@@ -7,12 +7,12 @@
  */
 
 import React from 'react'
-import PureComponent from '../components/purecomponent.react'
+import Component from '../components/component.react'
 import {onShowOptions} from '../options/actions'
 
 require('./header.styl')
 
-export default class Header extends PureComponent {
+export default class Header extends Component {
 
   render() {
     return (

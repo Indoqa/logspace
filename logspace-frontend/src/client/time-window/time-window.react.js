@@ -7,11 +7,11 @@
  */
  
 import React from 'react';
-import PureComponent from '../components/purecomponent.react';
+import Component from '../components/component.react';
 import {onTimeWindowChange} from './actions';
 import {GAPS} from './constants'
 
-export default class TimeWindow extends PureComponent {
+export default class TimeWindow extends Component {
   
   constructor(props) {
     super(props);
