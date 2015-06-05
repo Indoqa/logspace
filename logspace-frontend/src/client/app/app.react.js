@@ -9,6 +9,8 @@ import DocumentTitle from 'react-document-title'
 import React from 'react'
 import {Link, RouteHandler} from 'react-router'
 
+import Component from '../components/component.react';
+
 import * as appState from '../state'
 
 import '../intl/store'
@@ -20,7 +22,7 @@ import '../drawer/store'
 
 require('./app.styl');
 
-export default class App extends React.Component {
+export default class App extends Component {
 
   constructor(props) {
     super(props)
