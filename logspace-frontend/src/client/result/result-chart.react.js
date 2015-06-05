@@ -22,11 +22,11 @@ import {onResultRefreshed} from './actions'
 
 require ('./result-chart.styl')
 
-const ComponentState = Immutable.Map({
-  loadingCss: Immutable.Map({
+const ComponentState = Immutable.fromJS({
+  loadingCss: {
     'loading' : true,
     'active' : false
-  }),
+  },
   type: 'spline'
 })
 
