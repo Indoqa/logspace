@@ -6,7 +6,7 @@ title: Architecture
 #Architecture
 
 logspace relies on simple, standardized HTTP communication between its components.
-Your monitored applications will not need to listen on any ports and will initialize all communication themselves.
+Your monitored applications will not need to listen on any ports and will initiate all communication themselves.
 
 ![logspace architecture](/assets/images/architecture.png)
 
@@ -16,7 +16,7 @@ Your monitored applications will not need to listen on any ports and will initia
 
 The *Agent* is the component that is actually collecting the desired information.<br/>
 
-*Agents* are always passive and need to be triggered externally in order to take a measurement. This can either be a timer, which triggers the *Agent* based on a **cron** expression or an **event** inside the application that is monitored with logspace.
+*Agents* are always passive and need to be triggered externally in order to take a measurement. This can either be a timer, which triggers the *Agent* based on a **cron-expression** or an **event** inside the application that is monitored with logspace.
 
 In order to transport, store and analyze the collected information, the *Agent* packages it into an object called *Event*. This *Event* carries both the actually collected information as well as when, where and by which *Agent* it was created.<br/>
 All *Events* created by an *Agent* are forwarded to its *AgentController*.
