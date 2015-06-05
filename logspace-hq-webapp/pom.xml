@@ -139,6 +139,13 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>io.logspace.hq.webapp.LogspaceHq</mainClass>
+        </configuration>
+      </plugin>    
     </plugins>
   </build>
 </project>
