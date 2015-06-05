@@ -2,29 +2,40 @@
 layout: default
 title: Event API
 ---
-#Event API
+# Event API
 
-##Store Events
+## Store Events
 
 Stores multiple events in Logspace.
 
-* **URL:** /events
-* **Method:** `POST`
-* **URL Parameters:** `None`
-* **Header Parameters**
+<table>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>/events</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td><code>POST</code></td>
+    </tr>
+    <tr>
+      <td>URL Parameters</td>
+      <td><code>None</code></td>
+    </tr>
+  </tbody>
+</table>
 
-| Text                    | Col1 | Col2 |
-|----------------------------|:---:|:-----:|
+### Header Parameters
+<table>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap">logspace.space-token=[space-token]</td>
+      <td>This header serves as an authentication token for the caller to use this API.
+The supplied space-token must be configured in the Logspace HQ to be accepted.</td>
+    </tr>
+  </tbody>
+</table>
 
-| Text                    | Col1 | Col2 |
-|----------------------------|:---:|:-----:|
-
-   * **Required:**
-
-       `logspace.space-token`=[space-token]
-
-       This header serves as an authentication token for the caller to use this API.
-       The supplied space-token must be configured in the Logspace HQ to be accepted.
 
 ### Body
 
