@@ -8,7 +8,6 @@
 package io.logspace.agent.solr;
 
 import static io.logspace.agent.api.order.TriggerType.Event;
-import static io.logspace.agent.api.order.TriggerType.Off;
 
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.search.SolrIndexSearcher;
@@ -16,7 +15,7 @@ import org.apache.solr.search.SolrIndexSearcher;
 public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
 
     public SolrCoreCommitAgent(SolrCore core) {
-        super(core, "/commit", Off, Event);
+        super(core, "/commit", Event);
 
         this.getSolrCore().registerNewSearcherListener(this);
         this.getSolrCore().getUpdateHandler().registerCommitCallback(this);

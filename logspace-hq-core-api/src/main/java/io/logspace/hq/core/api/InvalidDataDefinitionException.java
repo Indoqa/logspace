@@ -5,14 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.core.api;
 
 import static io.logspace.agent.api.HttpStatusCode.BadRequest;
+import static java.text.MessageFormat.format;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyType;
-import io.logspace.hq.core.api.AbstractLogspaceResourceException;
 
 import java.text.MessageFormat;
+import java.util.Date;
 
 public final class InvalidDataDefinitionException extends AbstractLogspaceResourceException {
 
@@ -30,6 +31,27 @@ public final class InvalidDataDefinitionException extends AbstractLogspaceResour
         result.setParameter("property-type", propertyType);
         result.setParameter("illegal-aggregate", aggregate);
         result.setParameter("allowed-aggregates", propertyType.getAllowedAggregates());
+
+        return result;
+    }
+
+    public static InvalidDataDefinitionException invalidRange(Date start, Date end) {
+        InvalidDataDefinitionException result = new InvalidDataDefinitionException(
+                format("The start of the range must be before its end."));
+
+        result.setParameter("start", start);
+        result.setParameter("end", end);
+
+        return result;
+    }
+
+    public static InvalidDataDefinitionException tooManyValues(int requestedValues, int maxValues) {
+        InvalidDataDefinitionException result = new InvalidDataDefinitionException(
+                format("Cannot created a data response with ''{0}'' values. The allowed maximum is ''{1}''. Either decrease the range or increase the gap.",
+                        requestedValues, maxValues));
+
+        result.setParameter("requested-values", requestedValues);
+        result.setParameter("max-values", maxValues);
 
         return result;
     }

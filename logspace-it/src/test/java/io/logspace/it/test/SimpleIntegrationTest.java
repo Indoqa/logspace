@@ -106,7 +106,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         private int eventCount;
 
         public TestAgent() {
-            super("TEST-AGENT-001", "TEST-AGENT", TriggerType.Off, TriggerType.Cron);
+            super("TEST-AGENT-001", "TEST-AGENT", TriggerType.Cron);
         }
 
         @Override

@@ -1,0 +1,9 @@
+{
+  "id" : "logspace-demo",
+  "class-name" : "io.logspace.agent.hq.HqAgentController",
+  "parameters" : {
+    "space-token" : "demo",
+    "base-url" : "http://localhost:4567",
+    "queue-file" : "${java.io.tmpdir}/logspace-demo/logspace-event-queue.dat"
+  }
+}

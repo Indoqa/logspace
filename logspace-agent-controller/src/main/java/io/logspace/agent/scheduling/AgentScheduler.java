@@ -59,7 +59,7 @@ public class AgentScheduler {
 
     private static boolean isShaded() {
         try {
-            Class.forName("io.logspace.agent.impl.shaded.quartz.simpl.SimpleThreadPool");
+            Class.forName("io.logspace.agent.shaded.quartz.simpl.SimpleThreadPool");
             return true;
         } catch (ClassNotFoundException e) {
             return false;
@@ -124,10 +124,8 @@ public class AgentScheduler {
         InputStream resourceStream;
         if (isShaded()) {
             resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-shaded-quartz.properties");
-            // System.setProperty("org.quartz.properties", "logspace-shaded-quartz.properties");
         } else {
             resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-quartz.properties");
-            // System.setProperty("org.quartz.properties", "logspace-quartz.properties");
         }
 
         try {

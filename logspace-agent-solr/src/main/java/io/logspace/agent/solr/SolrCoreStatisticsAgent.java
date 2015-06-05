@@ -8,7 +8,6 @@
 package io.logspace.agent.solr;
 
 import static io.logspace.agent.api.order.TriggerType.Cron;
-import static io.logspace.agent.api.order.TriggerType.Off;
 import io.logspace.agent.api.order.AgentOrder;
 
 import java.text.NumberFormat;
@@ -27,7 +26,7 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
     private static final String FIELD_CUMULATIVE_HITS = "cumulative_hits";
 
     public SolrCoreStatisticsAgent(SolrCore core) {
-        super(core, "/statistics", Off, Cron);
+        super(core, "/statistics", Cron);
     }
 
     private static long getIndexSize(NamedList<?> statistics) {

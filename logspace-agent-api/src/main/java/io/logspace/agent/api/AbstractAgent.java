@@ -12,6 +12,9 @@ import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class AbstractAgent implements Agent {
 
     private final String id;
@@ -20,7 +23,7 @@ public abstract class AbstractAgent implements Agent {
     private AgentCapabilities capabilities;
     private AgentController agentController;
 
-    protected AbstractAgent(String id, String type, TriggerType... triggerType) {
+    protected AbstractAgent(String id, String type, TriggerType triggerType) {
         super();
 
         this.id = id;
@@ -28,6 +31,15 @@ public abstract class AbstractAgent implements Agent {
         this.updateCapabilities(triggerType);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
+    }
+
+    private static TriggerType[] addBaseTrigger(TriggerType triggerTypes) {
+        Set<TriggerType> result = new HashSet<TriggerType>();
+
+        result.add(TriggerType.Off);
+        result.add(triggerTypes);
+
+        return result.toArray(new TriggerType[result.size()]);
     }
 
     @Override
@@ -66,12 +78,12 @@ public abstract class AbstractAgent implements Agent {
         this.agentController.send(event);
     }
 
-    protected final void updateCapabilities(TriggerType... triggerTypes) {
+    protected final void updateCapabilities(TriggerType triggerTypes) {
         AgentCapabilities agentCapabilities = new AgentCapabilities();
 
         agentCapabilities.setId(this.getId());
         agentCapabilities.setType(this.getType());
-        agentCapabilities.setSupportedTriggerTypes(triggerTypes);
+        agentCapabilities.setSupportedTriggerTypes(addBaseTrigger(triggerTypes));
 
         this.capabilities = agentCapabilities;
     }

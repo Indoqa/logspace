@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    Logspace
+    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+    This program and the accompanying materials are made available under the terms of
+    the Eclipse Public License Version 1.0, which accompanies this distribution and
+    is available at http://www.eclipse.org/legal/epl-v10.html.
+
+-->
+<schema name="example" version="1.5">
+  <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+  <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" />
+  <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0" />
+  <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
+  <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0" />
+  <fieldtype name="binary" class="solr.BinaryField" />
+  <fieldType name="random" class="solr.RandomSortField" indexed="true" />
+
+  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <analyzer type="index">
+      <tokenizer class="solr.StandardTokenizerFactory" />
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+    <analyzer type="query">
+      <tokenizer class="solr.StandardTokenizerFactory" />
+      <filter class="solr.LowerCaseFilterFactory" />
+    </analyzer>
+  </fieldType>
+
+  <fieldType name="text_tokenized" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+      <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}&amp;&amp;\D]" replacement=" " />
+      <tokenizer class="solr.WhitespaceTokenizerFactory" />
+      <filter class="solr.TrimFilterFactory" />
+      <filter class="solr.LowerCaseFilterFactory" />
+      <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+    </analyzer>
+  </fieldType>
+
+<fieldtype name="german_text" class="solr.TextField">
+  <analyzer class="org.apache.lucene.analysis.de.GermanAnalyzer" />
+</fieldtype>
+
+  <!-- this field is neither stored nor indexed and just here to allow sending the shard-id per document -->
+  <field name="_route_" type="string" indexed="false" stored="false" multiValued="false" />
+  <field name="_version_" type="long" indexed="true" stored="true" />
+
+  <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <field name="global_agent_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <field name="space" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="system" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="agent_id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+
+  <field name="timestamp" type="date" indexed="true" stored="true" required="true" multiValued="false" />
+  <field name="type" type="string" indexed="true" stored="true" multiValued="false" />
+  <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false" />
+  <field name="global_id" type="string" indexed="true" stored="true" multiValued="false" />
+
+
+  <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="date_property_*" type="date" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="double_property_*" type="double" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="float_property_*" type="float" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="false" />
+
+  <field name="property_id" type="string" indexed="true" stored="false" multiValued="true" />
+
+  <field name="tokenized_search_field" type="text_tokenized" indexed="true" stored="false" multiValued="true" />
+
+  <uniqueKey>id</uniqueKey>
+
+  <copyField source="property_id" dest="tokenized_search_field" />
+  <copyField source="agent_id" dest="tokenized_search_field" />
+  <copyField source="system" dest="tokenized_search_field" />
+  <copyField source="space" dest="tokenized_search_field" />
+</schema>

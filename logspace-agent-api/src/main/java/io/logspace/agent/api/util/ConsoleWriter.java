@@ -16,7 +16,7 @@ public final class ConsoleWriter {
     }
 
     public static void write(String message) {
-        System.out.print(message);
+        System.out.println(message);
     }
 
     public static void writeSystem(String message) {

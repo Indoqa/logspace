@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public final class AgentControllerProvider {
 
-    private static final String PROPERTY_LOGSPACE_CONFIG = "logspace.config";
+    public static final String PROPERTY_LOGSPACE_CONFIG = "logspace.config";
 
     private static final String[] CONFIG_LOCATIONS = {"/logspace-test.json", "/logspace.json", "/logspace-default.json"};
 
@@ -163,6 +163,10 @@ public final class AgentControllerProvider {
         }
 
         initializeDescriptionFromClasspath();
+
+        if (!hasDescription()) {
+            throw new AgentControllerException("Could not find any description.");
+        }
     }
 
     private static void initializeDescriptionFromClasspath() {

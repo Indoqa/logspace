@@ -7,6 +7,8 @@
  */
 package io.logspace.hq.core.api;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 import java.util.Date;
 
 public class DateRange {
@@ -26,6 +28,11 @@ public class DateRange {
 
     public Date getStart() {
         return this.start;
+    }
+
+    public int getSteps() {
+        long gapInMilliseconds = SECONDS.toMillis(this.gap);
+        return (int) ((this.end.getTime() - this.start.getTime() + gapInMilliseconds - 1) / gapInMilliseconds);
     }
 
     public void setEnd(Date end) {

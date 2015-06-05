@@ -19,7 +19,7 @@ public abstract class AbstractSolrCoreAgent extends AbstractAgent implements Sol
 
     private final SolrCore solrCore;
 
-    protected AbstractSolrCoreAgent(SolrCore solrCore, String type, TriggerType... triggerType) {
+    protected AbstractSolrCoreAgent(SolrCore solrCore, String type, TriggerType triggerType) {
         super(solrCore.getName() + type, "solr/core" + type, triggerType);
 
         SolrCore.log.info("Initializing " + this.getClass().getSimpleName() + " for Core '" + solrCore + "'.");

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
+
+-->
+<Configuration status="INFO" debug="true">
+  <Properties>
+    <Property name="log-path">${sys:java.io.tmpdir}/logspace-demo/logs</Property>
+    <Property name="log-level">WARN</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{1.} - %msg%n" />
+    </Console>
+    <Console name="ConsoleInit" target="SYSTEM_OUT">
+      <PatternLayout pattern="%msg%n" />
+    </Console>
+    <RollingFile name="File" fileName="${sys:log-path}/logspace-monitor.log" filePattern="${sys:log-path}/logspace-monitor-%d{yyyy-MM-dd}-%i.log">
+      <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger - %msg%n" />
+      <Policies>
+        <TimeBasedTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <!-- Always log basic initialization information -->
+    <Logger name="com.indoqa.boot.AbstractIndoqaBootApplication_INIT" additivity="false">
+      <AppenderRef ref="ConsoleInit" />
+    </Logger>
+
+    <Logger name="io.logspace" additivity="true" level="INFO">
+<!--       <AppenderRef ref="Console" /> -->
+<!--       <AppenderRef ref="File" /> -->
+    </Logger>
+
+    <Logger name="io.logspace.agent.shaded" additivity="true" level="${sys:log-level}">
+<!--       <AppenderRef ref="Console" /> -->
+<!--       <AppenderRef ref="File" /> -->
+    </Logger>
+
+    <Root level="${sys:log-level}">
+      <AppenderRef ref="Console" />
+      <AppenderRef ref="File" />
+    </Root>
+  </Loggers>
+</Configuration>

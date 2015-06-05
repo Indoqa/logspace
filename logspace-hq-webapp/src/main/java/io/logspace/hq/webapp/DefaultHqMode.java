@@ -5,18 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.agent.os;
+package io.logspace.hq.webapp;
 
-import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.order.TriggerType;
+public class DefaultHqMode implements HqMode {
 
-public abstract class AbstractOsAgent extends AbstractAgent {
-
-    protected AbstractOsAgent(String type) {
-        super(type, type, TriggerType.Cron);
+    @Override
+    public void afterInitialization() {
+        // default does nothing
     }
 
-    public final void execute() {
-        this.execute(null);
+    @Override
+    public void beforeInitialization() {
+        // default does nothing
     }
 }

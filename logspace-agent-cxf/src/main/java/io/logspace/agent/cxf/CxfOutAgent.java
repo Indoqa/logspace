@@ -8,7 +8,6 @@
 package io.logspace.agent.cxf;
 
 import static io.logspace.agent.api.order.TriggerType.Event;
-import static io.logspace.agent.api.order.TriggerType.Off;
 import io.logspace.agent.api.AbstractAgent;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.order.AgentCapabilities;
@@ -73,7 +72,7 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
         private static final String AGENT_ID = "CXF";
 
         public DelegateAgent(String id) {
-            super(id, AGENT_ID, Off, Event);
+            super(id, AGENT_ID, Event);
         }
 
         public void sendCxfEvent(Message message) {

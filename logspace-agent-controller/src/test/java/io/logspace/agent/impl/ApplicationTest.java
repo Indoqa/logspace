@@ -48,7 +48,7 @@ public class ApplicationTest {
     public static class TestAgent extends AbstractAgent {
 
         public TestAgent() {
-            super("test", "test", TriggerType.Off, TriggerType.Event);
+            super("test", "test", TriggerType.Event);
         }
 
         public void triggerEvent() {

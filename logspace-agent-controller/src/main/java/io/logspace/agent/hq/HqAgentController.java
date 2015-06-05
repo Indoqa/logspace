@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
@@ -79,6 +81,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                         + QUEUE_FILE_PARAMETER + "'?");
             }
 
+            queueFile = resolveProperties(queueFile);
             this.persistentQueue = new FileObjectQueue<Event>(new File(queueFile), new TapeEventConverter());
         } catch (Exception e) {
             throw new AgentControllerInitializationException("Could not initialize queue file.", e);
@@ -99,6 +102,27 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         description.addParameter(Parameter.create(SPACE_TOKEN_PARAMETER, spaceToken));
 
         AgentControllerProvider.setDescription(description);
+    }
+
+    private static String resolveProperties(String value) {
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
+        Matcher matcher = pattern.matcher(value);
+
+        StringBuffer stringBuffer = new StringBuffer();
+        while (matcher.find()) {
+            String propertyName = matcher.group(1);
+
+            String propertyValue = System.getProperty(propertyName);
+            if (propertyValue == null) {
+                throw new AgentControllerException("Could not resolve property '" + propertyName + "' in '" + value + "'.");
+            }
+
+            matcher.appendReplacement(stringBuffer, propertyValue.replace('\\', '/'));
+        }
+
+        matcher.appendTail(stringBuffer);
+
+        return stringBuffer.toString();
     }
 
     @Override
@@ -246,6 +270,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             return;
         }
 
+        this.logger.info("Received new AgentControllerOrder from HQ.");
         this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
 
         Integer commitDelay = agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);

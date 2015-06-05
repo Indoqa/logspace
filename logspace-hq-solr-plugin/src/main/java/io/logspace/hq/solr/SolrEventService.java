@@ -24,6 +24,7 @@ import io.logspace.hq.core.api.DataDefinition;
 import io.logspace.hq.core.api.DataRetrievalException;
 import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
+import io.logspace.hq.core.api.InvalidDataDefinitionException;
 import io.logspace.hq.core.api.Suggestion;
 import io.logspace.hq.core.api.SuggestionInput;
 
@@ -296,14 +297,14 @@ public class SolrEventService implements EventService {
         calendar.setTime(startDate);
 
         while (calendar.getTime().before(endDate)) {
-            String name1 = String.valueOf(facetBuilder.getFacetCount());
+            String name = String.valueOf(facetBuilder.getFacetCount());
 
             Date start = calendar.getTime();
             calendar.add(Calendar.SECOND, gap);
             Date end = calendar.getTime();
             String query = this.getTimestampRangeQuery(start, end);
 
-            facetBuilder.addFacet(QueryFacet.with(name1, query, valueFacet));
+            facetBuilder.addFacet(QueryFacet.with(name, query, valueFacet));
         }
 
         return facetBuilder.toJson();

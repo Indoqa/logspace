@@ -80,7 +80,7 @@
             </relocation>
             <relocation>
               <pattern>org.slf4j</pattern>
-              <shadedPattern>io.logspace.jvm.agent.impl.shaded.slf4j</shadedPattern>
+              <shadedPattern>io.logspace.jvm.agent.shaded.slf4j</shadedPattern>
             </relocation>
           </relocations>
           <filters>
