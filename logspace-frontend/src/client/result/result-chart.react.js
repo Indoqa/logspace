@@ -235,10 +235,13 @@ export default class Chart extends Component {
     const formatXTooltipCallback = this.formatXTooltip.bind(me)
     const formatYTooltipCallback = this.formatYTooltip.bind(me)
 
+    const defaultType = this.state.type
+    
     return {
       data: {
           x: 'x',
           columns: [],
+          type: this.state.localState.get('type')
         },
       axis: {
         x: {
