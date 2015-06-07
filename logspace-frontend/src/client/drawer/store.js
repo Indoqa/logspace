@@ -16,6 +16,7 @@ import * as timeWindowActions from '../time-window/actions'
 import * as timeSeriesActions from '../time-series/actions'
 import * as suggestionsActions from '../suggestions/actions'
 import * as optionsActions from '../options/actions'
+import * as resultActions from '../result/actions'
 import * as drawerActions from './actions'
 
 export const DrawerStore_dispatchToken = register(({action, data}) => {
@@ -55,6 +56,10 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
     case timeSeriesActions.onTimeSeriesDeleted:
       setActivePanel(null)
       break
+
+    case resultActions.refreshResult:
+      setActivePanel(null)
+      break  
   }
 })
 

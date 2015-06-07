@@ -7,6 +7,8 @@
  */
 import State from '../lib/state'
 
+const VERSION = 1
+
 export const state = new State(require('./initialstate'))
 export const i18nCursor = state.cursor(['i18n'])
 export const timeWindowCursor = state.cursor(['timeWindow'])
@@ -15,3 +17,20 @@ export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries'])
 export const resultCursor = state.cursor(['result'])
 export const suggestionCursor = state.cursor(['suggestions'])
 export const viewCursor = state.cursor(['view'])
+
+export function getExportState() {
+	return {
+		version: VERSION,
+		timeWindow: timeWindowCursor().toJS(),
+		timeSeries: timeSeriesCursor().toJS()
+	}
+}
+
+export function importState(importedState) {
+	if (importedState.version < VERSION) {
+		throw "Version " + importedState.version + " not supported!"
+	}
+
+	const mergedState = state.get().merge(importedState)
+	state.set(mergedState)
+}

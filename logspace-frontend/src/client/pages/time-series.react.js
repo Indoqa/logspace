@@ -52,13 +52,20 @@ export default class TimeSeries extends Component {
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
+              chartTitle={this.props.chartTitle}
+              editables={this.props.editables}
               view={this.props.view} />
           </div>
 
         </div>
 
         <div className={classnames(this.props.view.get('mainCss').toJS())}>
-          <Chart series={this.props.timeSeries} result={this.props.result} />
+          <Chart 
+            series={this.props.timeSeries} 
+            result={this.props.result} 
+            chartTitle={this.props.chartTitle}
+            chartTitleEditable={this.props.editables.get('result')}
+          />
         </div>
 
       </div>

@@ -5,18 +5,13 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+ 
+ @require '../app/variables'
 
-import {dispatch} from '../dispatcher';
-import setToString from '../../lib/settostring';
-
-export function refreshResult() {
-  dispatch(refreshResult);
-}
-
-export function saveChartTitle(title) {
-  dispatch(saveChartTitle, title);
-}
+ .dropzone
+  padding 10px
   
-setToString('result', {
-  refreshResult, saveChartTitle
-});  
+ .exportButton
+   a 
+     color #00
+     text-decoration none 

@@ -24,13 +24,14 @@ export default {
   'timeSeries': [],
   'editedTimeSeries': {},
   'result': {
-     'translatedResult': {
-       'error': false,
-       'empty': true,
-       'series': null,
-       'xvalues': [],
-       'warnings': []
-     }
+    'translatedResult': {
+      'error': false,
+      'empty': true,
+      'series': null,
+      'xvalues': [],
+      'warnings': []
+    },
+    'chartTitle': 'New Logspace Chart'
   },
   'suggestions': {
     'request' : {
@@ -56,6 +57,13 @@ export default {
     'mainCss': {
       'main' : true,
       'main-reduced' : false
+    },
+    'editables': {
+      'result': {
+        'chartTitle': {
+          isEdited: false
+        }
+      }
     }
   }
 };
