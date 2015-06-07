@@ -14,11 +14,13 @@ import moment from 'moment'
 import shallowEqual from 'react-pure-render/shallowEqual';
 
 import Component from '../components/component.react'
+import Editable from '../editable/editable.react'
 import debounceFunc from '../../lib/debounce'
 
 import {GAPS} from '../time-window/constants'
 
-import {onResultRefreshed} from './actions'
+import {onResultRefreshed, saveChartTitle} from './actions'
+import {onEditableState} from '../editable/actions'
 
 require ('./result-chart.styl')
 
@@ -192,6 +194,12 @@ export default class Chart extends Component {
     return this.originalColumns[id][index]
   }
 
+  onChartTitleSaved(title, hide) {
+    console.log(hide)
+    saveChartTitle(title)
+    hide()
+  }
+
   render() {
     return (
       <div>
@@ -210,8 +218,19 @@ export default class Chart extends Component {
           </select>
         </div>
         <div className="chart-title">
-          <span className='title'>New logspace.io chart</span>
-          <span className='edit'>[edit]</span>
+          <Editable
+            defaultValue={this.props.chartTitle}
+            disabled={false}
+            id={'result'}
+            isRequired
+            maxLength={200}
+            name={'chartTitle'}
+            onSave={(title, hide) => (this.onChartTitleSaved(title, hide))}
+            onState={onEditableState}
+            state={this.props.chartTitleEditable}
+          >
+            <label>{this.props.chartTitle}</label>
+          </Editable>
         </div>
         </div>
         <div className={'resultChart'}>

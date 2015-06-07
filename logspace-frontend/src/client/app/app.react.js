@@ -19,6 +19,7 @@ import '../time-series/store'
 import '../result/store'
 import '../suggestions/store'
 import '../drawer/store'
+import '../editable/store'
 
 require('./app.styl');
 
@@ -36,6 +37,8 @@ export default class App extends Component {
       timeSeries: appState.timeSeriesCursor(),
       editedTimeSeries: appState.editedTimeSeriesCursor(),
       result: appState.resultCursor().get('translatedResult'),
+      chartTitle: appState.resultCursor().get('chartTitle'),
+      editables: appState.viewCursor().get('editables'),
       suggestions: appState.suggestionCursor(),
       view: appState.viewCursor()
     };

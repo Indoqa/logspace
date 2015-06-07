@@ -28,6 +28,8 @@ export default class Drawer extends Component {
               timeWindow={this.props.timeWindow}
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
+              chartTitle={this.props.chartTitle}
+              editables={this.props.editables}
               view={this.props.view} />
         </div>
       </div>

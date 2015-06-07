@@ -37,7 +37,7 @@ export default class DrawerPanel extends Component {
         return <EditTimeSeries editedTimeSeries={this.props.editedTimeSeries} timeSeries={this.props.timeSeries}/>
 
       case Panels.OPTIONS:
-        return <Options />
+        return <Options  chartTitle={this.props.chartTitle}/>
 
       default:
         return (<div>Warning: Unsupported panel: {this.props.activePanel} </div>)

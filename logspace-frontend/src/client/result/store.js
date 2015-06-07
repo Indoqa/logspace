@@ -39,9 +39,14 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
       refreshResult()
       break
 
-    case resultActions.onResultRefreshed:
+    case resultActions.refreshResult:
       refreshResult()
       break
+
+    case resultActions.saveChartTitle:
+      resultCursor(result => {
+        return result.set('chartTitle', data)
+      })
   }
 })
 

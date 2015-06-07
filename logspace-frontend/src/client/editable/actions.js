@@ -9,14 +9,10 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
-export function refreshResult() {
-  dispatch(refreshResult);
+export function onEditableState(id, name, state) {
+  dispatch(onEditableState, {id, name, state});
 }
 
-export function saveChartTitle(title) {
-  dispatch(saveChartTitle, title);
-}
-  
-setToString('result', {
-  refreshResult, saveChartTitle
+setToString('editable', {
+  onEditableState
 });  
