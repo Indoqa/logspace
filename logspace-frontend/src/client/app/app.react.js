@@ -38,7 +38,7 @@ export default class App extends Component {
       editedTimeSeries: appState.editedTimeSeriesCursor(),
       result: appState.resultCursor().get('translatedResult'),
       chartTitle: appState.resultCursor().get('chartTitle'),
-      editables: appState.viewCursor().get('editables'),
+      chartTitleEditable: appState.viewCursor().get('editables').get('result'),
       suggestions: appState.suggestionCursor(),
       view: appState.viewCursor()
     };
