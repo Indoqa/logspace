@@ -53,7 +53,6 @@ export default class TimeSeries extends Component {
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
               chartTitle={this.props.chartTitle}
-              editables={this.props.editables}
               view={this.props.view} />
           </div>
 
@@ -64,7 +63,7 @@ export default class TimeSeries extends Component {
             series={this.props.timeSeries} 
             result={this.props.result} 
             chartTitle={this.props.chartTitle}
-            chartTitleEditable={this.props.editables.get('result')}
+            chartTitleEditable={this.props.chartTitleEditable}
           />
         </div>
 
