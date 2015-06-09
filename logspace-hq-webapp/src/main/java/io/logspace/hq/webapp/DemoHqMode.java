@@ -23,6 +23,12 @@ import com.indoqa.boot.AbstractIndoqaBootApplication.ApplicationInitializationEx
 
 public class DemoHqMode implements HqMode {
 
+    public DemoHqMode() {
+        super();
+
+        this.initializeDemoLogging();
+    }
+
     @Override
     public void afterInitialization() {
         ConsoleWriter.write("Logspace HQ now running in demo mode");
@@ -31,7 +37,6 @@ public class DemoHqMode implements HqMode {
 
     @Override
     public void beforeInitialization() {
-        this.initializeDemoLogging();
         this.initializeDemoPort();
         this.initializeDemoSolr();
 

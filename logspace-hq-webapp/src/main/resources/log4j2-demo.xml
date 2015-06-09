@@ -11,7 +11,7 @@
 <Configuration status="INFO" debug="true">
   <Properties>
     <Property name="log-path">${sys:java.io.tmpdir}/logspace-demo/logs</Property>
-    <Property name="log-level">WARN</Property>
+    <Property name="log-level">ERROR</Property>
   </Properties>
 
   <Appenders>
@@ -21,7 +21,7 @@
     <Console name="ConsoleInit" target="SYSTEM_OUT">
       <PatternLayout pattern="%msg%n" />
     </Console>
-    <RollingFile name="File" fileName="${sys:log-path}/logspace-monitor.log" filePattern="${sys:log-path}/logspace-monitor-%d{yyyy-MM-dd}-%i.log">
+    <RollingFile name="File" fileName="${sys:log-path}/logspace-hq.log" filePattern="${sys:log-path}/logspace-hq-%d{yyyy-MM-dd}-%i.log">
       <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger - %msg%n" />
       <Policies>
         <TimeBasedTriggeringPolicy />
@@ -36,15 +36,9 @@
       <AppenderRef ref="ConsoleInit" />
     </Logger>
 
-    <Logger name="io.logspace" additivity="true" level="INFO">
-<!--       <AppenderRef ref="Console" /> -->
-<!--       <AppenderRef ref="File" /> -->
-    </Logger>
-
-    <Logger name="io.logspace.agent.shaded" additivity="true" level="${sys:log-level}">
-<!--       <AppenderRef ref="Console" /> -->
-<!--       <AppenderRef ref="File" /> -->
-    </Logger>
+<!--     <Logger name="io.logspace" additivity="true" level="WARN" /> -->
+    <Logger name="io.logspace.hq.webapp.resource.EventResource" additivity="true" level="INFO" />
+<!--     <Logger name="io.logspace.agent.shaded" additivity="true" level="${sys:log-level}" /> -->
 
     <Root level="${sys:log-level}">
       <AppenderRef ref="Console" />

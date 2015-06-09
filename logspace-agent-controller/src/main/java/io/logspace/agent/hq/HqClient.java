@@ -88,6 +88,8 @@ public class HqClient {
     }
 
     public void uploadEvents(Collection<Event> events) throws IOException {
+        this.logger.info("Uploading {} event(s) using space-token '{}'.", events.size(), this.spaceToken);
+
         HttpPost httpPost = new HttpPost(this.baseUrl + "/events");
         httpPost.setEntity(toJsonEntity(events));
         httpPost.addHeader("logspace.space-token", this.spaceToken);

@@ -23,13 +23,25 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
     private static final String LOGO_PATH = "/logspace.io.txt";
     private static final String FRONTEND_INDEX_HTML_PATH = "/logspace-frontend/index.html";
 
-    private HqMode hqMode = new DefaultHqMode();
+    private final HqMode hqMode;
+
+    public LogspaceHq() {
+        this(new DefaultHqMode());
+    }
+
+    public LogspaceHq(HqMode hqMode) {
+        super();
+
+        this.hqMode = hqMode;
+    }
 
     public static void main(String[] args) {
-        LogspaceHq logspaceHq = new LogspaceHq();
+        LogspaceHq logspaceHq;
 
         if (hasArgument(args, "--demo")) {
-            logspaceHq.hqMode = new DemoHqMode();
+            logspaceHq = new LogspaceHq(new DemoHqMode());
+        } else {
+            logspaceHq = new LogspaceHq(new DefaultHqMode());
         }
 
         logspaceHq.invoke();
