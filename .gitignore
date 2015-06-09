@@ -1,4 +1,4 @@
 _site
 .sass-cache
 .project
-jekyll.cmd
+run-jekyll.cmd
