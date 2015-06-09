@@ -66,6 +66,7 @@
     <module>logspace-agent-api-json</module>
     <module>logspace-agent-controller</module>
     <module>logspace-agent-cxf</module>
+    <module>logspace-agent-journal</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-solr</module>
     <module>logspace-frontend</module>
