@@ -52,7 +52,7 @@
 	        chartData.axes[item.get("id")] = 'y'; 
 	        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
-	      } else if (chartData.axisRanges.min.y == scale.min && axisRanges.max.y == scale.max)  {
+	      } else if (chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
 	        chartData.axes[item.get("id")] = 'y'
 	        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
