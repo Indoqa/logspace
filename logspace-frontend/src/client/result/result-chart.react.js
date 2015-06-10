@@ -14,34 +14,34 @@ import moment from 'moment'
 import shallowEqual from 'react-pure-render/shallowEqual';
 
 import Component from '../components/component.react'
-import Editable from '../editable/editable.react'
 import debounceFunc from '../../lib/debounce'
 
 import {GAPS} from '../time-window/constants'
 
-import {onResultRefreshed, saveChartTitle} from './actions'
-import {onEditableState} from '../editable/actions'
-
-require ('./result-chart.styl')
+import {onResultRefreshed} from './actions'
 
 const ComponentState = Immutable.fromJS({
   loadingCss: {
     'loading' : true,
     'active' : false
-  },
-  type: 'spline'
+  }
 })
 
 export default class Chart extends Component {
 
   constructor(props) {
     super(props)
+
     this.state = {
       localState: ComponentState
     }
+
+    this.prevType = props.chartType
   }
 
   componentWillReceiveProps(nextProps) {
+    this.rememberPreviousChartType(this.props.chartType)
+
     if (nextProps.result.get("loading")) {
       this.toggleLoading(true)
       return
@@ -66,6 +66,12 @@ export default class Chart extends Component {
 
     if (this.props.result.get("empty") || this.props.result.get("error")) {
       this.chart.unload()
+      return
+    }
+
+    if (this.prevType != this.props.chartType) {
+      this.transform(this.props.chartType)      
+      this.prevType = this.props.chartType
       return
     }
 
@@ -99,6 +105,10 @@ export default class Chart extends Component {
     })
   }
 
+  rememberPreviousChartType(type) {
+    this.prevType = type
+  }
+
   calculateChartSize() {
     const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
@@ -125,9 +135,6 @@ export default class Chart extends Component {
 
   transform(type) {
     this.chart.transform(type)
-    this.setState({
-      localState: this.state.localState.updateIn(['type'], () => { return type })
-    })
   }
 
   formatXAxis(index) {
@@ -194,53 +201,15 @@ export default class Chart extends Component {
     return this.originalColumns[id][index]
   }
 
-  onChartTitleSaved(title, hide) {
-    console.log(hide)
-    saveChartTitle(title)
-    hide()
-  }
-
   render() {
     return (
-      <div>
-       <div className='chart-header'>
-        <div className='chart-options'>
-           <select onChange={(e) => this.transform(e.target.value)}
-                   value={this.state.localState.get('type')} >
-            <option value={'bar'}>bar</option>
-            <option value={'line'}>line</option>
-            <option value={'spline'}>spline</option>
-            <option value={'step'}>step</option>
-            <option value={'area'}>area</option>
-            <option value={'area-spline'}>area-spline</option>
-            <option value={'area-step'}>area-step</option>
-            <option value={'scatter'}>scatter</option>
-          </select>
+      <div className={'resultChart'}>
+        <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
+          <span>
+            <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'} />
+          </span>
         </div>
-        <div className="chart-title">
-          <Editable
-            defaultValue={this.props.chartTitle}
-            disabled={false}
-            id={'result'}
-            isRequired
-            maxLength={200}
-            name={'chartTitle'}
-            onSave={(title, hide) => (this.onChartTitleSaved(title, hide))}
-            onState={onEditableState}
-            state={this.props.chartTitleEditable}
-          >
-            <label>{this.props.chartTitle}</label>
-          </Editable>
-        </div>
-        </div>
-        <div className={'resultChart'}>
-          <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
-            <span>
-              <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'} />
-            </span>
-          </div>
-          <div id="chart" />
-        </div>
+        <div id="chart" />
       </div>
     )
   }
@@ -254,13 +223,13 @@ export default class Chart extends Component {
     const formatXTooltipCallback = this.formatXTooltip.bind(me)
     const formatYTooltipCallback = this.formatYTooltip.bind(me)
 
-    const defaultType = this.state.type
-    
+    const defaultType = this.props.chartType
+
     return {
       data: {
           x: 'x',
           columns: [],
-          type: this.state.localState.get('type')
+          type: defaultType
         },
       axis: {
         x: {

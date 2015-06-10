@@ -16,7 +16,11 @@ export function refreshResult() {
 export function saveChartTitle(title) {
   dispatch(saveChartTitle, title);
 }
+
+export function setChartType(type) {
+  dispatch(setChartType, type);
+}
   
 setToString('result', {
-  refreshResult, saveChartTitle
+  refreshResult, saveChartTitle, setChartType
 });  

@@ -31,7 +31,8 @@ export default {
       'xvalues': [],
       'warnings': []
     },
-    'chartTitle': 'New Logspace Chart'
+    'chartTitle': 'New Logspace Chart',
+    'chartType': 'spline'
   },
   'suggestions': {
     'request' : {

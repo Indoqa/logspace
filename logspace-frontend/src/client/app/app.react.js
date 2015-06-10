@@ -39,6 +39,7 @@ export default class App extends Component {
       result: appState.resultCursor().get('translatedResult'),
       chartTitle: appState.resultCursor().get('chartTitle'),
       chartTitleEditable: appState.viewCursor().get('editables').get('result'),
+      chartType: appState.resultCursor().get('chartType'),
       suggestions: appState.suggestionCursor(),
       view: appState.viewCursor()
     };
@@ -62,5 +63,4 @@ export default class App extends Component {
       </DocumentTitle>
     )
   }
-
 }

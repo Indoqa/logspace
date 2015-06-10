@@ -12,7 +12,7 @@ import classnames from 'classnames'
 import AddTimeSeries  from '../time-series/time-series-add.react'
 import TimeSeriesList  from '../time-series/time-series-list.react'
 import TimeWindowValues  from '../time-window/time-window-values.react'
-import Chart from '../result/result-chart.react'
+import Result from '../result/result.react'
 import Drawer from '../drawer/drawer.react'
 import Header from '../header/header.react'
 
@@ -59,11 +59,12 @@ export default class TimeSeries extends Component {
         </div>
 
         <div className={classnames(this.props.view.get('mainCss').toJS())}>
-          <Chart 
+          <Result 
             series={this.props.timeSeries} 
             result={this.props.result} 
             chartTitle={this.props.chartTitle}
             chartTitleEditable={this.props.chartTitleEditable}
+            chartType={this.props.chartType}
           />
         </div>
 

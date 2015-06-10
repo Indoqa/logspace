@@ -47,6 +47,13 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
       resultCursor(result => {
         return result.set('chartTitle', data)
       })
+      break
+
+    case resultActions.setChartType:
+      resultCursor(result => {
+        return result.set('chartType', data)
+      })
+      break  
   }
 })
 

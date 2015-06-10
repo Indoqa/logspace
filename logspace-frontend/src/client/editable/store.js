@@ -14,7 +14,6 @@ import {viewCursor} from '../state'
 export const EditableStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.onEditableState:
-    console.log('aaa')
     viewCursor(view => {
       const {id, name, state} = data;
       return view.setIn(['editables', id, name], state);
