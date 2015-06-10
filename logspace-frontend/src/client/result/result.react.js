@@ -6,18 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React from 'react'
-import classnames from 'classnames'
 
 import Component from '../components/component.react'
-import Editable from '../editable/editable.react'
 import Chart from './result-chart.react'
 import Header from './result-header.react'
-
-import {onEditableState} from '../editable/actions'
-import {saveChartTitle} from './actions'
-
-
-require ('./result.styl')
 
 export default class Result extends Component {
 

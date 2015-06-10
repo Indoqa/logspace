@@ -15,6 +15,8 @@ import Chart from './result-chart.react'
 import {onEditableState} from '../editable/actions'
 import {saveChartTitle, setChartType} from './actions'
 
+require ('./result-header.styl')
+
 export default class Header extends Component {
 
   onChartTitleSaved(title, hide) {

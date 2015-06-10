@@ -20,6 +20,8 @@ import {GAPS} from '../time-window/constants'
 
 import {onResultRefreshed} from './actions'
 
+require ('./result-chart.styl')
+
 const ComponentState = Immutable.fromJS({
   loadingCss: {
     'loading' : true,
