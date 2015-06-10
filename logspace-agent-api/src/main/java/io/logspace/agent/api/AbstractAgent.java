@@ -15,6 +15,16 @@ import io.logspace.agent.api.order.TriggerType;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ * Base class for {@link Agent}s. Extend it for simplified initialization (setup of {@link AgentController}) and
+ * handling of {@link AgentCapabilities}.<br/>
+ *
+ * It will delegate the sending of {@link Event}s to the {@link AgentController}. <br/>
+ * Also the {@link TriggerType}.Off will be added to the supported trigger types, to ensure derived agents can be turned
+ * <strong>off</strong>.
+ *
+ */
 public abstract class AbstractAgent implements Agent {
 
     private final String id;

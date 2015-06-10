@@ -17,6 +17,9 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
+/**
+ * Base class for JSON deserializers. Simplifies handling of the {@link JsonParser}.
+ */
 public abstract class AbstractJsonDeserializer {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();

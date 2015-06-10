@@ -20,6 +20,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *
+ * Base class for {@link AgentController}s. Initializes the system name and handles un-/registering of {@link Agent}s.
+ *
+ */
 public abstract class AbstractAgentController implements AgentController {
 
     private final Map<String, Agent> agents = new ConcurrentHashMap<String, Agent>();
@@ -85,18 +90,34 @@ public abstract class AbstractAgentController implements AgentController {
         this.onAgentUnregistered(agent);
     }
 
+    /**
+     * Returns the {@link Agent} with the supplied agentId or null if there is no agent with this agentId is registered.
+     *
+     * @param agentId - The agentId of the registered {@link Agent}.
+     * @return The registered {@link Agent} or null if no agent is registered with this agentId.
+     */
     protected Agent getAgent(String agentId) {
         return this.agents.get(agentId);
     }
 
+    /**
+     * @return The agentIds of all registered {@link Agent}s.
+     */
     protected Collection<String> getAgentIds() {
         return this.agents.keySet();
     }
 
+    /**
+     * @return All registered {@link Agent}s.
+     */
     protected Iterable<Agent> getAgents() {
         return this.agents.values();
     }
 
+    /**
+     *
+     * @return The {@link AgentControllerCapabilities} for each registered {@link Agent}.
+     */
     protected AgentControllerCapabilities getCapabilities() {
         AgentControllerCapabilities result = new AgentControllerCapabilities();
 

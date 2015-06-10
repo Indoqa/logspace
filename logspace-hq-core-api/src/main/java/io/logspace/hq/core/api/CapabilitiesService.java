@@ -7,18 +7,47 @@
  */
 package io.logspace.hq.core.api;
 
+import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 
 import java.io.IOException;
 
+/**
+ * This service is responsible for storing information about {@link Agent}s.
+ */
 public interface CapabilitiesService {
 
+    /**
+     * Retrieve the {@link AgentDescription} for the globalAgentId.
+     *
+     * @param globalAgentId - The globalAgentId to retrieve the {@link AgentDescription} for.
+     * @return The {@link AgentDescription} for the supplied globalAgentId.
+     */
     AgentDescription getAgentDescription(String globalAgentId);
 
-    void save(AgentControllerCapabilities capabilities) throws IOException;
+    /**
+     * Retrieve the agentId for the globalAgentId.
+     *
+     * @param globalAgentId
+     * @return The agentId for the globalAgentId.
+     */
+    String getAgentId(String globalAgentId);
 
+    /**
+     * Return the globalAgentId for the supplied unique triple.
+     *
+     * @param space - The space of the agent.
+     * @param system - The system of the agent.
+     * @param agentId - The agentId of the agent.
+     * @return The globaleAgentId for the unique triple (space, system, agentId).
+     */
     String getGlobalAgentId(String space, String system, String agentId);
 
-    String getAgentId(String globalAgentId);
+    /**
+     * Store the supplied {@link AgentControllerCapabilities}
+     *
+     * @param capabilities - The {@link AgentControllerCapabilities} to store.
+     */
+    void save(AgentControllerCapabilities capabilities) throws IOException;
 
 }

@@ -10,14 +10,35 @@ package io.logspace.agent.api;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentOrder;
 
+/**
+ * An Agent is responsible for packaging collected information into {@link Event}s.
+ *
+ */
 public interface Agent {
 
+    /**
+     * This method will be called by a timer.
+     *
+     * @param agentOrder - The {@link AgentOrder}
+     */
+    void execute(AgentOrder agentOrder);
+
+    /**
+     *
+     * @return {@link AgentCapabilities} of this agent.
+     */
     AgentCapabilities getCapabilities();
 
+    /**
+     * @return The unique id of this agent.
+     */
     String getId();
 
+    /**
+     * The type describes the intention of this agent.
+     *
+     * @return The type of this agent.
+     */
     String getType();
-
-    void execute(AgentOrder agentOrder);
 
 }

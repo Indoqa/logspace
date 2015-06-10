@@ -12,6 +12,11 @@ import java.io.InputStream;
 
 public interface AgentControllerDescriptionDeserializer {
 
+    /**
+     * @param inputStream - The inputStream to deserialize from.
+     *
+     * @return The {@link AgentControllerDescription}
+     */
     AgentControllerDescription fromJson(InputStream inputStream) throws IOException;
 
 }

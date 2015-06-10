@@ -9,10 +9,21 @@ package io.logspace.agent.scheduling;
 
 import io.logspace.agent.api.order.AgentOrder;
 
+/**
+ * The agent executor is responsible for the time-based execution of its methods.
+ */
 public interface AgentExecutor {
 
+    /**
+     * Time-based execution of the agent with its order.
+     *
+     * @param agentOrder - The {@link AgentOrder} of the {@link Agent} to execute.
+     */
     void executeAgent(AgentOrder agentOrder);
 
+    /**
+     * Time-based execution of updates.
+     */
     void update();
 
 }

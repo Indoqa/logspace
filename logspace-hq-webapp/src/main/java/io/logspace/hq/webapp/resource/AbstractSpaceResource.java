@@ -23,6 +23,11 @@ import spark.Spark;
 
 import com.indoqa.boot.AbstractJsonResourcesBase;
 
+/**
+ * Base class for resources, which need protection via spaces. See {@link Spaces}.<br/>
+ * Consumers must supply the space token header in their request.
+ *
+ */
 public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
 
     private static final String SPACE_TOKEN_HEADER = "logspace.space-token";
@@ -38,6 +43,15 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
                 (e, req, res) -> this.mapLogspaceException(res, (AbstractLogspaceResourceException) e));
     }
 
+    /**
+     * Extract spaceToken from request headers.
+     *
+     * @param req - Request to extract spaceToken from.
+     * @return Extracted spaceToken.
+     * @throws MissingSpaceTokenException If the spaceToken Header is missing in the request.
+     * @throws InvalidSpaceTokenException If no space is configured for the supplied spaceToken.
+     *
+     */
     protected String getSpace(Request req) {
         String spaceToken = req.headers(SPACE_TOKEN_HEADER);
         if (StringUtils.isBlank(spaceToken)) {
@@ -52,6 +66,12 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
         return space;
     }
 
+    /**
+     * Validates the request against its supplied spaceToken Header.<br/>
+     * Delegates to {@link #getSpace(Request)}
+     *
+     * @param req - Request to validate.
+     */
     protected void validateSpace(Request req) {
         this.getSpace(req);
     }

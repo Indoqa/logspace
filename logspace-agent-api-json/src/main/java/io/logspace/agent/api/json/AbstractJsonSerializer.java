@@ -21,6 +21,9 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
+/**
+ * Base class for JSON serializers. Simplifies handling of the {@link JsonGenerator}.
+ */
 public abstract class AbstractJsonSerializer {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();

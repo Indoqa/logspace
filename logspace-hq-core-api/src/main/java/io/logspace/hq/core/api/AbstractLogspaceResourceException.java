@@ -12,6 +12,10 @@ import io.logspace.agent.api.HttpStatusCode;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Base class for exceptions in resources. Extend it to make use of descriptive errors for the consumers of
+ * resources.</br> It is possible to transport error properties to the consumer for e.g. i18n.
+ */
 public abstract class AbstractLogspaceResourceException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
