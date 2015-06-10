@@ -63,7 +63,7 @@ export default class Options extends Component {
         <br/>
         <br/>
         <Dropzone onDrop={this.onDrop} size={150} >
-          <div className='dropzone'>Drop json file click to select file to upload.</div>
+          <div className='dropzone'>Drop json file or click to select file.</div>
         </Dropzone>
       </div>
     )
