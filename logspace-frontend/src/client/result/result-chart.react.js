@@ -72,7 +72,7 @@ export default class Chart extends Component {
     }
 
     if (this.prevType != this.props.chartType) {
-      this.transform(this.props.chartType)      
+      this.transform(this.props.chartType)
       this.prevType = this.props.chartType
       return
     }
@@ -116,14 +116,15 @@ export default class Chart extends Component {
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
     const minWindowWidth = 1024
-    const minWindowHeight = windowHeight - 200
+    const minWindowHeight = windowHeight - 0
 
+    const headerheight = 40
     const sidebarWidth = 250
     const chartPadding = 20 * 2
     const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = Math.min(width * heightWidthRatio, minWindowHeight)
+    const height = Math.min(windowHeight, minWindowHeight) - chartPadding - headerheight
 
     return {
       width : width,

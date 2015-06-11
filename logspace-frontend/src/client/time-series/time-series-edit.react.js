@@ -83,7 +83,7 @@ export default class EditTimeSeries extends Component {
       <div>
         <TimeSeriesLabel timeSeries={agentDescription} />
         <hr/>
-        <b>Select Property:</b>
+        <b>Select Property</b>
         <br/>
         {agentDescription.get("propertyDescriptions").map(function(property) {
           const propertyId = property.get("id")
@@ -104,7 +104,7 @@ export default class EditTimeSeries extends Component {
           )
         })}
         <br/>
-        <b>Select Aggregation: </b>
+        <b>Select Aggregation </b>
         <br/>
         <select name="aggregate" value={agentDescription.get("aggregate")} onChange={this.handleChange.bind(this)}>
           <option value="max">max</option>
@@ -116,7 +116,7 @@ export default class EditTimeSeries extends Component {
         <br/>
         <br/>
 
-        <b>Select Color: </b>
+        <b>Select Color </b>
         <br/>
         {COLORS.map(function(color) {
           const colorSyle = {
@@ -137,7 +137,7 @@ export default class EditTimeSeries extends Component {
         })}
         <div className='clearer'/>
         <br/>
-        <b>Define Scale: </b>
+        <b>Define Scale</b>
         <br/>
         <input
           type="radio"

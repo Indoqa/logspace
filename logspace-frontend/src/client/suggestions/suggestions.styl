@@ -5,25 +5,29 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
- 
+
  @require '../app/variables'
- 
+
 .suggestions
   height 100%
   width 100%
   position relative
   overflow hidden
+
   .query
     width: 445px
     position: absolute
-    input 
+    input
       width 100%
+
   .result
     width: 280px
     top: 50px
     position absolute
     height s("calc(100% - 100px)")
     overflow-y auto
+    overflow-x hidden
+
     a
       display block
       width 270px
@@ -46,19 +50,18 @@
         width 240px
         background-color $color6
         box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 1px 3px 0 rgba(0, 0, 0, 0.14);
-        .properties 
+        .properties
           text-overflow: ellipsis;
           width: 230px;
           white-space: nowrap;
-          overflow: hidden;     
-          span 
-            font-size 0.9em
-    
-    a:hover 
+          overflow: hidden;
+          span
+            font-size 1.1rem
+
+    a:hover
       .inner
-        background-color: $color7  
-    
-    
+        background-color: $color7
+
   .facets
     width: 190px
     top: 50px
@@ -66,13 +69,12 @@
     position: absolute
     height s("calc(100% - 100px)")
     overflow-y auto
-  ul 
+    
+  ul
     margin 0
     padding 0
-    li 
+    li
       list-style none
-      margin-left 0  
+      margin-left 0
       a
         cursor pointer
-     
-     

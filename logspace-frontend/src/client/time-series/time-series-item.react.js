@@ -19,7 +19,7 @@ export default class TimeSeriesItem extends Component {
     const id = this.props.item.get("propertyId");
     const pattern = /[\w]*?_[\w]*?_(.*)/
     const result = pattern.exec(id)
-    
+
     if(result != null) {
       return result[1]
     }
@@ -37,7 +37,7 @@ export default class TimeSeriesItem extends Component {
         <div className='inner'>
           <div className='axis'>  {this.props.item.get("axis")} </div>
           <TimeSeriesLabel timeSeries={this.props.item} />
-          {this.props.item.get("aggregate")} of {this.getPropertyName()}
+          <span className='property'>{this.props.item.get("aggregate")} of {this.getPropertyName()}</span>
         </div>
       </div>
     )

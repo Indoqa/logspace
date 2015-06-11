@@ -17,7 +17,7 @@ export default class Header extends Component {
   render() {
     return (
       <div className='header'>
-        <div className="close"> <input type="button" value="..." onClick={() => onShowOptions()}/> </div>
+        <div className="options"> <input type="button" value="..." onClick={() => onShowOptions()}/> </div>
         <div className='logo'>logspace.io</div>
       </div>
     )
