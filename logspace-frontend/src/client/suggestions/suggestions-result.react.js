@@ -48,7 +48,8 @@ export default class SuggestionResult extends Component {
                      <TimeSeriesLabel timeSeries={item} />
                      <div className={'properties'}>
                         {agent.propertyDescriptions.map(function(item, index) {
-                          return <span key={item.name}> {item.name} |</span>    
+                          const separator = agent.propertyDescriptions.length - 1 > index ? '|' : ''
+                          return <span key={item.name}> {item.name} {separator}</span>
                         })}
                       </div>
                     </div>

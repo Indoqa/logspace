@@ -6,10 +6,10 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import Component from '../components/component.react';
+import React from 'react'
+import Component from '../components/component.react'
 
-require('./time-series-label.styl')
+import './time-series-label.styl'
 
 export default class TimeSeriesLabel extends Component {
 
@@ -17,11 +17,11 @@ export default class TimeSeriesLabel extends Component {
     return (
       <div className='time-series-label'>
         <div className={'meta'}>
-          <span> {this.props.timeSeries.get("space")} </span>
-          <span> {this.props.timeSeries.get("system")} </span>
+          <span className='space'> {this.props.timeSeries.get('space')} </span>
+          <span className='system'> {this.props.timeSeries.get('system')} </span>
         </div>
         <div className={'name'}>
-          <span> {this.props.timeSeries.get("name")} </span>    
+          <span> {this.props.timeSeries.get('name')} </span>
         </div>
       </div>
     )
