@@ -47,7 +47,7 @@ public final class InvalidDataDefinitionException extends AbstractLogspaceResour
 
     public static InvalidDataDefinitionException tooManyValues(int requestedValues, int maxValues) {
         InvalidDataDefinitionException result = new InvalidDataDefinitionException(
-                format("Cannot created a data response with ''{0}'' values. The allowed maximum is ''{1}''. Either decrease the range or increase the gap.",
+                format("Cannot create a data response with {0} values. The allowed maximum is {1}. Either decrease the range or increase the gap.",
                         requestedValues, maxValues));
 
         result.setParameter("requested-values", requestedValues);
