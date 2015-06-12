@@ -24,7 +24,7 @@ export default class SuggestionResult extends Component {
     if (isLoading) {
       return <div className={'result'}>
         <div className={'loading'}>
-          <span> <Halogen.PulseLoader color={'#BBDEFB'}/> </span>
+          <span> <Halogen.PulseLoader color={'#ddfcff'}/> </span>
         </div>
       </div>
     }
