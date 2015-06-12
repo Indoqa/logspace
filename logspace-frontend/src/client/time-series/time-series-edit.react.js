@@ -164,7 +164,7 @@ export default class EditTimeSeries extends Component {
           <button className='waves-effect waves-light btn' onClick={() => onTimeSeriesSaved()}>Save time series</button>
           <button
             className={(agentDescription.get("id") != null) ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
-            onClick={() =>  onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
+            onClick={() => onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
           </button>
         </div>
       </div>

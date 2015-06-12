@@ -48,13 +48,13 @@ export default class Options extends Component {
         <b> Export to file</b>
         <br/>
         <br/>
-        <button className='exportButton'> 
-          <a  
-            href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)} 
+        <button className='exportButton waves-effect waves-light btn'> 
+          <a
+            href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)}
             download={this.getDownloadName()}
-            target="_blank"> 
-            Export 
-          </a> 
+            target="_blank">
+            Export
+          </a>
         </button>
         <br/>
         <br/>
