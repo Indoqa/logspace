@@ -79,10 +79,13 @@ export default class EditTimeSeries extends Component {
     });
 
     return (
-
       <div>
-        <TimeSeriesLabel timeSeries={agentDescription} />
-        <hr/>
+        <div className='time-series-label-wrapper'>
+          <TimeSeriesLabel timeSeries={agentDescription} />
+        </div>
+
+        <div className='spacer' />
+
         <b>Select Property</b>
         <br/>
         {agentDescription.get("propertyDescriptions").map(function(property) {
@@ -103,6 +106,7 @@ export default class EditTimeSeries extends Component {
             </div>
           )
         })}
+
         <br/>
         <b>Select Aggregation </b>
         <br/>
@@ -155,12 +159,14 @@ export default class EditTimeSeries extends Component {
           checked={agentDescription.get("scaleType") == 'custom'}
           onChange={me.handleChange.bind(me)}>
         </input> Custom {customScaleInput}
-        <hr/>
-        <button onClick={() => onTimeSeriesSaved()}>Save time series</button>
-        <button
-          className={(agentDescription.get("id") != null) ? 'delete-visible' : 'delete-hidden'}
-          onClick={() =>  onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
-        </button>
+
+        <div className='buttons'>
+          <button className='waves-effect waves-light btn' onClick={() => onTimeSeriesSaved()}>Save time series</button>
+          <button
+            className={(agentDescription.get("id") != null) ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
+            onClick={() =>  onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
+          </button>
+        </div>
       </div>
     );
   }

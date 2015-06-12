@@ -209,7 +209,7 @@ export default class Chart extends Component {
       <div className={'resultChart'}>
         <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
           <span>
-            <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'} />
+            <Halogen.PulseLoader color={'#ddfcff'} size={'50px'} />
           </span>
         </div>
         <div id="chart" />
