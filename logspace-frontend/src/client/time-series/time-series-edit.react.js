@@ -88,7 +88,7 @@ export default class EditTimeSeries extends Component {
 
         <b>Select Property</b>
         <br/>
-        {agentDescription.get("propertyDescriptions").map(function(property) {
+        {agentDescription.get("propertyDescriptions").map((property) => {
           const propertyId = property.get("id")
           return (
             <div key={propertyId}>
@@ -96,12 +96,12 @@ export default class EditTimeSeries extends Component {
                 type="radio"
                 name="propertyId"
                 value={propertyId}
-                checked={propertyId == agentDescription.get("propertyId")}
+                checked={propertyId === agentDescription.get("propertyId")}
                 onChange={me.handleChange.bind(me)}
-                disabled={property.get("propertyType")==="STRING"}>
-                </input>
-                <nbsp/>
-                <span> {property.get("name")} </span>
+                disabled={property.get("propertyType") === "STRING"}>
+              </input>
+              <nbsp/>
+              <span> {property.get("name")} </span>
               <br/>
             </div>
           )
@@ -111,10 +111,10 @@ export default class EditTimeSeries extends Component {
         <b>Select Aggregation </b>
         <br/>
         <select name="aggregate" value={agentDescription.get("aggregate")} onChange={this.handleChange.bind(this)}>
+          <option value="count">count</option>
           <option value="max">max</option>
           <option value="min">min</option>
           <option value="avg">average</option>
-          <option value="count">count</option>
           <option value="sum">sum</option>
         </select>
         <br/>

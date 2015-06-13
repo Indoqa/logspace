@@ -70,7 +70,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           space: data.space,
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
-          aggregate: 'sum',
+          aggregate: 'count',
           color: nextColor
         }).toMap()
 
@@ -92,10 +92,11 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
 
     case actions.onAxisChanged:
       timeSeriesCursor(timeSeries => {
-        var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === data.id })
-        var index = timeSeries.indexOf(itemToUpdate)
-
-        itemToUpdate = itemToUpdate.set('axis', data.axis)
+        const itemToUpdate = timeSeries
+          .find(function(obj){ return obj.get('id') === data.id })
+          .set('axis', data.axis)
+          
+        const index = timeSeries.indexOf(itemToUpdate)
 
         return timeSeries.update(index, item => itemToUpdate)
       })
