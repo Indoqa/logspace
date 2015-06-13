@@ -59,11 +59,14 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
 
     case resultActions.refreshResult:
       setActivePanel(null)
-      break  
+      break
   }
 })
 
 function setActivePanel(panel) {
+  if(panel === viewCursor().get('activePanel')) {
+    panel = null
+  }
   const showPanel = panel !== null
 
   viewCursor(view => {
