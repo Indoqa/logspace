@@ -7,6 +7,9 @@
  */
 
 import moment from 'moment'
+
+import {cleanPropertyName} from '../time-series/time-series-item.react'
+
 import * as timeSeriesActions from '../time-series/actions'
 
 export function transformLogspaceResult(timeSeries, responseJson) {
@@ -31,7 +34,7 @@ export function transformLogspaceResult(timeSeries, responseJson) {
     // meta data
     chartData.columnKeys.push(item.get("id"))
     chartData.colors[item.get("id")] = item.get("color")
-    chartData.names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " " + item.get("propertyId")
+    chartData.names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " of " + cleanPropertyName(item.get("propertyId"))
 
     // type
     const typeArray = chartData.types[item.get("type")];
