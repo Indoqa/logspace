@@ -8,13 +8,6 @@
 
 @require 'variables'
 
-calc(prop, val, fallback) {
-  if (fallback) {
-   {prop}: fallback;
-  }
-  {prop}: s("calc(%s)", val);
-}
-
 slide-navigation-drawer-transformation() {
   transition all 0.15s ease-out
 }
@@ -56,6 +49,8 @@ body
     .left
       width: $navigation-drawer-width
       position: absolute
+      height 100%
+      overflow hidden
 
     .right
       width $navigation-drawer-width-expanded-only

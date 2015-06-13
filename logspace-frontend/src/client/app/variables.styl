@@ -25,3 +25,10 @@ $color-text = $color4
 $color-text-inverted = $color3
 $font-main = "Yantramanav", sans-serif
 $font-title = "Yantramanav", sans-serif
+
+calc(prop, val, fallback) {
+  if (fallback) {
+   {prop}: fallback;
+  }
+  {prop}: s("calc(%s)", val);
+}
