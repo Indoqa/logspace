@@ -17,11 +17,11 @@ export default class TimeSeriesLabel extends Component {
     return (
       <div className='time-series-label'>
         <div className={'meta'}>
-          <span className='space'> {this.props.timeSeries.get('space')} </span>
-          <span className='system'> {this.props.timeSeries.get('system')} </span>
+          <span className='space'>{this.props.timeSeries.get('space')}</span>
+          <span className='system'>{this.props.timeSeries.get('system')}</span>
         </div>
         <div className={'name'}>
-          <span> {this.props.timeSeries.get('name')} </span>
+          <span>{this.props.timeSeries.get('name')}</span>
         </div>
       </div>
     )

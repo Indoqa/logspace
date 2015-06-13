@@ -19,7 +19,7 @@ import {onNewTimeSeries} from '../time-series/actions';
 export default class SuggestionResult extends Component {
 
  render() {
-    var isLoading = this.props.result.get("loading");
+    var isLoading = this.props.result.get('loading');
 
     if (isLoading) {
       return <div className={'result'}>
@@ -29,10 +29,10 @@ export default class SuggestionResult extends Component {
       </div>
     }
 
-    var request = this.props.request;
-    var systems = this.props.result.get("systems");
-    var spaces = this.props.result.get("spaces");
-    var properties = this.props.result.get("propertyNames");
+    const request = this.props.request;
+    const systems = this.props.result.get('systems');
+    const spaces = this.props.result.get('spaces');
+    const properties = this.props.result.get('propertyNames');
 
     return (
       <div>
@@ -59,6 +59,7 @@ export default class SuggestionResult extends Component {
             })}
           </ul>
         </div>
+        
         <div className={'facets'}>
           <b>Spaces</b>
           <SuggestionSpaces spaces={spaces} selected={request.get('space')}/>
