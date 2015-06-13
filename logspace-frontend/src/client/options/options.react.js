@@ -48,7 +48,7 @@ export default class Options extends Component {
         <b> Export to file</b>
         <br/>
         <br/>
-        <button className='exportButton waves-effect waves-light btn'> 
+        <button className='exportButton waves-effect waves-light btn'>
           <a
             href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)}
             download={this.getDownloadName()}
@@ -58,12 +58,11 @@ export default class Options extends Component {
         </button>
         <br/>
         <br/>
-        <hr/>
         <b> Import file</b>
         <br/>
         <br/>
-        <Dropzone onDrop={this.onDrop} size={150} >
-          <div className='dropzone'>Drop json file or click to select file.</div>
+        <Dropzone onDrop={this.onDrop} size={125} >
+          <div className='dropzone'>Drop a Logspace configuration file or click to select it from your file system.</div>
         </Dropzone>
       </div>
     )
