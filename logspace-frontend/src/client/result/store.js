@@ -24,10 +24,20 @@ import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store
 
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
-    case timeWindowActions.onTimeWindowChange:
+    case timeWindowActions.selectCustomDate:
       waitFor([TimeWindowStore_dispatchToken])
       refreshResult()
       break
+
+    case timeWindowActions.selectPredefinedDate:
+      waitFor([TimeWindowStore_dispatchToken])
+      refreshResult()
+      break  
+
+    case timeWindowActions.selectDynamicDate:
+      waitFor([TimeWindowStore_dispatchToken])
+      refreshResult()
+      break    
 
     case timeSeriesActions.onTimeSeriesSaved:
       waitFor([TimeSeriesStore_dispatchToken])
@@ -87,9 +97,9 @@ function createRestRequest(timeSeries, timeWindow) {
   timeSeries.forEach(function(item) {
     request.dataDefinitions.push({
       'dateRange': {
-        'start': timeWindow.get('start'),
-        'end': timeWindow.get('end'),
-        'gap': timeWindow.get('gap')
+        'start': timeWindow.get('selection').start(),
+        'end': timeWindow.get('selection').end(),
+        'gap': timeWindow.get('selection').gap
       },
       'globalAgentId': item.get('agentId'),
       'propertyId': item.get('propertyId'),

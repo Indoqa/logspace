@@ -41,9 +41,17 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       setActivePanel(Panels.OPTIONS)
       break
 
-    case timeWindowActions.onTimeWindowChange:
+    case timeWindowActions.selectCustomDate:
       setActivePanel(null)
       break
+
+    case timeWindowActions.selectPredefinedDate:
+      setActivePanel(null)
+      break  
+
+    case timeWindowActions.selectDynamicDate:
+      setActivePanel(null)
+      break    
 
     case drawerActions.onCloseDrawer:
       setActivePanel(null)

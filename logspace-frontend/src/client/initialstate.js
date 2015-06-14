@@ -7,6 +7,7 @@
  */
 
 import messages from './messages';
+import {selections} from './time-window/constants'
 
 const initialLocale = 'en';
 
@@ -17,9 +18,7 @@ export default {
     messages: messages[initialLocale]
   },
   'timeWindow': {
-    'start': '2014-01-01',
-    'end': '2014-01-02',
-    'gap': 3600
+    selection: selections[0]
   },
   'timeSeries': [],
   'editedTimeSeries': {},

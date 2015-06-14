@@ -33,7 +33,7 @@ export default class App extends Component {
   getState() {
     return {
       i18n: appState.i18nCursor(),
-      timeWindow: appState.timeWindowCursor(),
+      timeWindow: appState.timeWindowCursor().get('selection'),
       timeSeries: appState.timeSeriesCursor(),
       editedTimeSeries: appState.editedTimeSeriesCursor(),
       result: appState.resultCursor().get('translatedResult'),

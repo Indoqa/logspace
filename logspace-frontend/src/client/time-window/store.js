@@ -7,25 +7,46 @@
  */
 
 import {Dispatcher} from 'flux'
-
 import {register} from '../dispatcher'
+import moment from 'moment'
 
 import {timeWindowCursor} from '../state'
-
 import * as actions from './actions'
+
+import {TimeWindowSelection} from './constants'
 
 export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
   switch (action) {
-    case actions.onTimeWindowChange:
+    case actions.selectPredefinedDate:
       timeWindowCursor(timeWindow => {
-        return timeWindow.set('start', data.start)
+        return timeWindow.set('selection', data)
       })
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('end', data.end)
+      break
+
+    case actions.selectCustomDate:
+      const customSelection = new TimeWindowSelection({
+        label: moment(data.start).format("MM-DD-YY, HH:mm") + " - \n" + moment(data.end).format("MM-DD-YY, HH:mm"),
+        start: () => moment(data.start), 
+        end: () => moment(data.end),
+        gap: data.gap
       })
+
       timeWindowCursor(timeWindow => {
-        return timeWindow.set('gap', data.gap)
+        return timeWindow.set('selection', customSelection)
+      })
+      break
+
+    case actions.selectDynamicDate:
+      const dynamicSelection = new TimeWindowSelection({
+        label: 'last ' + data.duration + ' ' + data.unit,
+        start: () => moment().subtract(data.duration, data.unit), 
+        end: () => moment(),
+        gap: data.gap
+      })
+
+      timeWindowCursor(timeWindow => {
+        return timeWindow.set('selection', dynamicSelection)
       })
       break
   }
