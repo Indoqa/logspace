@@ -28,14 +28,7 @@ export default class Drawer extends Component {
           <div className="title"> {msg('drawer.header.' + this.props.view.get('activePanel'))} </div>
         </div>
         <div className="panel">
-          <DrawerPanel
-              suggestions={this.props.suggestions}
-              timeWindow={this.props.timeWindow}
-              timeSeries={this.props.timeSeries}
-              editedTimeSeries={this.props.editedTimeSeries}
-              chartTitle={this.props.chartTitle}
-              editables={this.props.editables}
-              view={this.props.view} />
+          <DrawerPanel {...this.props} />
         </div>
       </div>
       )

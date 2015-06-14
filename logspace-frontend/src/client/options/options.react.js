@@ -44,8 +44,8 @@ export default class Options extends Component {
     const exportedState = JSON.stringify(getExportState())
 
     return (
-      <div>
-        <b> Export to file</b>
+      <div className='options'>
+        <b>Export to file</b>
         <br/>
         <br/>
         <button className='exportButton waves-effect waves-light btn'>
@@ -58,7 +58,7 @@ export default class Options extends Component {
         </button>
         <br/>
         <br/>
-        <b> Import file</b>
+        <b>Import file</b>
         <br/>
         <br/>
         <Dropzone onDrop={this.onDrop} size={125} >
