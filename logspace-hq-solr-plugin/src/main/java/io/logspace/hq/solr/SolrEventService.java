@@ -114,6 +114,7 @@ public class SolrEventService implements EventService {
 
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
         solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getDateRange()));
+        solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
         solrQuery.set("json.facet", this.createJsonFacets(dataDefinition));
 
         this.logger.debug("Executing query {}", solrQuery);
