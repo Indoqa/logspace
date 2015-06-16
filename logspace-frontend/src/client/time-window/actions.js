@@ -13,8 +13,12 @@ export function onShowTimeWindowForm() {
   dispatch(onShowTimeWindowForm);
 }
 
-export function selectCustomDate(newTimeWindowData) {
-  dispatch(selectCustomDate, newTimeWindowData);
+export function selectCustomDate(start, end, gap) {
+  console.log(start)
+  console.log(end)
+  console.log(gap)
+
+  dispatch(selectCustomDate, {start: start, end:end, gap:gap});
 }
 
 export function selectDynamicDate(duration, unit, gap) {
@@ -25,8 +29,12 @@ export function selectPredefinedDate(selection) {
   dispatch(selectPredefinedDate, selection);
 }
 
+export function onTabOpen(tabIndex) {
+  dispatch(onTabOpen, tabIndex);
+}
+
 // Override actions toString for logging.
 setToString('timeWindow', {
-  selectCustomDate, selectPredefinedDate, onShowTimeWindowForm, selectDynamicDate
+  selectCustomDate, selectPredefinedDate, onShowTimeWindowForm, selectDynamicDate,onTabOpen
 });
   

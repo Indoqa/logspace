@@ -9,10 +9,12 @@
 import React from 'react';
 import Immutable from 'immutable'
 import Component from '../components/component.react'
-import moment from 'moment'
+import moment from 'moment-range'
+
+import GapSelection from './time-window-gapselection.react.js'
 
 import {selectDynamicDate} from './actions';
-import {GAPS,selections} from './constants'
+import {units, selections} from './constants'
 
 require('./time-window.styl')
 
@@ -23,44 +25,43 @@ export default class TimeWindowDynamic extends Component {
     
     this.state = { 
       localState: Immutable.fromJS({
-        count: 60,
-        unit: 'minutes',
-        gap: GAPS.minute
+         gap: {
+          amount: props.timeWindow.get("dynamicDuration"),
+          unit: props.timeWindow.get("dynamicUnit")
+         }
       }) 
     }
   }
 
-  handleChange(event) {
-    var newState = {};
-    newState[event.target.name] = event.target.value
-
+   onGapChange(value) {
     this.setState({
-      localState: this.state.localState.mergeDeep(newState)
+      localState: this.state.localState.merge({
+        gap: value
+      })
     })
   }
   
-  render() {
+  submit() {
     const state = this.state.localState.toJS()
+    selectDynamicDate(state.gap.amount, state.gap.unit, {amount: 1, unit: state.gap.unit})
+  }
+
+  render() {
+   
   
     return (
       <div>
-        last 
-        <input name="count" value={state.count} onChange={this.handleChange.bind(this)} size='5'/> 
-        <select name="unit" value={state.unit} onChange={this.handleChange.bind(this)}>
-          <option value='seconds'>seconds</option>
-          <option value='minutes'>minutes</option>
-          <option value='days'>days</option>
-        </select>
-        <br/>
-        Gap:  
-         <select name="gap" value={state.gap} onChange={this.handleChange.bind(this)}>
-          <option value={GAPS.second}>seconds</option>
-          <option value={GAPS.minute}>minutes</option>
-          <option value={GAPS.hour}>hours</option>
-          <option value={GAPS.day}>days</option>
-        </select>    
-        <br/>  
-        <input type="button" value="go" onClick={() => selectDynamicDate(state.count, state.unit, state.gap)} /> 
+         <div className='selection'>
+          <div className='submit' >
+             <button className='waves-effect waves-light btn' onClick={() => this.submit()}>
+              Apply
+             </button> 
+          </div>
+          <div className='dynamic'>
+             last 
+            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
+          </div>         
+        </div>
       </div>
     )
   }

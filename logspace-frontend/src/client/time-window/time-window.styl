@@ -8,11 +8,64 @@
  
  @require '../app/variables'
  
- .tabs-navigation
-    background-color:  @color2
+.tabs
+  .tabs-navigation
+    background $color1
+    height 31px
+    .tabs-menu
+      margin 0
+      padding 0
+      list-style none
+    .tabs-menu li
+      width 80px
+      font-size 0.85em
+      float left
+      text-align center
+      font-weight 300
+      vertical-align center
+      border-top 2px solid $color1
+      border-bottom 2px solid $color1
+      height 27px
+      background $color1
+    .tabs-menu li a 
+      margin-top 3px
+      display block
+      color #D5d5d5
+      text-decoration none
+    .tabs-menu .is-active
+      //background #006064
+      height 25px
+      font-weight 700
+      border-top 2px solid $color1
+      border-bottom 4px solid #006064
+    .tabs-menu .is-active a  
+      color #FF
+  .tab-panel
+    clear both  
+    padding 5px
 
- table td 
-    padding-right 10px     
+.selection
+  background-color $color5
+  height 50px
+  clear both
+  margin-bottom 20px
+.selection div 
+  float left
+  margin 5px
+.selection div.date   
+  width 100px
+.selection div.date .day
+  font-weight 700
+.selection div.date .time  
+  font-size 0.8em   
+.selection div.gap   
+  width 150px     
+.selection div.gap .label  
+  font-size 0.8em   
+.selection div.submit
+  text-align right   
+  width 100px  
+  float right
  
 .DateRangePicker {
     -moz-user-select: none;

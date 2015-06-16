@@ -9,108 +9,120 @@
 import React from 'react';
 import Immutable from 'immutable'
 import Component from '../components/component.react'
-import DateRangePicker from 'react-daterange-picker'
-import Tabs from 'react-simpletabs'
 import moment from 'moment'
+import DateRangePicker from 'react-daterange-picker'
+import GapSelection from './time-window-gapselection.react.js'
+import TimePicker from 'react-time-picker'
 
-import {selectCustomDate, selectPredefinedDate, selectDynamicDate} from './actions';
-import {GAPS,selections} from './constants'
+import {selectCustomDate} from './actions';
+import {units,selections} from './constants'
 
 require('./time-window.styl')
 
 export default class TimeWindowCustom extends Component {
+  constructor(props) {
+    super(props);
 
-  
-  handleChange(event) {
+    this.state = { 
+      localState: Immutable.fromJS({
+        dateRange: moment.range(props.timeWindow.start(), props.timeWindow.end()),
+        time: {
+          start: props.timeWindow.start().format("HH:mm:ss"),
+          end: props.timeWindow.end().format("HH:mm:ss")
+        },
+        gap: props.timeWindow.gap
+      }) 
+    }
+  }
+
+  onTimeChange(field, value) {
     var newState = {
-      custom: {
-        dateRange: {} 
-      }
+      time:{}
     };
 
-    newState['custom']['dateRange'][event.target.name] = event.target.value
-
-    console.log(newState)
+    newState.time[field] = value
 
     this.setState({
       localState: this.state.localState.mergeDeep(newState)
     })
   }
-  
-  submitCustom() {
-    selectCustomDate(
-      {
-        start: this.state.start,
-        end: this.state.end,
-        gap: this.state.gap
-      }
-    );  
-  }
 
-  handleSelect(range, states) {
+  onDateRangeChange(range, states) {
     this.setState({
       localState: this.state.localState.mergeDeep({
-        custom: {
-          dateRange: moment().range(range.start, range.end)
-        }
+        dateRange: moment().range(range.start, range.end)
       })
     })
   }
 
-  submitDynamic() {
-    selectDynamicDate(this.state.dynamic.count, this.state.dynamic.unit, this.state.dynamic.gap)
+  onGapChange(value) {
+    this.setState({
+      localState: this.state.localState.merge({
+        gap: value
+      })
+    })
   }
-  
+    
+  submitCustom() {
+    const state = this.state.localState.toJS()
+
+    const startDate = state.dateRange.start
+    const endDate = state.dateRange.end
+
+    const startTime = moment(state.time.start, "HH:mm:ss");
+    const endTime = moment(state.time.end, "HH:mm:ss");
+
+    startDate.hour(startTime.hour())
+    startDate.minute(startTime.minute())
+    startDate.second(startTime.second())
+
+    endDate.hour(endTime.hour())
+    endDate.minute(endTime.minute())
+    endDate.second(endTime.second())
+
+    selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))  
+  }
+
   render() {
     const state = this.state.localState.toJS()
-    console.log(state)
-
+    
     return (
-      <div>
+      <div className='current'>
+        <div className='selection'>
+          <div className='submit' >
+            <button className='waves-effect waves-light btn' onClick={this.submitCustom.bind(this)}>
+              Apply
+            </button>  
+          </div>
+          <div className='date'>
+            <span className='day'>{state.dateRange.start.format('YYYY-MM-DD')}</span><br/>
+            <span className='time'>{state.time.start} </span>
+          </div>
+          <div className='date'>
+            <span className='day'>{state.dateRange.end.format('YYYY-MM-DD')}</span><br/>
+            <span className='time'>{state.time.end} </span>
+          </div>
+          <div className='gap'>
+            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
+          </div>  
+        </div>
         <DateRangePicker
           numberOfCalendars={2}
           selectionType="range"
           singleDateRange={true}
           firstOfWeek={1}
-          value={state.custom.dateRange}
-          onSelect={this.handleSelect.bind(this)} />
-    
-        <form name="time" >
-          <table>
-            <tr>
-              <td> Start</td>
-              <td>  <b>{state.custom.dateRange.start.format("YYYY-MM-DD")}</b> </td>
-              <td><input name="start" value={state.custom.time.start.format("HH:mm:ss")} onChange={this.handleChange.bind(this)}/> </td>
-            </tr>
-            <tr>
-              <td> End</td>
-              <td>  <b>{state.custom.dateRange.end.format("YYYY-MM-DD")}</b> </td>
-              <td><input name="start" value={state.custom.time.end.format("HH:mm:ss")} onChange={this.handleChange.bind(this)}/> </td>
-            </tr>
-             <tr>
-              <td> Gap</td>
-              <td> </td>
-              <td>
-                <select name="gap" value={state.gap} onChange={this.handleChange.bind(this)}>
-                  <option value={GAPS.second}>pro Sekunde</option>
-                  <option value={GAPS.minute}>pro Minute</option>
-                  <option value={GAPS.hour}>pro Stunde</option>
-                  <option value={GAPS.day}>pro Tag</option>
-                  <option value={GAPS.week}>pro Woche</option>
-                  <option value={GAPS.month}>pro Monat</option>
-                  <option value={GAPS.year}>pro Jahr</option>
-                </select>  
-              </td>
-            </tr>
-            <tr>
-              <td> </td>
-              <td> </td>
-              <td>
-                <input type="button" value="set time" onClick={this.submitCustom.bind(this)} /> 
-              </td>
-            </tr>
-          </table>
-        </form>
+          value={state.dateRange}
+          onSelect={this.onDateRangeChange.bind(this)} />
+        <TimePicker
+          value={state.time.start}
+          style={{width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
+          onChange={(value) => this.onTimeChange('start', value)}
+        />    
+        <TimePicker
+          value={state.time.end}
+          style={{width: '150', padding: 5, border: 'none', marginLeft: '90px'}}
+          onChange={(value) => this.onTimeChange('end', value)}
+        />
       </div>
     );
   }

@@ -14,13 +14,16 @@ import TimeWindowCustom from './time-window-custom.react'
 import TimeWindowDynamic from './time-window-dynamic.react'
 import TimeWindowShortcuts from './time-window-shortcuts.react'
 
+import {onTabOpen} from './actions';
+
 import './time-window.styl'
 
 export default class TimeWindow extends Component {
  render() {
+    console.log(this.props.activeTab)
     return (
       <div>
-        <Tabs>
+        <Tabs tabActive={this.props.activeTab} onAfterChange={onTabOpen}>
           <Tabs.Panel title='Shortcuts'>
             <TimeWindowShortcuts {...this.props} /> 
           </Tabs.Panel>

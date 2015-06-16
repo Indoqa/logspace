@@ -34,7 +34,7 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       break
 
     case timeSeriesActions.onEditTimeSeries:
-      setActivePanel(Panels.EDIT_TIMESERIES)
+      setActivePanel(Panels.EDIT_TIMESERIES, true)
       break
 
     case optionsActions.onShowOptions:
@@ -71,8 +71,8 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
   }
 })
 
-function setActivePanel(panel) {
-  if(panel === viewCursor().get('activePanel')) {
+function setActivePanel(panel, omitClose=false) {
+  if(!omitClose && panel === viewCursor().get('activePanel')) {
     panel = null
   }
   const showPanel = panel !== null

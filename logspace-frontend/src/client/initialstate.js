@@ -8,6 +8,7 @@
 
 import messages from './messages';
 import {selections} from './time-window/constants'
+import Immutable from 'immutable'
 
 const initialLocale = 'en';
 
@@ -18,7 +19,8 @@ export default {
     messages: messages[initialLocale]
   },
   'timeWindow': {
-    selection: selections[0]
+    selection: selections[0],
+    activeTab: 1
   },
   'timeSeries': [],
   'editedTimeSeries': {},

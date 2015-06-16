@@ -16,7 +16,7 @@ import shallowEqual from 'react-pure-render/shallowEqual';
 import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
-import {GAPS} from '../time-window/constants'
+import {gaps} from '../time-window/constants'
 
 import {onResultRefreshed} from './actions'
 
@@ -145,7 +145,7 @@ export default class Chart extends Component {
     const gap = this.props.result.get('chartData').get("xgap")
 
     switch (gap) {
-      case GAPS.second:
+      case GAPS.second.value:
         return date.format('HH:mm:ss')
 
       case GAPS.minute:
@@ -246,11 +246,13 @@ export default class Chart extends Component {
         },
         y: {
           show: true,
-          label: 'y1'
+          label: 'y1',
+          padding: 0
         },
         y2: {
           show: true,
-          label: 'y2'
+          label: 'y2',
+          padding: 0
         }
       },
       grid: {

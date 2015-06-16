@@ -7,14 +7,10 @@
  */
  
 import React from 'react';
-import Immutable from 'immutable'
 import Component from '../components/component.react'
-import DateRangePicker from 'react-daterange-picker'
-import Tabs from 'react-simpletabs'
-import moment from 'moment'
 
-import {selectCustomDate, selectPredefinedDate, selectDynamicDate} from './actions';
-import {GAPS,selections} from './constants'
+import {selectPredefinedDate} from './actions';
+import {selections} from './constants'
 
 require('./time-window.styl')
 
@@ -31,7 +27,19 @@ export default class TimeWindowShortcuts extends Component {
             );
           })}
         </div>
-     
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     )
   }

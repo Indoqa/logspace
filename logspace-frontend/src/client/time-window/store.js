@@ -9,6 +9,7 @@
 import {Dispatcher} from 'flux'
 import {register} from '../dispatcher'
 import moment from 'moment'
+import Immutable from 'immutable'
 
 import {timeWindowCursor} from '../state'
 import * as actions from './actions'
@@ -25,11 +26,17 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
       break
 
     case actions.selectCustomDate:
+      const customLabel = moment(data.start).format("YY-MM-DD") 
+        + "<span class='small'> " + moment(data.start).format("HH:mm") + "</span>"
+        + " - " 
+        + moment(data.end).format("YY-MM-DD")
+        + "<span class='small'> " + moment(data.end).format("HH:mm") + "</span>"
+
       const customSelection = new TimeWindowSelection({
-        label: moment(data.start).format("MM-DD-YY, HH:mm") + " - \n" + moment(data.end).format("MM-DD-YY, HH:mm"),
+        label: customLabel,
         start: () => moment(data.start), 
         end: () => moment(data.end),
-        gap: data.gap
+        gap: Immutable.fromJS(data.gap)
       })
 
       timeWindowCursor(timeWindow => {
@@ -39,15 +46,23 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
     case actions.selectDynamicDate:
       const dynamicSelection = new TimeWindowSelection({
-        label: 'last ' + data.duration + ' ' + data.unit,
+        label: 'last ' + data.duration + ' ' + data.unit.label,
         start: () => moment().subtract(data.duration, data.unit), 
         end: () => moment(),
-        gap: data.gap
+        dynamicDuration: data.duration,
+        dynamicUnit: data.unit,
+        gap: Immutable.fromJS(data.gap)
       })
 
       timeWindowCursor(timeWindow => {
         return timeWindow.set('selection', dynamicSelection)
       })
       break
+
+    case actions.onTabOpen:
+      timeWindowCursor(timeWindow => {
+        return timeWindow.set('activeTab', data)
+      })
+      break  
   }
 })

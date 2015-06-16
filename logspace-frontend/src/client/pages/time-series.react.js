@@ -41,7 +41,7 @@ export default class TimeSeries extends Component {
 
           <div className="left">
             <Header/>
-            <TimeWindowValues timeWindow={this.props.timeWindow}/>
+            <TimeWindowValues timeWindow={this.props.timeWindow} />
             <div className='time-series-list-wrapper'>
               <TimeSeriesList items={this.props.timeSeries} />
               <AddTimeSeries count={this.props.timeSeries.size} />
@@ -52,6 +52,7 @@ export default class TimeSeries extends Component {
             <Drawer
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
+              timeWindowActiveTab={this.props.timeWindowActiveTab} 
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}
               chartTitle={this.props.chartTitle}
