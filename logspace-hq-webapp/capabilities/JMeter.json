@@ -1,0 +1,51 @@
+{
+  "id" : "JMeter",
+  "system" : null,
+  "space" : "development",
+  "agent-capabilities" : [ {
+    "id" : "jmeter-ES - Solr Document Selection",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-ES - Solr Type Selection",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-TR - Query 5",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter- Upload RDO",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-TR - Query 4",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-TR - Query 3",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-TR - Query 2",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-TR - Query 1",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "jmeter-Upload InfoObject",
+    "type" : "jmeter",
+    "trigger-types" : [ "Off", "Event" ],
+    "property-descriptions" : [ ]
+  } ]
+}

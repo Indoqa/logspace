@@ -14,8 +14,8 @@ import static io.logspace.agent.api.AgentControllerDescription.FIELD_CLASS_NAME;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_ID;
 import static io.logspace.agent.api.AgentControllerDescription.FIELD_PARAMETERS;
 import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.AgentControllerDescriptionDeserializer;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
+import io.logspace.agent.api.AgentControllerDescriptionDeserializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

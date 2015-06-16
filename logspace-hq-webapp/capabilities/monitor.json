@@ -1,0 +1,26 @@
+{
+  "id" : "monitor",
+  "system" : "S430",
+  "space" : "development",
+  "agent-capabilities" : [ {
+    "id" : "os/cpu",
+    "type" : "os/cpu",
+    "trigger-types" : [ "Off", "Cron" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "os/disk",
+    "type" : "os/disk",
+    "trigger-types" : [ "Off", "Cron" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "os/swap",
+    "type" : "os/swap",
+    "trigger-types" : [ "Off", "Cron" ],
+    "property-descriptions" : [ ]
+  }, {
+    "id" : "os/memory",
+    "type" : "os/memory",
+    "trigger-types" : [ "Off", "Cron" ],
+    "property-descriptions" : [ ]
+  } ]
+}

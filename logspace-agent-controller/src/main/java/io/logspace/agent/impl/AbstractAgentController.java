@@ -122,6 +122,7 @@ public abstract class AbstractAgentController implements AgentController {
         AgentControllerCapabilities result = new AgentControllerCapabilities();
 
         result.setId(this.getId());
+        result.setSystem(this.getSystem());
 
         for (Agent eachAgent : this.getAgents()) {
             result.add(eachAgent.getCapabilities());
