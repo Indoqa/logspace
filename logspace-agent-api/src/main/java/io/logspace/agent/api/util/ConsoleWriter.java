@@ -7,16 +7,20 @@
  */
 package io.logspace.agent.api.util;
 
+import java.io.PrintStream;
+
 public final class ConsoleWriter {
 
     private static final String PROPERTY_SUPPRESS_SYSTEM = "logspace.suppress-system-message";
+
+    private static final PrintStream OUT = System.out;
 
     private ConsoleWriter() {
         // hide utility class constructor
     }
 
     public static void write(String message) {
-        System.out.println(message);
+        OUT.println(message);
     }
 
     public static void writeSystem(String message) {
