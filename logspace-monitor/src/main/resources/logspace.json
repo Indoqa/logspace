@@ -1,0 +1,9 @@
+{
+  "id" : "monitor",
+  "class-name" : "io.logspace.agent.hq.HqAgentController",
+  "parameters" : {
+    "space-token" : "development",
+    "base-url" : "http://localhost:4567",
+    "queue-file" : "${java.io.tmpdir}/logspace-monitor-event-queue.dat"
+  }
+}

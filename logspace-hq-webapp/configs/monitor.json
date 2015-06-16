@@ -1,0 +1,26 @@
+{
+  "agent-orders" : [
+    {
+      "id" : "os/cpu",
+      "trigger-type" : "CRON",
+      "trigger-parameter" : "0/5 * * * * ? *"
+    },
+    {
+      "id" : "os/disk",
+      "trigger-type" : "CRON",
+      "trigger-parameter" : "0/5 * * * * ? *"
+    },
+    {
+      "id" : "os/memory",
+      "trigger-type" : "CRON",
+      "trigger-parameter" : "0/5 * * * * ? *"
+    },
+    {
+      "id" : "os/swap",
+      "trigger-type" : "CRON",
+      "trigger-parameter" : "0/5 * * * * ? *"
+    }
+  ],
+  "commit-max-count" : 1000,
+  "commit-max-seconds" : 60
+}
