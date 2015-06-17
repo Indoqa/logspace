@@ -18,6 +18,7 @@ import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.hq.HqAgentController;
 import io.logspace.it.AbstractLogspaceTest;
+import io.logspace.it.InfrastructureRule;
 
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ import org.junit.Test;
 
 public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
-    private static final String HQ_URL = "http://localhost:4567";
+    private static final String HQ_URL = "http://localhost:" + InfrastructureRule.TEST_PORT;
     private static final String QUEUE_FILE = "./target/queue-file.dat";
     private static final String SPACE_TOKEN = "test";
 

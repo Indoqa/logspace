@@ -20,6 +20,8 @@ import org.springframework.context.ApplicationContext;
 
 public class InfrastructureRule extends ExternalResource {
 
+    public static final int TEST_PORT = 4568;
+
     private boolean initialized;
 
     private LogspaceHq logspaceHq;
@@ -71,6 +73,12 @@ public class InfrastructureRule extends ExternalResource {
 
         System.setProperty("log-path", "./target");
         System.setProperty("logspace.solr.base-url", solrDataDirectory.toURI().toString());
+
+        File capabilitiesDirectory = new File("./target/capabilities");
+        capabilitiesDirectory.mkdirs();
+        System.setProperty("logspace.hq-webapp.capabilities-directory", capabilitiesDirectory.getAbsolutePath());
+
+        System.setProperty("port", String.valueOf(TEST_PORT));
 
         this.logspaceHq = new LogspaceHq();
         this.logspaceHq.invoke();
