@@ -7,14 +7,24 @@
  */
 package io.logspace.agent.api.order;
 
-
-public class PropertyDescription {
+public class PropertyDescription implements Comparable<PropertyDescription> {
 
     private String id;
     private String name;
 
     private PropertyType propertyType;
     private PropertyUnit[] units;
+
+    @Override
+    public int compareTo(PropertyDescription other) {
+        int nameComparison = this.getName().compareToIgnoreCase(other.getName());
+
+        if (nameComparison != 0) {
+            return nameComparison;
+        }
+
+        return this.getId().compareToIgnoreCase(other.getId());
+    }
 
     public String getId() {
         return this.id;

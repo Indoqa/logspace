@@ -13,6 +13,7 @@ import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.AgentDescription;
 import io.logspace.hq.core.api.CapabilitiesService;
 import io.logspace.hq.core.api.IdHelper;
@@ -30,6 +31,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -110,7 +112,7 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
                 agentDescription.setName(eachAgentCapabilities.getId());
                 agentDescription.setSystem(capabilities.getSystem());
                 agentDescription.setSpace(capabilities.getSpace().get());
-                agentDescription.setPropertyDescriptions(Arrays.asList(eachAgentCapabilities.getPropertyDescriptions()));
+                agentDescription.setPropertyDescriptions(this.asSortedList(eachAgentCapabilities));
 
                 this.agentDescriptions.put(globalAgentId, agentDescription);
 
@@ -121,6 +123,12 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
         for (String eachOldGlobalAgentId : oldGlobalAgentIds) {
             this.agentDescriptions.remove(eachOldGlobalAgentId);
         }
+    }
+
+    private List<PropertyDescription> asSortedList(AgentCapabilities eachAgentCapabilities) {
+        List<PropertyDescription> propertyDescriptions = Arrays.asList(eachAgentCapabilities.getPropertyDescriptions());
+        Collections.sort(propertyDescriptions);
+        return propertyDescriptions;
     }
 
     private Set<String> getGlobalAgentIds(AgentControllerCapabilities capabilities) {

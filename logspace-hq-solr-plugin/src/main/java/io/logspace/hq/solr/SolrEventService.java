@@ -33,6 +33,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -419,10 +420,13 @@ public class SolrEventService implements EventService {
         result.setSpace(this.getFirstFacetValue(response, FIELD_SPACE));
         result.setSystem(this.getFirstFacetValue(response, FIELD_SYSTEM));
 
+        List<PropertyDescription> propertyDescriptions = new ArrayList<>();
         FacetField facetField = response.getFacetField(FIELD_PROPERTY_ID);
         for (Count eachValue : facetField.getValues()) {
-            result.addPropertyDescription(this.createPropertyDescription(eachValue.getName()));
+            propertyDescriptions.add(this.createPropertyDescription(eachValue.getName()));
         }
+        Collections.sort(propertyDescriptions);
+        result.setPropertyDescriptions(propertyDescriptions);
 
         return result;
     }
