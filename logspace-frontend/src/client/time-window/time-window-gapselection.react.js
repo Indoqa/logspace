@@ -71,7 +71,6 @@ export default class GapSelection extends Component {
           onChange={(event) => this.onAmountChange(event.target.value)} 
         />
         <select 
-          className='waves-effect btn'
           name="gap" 
           value={this.state.localState.get('gap').get('unit').get('id')} 
           onChange={(event) => this.onUnitChange(event.target.value)}>

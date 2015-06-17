@@ -47,6 +47,19 @@ export default class TimeWindowCustom extends Component {
     })
   }
 
+  onTimeReset() {
+    var newState = {
+      time:{
+        start: '00:00:00',
+        end: '23:59:59'
+      }
+    };
+
+    this.setState({
+      localState: this.state.localState.mergeDeep(newState)
+    })
+  }
+
   onDateRangeChange(range, states) {
     this.setState({
       localState: this.state.localState.mergeDeep({
@@ -114,12 +127,15 @@ export default class TimeWindowCustom extends Component {
           onSelect={this.onDateRangeChange.bind(this)} />
         <TimePicker
           value={state.time.start}
-          style={{width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
+          style={{float: 'left', width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
           onChange={(value) => this.onTimeChange('start', value)}
         />    
+        <button 
+          onClick={() => this.onTimeReset()}
+          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '30px'}}>reset</button>
         <TimePicker
           value={state.time.end}
-          style={{width: '150', padding: 5, border: 'none', marginLeft: '90px'}}
+          style={{float: 'left', width: '150', padding: 5, border: 'none', marginLeft: '20px'}}
           onChange={(value) => this.onTimeChange('end', value)}
         />
       </div>

@@ -17,16 +17,16 @@ require('./time-window.styl')
 export default class TimeWindowShortcuts extends Component {
   render() {
     return (
-      <div>
-        <div>
+      <div className='shortcuts'>
+        <ul>
           {selections.map(function(selection) {
             return (
-              <div>
+              <li>
                 <a onClick={() => selectPredefinedDate(selection)}>{selection.label}</a>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
         <br/>
         <br/>
         <br/>
