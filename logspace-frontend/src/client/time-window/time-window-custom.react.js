@@ -90,6 +90,8 @@ export default class TimeWindowCustom extends Component {
       <div className='current'>
         <div className='selection'>
           <div className='submit' >
+            <span className='intro'>UNIT</span>
+            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
             <button className='waves-effect waves-light btn' onClick={this.submitCustom.bind(this)}>
               Apply
             </button>  
@@ -102,9 +104,6 @@ export default class TimeWindowCustom extends Component {
             <span className='day'>{state.dateRange.end.format('YYYY-MM-DD')}</span><br/>
             <span className='time'>{state.time.end} </span>
           </div>
-          <div className='gap'>
-            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
-          </div>  
         </div>
         <DateRangePicker
           numberOfCalendars={2}

@@ -13,43 +13,43 @@ import Immutable from 'immutable'
 export const units = Immutable.fromJS({
     second: {
       id: 1,
-      label: 'second(s)',
+      label: 'seconds',
       short: 's',
       factor: 1
     },
     minute: {
       id: 2,
-      label: 'minute(s)',
+      label: 'minutes',
       short: 'min',
       factor: 60
     },
     hour: {
       id: 3,
-      label: 'hours(s)',
+      label: 'hours',
       short: 'h',
       factor: 3600
     },
     day: {
       id: 4,
-      label: 'days(s)',
+      label: 'days',
       short: 'd',
       factor: 86400
     },
     week: {
       id: 5,
-      label: 'week(s)',
+      label: 'weeks',
       short: 'w',
       factor: 604800
     },
     month: {
       id: 6,
-      label: 'month(s)',
+      label: 'months',
       short: 'mon',
       factor: 2629740
     },
     year: {
       id: 7,
-      label: 'year(s)',
+      label: 'years',
       short: 'y',
       factor: 31556900
     }

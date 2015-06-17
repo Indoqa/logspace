@@ -16,7 +16,7 @@ import shallowEqual from 'react-pure-render/shallowEqual';
 import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
-import {gaps} from '../time-window/constants'
+import {units} from '../time-window/constants'
 
 import {onResultRefreshed} from './actions'
 
@@ -142,62 +142,62 @@ export default class Chart extends Component {
 
   formatXAxis(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
-    const gap = this.props.result.get('chartData').get("xgap")
+    const unit = this.props.result.get('gap').get('unit')
 
-    switch (gap) {
-      case GAPS.second.value:
+    switch (unit.get('id')) {
+      case units.get('second').get('id'):
         return date.format('HH:mm:ss')
 
-      case GAPS.minute:
+      case units.get('minute').get('id'):
         return date.format('HH:mm')
 
-      case GAPS.hour:
+      case units.get('hour').get('id'):
         return date.format('HH:00')
 
-      case GAPS.day:
+      case units.get('day').get('id'):
         return date.format('DD.MM.')
 
-      case GAPS.week:
+      case units.get('week').get('id'):
         return date.format('DD.MM.')
 
-      case GAPS.month:
+      case units.get('month').get('id'):
         return date.format('MMMM')
 
-      case GAPS.year:
+      case units.get('year').get('id'):
         return date.format('YYYY')
     }
 
-    return gap
+    return unit
   }
 
   formatXTooltip(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
-    const gap = this.props.result.get('chartData').get("xgap")
+    const unit = this.props.result.get('gap').get('unit')
 
-    switch (gap) {
-      case GAPS.second:
+    switch (unit.get('id')) {
+      case units.get('second').get('id'):
         return date.format('dd DD.MM.YYYY - HH:mm:ss')
 
-      case GAPS.minute:
+      case units.get('minute').get('id'):
         return date.format('dd DD.MM.YYYY - HH:mm')
 
-      case GAPS.hour:
+      case units.get('hour').get('id'):
         return date.format('dd DD.MM.YYYY - HH:00')
 
-      case GAPS.day:
+      case units.get('day').get('id'):
         return date.format('dd DD.MM.YYYY')
 
-      case GAPS.week:
+      case units.get('week').get('id'):
         return date.format('dd DD.MM.YYYY')
 
-      case GAPS.month:
+      case units.get('month').get('id'):
         return date.format('MMMM YYYY')
 
-      case GAPS.year:
+      case units.get('year').get('id'):
         return date.format('YYYY')
     }
 
-    return gap
+    return unit
   }
 
   formatYTooltip(value, ratio, id, index) {

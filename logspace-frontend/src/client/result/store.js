@@ -80,7 +80,7 @@ function refreshResult() {
 
   axios.post(getRestUrl('/query'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
-    storeSuccessResult(timeSeries, response.data)
+    storeSuccessResult(timeSeries, response.data, timeWindow)
   })
   .catch(function (response) {
     console.log(response)
@@ -99,7 +99,7 @@ function createRestRequest(timeSeries, timeWindow) {
       'dateRange': {
         'start': timeWindow.get('selection').start(),
         'end': timeWindow.get('selection').end(),
-        'gap': timeWindow.get('selection').gap
+        'gap': timeWindow.get('selection').get('gap').get('amount') * timeWindow.get('selection').get('gap').get('unit').get('factor')
       },
       'globalAgentId': item.get('agentId'),
       'propertyId': item.get('propertyId'),
@@ -142,7 +142,7 @@ function storeErrorResult(serverResponse) {
   })
 }
 
-function storeSuccessResult(timeSeries, responseJson) {
+function storeSuccessResult(timeSeries, responseJson, timeWindow) {
   const chartData = transformLogspaceResult(timeSeries, responseJson)
 
   resultCursor(result => {
@@ -150,7 +150,8 @@ function storeSuccessResult(timeSeries, responseJson) {
       empty: false,
       error: false,
       loading: false,
-      chartData: chartData
+      chartData: chartData,
+      gap: timeWindow.get('selection').get('gap')
     }))
   })
 }

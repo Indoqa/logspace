@@ -14,10 +14,6 @@ export function onShowTimeWindowForm() {
 }
 
 export function selectCustomDate(start, end, gap) {
-  console.log(start)
-  console.log(end)
-  console.log(gap)
-
   dispatch(selectCustomDate, {start: start, end:end, gap:gap});
 }
 

@@ -26,8 +26,7 @@ export function transformLogspaceResult(timeSeries, responseJson) {
 	  },
     types: {},
     names: {},
-    xvalues: createXAxisLabals(responseJson),
-    xgap: responseJson.dateRange.gap
+    xvalues: createXAxisLabals(responseJson)
   }
 
   timeSeries.forEach((item, index) => {
