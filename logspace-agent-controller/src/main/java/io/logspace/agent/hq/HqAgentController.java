@@ -8,6 +8,7 @@
 package io.logspace.agent.hq;
 
 import static io.logspace.agent.api.HttpStatusCode.NotFound;
+import static java.text.MessageFormat.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentControllerDescription;
@@ -20,6 +21,7 @@ import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.api.util.ConsoleWriter;
 import io.logspace.agent.impl.AbstractAgentController;
 import io.logspace.agent.scheduling.AgentExecutor;
 import io.logspace.agent.scheduling.AgentScheduler;
@@ -41,14 +43,13 @@ import com.squareup.tape.FileObjectQueue;
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
     private static final int DEFAULT_UPLOAD_SIZE = 1000;
+    private static final int DEFAULT_COMMIT_DELAY = 300;
 
     private static final String BASE_URL_PARAMETER = "base-url";
     private static final String SPACE_TOKEN_PARAMETER = "space-token";
     private static final String QUEUE_FILE_PARAMETER = "queue-file";
     private static final String HQ_COMMUNICATION_INTERVAL_PARAMETER = "hq-communication-interval";
     private static final String HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE = "60";
-
-    private static final int DEFAULT_COMMIT_DELAY = 300;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -75,14 +76,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
 
         try {
-            String queueFile = agentControllerDescription.getParameterValue(QUEUE_FILE_PARAMETER);
-            if (queueFile == null) {
-                throw new AgentControllerInitializationException("No queue file is configured. Did you set parameter '"
-                        + QUEUE_FILE_PARAMETER + "'?");
+            String queueFileParameter = agentControllerDescription.getParameterValue(QUEUE_FILE_PARAMETER);
+            if (queueFileParameter == null) {
+                throw new AgentControllerInitializationException(format("No queue file is configured. Did you set parameter ''{0}''?",
+                        QUEUE_FILE_PARAMETER));
             }
 
-            queueFile = resolveProperties(queueFile);
-            this.persistentQueue = new FileObjectQueue<Event>(new File(queueFile), new TapeEventConverter());
+            File queueFile = getFile(queueFileParameter);
+            ConsoleWriter.writeSystem(format("Using queue file ''{0}''.", queueFile.getPath()));
+            this.persistentQueue = new FileObjectQueue<Event>(queueFile, new TapeEventConverter());
         } catch (Exception e) {
             throw new AgentControllerInitializationException("Could not initialize queue file.", e);
         }
@@ -102,6 +104,20 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         description.addParameter(Parameter.create(SPACE_TOKEN_PARAMETER, spaceToken));
 
         AgentControllerProvider.setDescription(description);
+    }
+
+    private static File getFile(String path) {
+        String resolvedPath = resolveProperties(path);
+
+        File file = new File(resolvedPath);
+
+        try {
+            file = file.getCanonicalFile();
+        } catch (IOException e) {
+            // ignore this
+        }
+
+        return file.getAbsoluteFile();
     }
 
     private static String resolveProperties(String value) {
