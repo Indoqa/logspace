@@ -185,6 +185,7 @@ public class AgentScheduler {
         }
     }
 
+    @DisallowConcurrentExecution
     public static class AgentExecutionJob implements Job {
 
         @Override
