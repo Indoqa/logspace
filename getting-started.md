@@ -4,13 +4,13 @@ title: Getting Started
 ---
 
 # Getting Started
-Using logspace is as easy as using a logging framework:
+Using Logspace is as easy as using a logging framework:
 Just add the logspace-agent-all.jar to your application's classpath and you are ready to go.
 
 
 ## Usage
 
-In logspace you use *Agents* to collect relevant information and package it into *Events*.<br/>
+In Logspace you use *Agents* to collect relevant information and package it into *Events*.<br/>
 Doing this is a simple method call:
 
 ````java
@@ -29,18 +29,18 @@ a00f812e-ea08-4d38-9ce0-fa5973f0d411 (gid:none, pid:none) - os/memory [os/memory
 ````
 
 What is that output?<br/>
-In the background logspace created an *AgentController* and the *MemoryAgent* forwarded the *Event* with the memory utilization data to it.<br/>
-logspace comes with different implementations of *AgentController*, each handling *Events* in a different way. In our example above, logspace used the *ConsoleAgentController* which writes all *Events* to the console.
+In the background Logspace created an *AgentController* and the ```MemoryAgent``` forwarded the *Event* with the memory utilization data to it.<br/>
+Logspace comes with different implementations of *AgentController*, each handling *Events* in a different way. In our example above, Logspace used the ```ConsoleAgentController``` which writes all *Events* to the console.
 
 The next chapter explains how you can use other *AgentControllers*.
 
 ## Configuration
 
 If you just want to write your *Events* to the console you don't need any configuration at all.
-logspace will do this by default to make sure none of your *Events* are lost. It is convenient during development but sometimes you might want something else.
+Logspace will do this by default to make sure none of your *Events* are lost. It is convenient during development but sometimes you might want something else.
 
 You can provide a configuration to define which *AgentController* is used:<br/>
-Create a file called "logspace.json" and put it in your working directory or the application's classpath.<br/>
+Create a file called **logspace.json** and put it in your working directory or the application's classpath.<br/>
 The file contains a simple configuration object written in JSON. The default configuration looks like this:
 
 ````json
@@ -61,4 +61,4 @@ The configuration looks like this:
 ````
 
 Whatever *AgentController* you choose, your application's code does not need to change.<br/>
-You simply invoke *Agents* and logspace takes care of handling the *Events* for you.
+You simply invoke *Agents* and Logspace takes care of handling the *Events* for you.

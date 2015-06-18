@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Tutorial
+title: Demo
 ---
 
 
 # Logspace Demo
-The *logspace Demo* is a prepared setup that allows you to test-drive logspace on your own computer in just one minute.
+The *logspace Demo* is a prepared setup that allows you to test-drive Logspace on your own computer in just one minute.
 
 >All files will be stored in your temp directory.<br/>
 See "Behind the Curtain" for details.
@@ -15,7 +15,7 @@ The only requirement for running the *logspace Demo* is that you have installed 
 We encourage you to use the latest version and stay up-to-date with security and bug fix releases.
 
 
-## Step 1: The logspace HQ
+## Step 1: The Logspace HQ
 First you need to download the **logspace-hq-webapp-runnable.jar**.
 
 The next step is to open a terminal, change to the directory you downloaded the JAR to and execute the following command:
@@ -31,7 +31,7 @@ Unless you have already collected some *Events* with this mode before, you will 
 To change this, we will start the *logspace Monitor* in demo mode as well.
 
 
-## Step 2: The logspace Monitor
+## Step 2: The Logspace Monitor
 Download the **logspace-monitor-runnable.jar**.
 
 Now open a terminal, change to the directory you downloaded the JAR to and execute the following command:
@@ -78,6 +78,6 @@ All data and logs collected with the demo mode are persistent!<br/>
 You can stop and restart the demo and continue to work with your collected data as long as your temp directory is not cleared.<br/>
 You can also collect *Events* from other *Agents*, provided you configure them appropriately.
 
-You are free to inspect the configuration and modify it, but keep in mind that logspace will rewrite the configuration files with every start.<br/>
+You are free to inspect the configuration and modify it, but keep in mind that Logspace will rewrite the configuration files with every start.<br/>
 
-If you want to get rid of the collected data just stop logspace and delete the directory **logspace-demo**.
+If you want to get rid of the collected data just stop Logspace and delete the directory **logspace-demo**.

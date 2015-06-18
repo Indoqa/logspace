@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Configuration HQ AgentController
+title: Configuration HqAgentController
 ---
 
-#Configuration HQ AgentController
+#Configuration HqAgentController
 
 ##Parameters
 
@@ -20,7 +20,7 @@ Example logspace.json
 
 ```json
 {
-  "id" : "AgentDescriptionId",
+  "id" : "AgentControllerId",
   "class-name" : "io.logspace.agent.hq.HqAgentController",
   "parameters" : {
     "space-token" : "development",

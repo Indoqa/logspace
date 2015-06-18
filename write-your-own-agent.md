@@ -5,14 +5,14 @@ title: Write Your Own Agent
 
 #Write Your Own Agent
 
-If you cannot find an *Agent* that collects the information you need or want to track specific processes in your application you can extend logspace by writing your own *Agent*.
+If you cannot find an *Agent* that collects the information you need or want to track specific processes in your application you can extend Logspace by writing your own *Agent*.
 
->This tutorial relies on the **ConsoleAgentController** to simplify development and make additional configuration unnecessary.<br/>The *Agent* developed will still be fully compatible with logspace and can be used with all *AgentControllers*.
+>This tutorial relies on the **ConsoleAgentController** to simplify development and make additional configuration unnecessary.<br/>The *Agent* developed will still be fully compatible with Logspace and can be used with all *AgentControllers*.
 
 
 ##Prerequisites
 
-You should be familiar with the [architecture](/architecture) of logspace so you understand what your *Agent* is supposed to do and which component it is supposed to interact with.
+You should be familiar with the [architecture](/architecture) of Logspace so you understand what your *Agent* is supposed to do and which component it is supposed to interact with.
 
 In order to create your own *Agent* you need the **logspace-agent-api.jar** in your classpath.
 It contains the interfaces defining *Agents*, *AgentCapabilities*, *AgentOrders* and *Events*.
@@ -73,7 +73,7 @@ The next chapter will explain how we can change this.
 
 logspace packages all information into *Events*. An *Event* is defined by the interface **io.logspace.agent.api.event.Event**. This interface defines the general attributes of all *Events*, like an ID and a timestamp.
 
-Since some of those attributes are optional and others are mandatory, logspace relies on the [Builder Pattern] (http://en.wikipedia.org/wiki/Builder_pattern) to create *Events*. The best way to create your own *Events* is to create your own *EventBuilder* by extending the class **io.logspace.agent.api.event.AbstractEventBuilder**.
+Since some of those attributes are optional and others are mandatory, Logspace relies on the [Builder Pattern] (http://en.wikipedia.org/wiki/Builder_pattern) to create *Events*. The best way to create your own *Events* is to create your own *EventBuilder* by extending the class **io.logspace.agent.api.event.AbstractEventBuilder**.
 
 ````java
 import io.logspace.agent.api.event.AbstractEventBuilder;
@@ -99,7 +99,7 @@ The **Event-ID** and **Timestamp** are generated automatically by the AbstractEv
 Using the **SimpleEventBuilder** will result in an *Event* similar to the one above.<br/>
 It will carry the defined **Type** but it is still lacking any specific information.
 
-In order to add specific information logspace uses *EventProperties*, which are defined by the interface **io.logspace.agent.api.event.EventProperty**.
+In order to add specific information Logspace uses *EventProperties*, which are defined by the interface **io.logspace.agent.api.event.EventProperty**.
 There are specific *EventProperties* that can carry different types of data: **LongEventProperty**, **StringEventProperty**, **DateEventProperty**, etc.
 
 The best way to add *EventProperties* to your *Events* is to add specific methods to your *EventBuilder* that will generate the appropriate *EventProperty*:
@@ -153,11 +153,11 @@ Note how the **Event-ID** and the **Timestamp** are set automatically and each *
 
 ##The Do's and Don'ts
 An *Event* can carry as many or as few *EventProperties* as desired.<br/>
-There is no schema and if some of your *Events* are missing some *EventProperties*, logspace will not complain.
+There is no schema and if some of your *Events* are missing some *EventProperties*, Logspace will not complain.
 
 However there are still some things to consider:
 
-* Only use letters, digits and underscores to construct the name of an *EventProperty*. This is a limitation of [Apache Solr](http://lucene.apache.org/solr/), which is currently used to store *Events* in the logspace *HQ* (see [architecture](/architecture) for what the *HQ* does).
-* Don't put the type of the *EventProperty* into its name. logspace keeps track of the type and the [Query API](/query-api) will have it available for you, so this will only lead to redundancy.
+* Only use letters, digits and underscores to construct the name of an *EventProperty*. This is a limitation of [Apache Solr](http://lucene.apache.org/solr/), which is currently used to store *Events* in the Logspace *HQ* (see [architecture](/architecture) for what the *HQ* does).
+* Don't put the type of the *EventProperty* into its name. Logspace keeps track of the type and the [Query API](/query-api) will have it available for you, so this will only lead to redundancy.
 * Don't use large strings as value of an *EventProperty*. This is rarely useful and [Apache Solr](http://lucene.apache.org/solr/) will not accept any String longer than 32,768 characters.
 * Avoid long running operations, blocking, waiting and multi-threading in your *Agents*. An *Agent* is always interrupting the normal execution of an application, so it should be as quick and less intrusive as possible.
