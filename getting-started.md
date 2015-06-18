@@ -5,7 +5,7 @@ title: Getting Started
 
 # Getting Started
 Using Logspace is as easy as using a logging framework:
-Just add the logspace-agent-all.jar to your application's classpath and you are ready to go.
+Just add the **logspace-agent-all.jar** to your application's classpath and you are ready to go.
 
 
 ## Usage
@@ -50,7 +50,7 @@ The file contains a simple configuration object written in JSON. The default con
 }
 ````
 
-If you are using slf4j you could use the *LoggingAgentController* to write all *Events* to you application's logfile.
+If you are using [SLF4J](http://www.slf4j.org/) you could use the *LoggingAgentController* to write all *Events* to you application's logfile.
 The configuration looks like this:
 
 ````json
