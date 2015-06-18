@@ -7,13 +7,12 @@
  */
 package io.logspace.hq.core.api;
 
-import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 
 import java.io.IOException;
 
 /**
- * This service is responsible for storing information about {@link Agent}s.
+ * This service is responsible for storing information about {@link io.logspace.agent.api.Agent Agents}.
  */
 public interface CapabilitiesService {
 
