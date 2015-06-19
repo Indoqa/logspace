@@ -13,13 +13,22 @@ $navigation-drawer-width = 250px
 $navigation-drawer-width-expanded = 750px
 $navigation-drawer-width-expanded-only = $navigation-drawer-width-expanded - $navigation-drawer-width
 
-$color-primary = #1976d2
-$color-secondary = #ff4081
+$color-primary = #006064
+$color-secondary = #dc1b67
+$color1 = #0097a7
 $color3 = #fff
 $color4 = #222
-$color5 = #cfd8dc
-$color6 = #fff
-$color7 = #bbdefb
+$color5 = #f3f3f3
+
 
 $color-text = $color4
-$font-main = "Roboto", sans-serif
+$color-text-inverted = $color3
+$font-main = "Yantramanav", sans-serif
+$font-title = "Yantramanav", sans-serif
+
+calc(prop, val, fallback) {
+  if (fallback) {
+   {prop}: fallback;
+  }
+  {prop}: s("calc(%s)", val);
+}

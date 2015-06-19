@@ -6,94 +6,95 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
- import moment from 'moment'
- import * as timeSeriesActions from '../time-series/actions'
+import moment from 'moment'
 
- export function transformLogspaceResult(timeSeries, responseJson) {
-    // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
-	 
- 	 const chartData = {
-      colors: {},
-      columns: [],
-      columnKeys: [],
-      originalColumns: {},
-      axes: {},
-      axisRanges: {
-       min: {y:0, y2:0},
-       max: {y:0, y2:0}
-	    },
-      types: {},
-      names: {},
-      xvalues: createXAxisLabals(responseJson),
-      xgap: responseJson.dateRange.gap
+import {cleanPropertyName} from '../time-series/time-series-item.react'
+
+import * as timeSeriesActions from '../time-series/actions'
+
+export function transformLogspaceResult(timeSeries, responseJson) {
+  // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
+  const chartData = {
+    colors: {},
+    columns: [],
+    columnKeys: [],
+    originalColumns: {},
+    axes: {},
+    axisRanges: {
+      min: {y:0, y2:0},
+      max: {y:0, y2:0}
+	  },
+    types: {},
+    names: {},
+    xvalues: createXAxisLabals(responseJson)
+  }
+
+  timeSeries.forEach((item, index) => {
+    // meta data
+    chartData.columnKeys.push(item.get("id"))
+    chartData.colors[item.get("id")] = item.get("color")
+    chartData.names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " of " + cleanPropertyName(item.get("propertyId"))
+
+    // type
+    const typeArray = chartData.types[item.get("type")];
+    if (typeArray == null) {
+      chartData.types[item.get("type")] = [];
     }
 
- 	  timeSeries.forEach(function(item, index) {
-	      // meta data
-	      chartData.columnKeys.push(item.get("id"))
-	      chartData.colors[item.get("id")] = item.get("color")
-	      chartData.names[item.get("id")] = item.get("name") + ': ' + item.get("aggregate") + " " + item.get("propertyId")
+    chartData.types[item.get("type")].push(item.get("id"));
 
-	      // type
-	      const typeArray = chartData.types[item.get("type")];
-	      if (typeArray == null) {
-	        chartData.types[item.get("type")] = [];
-	      }
+    // apply scale
+    const scale = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
+    let normalizer;
 
-	      chartData.types[item.get("type")].push(item.get("id"));
+    if (chartData.axisRanges.max.y == 0) {
+      chartData.axisRanges.min.y = scale.min
+      chartData.axisRanges.max.y = scale.max
+      chartData.axes[item.get("id")] = 'y';
+      timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
-	      // apply scale
-	      const scale = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
-	      let normalizer;
+    } else if (chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
+      chartData.axes[item.get("id")] = 'y'
+      timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
-	      if (chartData.axisRanges.max.y == 0) {
-	        chartData.axisRanges.min.y = scale.min
-	        chartData.axisRanges.max.y = scale.max 
-	        chartData.axes[item.get("id")] = 'y'; 
-	        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
+    } else if (chartData.axisRanges.max.y2 == 0) {
+      chartData.axisRanges.min.y2 = scale.min
+      chartData.axisRanges.max.y2 = scale.max
+      chartData.axes[item.get("id")] = 'y2'
+      timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
-	      } else if (chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
-	        chartData.axes[item.get("id")] = 'y'
-	        timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
+    } else if (chartData.axisRanges.min.y2 == scale.min && chartData.axisRanges.max.y2 == scale.max)  {
+      chartData.axes[item.get("id")] = 'y2'
+      timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
-	      } else if (chartData.axisRanges.max.y2 == 0) {
-	        chartData.axisRanges.min.y2 = scale.min
-	        chartData.axisRanges.max.y2 = scale.max
-	        chartData.axes[item.get("id")] = 'y2'
-	        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
+    } else {
+      chartData.axes[item.get("id")] = 'y'
+      timeSeriesActions.onAxisChanged(item.get("id"), 'y*')
 
-	      } else if (chartData.axisRanges.min.y2 == scale.min && chartData.axisRanges.max.y2 == scale.max)  {
-	        chartData.axes[item.get("id")] = 'y2'
-	        timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
+      normalizer = (value) => {
+        const onePercentOfOriginal = (scale.max - scale.min) / 100
+        const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
+        const targetRange = chartData.axisRanges.max.y - chartData.axisRanges.min.y
+        const onePercentOfTarget = targetRange / 100
+        // console.log(targetRange + "/" + onePercentOfTarget + "/" + onePercentOfOriginal + "/" + scale.max + "/" + scale.min)
+        return onePercentOfTarget * percentOfOriginal
+      }
+    }
 
-	      } else {
-	        chartData.axes[item.get("id")] = 'y'
-	        timeSeriesActions.onAxisChanged(item.get("id"), 'y*')  
+    // original (not normalized y values)
+    chartData.originalColumns[item.get("id")] = responseJson.data[index]
 
-	        normalizer = (value) => {
-	          const onePercentOfOriginal = (scale.max - scale.min) / 100
-	          const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
-	          const targetRange = chartData.axisRanges.max.y - chartData.axisRanges.min.y
-	          const onePercentOfTarget = targetRange / 100
-	          console.log(targetRange + "/" + onePercentOfTarget + "/" + onePercentOfOriginal + "/" + scale.max + "/" + scale.min)
-	          return onePercentOfTarget * percentOfOriginal
-	        }
-	      }
+    // normalized column / data series (first entry = column key)
+    chartData.columns.push(getDataColumn(responseJson.data[index], item.get("id"), normalizer))
+  })
 
-	      // original (not normalized y values)
-	      chartData.originalColumns[item.get("id")] = responseJson.data[index]
-        
-        // normalized column / data series (first entry = column key)
-        chartData.columns.push(getDataColumn(responseJson.data[index], item.get("id"), normalizer))
-	  })
+  // add 'x' values as column (first entry = column key)
+  const xColumn = chartData.xvalues.slice()
+  xColumn.unshift('x')
+  chartData.columns.unshift(xColumn)
 
-    // add 'x' values as column (first entry = column key)
-    const xColumn = chartData.xvalues.slice()
-    xColumn.unshift('x')
-    chartData.columns.unshift(xColumn)
-
-	  return chartData
- }
+  return chartData
+}
 
 function createXAxisLabals(responseJson) {
   let labels = []
@@ -111,15 +112,15 @@ function createXAxisLabals(responseJson) {
 
 function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
   if (scaleType === 'auto') {
-    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }   
-  } 
+    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }
+  }
 
   return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
 }
 
 
 function getDataColumn(array, id, normalizer) {
-  var values =  array.map(function(item) {
+  const values =  array.map(function(item) {
      if (item != null && normalizer != null) {
        return normalizer(item)
      }

@@ -10,14 +10,14 @@ import Component from '../components/component.react';
 import {onPropertySelected, onPropertyCleared} from './actions';
 
 export default class SuggestionProperties extends Component {
-  
+
   render() {
     if (this.props.selected != null) {
       return (
         <div>
           <ul>
               <li> {this.props.selected.get('name')} (<a onClick={() => onPropertyCleared()}>x</a>) </li>
-           </ul> 
+           </ul>
         </div>
       );
     }
@@ -26,8 +26,8 @@ export default class SuggestionProperties extends Component {
       <div>
         <ul>
           {this.props.properties.map(function(item, index) {
-            return <li key={index}> <a onClick={() => onPropertySelected(item)}>{item.get('name')}</a> </li>;
-          })}    
+            return <li key={index}><a onClick={() => onPropertySelected(item)}>{item.get('name')}</a></li>;
+          })}
         </ul>
       </div>
     );

@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react';
+import React from 'react'
 import Component from '../components/component.react'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
@@ -44,26 +44,25 @@ export default class Options extends Component {
     const exportedState = JSON.stringify(getExportState())
 
     return (
-      <div>
-        <b> Export to file</b>
+      <div className='options'>
+        <b>Export to file</b>
         <br/>
         <br/>
-        <button className='exportButton'> 
-          <a  
-            href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)} 
+        <button className='exportButton waves-effect waves-light btn'>
+          <a
+            href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)}
             download={this.getDownloadName()}
-            target="_blank"> 
-            Export 
-          </a> 
+            target="_blank">
+            Export
+          </a>
         </button>
         <br/>
         <br/>
-        <hr/>
-        <b> Import file</b>
+        <b>Import file</b>
         <br/>
         <br/>
-        <Dropzone onDrop={this.onDrop} size={150} >
-          <div className='dropzone'>Drop json file or click to select file.</div>
+        <Dropzone onDrop={this.onDrop} size={125} >
+          <div className='dropzone'>Drop a Logspace configuration file or click to select it from your file system.</div>
         </Dropzone>
       </div>
     )

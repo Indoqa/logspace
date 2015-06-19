@@ -16,7 +16,7 @@ import shallowEqual from 'react-pure-render/shallowEqual';
 import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
-import {GAPS} from '../time-window/constants'
+import {units} from '../time-window/constants'
 
 import {onResultRefreshed} from './actions'
 
@@ -72,7 +72,7 @@ export default class Chart extends Component {
     }
 
     if (this.prevType != this.props.chartType) {
-      this.transform(this.props.chartType)      
+      this.transform(this.props.chartType)
       this.prevType = this.props.chartType
       return
     }
@@ -116,14 +116,15 @@ export default class Chart extends Component {
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
     const minWindowWidth = 1024
-    const minWindowHeight = windowHeight - 200
+    const minWindowHeight = windowHeight - 0
 
+    const headerheight = 40
     const sidebarWidth = 250
     const chartPadding = 20 * 2
     const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = Math.min(width * heightWidthRatio, minWindowHeight)
+    const height = Math.min(windowHeight, minWindowHeight) - chartPadding - headerheight
 
     return {
       width : width,
@@ -141,62 +142,62 @@ export default class Chart extends Component {
 
   formatXAxis(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
-    const gap = this.props.result.get('chartData').get("xgap")
+    const unit = this.props.result.get('gap').get('unit')
 
-    switch (gap) {
-      case GAPS.second:
+    switch (unit.get('id')) {
+      case units.get('second').get('id'):
         return date.format('HH:mm:ss')
 
-      case GAPS.minute:
+      case units.get('minute').get('id'):
         return date.format('HH:mm')
 
-      case GAPS.hour:
+      case units.get('hour').get('id'):
         return date.format('HH:00')
 
-      case GAPS.day:
+      case units.get('day').get('id'):
         return date.format('DD.MM.')
 
-      case GAPS.week:
+      case units.get('week').get('id'):
         return date.format('DD.MM.')
 
-      case GAPS.month:
+      case units.get('month').get('id'):
         return date.format('MMMM')
 
-      case GAPS.year:
+      case units.get('year').get('id'):
         return date.format('YYYY')
     }
 
-    return gap
+    return unit
   }
 
   formatXTooltip(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
-    const gap = this.props.result.get('chartData').get("xgap")
+    const unit = this.props.result.get('gap').get('unit')
 
-    switch (gap) {
-      case GAPS.second:
+    switch (unit.get('id')) {
+      case units.get('second').get('id'):
         return date.format('dd DD.MM.YYYY - HH:mm:ss')
 
-      case GAPS.minute:
+      case units.get('minute').get('id'):
         return date.format('dd DD.MM.YYYY - HH:mm')
 
-      case GAPS.hour:
+      case units.get('hour').get('id'):
         return date.format('dd DD.MM.YYYY - HH:00')
 
-      case GAPS.day:
+      case units.get('day').get('id'):
         return date.format('dd DD.MM.YYYY')
 
-      case GAPS.week:
+      case units.get('week').get('id'):
         return date.format('dd DD.MM.YYYY')
 
-      case GAPS.month:
+      case units.get('month').get('id'):
         return date.format('MMMM YYYY')
 
-      case GAPS.year:
+      case units.get('year').get('id'):
         return date.format('YYYY')
     }
 
-    return gap
+    return unit
   }
 
   formatYTooltip(value, ratio, id, index) {
@@ -208,7 +209,7 @@ export default class Chart extends Component {
       <div className={'resultChart'}>
         <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
           <span>
-            <Halogen.PulseLoader color={'#BBDEFB'} size={'50px'} />
+            <Halogen.PulseLoader color={'#ddfcff'} size={'50px'} />
           </span>
         </div>
         <div id="chart" />
@@ -245,11 +246,13 @@ export default class Chart extends Component {
         },
         y: {
           show: true,
-          label: 'y1'
+          label: 'y1',
+          padding: 0
         },
         y2: {
           show: true,
-          label: 'y2'
+          label: 'y2',
+          padding: 0
         }
       },
       grid: {

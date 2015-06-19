@@ -12,7 +12,6 @@
   .header
     z-index 99
     background none repeat scroll 0 0 $color-primary
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
 
   .navigation-drawer
     z-index 1
@@ -20,14 +19,27 @@
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
 
   .time-window-values
-    background-color $color7
+    background-color $color1
 
   .tools
     background-color $color5
     display none
 
-  .add-series-entry
-    margin-top 30px
-    text-align center
+  .time-series-list-wrapper
+    position absolute
+    height s("calc(100% - 140px)")
+    overflow-y auto
+    overflow-x hidden
+    width $navigation-drawer-width
 
-  
+  .time-series-list
+    position relative
+    width $navigation-drawer-width
+
+  .add-series-entry
+    position relative
+    float left
+    margin-top 30px
+    margin-bottom 15px
+    text-align center
+    width $navigation-drawer-width

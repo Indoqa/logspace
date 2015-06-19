@@ -25,26 +25,25 @@ export default class Suggestions extends Component {
   }
 
   componentDidMount() {
-    var me = this;
-
-    this.debouncedChangeFunction = debounceFunc(function() {
-      onNewSuggestionQuery(me.state.input)
-    }, 350)
+    const me = this;
+    this.debouncedChangeFunction = debounceFunc(() => onNewSuggestionQuery(me.state.input), 350)
   }
 
   handleQueryChange(event) {
     this.setState({input: event.target.value});
-    this.debouncedChangeFunction() 
+    this.debouncedChangeFunction()
   }
 
   render() {
     return (
       <div className={'suggestions'}>
         <div className={'query'}>
-           <input onChange={this.handleQueryChange.bind(this)} value={this.state.input} placeholder="Filter by agent, space, system or property name"/>
+           <input onChange={this.handleQueryChange.bind(this)}
+                  value={this.state.input}
+                  placeholder="Filter by agent, space, system or property name"/>
         </div>
-        <SuggestionResult 
-          result={this.props.suggestions.get("result")} 
+        <SuggestionResult
+          result={this.props.suggestions.get("result")}
           request={this.props.suggestions.get("request")}
         />
       </div>

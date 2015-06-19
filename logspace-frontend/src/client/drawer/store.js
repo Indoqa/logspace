@@ -34,16 +34,24 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
       break
 
     case timeSeriesActions.onEditTimeSeries:
-      setActivePanel(Panels.EDIT_TIMESERIES)
+      setActivePanel(Panels.EDIT_TIMESERIES, true)
       break
 
     case optionsActions.onShowOptions:
       setActivePanel(Panels.OPTIONS)
       break
 
-    case timeWindowActions.onTimeWindowChange:
+    case timeWindowActions.selectCustomDate:
       setActivePanel(null)
       break
+
+    case timeWindowActions.selectPredefinedDate:
+      setActivePanel(null)
+      break  
+
+    case timeWindowActions.selectDynamicDate:
+      setActivePanel(null)
+      break    
 
     case drawerActions.onCloseDrawer:
       setActivePanel(null)
@@ -59,11 +67,14 @@ export const DrawerStore_dispatchToken = register(({action, data}) => {
 
     case resultActions.refreshResult:
       setActivePanel(null)
-      break  
+      break
   }
 })
 
-function setActivePanel(panel) {
+function setActivePanel(panel, omitClose=false) {
+  if(!omitClose && panel === viewCursor().get('activePanel')) {
+    panel = null
+  }
   const showPanel = panel !== null
 
   viewCursor(view => {

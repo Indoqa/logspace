@@ -16,12 +16,12 @@ require('./time-window-values.styl')
 export default class TimeWindowValues extends Component {
 
   render() {
+    console.log(this.props.timeWindow.get('gap').toJS())
+
     return (
-      <div className='time-window-values'>
-        <div>from: {this.props.timeWindow.get('start')} </div>
-        <div>to: {this.props.timeWindow.get('end')} </div>
-        <div>gap: {this.props.timeWindow.get('gap')} seconds</div>
-        <button onClick={() => onShowTimeWindowForm()}>change</button>
+      <div className='time-window-values' onClick={() => onShowTimeWindowForm()}>
+        <span className='gap'>{this.props.timeWindow.get('gap').get('amount')} {this.props.timeWindow.get('gap').get('unit').get('short')}</span>
+        <span dangerouslySetInnerHTML={{__html: this.props.timeWindow.get('label')}} />
       </div>
     )
   }

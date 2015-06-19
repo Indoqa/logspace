@@ -8,22 +8,25 @@
 @require '../app/variables'
 
 .chart-header
-   background-color $color-primary
+   background-color $color1
    text-align center
    height $header-height
-   .chart-title 
+
+   .chart-title
      padding-top 4px
-    label
-      color $color3
-      font-weight 700
-      font-size 2.1rem
-    input
-      font-weight 700
-      font-size 2.1rem
-      color #00
-      width 300px
-  .chart-options 
+     font-size 1.8rem
+     text-transform uppercase
+
+     label
+       color $color-text-inverted
+       font-family $font-title
+       line-height 3.4rem
+
+     input
+       color $color-text
+       width 300px
+
+  .chart-options
     position absolute
     right 10px
     top 5px
-  

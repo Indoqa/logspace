@@ -11,8 +11,6 @@ import immutable from 'immutable';
 import Component from '../components/component.react';
 import TimeSeriesItem  from '../time-series/time-series-item.react'
 
-require('./time-series-list.styl')
-
 export default class TimeSeriesList extends Component {
   render() {
     const items = this.props.items;

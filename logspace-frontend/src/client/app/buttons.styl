@@ -3,52 +3,70 @@
  * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
- * is available at http://www.eclipse.org/legal/epl-v10.html.
+ * is available at http//www.eclipse.org/legal/epl-v10.html.
  */
 .btn-floating
-  background-color: #26a69a;
-  border-radius: 50%;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  height: 37px;
-  line-height: 37px;
-  overflow: hidden;
-  padding: 0;
-  position: relative;
-  transition: all 0.3s ease 0s;
-  vertical-align: middle;
-  width: 37px;
-  z-index: 1;
-
-.waves-effect
-  -moz-user-select: none;
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-  transition: all 0.3s ease-out 0s;
-  vertical-align: middle;
-  will-change: opacity, transform;
-  z-index: 1;
-
-.btn-large
   background-color $color-primary
-  color $color3
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.2s ease-out 0s;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.18), 0 2px 10px 0 rgba(0, 0, 0, 0.14);
-  border-width 0
+  border-radius 50%
+  color $color-text-inverted
+  cursor pointer
+  display inline-block
+  height 37px
+  line-height 37px
+  overflow hidden
+  padding 0
+  position relative
+  transition all 0.3s ease 0s
+  vertical-align middle
   height 5.5rem
   width 5.5rem
+  z-index 1
+
+.waves-effect
+  cursor pointer
+  display inline-block
+  overflow hidden
+  position relative
+  transition all 0.3s ease-out 0s
+  vertical-align middle
+  will-change opacity, transform
+  z-index 1
+
+.btn, .btn-large
+  background-color $color-primary
+  color $color-text-inverted
+  cursor pointer
+  letter-spacing 0.5px
+  text-align center
+  text-decoration none
+  transition all 0.2s ease-out 0s
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  border-width 0
 
   i
     font-weight 700
     font-style normal
     font-size 2.2rem
 
+.btn
+  border: medium none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  outline: 0 none;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  vertical-align: middle;
+
+.btn-large:hover, .btn:hover
+  background-color lighten($color-primary, 10%)
+
+.btn-large:hover, .btn-floating:hover, .btn-highlight:hover
+  box-shadow 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+
 .btn-highlight
   background-color $color-secondary
+
+.btn-highlight:hover
+  background-color lighten($color-secondary, 10%)
