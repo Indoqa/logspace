@@ -52,22 +52,13 @@ export default class Chart extends Component {
     this.toggleLoading(false)
   }
 
-
-  componentDidMount() {
-    this.chart = c3.generate(this.chartOptions())
-  }
-
-  componentWillUnmount() {
-    this.chart.destroy()
-  }
-
   componentDidUpdate() {
     if (this.props.result.get("loading")) {
       return
     }
 
     if (this.props.result.get("empty") || this.props.result.get("error")) {
-      this.chart.unload()
+      this.clearChart()
       return
     }
 
@@ -77,27 +68,11 @@ export default class Chart extends Component {
       return
     }
 
+    this.clearChart()
+
     const chartData = this.props.result.get("chartData").toJS()
-    const currentData = this.chart.data()
-    const keysToUnload = currentData.map(function(item) {
-      if (chartData.columnKeys.indexOf(item.id) > -1 ) {
-        return null
-      }
-      return item.id
-    })
-
-    this.chart.load(
-      {
-        colors: chartData.colors,
-        columns: chartData.columns,
-        axes: chartData.axes,
-        unload: keysToUnload
-      }
-    )
-
-    this.chart.data.names(chartData.names)
-    this.chart.axis.range(chartData.axisRanges)
-
+    
+    this.chart = c3.generate(this.chartOptions(chartData))
     this.originalColumns = chartData.originalColumns
   }
 
@@ -109,6 +84,12 @@ export default class Chart extends Component {
 
   rememberPreviousChartType(type) {
     this.prevType = type
+  }
+
+  clearChart() {
+    if (this.chart) {
+      try { this.chart.destroy() } catch(e) {}
+    }
   }
 
   calculateChartSize() {
@@ -142,6 +123,11 @@ export default class Chart extends Component {
 
   formatXAxis(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
+
+    if (!date) {
+      return
+    }
+
     const unit = this.props.result.get('gap').get('unit')
 
     switch (unit.get('id')) {
@@ -172,6 +158,11 @@ export default class Chart extends Component {
 
   formatXTooltip(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
+
+    if (!date) {
+      return
+    }
+
     const unit = this.props.result.get('gap').get('unit')
 
     switch (unit.get('id')) {
@@ -217,7 +208,7 @@ export default class Chart extends Component {
     )
   }
 
-  chartOptions() {
+  chartOptions(chartData) {
     const chartSize = this.calculateChartSize()
     const me = this
 
@@ -231,14 +222,18 @@ export default class Chart extends Component {
     return {
       data: {
           x: 'x',
-          columns: [],
-          type: defaultType
+          type: defaultType,
+          colors: chartData.colors,
+          columns: chartData.columns,
+          names: chartData.names,
+          axes: chartData.axes
         },
       axis: {
         x: {
           type: 'category',
           tick: {
-            count: 10,
+            culling: true,
+            fit: false,
             height: 130,
             rotate: 0,
             format: formatXAxisCallback
@@ -246,14 +241,11 @@ export default class Chart extends Component {
         },
         y: {
           show: true,
-          label: 'y1',
-          padding: 0
+          padding: 0,
+          min: chartData.axisRanges.min.y,
+          max: chartData.axisRanges.max.y
         },
-        y2: {
-          show: true,
-          label: 'y2',
-          padding: 0
-        }
+        y2: this.getY2Options(chartData)
       },
       grid: {
         x: {
@@ -282,4 +274,19 @@ export default class Chart extends Component {
       onresized: debouncedChartResize
     }
   }
+
+  getY2Options(chartData) {
+    if (chartData.axisRanges.min.y2 == 0 && chartData.axisRanges.max.y2 == 0) {
+      return {
+        show: false
+      }  
+    }
+
+    return {
+      show: true,
+      padding: 0,
+      min: chartData.axisRanges.min.y2,
+      max: chartData.axisRanges.max.y2
+    }
+  } 
 }
