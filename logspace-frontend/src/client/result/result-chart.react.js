@@ -232,7 +232,7 @@ export default class Chart extends Component {
         x: {
           type: 'category',
           tick: {
-            culling: true,
+            count: this.getMaxTicks(chartData),
             fit: false,
             height: 130,
             rotate: 0,
@@ -273,6 +273,16 @@ export default class Chart extends Component {
       },
       onresized: debouncedChartResize
     }
+  }
+
+  getMaxTicks(chartData) {
+    console.log(chartData.xvalues.length)
+
+    if (chartData.xvalues.length < 10) {
+      return chartData.xvalues.length
+    }
+
+    return 10
   }
 
   getY2Options(chartData) {
