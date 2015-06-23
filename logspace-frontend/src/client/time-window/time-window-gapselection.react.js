@@ -16,14 +16,24 @@ import {units} from './constants'
 export default class GapSelection extends Component {
   constructor(props) {
     super(props);
-
-    console.log('aaaaaaa')
-
+    
     this.state = { 
       localState: Immutable.fromJS({
         gap: props.value
       }) 
     }
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      localState: this.state.localState.merge({
+        gap: {
+          amount: nextProps.value.get('amount'),
+          unit: nextProps.value.get('unit')
+        }
+      })
+    })
   }
 
   onAmountChange(amount) {
