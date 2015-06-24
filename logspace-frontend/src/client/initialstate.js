@@ -33,6 +33,10 @@ export default {
     }
   },
   'timeSeries': [],
+  'timeSeriesDefaults': {
+    propertyStack: [],
+    aggregate: 'count'
+  },
   'editedTimeSeries': {},
   'result': {
     'translatedResult': {

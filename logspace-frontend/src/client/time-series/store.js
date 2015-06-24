@@ -15,6 +15,7 @@ import {getRandomString} from '../../lib/getrandomstring'
 import {COLORS} from './constants'
 
 import {timeSeriesCursor} from '../state'
+import {timeSeriesDefaultsCursor} from '../state'
 import {editedTimeSeriesCursor} from '../state'
 
 import * as actions from './actions'
@@ -60,6 +61,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     case actions.onNewTimeSeries:
       var nextColor = getNextColor()
       var defaultProperty = getDefaultProperty(data.propertyDescriptions)
+      var defaultAggregation = getDefaultAggregation(data.propertyDescriptions)
 
       editedTimeSeriesCursor(editedTimeSeries => {
         const item = new TimeSeriesItem({
@@ -70,7 +72,7 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
           space: data.space,
           system: data.system,
           propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
-          aggregate: 'count',
+          aggregate: defaultAggregation,
           color: nextColor
         }).toMap()
 
@@ -88,6 +90,13 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.setIn(['newItem', data.key],  data.value)
       })
+
+      if (data.key === 'aggregate') {
+        console.log('update!')
+        timeSeriesDefaultsCursor(defaults => {
+          return defaults.set('aggregate',  data.value)
+        })  
+      }
     break
 
     case actions.onAxisChanged:
@@ -115,16 +124,15 @@ function getNextColor() {
   return freeColors[0]
 }
 
-// FIXME rpoetz: Die For-Schleife ist sinnlos
 function getDefaultProperty(propertyDescriptions) {
-  for (var i = 0; i < propertyDescriptions.length; i++) {
-    let propertyDescription = propertyDescriptions[0]
-    if (propertyDescription.propertyType != 'STRING') {
-      return propertyDescription.id
-    }
-  }
+  const suggestions = timeSeriesDefaultsCursor().get('propertyChain')
 
-  return null
+  return propertyDescriptions[0].id
+}
+
+function getDefaultAggregation(propertyDescriptions) {
+   console.log(timeSeriesDefaultsCursor().get('aggregate'))
+  return timeSeriesDefaultsCursor().get('aggregate')
 }
 
 function addItem(item) {
