@@ -1,0 +1,9 @@
+{
+  "agent-orders" : [ {
+    "id" : "deep-importer/Dry-Run",
+    "trigger-type" : "EVENT",
+    "trigger-parameter" : ""
+  } ],
+  "commit-max-count" : 1000,
+  "commit-max-seconds" : 60
+}
