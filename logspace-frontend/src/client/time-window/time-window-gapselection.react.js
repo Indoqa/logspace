@@ -74,9 +74,11 @@ export default class GapSelection extends Component {
 
   render() {
     return (
-      <span>
+      <span className='gapselection'>
         <input 
           size='3'
+          type="number"
+          pattern='[0-9]{1,3}'
           value={this.state.localState.get('gap').get('amount')} 
           onChange={(event) => this.onAmountChange(event.target.value)} 
         />
