@@ -33,16 +33,19 @@
       <groupId>io.logspace</groupId>
       <artifactId>logspace-agent-api</artifactId>
     </dependency>
-    
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-agent-controller</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+        
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent-controller</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
