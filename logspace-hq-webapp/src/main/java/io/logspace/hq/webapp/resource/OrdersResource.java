@@ -39,8 +39,8 @@ public class OrdersResource extends AbstractSpaceResource {
 
     private static final String PARAMETER_CONTROLLER_ID = "controller-id";
 
-    @Value("${logspace.hq-webapp.configs-directory}")
-    private String configsDirectory;
+    @Value("${logspace.hq-webapp.orders-directory}")
+    private String ordersDirectory;
 
     private static DateFormat createDateFormat(String format) {
         DateFormat dateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
@@ -83,8 +83,8 @@ public class OrdersResource extends AbstractSpaceResource {
         Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
     }
 
-    private File getConfigFile(String controllerId) {
-        return new File(this.configsDirectory, controllerId + ".json");
+    private File getOrderFile(String controllerId) {
+        return new File(this.ordersDirectory, controllerId + ".json");
     }
 
     private String getOrder(Request req, Response res) throws IOException {
@@ -93,7 +93,7 @@ public class OrdersResource extends AbstractSpaceResource {
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
         this.logger.debug("Retrieving order for AgentController with ID '{}'.", controllerId);
 
-        File file = this.getConfigFile(controllerId);
+        File file = this.getOrderFile(controllerId);
         if (!file.exists()) {
             throw new OrderNotFoundException("There is no order for controller with ID '" + controllerId + "'.");
         }

@@ -77,11 +77,11 @@ public class DemoHqMode implements HqMode {
     }
 
     private void initializeDemoConfigs() {
-        File configsDir = new File(this.getBaseDir(), "configs");
-        System.setProperty("logspace.hq-webapp.configs-directory", configsDir.getAbsolutePath());
+        File ordersDir = new File(this.getBaseDir(), "orders");
+        System.setProperty("logspace.hq-webapp.orders-directory", ordersDir.getAbsolutePath());
 
-        configsDir.mkdirs();
-        this.createFile("/demo/configs/", configsDir, "logspace-demo.json");
+        ordersDir.mkdirs();
+        this.createFile("/demo/orders/", ordersDir, "logspace-demo.json");
     }
 
     private void initializeDemoLogging() {
