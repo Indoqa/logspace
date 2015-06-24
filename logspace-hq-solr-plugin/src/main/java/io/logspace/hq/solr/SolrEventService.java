@@ -335,7 +335,8 @@ public class SolrEventService implements EventService {
     private AgentDescription getAgentDescription(String globalAgentId) throws SolrServerException, IOException {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
-        if (agentDescription == null) {
+        if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
+                || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
