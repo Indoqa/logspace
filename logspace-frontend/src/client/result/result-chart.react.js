@@ -101,7 +101,7 @@ export default class Chart extends Component {
 
     const headerheight = 40
     const sidebarWidth = 250
-    const chartPadding = 20 * 2
+    const chartPadding = 30 * 2
     const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding

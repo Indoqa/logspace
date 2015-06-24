@@ -7,6 +7,7 @@
  */
 import Immutable from 'immutable'
 import axios from 'axios'
+import moment from 'moment'
 
 import {register,waitFor} from '../dispatcher'
 
@@ -22,20 +23,25 @@ import {resultCursor, timeSeriesCursor, timeWindowCursor} from '../state'
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store'
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store'
 
+let nextAutoPlay = null
+
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.selectCustomDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(false)
       refreshResult()
       break
 
     case timeWindowActions.selectPredefinedDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(false)
       refreshResult()
       break  
 
     case timeWindowActions.selectDynamicDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(true)
       refreshResult()
       break    
 
@@ -64,10 +70,29 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
         return result.set('chartType', data)
       })
       break  
+
+    case resultActions.setAutoPlay:
+      setAutoPlay(data)
+
+      if (data) {
+        refreshResult()  
+      } else {
+        clearAutoPlay()  
+      }
+
+      break  
   }
 })
 
+function setAutoPlay(enabled) {
+  resultCursor(result => {
+    return result.set('autoPlay', enabled)
+  })
+}
+
 function refreshResult() {
+  clearAutoPlay()  
+
   var timeSeries = timeSeriesCursor()
   var timeWindow = timeWindowCursor()
 
@@ -118,6 +143,8 @@ function storeEmptyResult() {
       error: false
     }))
   })
+
+  triggerNextAutoPlay()
 }
 
 function storeLoadingResult() {
@@ -127,6 +154,10 @@ function storeLoadingResult() {
       loading: true,
       error: false
     }))
+  })
+
+  resultCursor(result => {
+    return result.set('autoPlaySchedule', null)
   })
 }
 
@@ -140,6 +171,8 @@ function storeErrorResult(serverResponse) {
       errorText: serverResponse.statusText
     }))
   })
+
+  triggerNextAutoPlay()
 }
 
 function storeSuccessResult(timeSeries, responseJson, timeWindow) {
@@ -151,7 +184,26 @@ function storeSuccessResult(timeSeries, responseJson, timeWindow) {
       error: false,
       loading: false,
       chartData: chartData,
+      lastUpdated: moment(),
       gap: timeWindow.get('selection').get('gap')
     }))
   })
+
+  triggerNextAutoPlay()
+}
+
+function triggerNextAutoPlay() {
+  if (resultCursor().get('autoPlay')) {
+    nextAutoPlay = setTimeout(refreshResult, 15000)
+
+    resultCursor(result => {
+      return result.set('autoPlaySchedule', moment())
+    })
+  }
+}
+
+function clearAutoPlay() {
+  if(nextAutoPlay) {
+    clearTimeout(nextAutoPlay)
+  }
 }

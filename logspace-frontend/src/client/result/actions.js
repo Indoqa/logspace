@@ -20,7 +20,11 @@ export function saveChartTitle(title) {
 export function setChartType(type) {
   dispatch(setChartType, type);
 }
+
+export function setAutoPlay(enabled) {
+  dispatch(setAutoPlay, enabled);
+}
   
 setToString('result', {
-  refreshResult, saveChartTitle, setChartType
+  refreshResult, saveChartTitle, setChartType,setAutoPlay
 });  

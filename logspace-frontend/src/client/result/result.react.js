@@ -10,6 +10,7 @@ import React from 'react'
 import Component from '../components/component.react'
 import Chart from './result-chart.react'
 import Header from './result-header.react'
+import Footer from './result-footer.react'
 
 export default class Result extends Component {
 
@@ -17,6 +18,8 @@ export default class Result extends Component {
     return (
       <div>
         <Header 
+          autoPlay={this.props.autoPlay}
+          autoPlaySchedule={this.props.autoPlaySchedule}
           chartTitle={this.props.chartTitle}
           chartTitleEditable={this.props.chartTitleEditable}
           chartType={this.props.chartType}
@@ -26,6 +29,8 @@ export default class Result extends Component {
           result={this.props.result} 
           chartType={this.props.chartType}
         />
+        <Footer result={this.props.result}  />
+
       </div>
     )
   }

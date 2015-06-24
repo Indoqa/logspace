@@ -43,7 +43,8 @@ export default {
       'warnings': []
     },
     'chartTitle': 'New Logspace Chart',
-    'chartType': 'spline'
+    'chartType': 'spline',
+    'autoPlay': false
   },
   'suggestions': {
     'request' : {

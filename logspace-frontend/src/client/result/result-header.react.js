@@ -11,27 +11,71 @@ import classnames from 'classnames'
 import Component from '../components/component.react'
 import Editable from '../editable/editable.react'
 import Chart from './result-chart.react'
+import moment from 'moment'
 
 import {onEditableState} from '../editable/actions'
-import {saveChartTitle, setChartType} from './actions'
+import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from './actions'
 
 require ('./result-header.styl')
 
 export default class Header extends Component {
+
+  constructor(props) {
+    super(props)
+    
+    var me = this
+    setInterval(function(){me.onProgress()}, 500)
+  }
+
+  onProgress() {
+    const label = document.getElementById('progress')
+
+    if (!label) {
+      return
+    }
+
+    if (!this.props.autoPlaySchedule) {
+      label.innerHTML = 15
+      return
+    }
+
+    const difference = moment().diff(this.props.autoPlaySchedule, 'seconds') 
+    label.innerHTML = (15-difference)
+  }
 
   onChartTitleSaved(title, hide) {
     saveChartTitle(title)
     hide()
   }
 
+  getPlayControls() {
+    if (this.props.autoPlay) {
+           return (
+        <span>
+          <span className='option pause' onClick={() => setAutoPlay(false)}/>
+          <span className='option progress' onClick={refreshResult}>
+            <span id='progress'> 15 </span>
+          </span>
+        </span>
+      )
+    }
+
+    return (
+      <span>
+        <span className='option play' onClick={() => setAutoPlay(true)} />
+        <span className='option refresh' onClick={refreshResult}/>
+      </span>  
+    )
+  }
+
   render() {
+    const playControls = this.getPlayControls()
+ 
     return (
       <div className='chart-header'>
         <div className='chart-options'>
-          <button>play</button>
-          <button>refresh</button>
-          <select onChange={(e) => setChartType(e.target.value)}
-              value={this.props.chartType}>
+          {playControls}
+          <select onChange={(e) => setChartType(e.target.value)} value={this.props.chartType}>
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>
             <option value={'spline'}>spline</option>

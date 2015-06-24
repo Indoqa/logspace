@@ -66,6 +66,8 @@ export default class TimeSeries extends Component {
           <Result
             series={this.props.timeSeries}
             result={this.props.result}
+            autoPlay={this.props.autoPlay}
+            autoPlaySchedule={this.props.autoPlaySchedule}
             chartTitle={this.props.chartTitle}
             chartTitleEditable={this.props.chartTitleEditable}
             chartType={this.props.chartType}
