@@ -52,6 +52,7 @@ export default class TimeSeries extends Component {
             <Drawer
               suggestions={this.props.suggestions}
               timeWindow={this.props.timeWindow}
+              timeWindowDynamic={this.props.timeWindowDynamic}
               timeWindowActiveTab={this.props.timeWindowActiveTab} 
               timeSeries={this.props.timeSeries}
               editedTimeSeries={this.props.editedTimeSeries}

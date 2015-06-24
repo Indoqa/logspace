@@ -25,14 +25,8 @@ export default class TimeWindowDynamic extends Component {
     
     this.state = { 
       localState: Immutable.fromJS({
-         range: {
-          amount: props.timeWindow.get("dynamicDuration"),
-          unit: props.timeWindow.get("dynamicUnit")
-         }, 
-         gap: {
-          amount: 1,
-          unit: props.timeWindow.get("dynamicUnit")
-         }
+         range: props.dynamic.get("range"), 
+         gap: props.dynamic.get("gap")
       }) 
     }
   }
@@ -81,6 +75,28 @@ export default class TimeWindowDynamic extends Component {
             <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
           </div>         
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     )
   }

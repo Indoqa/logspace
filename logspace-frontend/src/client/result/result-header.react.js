@@ -28,6 +28,8 @@ export default class Header extends Component {
     return (
       <div className='chart-header'>
         <div className='chart-options'>
+          <button>play</button>
+          <button>refresh</button>
           <select onChange={(e) => setChartType(e.target.value)}
               value={this.props.chartType}>
             <option value={'bar'}>bar</option>

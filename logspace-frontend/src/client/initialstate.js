@@ -7,7 +7,7 @@
  */
 
 import messages from './messages';
-import {selections} from './time-window/constants'
+import {selections, units} from './time-window/constants'
 import Immutable from 'immutable'
 
 const initialLocale = 'en';
@@ -20,7 +20,17 @@ export default {
   },
   'timeWindow': {
     selection: selections[0],
-    activeTab: 1
+    activeTab: 1,
+    dynamic: {
+      range: {
+        amount: 60,
+        unit: units.get('minute')  
+      },
+      gap: {
+        amount: 1,
+        unit: units.get('minute')  
+      }
+    }
   },
   'timeSeries': [],
   'editedTimeSeries': {},
