@@ -89,6 +89,7 @@
     <module>logspace-agent-journal</module>
     <module>logspace-agent-os</module>
     <module>logspace-agent-solr</module>
+    <module>logspace-dist</module>
     <module>logspace-frontend</module>
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
@@ -622,6 +623,11 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.4.0</version>
       </plugin>
+      <plugin>
+          <groupId>de.jutzig</groupId>
+          <artifactId>github-release-plugin</artifactId>
+          <version>1.1.1</version>
+      </plugin>      
     </plugins>
   </build>
 
