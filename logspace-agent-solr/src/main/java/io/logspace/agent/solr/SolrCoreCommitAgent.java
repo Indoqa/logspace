@@ -7,19 +7,32 @@
  */
 package io.logspace.agent.solr;
 
-import static io.logspace.agent.api.order.TriggerType.Event;
+import static io.logspace.agent.solr.SolrEventBuilder.getLong;
+import io.logspace.agent.api.AbstractApplicationAgent;
 
+import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
+import org.apache.solr.core.SolrEventListener;
 import org.apache.solr.search.SolrIndexSearcher;
 
-public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
+public class SolrCoreCommitAgent extends AbstractApplicationAgent implements SolrEventListener {
 
-    public SolrCoreCommitAgent(SolrCore core) {
-        super(core, "/commit", Event);
+    private SolrCore solrCore;
 
-        this.getSolrCore().registerNewSearcherListener(this);
-        this.getSolrCore().getUpdateHandler().registerCommitCallback(this);
-        this.getSolrCore().getUpdateHandler().registerSoftCommitCallback(this);
+    public SolrCoreCommitAgent(SolrCore solrCore) {
+        super(solrCore.getName() + "/commit", "solr/core/commit");
+
+        this.solrCore = solrCore;
+        SolrCore.log.info("Initializing " + this.getClass().getSimpleName() + " for Core '" + this.solrCore + "'.");
+
+        this.solrCore.registerNewSearcherListener(this);
+        this.solrCore.getUpdateHandler().registerCommitCallback(this);
+        this.solrCore.getUpdateHandler().registerSoftCommitCallback(this);
+    }
+
+    @Override
+    public void init(@SuppressWarnings("rawtypes") NamedList args) {
+        // do nothing
     }
 
     @Override
@@ -53,5 +66,9 @@ public class SolrCoreCommitAgent extends AbstractSolrCoreAgent {
         SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getSystem(),
                 this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
+    }
+
+    private String getCoreName() {
+        return this.solrCore.getName();
     }
 }

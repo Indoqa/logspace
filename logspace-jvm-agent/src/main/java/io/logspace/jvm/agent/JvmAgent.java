@@ -7,9 +7,8 @@
  */
 package io.logspace.jvm.agent;
 
-import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AbstractSchedulerAgent;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.GarbageCollectorMXBean;
@@ -21,12 +20,12 @@ import java.lang.management.ThreadMXBean;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
-public final class JvmAgent extends AbstractAgent {
+public final class JvmAgent extends AbstractSchedulerAgent {
 
     public static final String SYSTEM_PROPERTY_JVM_IDENTIFIER = "io.logspace.jvm-identifier";
 
     private JvmAgent() {
-        super("jvm/" + getJvmIdentifier(), "jvm", TriggerType.Cron);
+        super("jvm/" + getJvmIdentifier(), "jvm");
     }
 
     public static JvmAgent create() {

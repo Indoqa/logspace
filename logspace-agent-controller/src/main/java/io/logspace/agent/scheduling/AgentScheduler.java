@@ -76,9 +76,15 @@ public class AgentScheduler {
 
             this.agentOrders.put(agentId, eachAgentOrder);
 
-            if (eachAgentOrder.getTriggerType() == TriggerType.Cron) {
+            if (eachAgentOrder.getTriggerType() == null) {
+                this.logger.error("Found order for agent with ID '{}' that has no trigger type. "
+                        + "This agent will not be able to produce any events!", agentId);
+                continue;
+            }
+
+            if (eachAgentOrder.getTriggerType() == TriggerType.Scheduler) {
                 if (!agentIds.contains(agentId)) {
-                    this.logger.warn("Cannot schedule cron trigger for agent with ID '{}' because no such agent exists!", agentId);
+                    this.logger.warn("Cannot schedule agent with ID '{}' because no such agent exists!", agentId);
                     continue;
                 }
 
@@ -172,7 +178,7 @@ public class AgentScheduler {
         jobDataMap.put(KEY_AGENT_EXECUTOR, this.agentExecutor);
         jobDataMap.put(KEY_AGENT_ORDER, agentOrder);
 
-        JobDetail job = newJob(AgentExecutionJob.class).withIdentity(agentOrder.getId(), AGENT_SCHEDULER_GROUP)
+        JobDetail job = newJob(ScheduledAgentExecutionJob.class).withIdentity(agentOrder.getId(), AGENT_SCHEDULER_GROUP)
                 .usingJobData(jobDataMap).build();
 
         Trigger trigger = newTrigger().withIdentity(agentOrder.getId() + "-trigger", AGENT_SCHEDULER_GROUP).startNow()
@@ -186,7 +192,7 @@ public class AgentScheduler {
     }
 
     @DisallowConcurrentExecution
-    public static class AgentExecutionJob implements Job {
+    public static class ScheduledAgentExecutionJob implements Job {
 
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -195,7 +201,7 @@ public class AgentScheduler {
             AgentExecutor agentExecutor = (AgentExecutor) jobDataMap.get(KEY_AGENT_EXECUTOR);
             AgentOrder agentOrder = (AgentOrder) jobDataMap.get(KEY_AGENT_ORDER);
 
-            agentExecutor.executeAgent(agentOrder);
+            agentExecutor.executeScheduledAgent(agentOrder);
         }
     }
 

@@ -7,15 +7,14 @@
  */
 package io.logspace.agent.journal;
 
-import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.api.AbstractApplicationAgent;
 
-public final class JournalAgent extends AbstractAgent {
+public final class JournalAgent extends AbstractApplicationAgent {
 
     public static final String TYPE = "journal";
 
     private JournalAgent(String id) {
-        super(id, TYPE, TriggerType.Event);
+        super(id, TYPE);
     }
 
     public static JournalAgent create(String id) {

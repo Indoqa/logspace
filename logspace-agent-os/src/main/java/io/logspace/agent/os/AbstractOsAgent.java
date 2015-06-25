@@ -7,13 +7,12 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.api.AbstractSchedulerAgent;
 
-public abstract class AbstractOsAgent extends AbstractAgent {
+public abstract class AbstractOsAgent extends AbstractSchedulerAgent {
 
     protected AbstractOsAgent(String type) {
-        super(type, type, TriggerType.Cron);
+        super(type, type);
     }
 
     public final void execute() {

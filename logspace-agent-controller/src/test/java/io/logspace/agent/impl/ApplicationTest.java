@@ -7,11 +7,10 @@
  */
 package io.logspace.agent.impl;
 
-import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AbstractApplicationAgent;
 import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.ImmutableEvent;
 import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.test.TestAgentController;
 
 import org.junit.AfterClass;
@@ -45,10 +44,10 @@ public class ApplicationTest {
         }
     }
 
-    public static class TestAgent extends AbstractAgent {
+    public static class TestAgent extends AbstractApplicationAgent {
 
         public TestAgent() {
-            super("test", "test", TriggerType.Event);
+            super("test", "test");
         }
 
         public void triggerEvent() {

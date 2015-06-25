@@ -7,11 +7,9 @@
  */
 package io.logspace.agent.cxf;
 
-import static io.logspace.agent.api.order.TriggerType.Event;
-import io.logspace.agent.api.AbstractAgent;
-import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AbstractApplicationAgent;
+import io.logspace.agent.api.ApplicationAgent;
 import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.AgentOrder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +26,7 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 
-public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Agent {
+public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements ApplicationAgent {
 
     private DelegateAgent delegateAgent;
 
@@ -36,11 +34,6 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
 
     public CxfOutAgent() {
         super(Phase.PRE_STREAM);
-    }
-
-    @Override
-    public void execute(AgentOrder agentOrder) {
-        this.delegateAgent.execute(agentOrder);
     }
 
     @Override
@@ -67,12 +60,12 @@ public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements Ag
         this.agentId = agentId;
     }
 
-    private static class DelegateAgent extends AbstractAgent {
+    private static class DelegateAgent extends AbstractApplicationAgent {
 
         private static final String AGENT_ID = "CXF";
 
         public DelegateAgent(String id) {
-            super(id, AGENT_ID, Event);
+            super(id, AGENT_ID);
         }
 
         public void sendCxfEvent(Message message) {

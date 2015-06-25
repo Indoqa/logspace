@@ -10,12 +10,11 @@ package io.logspace.it.test;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import io.logspace.agent.api.AbstractAgent;
+import io.logspace.agent.api.AbstractSchedulerAgent;
 import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.DefaultEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 import io.logspace.agent.hq.HqAgentController;
 import io.logspace.it.AbstractLogspaceTest;
 import io.logspace.it.InfrastructureRule;
@@ -102,12 +101,12 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
     }
 
-    public static class TestAgent extends AbstractAgent {
+    public static class TestAgent extends AbstractSchedulerAgent {
 
         private int eventCount;
 
         public TestAgent() {
-            super("TEST-AGENT-001", "TEST-AGENT", TriggerType.Cron);
+            super("TEST-AGENT-001", "TEST-AGENT");
         }
 
         @Override

@@ -9,11 +9,7 @@ package io.logspace.agent.api;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -25,7 +21,7 @@ import java.util.Set;
  * <strong>off</strong>.
  *
  */
-public abstract class AbstractAgent implements Agent {
+abstract class AbstractAgent implements Agent {
 
     private final String id;
     private final String type;
@@ -33,28 +29,14 @@ public abstract class AbstractAgent implements Agent {
     private AgentCapabilities capabilities;
     private AgentController agentController;
 
-    protected AbstractAgent(String id, String type, TriggerType triggerType) {
+    protected AbstractAgent(String id, String type, TriggerType[] triggerTypes) {
         super();
 
         this.id = id;
         this.type = type;
-        this.updateCapabilities(triggerType);
+        this.updateCapabilities(triggerTypes);
 
         this.setAgentController(AgentControllerProvider.getAgentController());
-    }
-
-    private static TriggerType[] addBaseTrigger(TriggerType triggerTypes) {
-        Set<TriggerType> result = new HashSet<TriggerType>();
-
-        result.add(TriggerType.Off);
-        result.add(triggerTypes);
-
-        return result.toArray(new TriggerType[result.size()]);
-    }
-
-    @Override
-    public void execute(AgentOrder agentOrder) {
-        // default does nothing
     }
 
     @Override
@@ -88,12 +70,12 @@ public abstract class AbstractAgent implements Agent {
         this.agentController.send(event);
     }
 
-    protected final void updateCapabilities(TriggerType triggerTypes) {
+    protected final void updateCapabilities(TriggerType[] triggerTypes) {
         AgentCapabilities agentCapabilities = new AgentCapabilities();
 
         agentCapabilities.setId(this.getId());
         agentCapabilities.setType(this.getType());
-        agentCapabilities.setSupportedTriggerTypes(addBaseTrigger(triggerTypes));
+        agentCapabilities.setSupportedTriggerTypes(triggerTypes);
 
         this.capabilities = agentCapabilities;
     }

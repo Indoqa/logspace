@@ -7,7 +7,12 @@
  */
 package io.logspace.agent.solr;
 
-import static io.logspace.agent.api.order.TriggerType.Cron;
+import static io.logspace.agent.solr.SolrEventBuilder.getBoolean;
+import static io.logspace.agent.solr.SolrEventBuilder.getDouble;
+import static io.logspace.agent.solr.SolrEventBuilder.getFloat;
+import static io.logspace.agent.solr.SolrEventBuilder.getInt;
+import static io.logspace.agent.solr.SolrEventBuilder.getLong;
+import io.logspace.agent.api.AbstractSchedulerAgent;
 import io.logspace.agent.api.order.AgentOrder;
 
 import java.text.NumberFormat;
@@ -19,14 +24,19 @@ import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.core.SolrInfoMBean;
 
-public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
+public class SolrCoreStatisticsAgent extends AbstractSchedulerAgent {
 
     private static final int INDEX_SIZE_UNIT_FACTOR = 1024;
     private static final String FIELD_SIZE = "size";
     private static final String FIELD_CUMULATIVE_HITS = "cumulative_hits";
 
-    public SolrCoreStatisticsAgent(SolrCore core) {
-        super(core, "/statistics", Cron);
+    private final SolrCore solrCore;
+
+    public SolrCoreStatisticsAgent(SolrCore solrCore) {
+        super(solrCore.getName() + "/statistics", "solr/core/statistics");
+
+        this.solrCore = solrCore;
+        SolrCore.log.info("Initializing " + this.getClass().getSimpleName() + " for Core '" + this.solrCore + "'.");
     }
 
     private static long getIndexSize(NamedList<?> statistics) {
@@ -67,7 +77,7 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
         SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getId(), this.getSystem(),
                 this.getCoreName());
 
-        Map<String, SolrInfoMBean> infoRegistry = this.getSolrCore().getInfoRegistry();
+        Map<String, SolrInfoMBean> infoRegistry = this.solrCore.getInfoRegistry();
         this.addIndexStatistics(solrEventBuilder, infoRegistry);
         this.addUpdateStatistics(solrEventBuilder, infoRegistry);
         this.addReplicationStatistics(solrEventBuilder, infoRegistry);
@@ -166,6 +176,10 @@ public class SolrCoreStatisticsAgent extends AbstractSolrCoreAgent {
         solrEventBuilder.setUpdates(getLong(statistics, "cumulative_adds"));
         solrEventBuilder.setDeletes(getLong(statistics, "cumulative_deletesByQuery") + getLong(statistics, "cumulative_deletesById"));
         solrEventBuilder.setCommits(getLong(statistics, "commits"));
+    }
+
+    private String getCoreName() {
+        return this.solrCore.getName();
     }
 
     private static enum IndexUnit {

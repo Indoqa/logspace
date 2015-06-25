@@ -19,7 +19,7 @@ public interface AgentExecutor {
      *
      * @param agentOrder - The {@link AgentOrder} of the {@link Agent} to execute.
      */
-    void executeAgent(AgentOrder agentOrder);
+    void executeScheduledAgent(AgentOrder agentOrder);
 
     /**
      * Time-based execution of updates.

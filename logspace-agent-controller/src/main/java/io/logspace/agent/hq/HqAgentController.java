@@ -16,6 +16,7 @@ import io.logspace.agent.api.AgentControllerDescription.Parameter;
 import io.logspace.agent.api.AgentControllerException;
 import io.logspace.agent.api.AgentControllerInitializationException;
 import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.SchedulerAgent;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
@@ -142,14 +143,19 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     @Override
-    public void executeAgent(AgentOrder agentOrder) {
+    public void executeScheduledAgent(AgentOrder agentOrder) {
         Agent agent = this.getAgent(agentOrder.getId());
         if (agent == null) {
             this.logger.error("Could not execute agent with ID '" + agentOrder.getId() + "', because it does not exist.");
             return;
         }
 
-        agent.execute(agentOrder);
+        if (!(agent instanceof SchedulerAgent)) {
+            this.logger.error("Could not execute agent with ID '" + agentOrder.getId() + "', because it is not a scheduled agent.");
+            return;
+        }
+
+        ((SchedulerAgent) agent).execute(agentOrder);
     }
 
     @Override
@@ -166,7 +172,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
 
         TriggerType agentTriggerType = agentOrder.getTriggerType();
-        return agentTriggerType == TriggerType.Event || agentTriggerType == TriggerType.Cron;
+        return agentTriggerType == TriggerType.Application || agentTriggerType == TriggerType.Scheduler;
     }
 
     @Override

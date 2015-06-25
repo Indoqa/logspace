@@ -9,7 +9,7 @@ package io.logspace.agent.api.order;
 
 public enum TriggerType {
 
-    Event, Cron, Off;
+    Application, Scheduler, Off;
 
     public static TriggerType get(String name) {
         for (TriggerType eachTriggerType : TriggerType.values()) {
