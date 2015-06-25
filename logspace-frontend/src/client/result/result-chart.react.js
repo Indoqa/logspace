@@ -68,7 +68,7 @@ export default class Chart extends Component {
 
     if (this.props.result.get("empty")) {
       this.clearChart()
-      messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one time timeseries</small>'
+      messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one timeseries</small>'
       return
     }
 
