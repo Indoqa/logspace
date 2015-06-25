@@ -20,7 +20,6 @@ import './time-window.styl'
 
 export default class TimeWindow extends Component {
  render() {
-    console.log(this.props.activeTab)
     return (
       <div>
         <Tabs tabActive={this.props.activeTab} onAfterChange={onTabOpen}>

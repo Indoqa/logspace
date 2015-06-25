@@ -16,8 +16,6 @@ require('./time-window-values.styl')
 export default class TimeWindowValues extends Component {
 
   render() {
-    console.log(this.props.timeWindow.get('gap').toJS())
-
     return (
       <div className='time-window-values' onClick={() => onShowTimeWindowForm()}>
         <span className='gap'>{this.props.timeWindow.get('gap').get('amount')} {this.props.timeWindow.get('gap').get('unit').get('short')}</span>

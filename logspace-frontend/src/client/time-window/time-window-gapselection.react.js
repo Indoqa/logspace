@@ -16,14 +16,24 @@ import {units} from './constants'
 export default class GapSelection extends Component {
   constructor(props) {
     super(props);
-
-    console.log('aaaaaaa')
-
+    
     this.state = { 
       localState: Immutable.fromJS({
         gap: props.value
       }) 
     }
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      localState: this.state.localState.merge({
+        gap: {
+          amount: nextProps.value.get('amount'),
+          unit: nextProps.value.get('unit')
+        }
+      })
+    })
   }
 
   onAmountChange(amount) {
@@ -64,9 +74,11 @@ export default class GapSelection extends Component {
 
   render() {
     return (
-      <span>
+      <span className='gapselection'>
         <input 
           size='3'
+          type="number"
+          pattern='[0-9]{1,3}'
           value={this.state.localState.get('gap').get('amount')} 
           onChange={(event) => this.onAmountChange(event.target.value)} 
         />

@@ -96,8 +96,7 @@ export default class EditTimeSeries extends Component {
                   name="propertyId"
                   value={propertyId}
                   checked={propertyId === agentDescription.get("propertyId")}
-                  onChange={me.handleChange.bind(me)}
-                  disabled={property.get("propertyType") === "STRING"}>
+                  onChange={me.handleChange.bind(me)}>
                 </input>
                 <nbsp/>
                 <span> {property.get("name")} </span>

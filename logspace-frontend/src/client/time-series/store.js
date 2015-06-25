@@ -15,6 +15,7 @@ import {getRandomString} from '../../lib/getrandomstring'
 import {COLORS} from './constants'
 
 import {timeSeriesCursor} from '../state'
+import {timeSeriesDefaultsCursor} from '../state'
 import {editedTimeSeriesCursor} from '../state'
 
 import * as actions from './actions'
@@ -50,45 +51,26 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
       break
 
     case actions.onTimeSeriesDeleted:
-      timeSeriesCursor(timeSeries => {
-        var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data })
-        var index = timeSeries.indexOf(itemToDelete)
-        return timeSeries.delete(timeSeries.indexOf(itemToDelete))
-      })
+      deleteItem(data)
       break
 
     case actions.onNewTimeSeries:
-      var nextColor = getNextColor()
-      var defaultProperty = getDefaultProperty(data.propertyDescriptions)
-
-      editedTimeSeriesCursor(editedTimeSeries => {
-        const item = new TimeSeriesItem({
-          id: null,
-          name: data.name,
-          agentId: data.globalId,
-          propertyId: defaultProperty,
-          space: data.space,
-          system: data.system,
-          propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
-          aggregate: 'count',
-          color: nextColor
-        }).toMap()
-
-        return editedTimeSeries.set('newItem',  item)
-      })
+      prepareNewItem(data)
       break
 
     case actions.onEditTimeSeries:
       editedTimeSeriesCursor(editedTimeSeries => {
         return editedTimeSeries.set('newItem',  data)
       })
-    break
+      break
 
     case actions.onTimeSeriesPropertyChanged:
-      editedTimeSeriesCursor(editedTimeSeries => {
-        return editedTimeSeries.setIn(['newItem', data.key],  data.value)
-      })
-    break
+      changeProperty(data)
+      break
+
+    case actions.rememberSelectedProperty:
+      rememberSelectedProperty(data)
+      break    
 
     case actions.onAxisChanged:
       timeSeriesCursor(timeSeries => {
@@ -104,29 +86,6 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
   }
 })
 
-function getNextColor() {
-  const usedColors = timeSeriesCursor().map((item) => item.get('color'))
-  const allColors = COLORS.slice()
-
-  const freeColors = allColors.filter(function(item) {
-    return usedColors.indexOf(item) === -1
-  })
-
-  return freeColors[0]
-}
-
-// FIXME rpoetz: Die For-Schleife ist sinnlos
-function getDefaultProperty(propertyDescriptions) {
-  for (var i = 0; i < propertyDescriptions.length; i++) {
-    let propertyDescription = propertyDescriptions[0]
-    if (propertyDescription.propertyType != 'STRING') {
-      return propertyDescription.id
-    }
-  }
-
-  return null
-}
-
 function addItem(item) {
   item.id = getRandomString()
 
@@ -141,4 +100,102 @@ function updateItem(item) {
     var index = timeSeries.indexOf(itemToUpdate)
     return timeSeries.set(index, Immutable.fromJS(item))
   })
+}
+
+function deleteItem(data) {
+  timeSeriesCursor(timeSeries => {
+    var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data })
+    var index = timeSeries.indexOf(itemToDelete)
+    return timeSeries.delete(timeSeries.indexOf(itemToDelete))
+  })
+}
+
+function prepareNewItem(data) {
+  var nextColor = getNextColor()
+  var defaultProperty = getDefaultProperty(data.propertyDescriptions)
+  var defaultAggregation = getDefaultAggregation(data.propertyDescriptions)
+
+  editedTimeSeriesCursor(editedTimeSeries => {
+    const item = new TimeSeriesItem({
+      id: null,
+      name: data.name,
+      agentId: data.globalId,
+      propertyId: defaultProperty,
+      space: data.space,
+      system: data.system,
+      propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
+      aggregate: defaultAggregation,
+      color: nextColor
+    }).toMap()
+
+    return editedTimeSeries.set('newItem',  item)
+  })
+}
+
+function changeProperty(data) {
+  editedTimeSeriesCursor(editedTimeSeries => {
+    return editedTimeSeries.setIn(['newItem', data.key],  data.value)
+  })
+
+  if (data.key === 'aggregate') {
+    timeSeriesDefaultsCursor(defaults => {
+      return defaults.set('aggregate',  data.value)
+    })  
+  }
+  
+  if (data.key === 'propertyId') {
+    rememberSelectedProperty(data.value)
+  }
+}
+
+function rememberSelectedProperty(value) {
+  const stack = timeSeriesDefaultsCursor().get('propertyStack').toJS()
+  stack.unshift(value)
+
+  if (stack.length > 10) {
+    stack.pop()
+  }
+
+  timeSeriesDefaultsCursor(defaults => {
+   return defaults.set('propertyStack', Immutable.fromJS(stack))
+  })  
+}
+
+function getNextColor() {
+  const usedColors = timeSeriesCursor().map((item) => item.get('color'))
+  const allColors = COLORS.slice()
+
+  const freeColors = allColors.filter(function(item) {
+    return usedColors.indexOf(item) === -1
+  })
+
+  return freeColors[0]
+}
+
+function getDefaultProperty(propertyDescriptions) {
+  const suggestions = timeSeriesDefaultsCursor().get('propertyStack').toJS()
+
+  for (var i = 0; i < suggestions.length; i++) {
+    let suggestion = suggestions[i]
+    if (containsDefault(propertyDescriptions, suggestion)) {
+      return suggestion
+    }
+  }
+
+  return propertyDescriptions[0].id
+}
+
+function containsDefault(propertyDescriptions, suggestion) {
+  for (var i = 0; i < propertyDescriptions.length; i++) {
+    let propertyDescription = propertyDescriptions[i]
+    if (propertyDescription.id === suggestion) {
+      return true
+    }
+  }
+
+  return false  
+}
+
+function getDefaultAggregation(propertyDescriptions) {
+  return timeSeriesDefaultsCursor().get('aggregate')
 }

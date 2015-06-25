@@ -34,10 +34,13 @@ export default class App extends Component {
     return {
       i18n: appState.i18nCursor(),
       timeWindow: appState.timeWindowCursor().get('selection'),
+      timeWindowDynamic: appState.timeWindowCursor().get('dynamic'),
       timeWindowActiveTab: appState.timeWindowCursor().get('activeTab'),
       timeSeries: appState.timeSeriesCursor(),
       editedTimeSeries: appState.editedTimeSeriesCursor(),
       result: appState.resultCursor().get('translatedResult'),
+      autoPlay: appState.resultCursor().get('autoPlay'),
+      autoPlaySchedule: appState.resultCursor().get('autoPlaySchedule'),
       chartTitle: appState.resultCursor().get('chartTitle'),
       chartTitleEditable: appState.viewCursor().get('editables').get('result'),
       chartType: appState.resultCursor().get('chartType'),

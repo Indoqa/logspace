@@ -28,7 +28,7 @@ export default class DrawerPanel extends Component {
         return <Suggestions suggestions={this.props.suggestions}/>
 
       case Panels.TIME_WINDOW:
-        return <TimeWindow timeWindow={this.props.timeWindow} activeTab={this.props.timeWindowActiveTab} />
+        return <TimeWindow timeWindow={this.props.timeWindow} dynamic={this.props.timeWindowDynamic} activeTab={this.props.timeWindowActiveTab} />
 
       case Panels.ADD_TIMESERIES:
         // fall through

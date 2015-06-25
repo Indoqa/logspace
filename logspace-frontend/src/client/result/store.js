@@ -7,6 +7,7 @@
  */
 import Immutable from 'immutable'
 import axios from 'axios'
+import moment from 'moment'
 
 import {register,waitFor} from '../dispatcher'
 
@@ -22,20 +23,25 @@ import {resultCursor, timeSeriesCursor, timeWindowCursor} from '../state'
 import {TimeWindowStore_dispatchToken, getTimeWindow} from '../time-window/store'
 import {TimeSeriesStore_dispatchToken, getTimeSeries} from '../time-series/store'
 
+let nextAutoPlay = null
+
 export const ResultStore_dispatchToken = register(({action, data}) => {
   switch (action) {
     case timeWindowActions.selectCustomDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(false)
       refreshResult()
       break
 
     case timeWindowActions.selectPredefinedDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(false)
       refreshResult()
       break  
 
     case timeWindowActions.selectDynamicDate:
       waitFor([TimeWindowStore_dispatchToken])
+      setAutoPlay(true)
       refreshResult()
       break    
 
@@ -64,10 +70,29 @@ export const ResultStore_dispatchToken = register(({action, data}) => {
         return result.set('chartType', data)
       })
       break  
+
+    case resultActions.setAutoPlay:
+      setAutoPlay(data)
+
+      if (data) {
+        refreshResult()  
+      } else {
+        clearAutoPlay()  
+      }
+
+      break  
   }
 })
 
+function setAutoPlay(enabled) {
+  resultCursor(result => {
+    return result.set('autoPlay', enabled)
+  })
+}
+
 function refreshResult() {
+  clearAutoPlay()  
+
   var timeSeries = timeSeriesCursor()
   var timeWindow = timeWindowCursor()
 
@@ -83,7 +108,7 @@ function refreshResult() {
     storeSuccessResult(timeSeries, response.data, timeWindow)
   })
   .catch(function (response) {
-    console.log(response)
+    console.error(response)
     storeErrorResult(response)
   })
 }
@@ -118,6 +143,8 @@ function storeEmptyResult() {
       error: false
     }))
   })
+
+  triggerNextAutoPlay()
 }
 
 function storeLoadingResult() {
@@ -128,18 +155,28 @@ function storeLoadingResult() {
       error: false
     }))
   })
+
+  resultCursor(result => {
+    return result.set('autoPlaySchedule', null)
+  })
 }
 
 function storeErrorResult(serverResponse) {
+  const errorStatus = getErrorStatus(serverResponse)
+  const errorMessage = getErrorMessage(serverResponse)
+
   resultCursor(result => {
     return result.set('translatedResult', Immutable.fromJS({
       empty: true,
       error: true,
       loading: false,
-      errorStatus: serverResponse.status,
-      errorText: serverResponse.statusText
+      lastUpdated: moment(),
+      errorStatus: errorStatus,
+      errorText: errorMessage
     }))
   })
+
+  triggerNextAutoPlay()
 }
 
 function storeSuccessResult(timeSeries, responseJson, timeWindow) {
@@ -151,7 +188,50 @@ function storeSuccessResult(timeSeries, responseJson, timeWindow) {
       error: false,
       loading: false,
       chartData: chartData,
+      lastUpdated: moment(),
       gap: timeWindow.get('selection').get('gap')
     }))
   })
+
+  triggerNextAutoPlay()
+}
+
+function triggerNextAutoPlay() {
+  if (resultCursor().get('autoPlay')) {
+    nextAutoPlay = setTimeout(refreshResult, 15000)
+
+    resultCursor(result => {
+      return result.set('autoPlaySchedule', moment())
+    })
+  }
+}
+
+function clearAutoPlay() {
+  if(nextAutoPlay) {
+    clearTimeout(nextAutoPlay)
+  }
+}
+
+function getErrorStatus(serverResponse) {
+  if (serverResponse.data && serverResponse.data.type) {
+    return serverResponse.data.type
+  }
+
+  if (serverResponse.statusText) {
+    return serverResponse.statusText
+  }
+
+  return ''
+}
+
+function getErrorMessage(serverResponse) {
+  if (serverResponse.data && serverResponse.data.message) {
+    return serverResponse.data.message
+  }
+
+  if (serverResponse.data) {
+    return serverResponse.data
+  }
+
+  return ''
 }

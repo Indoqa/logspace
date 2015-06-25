@@ -5,13 +5,21 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react';
-import Component from '../components/component.react';
-import {onPropertySelected, onPropertyCleared} from './actions';
+import React from 'react'
+import Component from '../components/component.react'
+import {onPropertySelected, onPropertyCleared} from './actions'
+import {rememberSelectedProperty} from '../time-series/actions'
 
 export default class SuggestionProperties extends Component {
 
+  selectProperty(value) {
+    onPropertySelected(value)
+    rememberSelectedProperty(value.get('id'))
+  }
+
   render() {
+    const callback = this.selectProperty
+
     if (this.props.selected != null) {
       return (
         <div>
@@ -26,7 +34,7 @@ export default class SuggestionProperties extends Component {
       <div>
         <ul>
           {this.props.properties.map(function(item, index) {
-            return <li key={index}><a onClick={() => onPropertySelected(item)}>{item.get('name')}</a></li>;
+            return <li key={index}><a onClick={() => callback(item)}>{item.get('name')}</a></li>;
           })}
         </ul>
       </div>

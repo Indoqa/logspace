@@ -25,11 +25,9 @@ export default class TimeWindowDynamic extends Component {
 
     this.state = {
       localState: Immutable.fromJS({
-         range: {
-          amount: props.timeWindow.get("dynamicDuration"),
-          unit: props.timeWindow.get("dynamicUnit")
-         }
-      })
+         range: props.dynamic.get("range"), 
+         gap: props.dynamic.get("gap")
+      }) 
     }
   }
 
@@ -39,19 +37,29 @@ export default class TimeWindowDynamic extends Component {
         range: {
           amount: value.get('amount'),
           unit: value.get('unit')
+        },
+        gap: {
+          amount: 1,
+          unit: value.get('unit')
         }
       })
     })
   }
 
+  onGapChange(value) {
+    this.setState({
+      localState: this.state.localState.merge({
+        gap: value
+      })
+    })
+  }
+  
   submit() {
     const state = this.state.localState.toJS()
-    selectDynamicDate(state.range.amount, state.range.unit, {amount: 1, unit: state.range.unit})
+    selectDynamicDate(state.range.amount, state.range.unit, state.gap)
   }
 
   render() {
-
-
     return (
       <div>
          <div className='selection'>
@@ -63,8 +71,32 @@ export default class TimeWindowDynamic extends Component {
           <div className='dynamic'>
             <span className='intro'>last </span>
             <GapSelection value={this.state.localState.get('range')} onChange={this.onRangeChange.bind(this)}/>
-          </div>
+            <span className='intro'>UNIT</span>
+            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
+          </div>         
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     )
   }
