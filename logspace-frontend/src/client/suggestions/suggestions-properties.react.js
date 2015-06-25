@@ -24,7 +24,7 @@ export default class SuggestionProperties extends Component {
       return (
         <div>
           <ul>
-              <li> {this.props.selected.get('name')} (<a onClick={() => onPropertyCleared()}>x</a>) </li>
+              <li onClick={() => onPropertyCleared()}> {this.props.selected.get('name')} (x) </li>
            </ul>
         </div>
       );
@@ -34,7 +34,7 @@ export default class SuggestionProperties extends Component {
       <div>
         <ul>
           {this.props.properties.map(function(item, index) {
-            return <li key={index}><a onClick={() => callback(item)}>{item.get('name')}</a></li>;
+            return <li key={index} onClick={() => callback(item)}> {item.get('name')} </li>;
           })}
         </ul>
       </div>

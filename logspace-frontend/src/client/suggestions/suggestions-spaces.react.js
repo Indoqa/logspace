@@ -16,7 +16,7 @@ export default class SuggestionSpaces extends Component {
       return (
         <div>
           <ul>
-              <li> {this.props.selected.get('name')} (<a onClick={() => onSpaceCleared()}>x</a>) </li>
+              <li onClick={() => onSpaceCleared()}> {this.props.selected.get('name')} (x) </li>
            </ul> 
         </div>
       );
@@ -26,7 +26,7 @@ export default class SuggestionSpaces extends Component {
       <div>
         <ul>
           {this.props.spaces.map(function(item, index) {
-            return <li key={index}> <a onClick={() => onSpaceSelected(item)}>{item.get('name')}</a> </li>;
+            return <li key={index} onClick={() => onSpaceSelected(item)}> {item.get('name')} </li>;
           })}    
         </ul>
       </div>

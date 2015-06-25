@@ -16,7 +16,7 @@ export default class SuggestionSystems extends Component {
       return (
         <div>
           <ul>
-              <li> {this.props.selected.get('name')} (<a onClick={() => onSystemCleared()}>x</a>) </li>
+              <li onClick={() => onSystemCleared()}> {this.props.selected.get('name')} (x) </li>
            </ul> 
         </div>
       );
@@ -26,7 +26,7 @@ export default class SuggestionSystems extends Component {
       <div>
         <ul>
           {this.props.systems.map(function(item, index) {
-            return <li key={index}> <a onClick={() => onSystemSelected(item)}>{item.get('name')}</a> </li>;
+            return <li key={index} onClick={() => onSystemSelected(item)}> {item.get('name')} </li>;
           })}    
         </ul>
       </div>
