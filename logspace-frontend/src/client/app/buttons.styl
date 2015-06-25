@@ -21,6 +21,8 @@
   height 5.5rem
   width 5.5rem
   z-index 1
+  outline: 0 none;
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 
 .waves-effect
   cursor pointer
@@ -40,13 +42,13 @@
   text-align center
   text-decoration none
   transition all 0.2s ease-out 0s
-  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
   border-width 0
 
   i
     font-weight 700
     font-style normal
     font-size 2.2rem
+    user-select none
 
 .btn
   border: medium none;
@@ -59,14 +61,18 @@
   text-transform: uppercase;
   vertical-align: middle;
 
-.btn-large:hover, .btn:hover
-  background-color lighten($color-primary, 10%)
+.btn-small
+  height 26px
+  line-height 24px
 
-.btn-large:hover, .btn-floating:hover, .btn-highlight:hover
+.btn:hover
+  background-color lighten($color-primary, 15%)
+
+.btn-floating:hover
   box-shadow 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
 
 .btn-highlight
   background-color $color-secondary
 
 .btn-highlight:hover
-  background-color lighten($color-secondary, 10%)
+  background-color lighten($color-secondary, 15%)

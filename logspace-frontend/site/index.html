@@ -10,25 +10,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>logspace.io</title>
-	<!-- build:css -->
-	<!-- endbuild -->
+  <meta charset="utf-8">
+  <title>logspace.io</title>
+  <!-- build:css -->
+  <!-- endbuild -->
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Yantramanav:400|Varela+Round);
+  </style>
 </head>
 <body>
-	<div id="app"></div>
-	<script>
-	(function() {
-		var app = document.createElement('script');
-		app.type = 'text/javascript';
-		app.async = true;
-		var src = '//localhost:8888/build/app.js';
-		// IE<11 and Safari need Intl polyfill.
-		if (!window.Intl) src = src.replace('.js', 'intl.js');
-		app.src = src;
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(app, s);
-	})();
-	</script>
+  <div id="app"></div>
+  <script>
+  (function() {
+    var app = document.createElement('script');
+    app.type = 'text/javascript';
+    app.async = true;
+    var src = '//localhost:8888/build/app.js';
+    // IE<11 and Safari need Intl polyfill.
+    if (!window.Intl) src = src.replace('.js', 'intl.js');
+    app.src = src;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(app, s);
+  })();
+  </script>
 </body>
 </html>

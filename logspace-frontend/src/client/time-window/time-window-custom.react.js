@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
- 
+
 import React from 'react';
 import Immutable from 'immutable'
 import Component from '../components/component.react'
@@ -23,7 +23,7 @@ export default class TimeWindowCustom extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
+    this.state = {
       localState: Immutable.fromJS({
         dateRange: moment.range(props.timeWindow.start(), props.timeWindow.end()),
         time: {
@@ -31,7 +31,7 @@ export default class TimeWindowCustom extends Component {
           end: props.timeWindow.end().format("HH:mm:ss")
         },
         gap: props.timeWindow.gap
-      }) 
+      })
     }
   }
 
@@ -75,7 +75,7 @@ export default class TimeWindowCustom extends Component {
       })
     })
   }
-    
+
   submitCustom() {
     const state = this.state.localState.toJS()
 
@@ -93,21 +93,21 @@ export default class TimeWindowCustom extends Component {
     endDate.minute(endTime.minute())
     endDate.second(endTime.second())
 
-    selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))  
+    selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
   }
 
   render() {
     const state = this.state.localState.toJS()
-    
+
     return (
       <div className='current'>
         <div className='selection'>
           <div className='submit' >
             <span className='intro'>UNIT</span>
             <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
-            <button className='waves-effect waves-light btn' onClick={this.submitCustom.bind(this)}>
+            <button className='waves-effect waves-light btn btn-small' onClick={this.submitCustom.bind(this)}>
               Apply
-            </button>  
+            </button>
           </div>
           <div className='date'>
             <span className='day'>{state.dateRange.start.format('YYYY-MM-DD')}</span><br/>
@@ -129,8 +129,8 @@ export default class TimeWindowCustom extends Component {
           value={state.time.start}
           style={{float: 'left', width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
           onChange={(value) => this.onTimeChange('start', value)}
-        />    
-        <button 
+        />
+        <button
           onClick={() => this.onTimeReset()}
           style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '30px'}}>reset</button>
         <TimePicker
