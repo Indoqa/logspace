@@ -76,7 +76,6 @@ export function transformLogspaceResult(timeSeries, responseJson) {
         const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
         const targetRange = chartData.axisRanges.max.y - chartData.axisRanges.min.y
         const onePercentOfTarget = targetRange / 100
-        // console.log(targetRange + "/" + onePercentOfTarget + "/" + onePercentOfOriginal + "/" + scale.max + "/" + scale.min)
         return onePercentOfTarget * percentOfOriginal
       }
     }

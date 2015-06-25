@@ -53,12 +53,22 @@ export default class Chart extends Component {
   }
 
   componentDidUpdate() {
+    const messageElement = document.getElementById('message')
+    messageElement.innerHTML = ''
+
     if (this.props.result.get("loading")) {
       return
     }
 
-    if (this.props.result.get("empty") || this.props.result.get("error")) {
+    if (this.props.result.get("error")) {
       this.clearChart()
+      messageElement.innerHTML = this.props.result.get("errorStatus") + '<br/><small>' + this.props.result.get("errorText") + '</small>'
+      return
+    }
+
+    if (this.props.result.get("empty")) {
+      this.clearChart()
+      messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one time timeseries</small>'
       return
     }
 
@@ -71,9 +81,27 @@ export default class Chart extends Component {
     this.clearChart()
 
     const chartData = this.props.result.get("chartData").toJS()
+
+    if (this.isEmpty(chartData)) {
+      this.clearChart()
+      messageElement.innerHTML = 'Empty Chart<br/><small>No data found in selected time window</small>'
+      return
+    }
     
     this.chart = c3.generate(this.chartOptions(chartData))
     this.originalColumns = chartData.originalColumns
+  }
+
+  isEmpty(chartData) {
+    const originalColumns = chartData.originalColumns
+    let count = 0
+
+    for (var i = 0; i < originalColumns.length; i++) {
+      let originalColumn = originalColumns[i]
+      count = count + originalColumn.length - 1
+    }
+
+    return count == 0
   }
 
   toggleLoading(show) {
@@ -203,6 +231,7 @@ export default class Chart extends Component {
             <Halogen.PulseLoader color={'#ddfcff'} size={'50px'} />
           </span>
         </div>
+        <div className={'message'} id="message" />
         <div id="chart" />
       </div>
     )
@@ -276,8 +305,6 @@ export default class Chart extends Component {
   }
 
   getMaxTicks(chartData) {
-    console.log(chartData.xvalues.length)
-
     if (chartData.xvalues.length < 10) {
       return chartData.xvalues.length
     }

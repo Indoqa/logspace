@@ -175,8 +175,6 @@ function getNextColor() {
 function getDefaultProperty(propertyDescriptions) {
   const suggestions = timeSeriesDefaultsCursor().get('propertyStack').toJS()
 
-  console.log(suggestions)
-
   for (var i = 0; i < suggestions.length; i++) {
     let suggestion = suggestions[i]
     if (containsDefault(propertyDescriptions, suggestion)) {
@@ -188,10 +186,6 @@ function getDefaultProperty(propertyDescriptions) {
 }
 
 function containsDefault(propertyDescriptions, suggestion) {
-  console.log('testing sugg: ' + suggestion)
-  console.log(propertyDescriptions)
-
-
   for (var i = 0; i < propertyDescriptions.length; i++) {
     let propertyDescription = propertyDescriptions[i]
     if (propertyDescription.id === suggestion) {

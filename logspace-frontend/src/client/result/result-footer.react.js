@@ -21,7 +21,7 @@ export default class Footer extends Component {
         return '-'
       }
 
-      return lastUpdated.format('dddd, MMMM Do YYYY, HH:mm:ss')
+      return lastUpdated.format('HH:mm:ss')
     }
 
     render() {

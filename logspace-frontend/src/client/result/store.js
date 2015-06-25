@@ -108,7 +108,7 @@ function refreshResult() {
     storeSuccessResult(timeSeries, response.data, timeWindow)
   })
   .catch(function (response) {
-    console.log(response)
+    console.error(response)
     storeErrorResult(response)
   })
 }
@@ -162,13 +162,17 @@ function storeLoadingResult() {
 }
 
 function storeErrorResult(serverResponse) {
+  const errorStatus = getErrorStatus(serverResponse)
+  const errorMessage = getErrorMessage(serverResponse)
+
   resultCursor(result => {
     return result.set('translatedResult', Immutable.fromJS({
       empty: true,
       error: true,
       loading: false,
-      errorStatus: serverResponse.status,
-      errorText: serverResponse.statusText
+      lastUpdated: moment(),
+      errorStatus: errorStatus,
+      errorText: errorMessage
     }))
   })
 
@@ -206,4 +210,28 @@ function clearAutoPlay() {
   if(nextAutoPlay) {
     clearTimeout(nextAutoPlay)
   }
+}
+
+function getErrorStatus(serverResponse) {
+  if (serverResponse.data && serverResponse.data.type) {
+    return serverResponse.data.type
+  }
+
+  if (serverResponse.statusText) {
+    return serverResponse.statusText
+  }
+
+  return ''
+}
+
+function getErrorMessage(serverResponse) {
+  if (serverResponse.data && serverResponse.data.message) {
+    return serverResponse.data.message
+  }
+
+  if (serverResponse.data) {
+    return serverResponse.data
+  }
+
+  return ''
 }
