@@ -32,18 +32,32 @@ export default class TimeWindowDynamic extends Component {
   }
 
    onRangeChange(value) {
-    this.setState({
-      localState: this.state.localState.merge({
-        range: {
-          amount: value.get('amount'),
-          unit: value.get('unit')
-        },
-        gap: {
-          amount: 1,
-          unit: value.get('unit')
-        }
-      })
-    })
+    const oldAmount = this.state.localState.get('range').get('amount')
+    const amountChanged = oldAmount != value.get('amount')
+
+    if (amountChanged) {
+      this.setState({
+        localState: this.state.localState.merge({
+          range: {
+            amount: value.get('amount'),
+            unit: value.get('unit')
+          }
+        })
+      })    
+    } else {
+      this.setState({
+        localState: this.state.localState.merge({
+          range: {
+            amount: value.get('amount'),
+            unit: value.get('unit')
+          },
+          gap: {
+            amount: 1,
+            unit: value.get('unit')
+          }
+        })
+      })    
+    }
   }
 
   onGapChange(value) {
