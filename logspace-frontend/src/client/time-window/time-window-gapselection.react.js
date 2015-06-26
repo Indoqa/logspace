@@ -37,7 +37,7 @@ export default class GapSelection extends Component {
   }
 
   onAmountChange(amount) {
-    if (isNaN(amount) || amount < 1) {
+    if (isNaN(amount) || amount < 0) {
       return
     } 
 

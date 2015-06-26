@@ -68,7 +68,7 @@ export default class Chart extends Component {
 
     if (this.props.result.get("empty")) {
       this.clearChart()
-      messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one timeseries</small>'
+      messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one time series</small>'
       return
     }
 
@@ -263,6 +263,10 @@ export default class Chart extends Component {
       axis: {
         x: {
           type: 'category',
+           padding: {
+            left: 0,
+            right: 5,
+          },
           tick: {
             count: this.getMaxTicks(chartData),
             fit: false,
