@@ -10,7 +10,7 @@ import axios from 'axios'
 
 import {suggestionCursor} from '../state'
 import {register} from '../dispatcher'
-import {getRestUrl} from '../rest'
+import {restUrl} from '../environment'
 
 import * as actions from './actions'
 
@@ -72,7 +72,7 @@ function refreshSelections() {
     propertyId: (request.property)?request.property.id:null,
   }
 
-  axios.post(getRestUrl('/suggest'), translatedRequest)
+  axios.post(restUrl('/suggest'), translatedRequest)
   .then(function (response) {
     storeSuccessResult(response.data)
   })

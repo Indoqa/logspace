@@ -9,6 +9,7 @@
 import React from 'react'
 import Component from '../components/component.react'
 import {onShowOptions} from '../options/actions'
+import {title} from '../environment'
 
 require('./header.styl')
 
@@ -21,7 +22,7 @@ export default class Header extends Component {
           <span onClick={() => onShowOptions()}
                 dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}} />
         </div>
-        <div className='logo'>logspace</div>
+        <div className='logo'>{title('Logspace')}</div>
       </div>
     )
   }

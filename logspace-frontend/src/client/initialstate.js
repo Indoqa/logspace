@@ -46,7 +46,7 @@ export default {
       'xvalues': [],
       'warnings': []
     },
-    'chartTitle': 'New Logspace Chart',
+    'chartTitle': 'New Chart',
     'chartType': 'spline',
     'autoPlay': false
   },

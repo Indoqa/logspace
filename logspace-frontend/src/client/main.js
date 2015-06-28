@@ -11,6 +11,6 @@ import routes from './routes'
 
 const app = document.getElementById('app')
 
-Router.run(routes, Router.HistoryLocation, (Handler) => {
+Router.run(routes, Router.HashLocation, (Handler) => {
   React.render(<Handler />, app)
 })

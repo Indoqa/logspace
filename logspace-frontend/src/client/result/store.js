@@ -15,7 +15,7 @@ import * as timeWindowActions from '../time-window/actions'
 import * as timeSeriesActions from '../time-series/actions'
 import * as resultActions from './actions'
 
-import {getRestUrl} from '../rest'
+import {restUrl} from '../environment'
 import {transformLogspaceResult} from './c3js-chartplugin'
 
 import {resultCursor, timeSeriesCursor, timeWindowCursor} from '../state'
@@ -103,7 +103,7 @@ function refreshResult() {
 
   storeLoadingResult()
 
-  axios.post(getRestUrl('/query'), createRestRequest(timeSeries, timeWindow))
+  axios.post(restUrl('/query'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
     storeSuccessResult(timeSeries, response.data, timeWindow)
   })

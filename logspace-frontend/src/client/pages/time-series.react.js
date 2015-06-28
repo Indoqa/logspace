@@ -38,7 +38,6 @@ export default class TimeSeries extends Component {
       <div className='time-series'>
 
         <div className={classnames(this.props.view.get('navDrawerCss').toJS())}>
-
           <div className="left">
             <Header/>
             <TimeWindowValues timeWindow={this.props.timeWindow} />

@@ -17,6 +17,7 @@ import Component from '../components/component.react'
 import debounceFunc from '../../lib/debounce'
 
 import {units} from '../time-window/constants'
+import {marginTop} from '../environment'
 
 import {onResultRefreshed} from './actions'
 
@@ -124,8 +125,10 @@ export default class Chart extends Component {
   }
 
   calculateChartSize() {
+    const environmentMarginTop = marginTop()
+    
     const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-    const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - environmentMarginTop
 
     const minWindowWidth = 1024
     const minWindowHeight = windowHeight - 0
