@@ -9,6 +9,7 @@
 import moment from 'moment'
 
 import {cleanPropertyName} from '../time-series/time-series-item.react'
+import {isSubitem, getReference} from '../time-series/constants';
 
 import * as timeSeriesActions from '../time-series/actions'
 
@@ -29,6 +30,8 @@ export function transformLogspaceResult(timeSeries, responseJson) {
     xvalues: createXAxisLabals(responseJson)
   }
 
+  const scaleMap = createScaleMap(timeSeries, responseJson)
+
   timeSeries.forEach((item, index) => {
     // meta data
     chartData.columnKeys.push(item.get("id"))
@@ -44,32 +47,28 @@ export function transformLogspaceResult(timeSeries, responseJson) {
     chartData.types[item.get("type")].push(item.get("id"));
 
     // apply scale
-    const scale = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
+    const scale = getAppliedScale(item, scaleMap)
+
     let normalizer;
 
     if (chartData.axisRanges.max.y == 0) {
       chartData.axisRanges.min.y = scale.min
       chartData.axisRanges.max.y = scale.max
-      chartData.axes[item.get("id")] = 'y';
-      timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
+      chartData.axes[item.get("id")] = 'y'
 
     } else if (chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
       chartData.axes[item.get("id")] = 'y'
-      timeSeriesActions.onAxisChanged(item.get("id"), 'y1')
 
     } else if (chartData.axisRanges.max.y2 == 0) {
       chartData.axisRanges.min.y2 = scale.min
       chartData.axisRanges.max.y2 = scale.max
       chartData.axes[item.get("id")] = 'y2'
-      timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
     } else if (chartData.axisRanges.min.y2 == scale.min && chartData.axisRanges.max.y2 == scale.max)  {
       chartData.axes[item.get("id")] = 'y2'
-      timeSeriesActions.onAxisChanged(item.get("id"), 'y2')
 
     } else {
       chartData.axes[item.get("id")] = 'y'
-      timeSeriesActions.onAxisChanged(item.get("id"), 'y*')
 
       normalizer = (value) => {
         const onePercentOfOriginal = (scale.max - scale.min) / 100
@@ -95,6 +94,16 @@ export function transformLogspaceResult(timeSeries, responseJson) {
   return chartData
 }
 
+function createScaleMap(items, responseJson) {
+  const map = []
+
+  items.forEach(function(item, index) {
+    map[item.get('id')] = getTimeSeriesScale(item.get("scaleType"), item.get("scaleMin"), item.get("scaleMax"), responseJson.data[index])
+  })
+
+  return map
+}
+
 function createXAxisLabals(responseJson) {
   let labels = []
 
@@ -117,6 +126,16 @@ function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
   return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
 }
 
+function getAppliedScale(item, scaleMap) {
+  const scaleType = item.get('scaleType')
+
+  if (!isSubitem(scaleType)) {
+    return scaleMap[item.get('id')]
+  }
+
+  const reference = getReference(scaleType)
+  return scaleMap[reference]
+}
 
 function getDataColumn(array, id, normalizer) {
   const values =  array.map(function(item) {

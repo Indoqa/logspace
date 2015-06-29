@@ -12,7 +12,7 @@ import {Record} from 'immutable'
 import {register} from '../dispatcher'
 import {getRandomString} from '../../lib/getrandomstring'
 
-import {COLORS} from './constants'
+import {COLORS, isSubitem} from './constants'
 
 import {timeSeriesCursor} from '../state'
 import {timeSeriesDefaultsCursor} from '../state'
@@ -33,7 +33,6 @@ const TimeSeriesItem = Record({
   type: 'spline',
   space: '',
   system: '',
-  axis: '',
   propertyDescriptions: []
 })
 
@@ -71,18 +70,6 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     case actions.rememberSelectedProperty:
       rememberSelectedProperty(data)
       break    
-
-    case actions.onAxisChanged:
-      timeSeriesCursor(timeSeries => {
-        const itemToUpdate = timeSeries
-          .find(function(obj){ return obj.get('id') === data.id })
-          .set('axis', data.axis)
-          
-        const index = timeSeries.indexOf(itemToUpdate)
-
-        return timeSeries.update(index, item => itemToUpdate)
-      })
-    break
   }
 })
 
@@ -114,6 +101,8 @@ function prepareNewItem(data) {
   var nextColor = getNextColor()
   var defaultProperty = getDefaultProperty(data.propertyDescriptions)
   var defaultAggregation = getDefaultAggregation(data.propertyDescriptions)
+  var defaultScaleType = getDefaultScaleType()
+  
 
   editedTimeSeriesCursor(editedTimeSeries => {
     const item = new TimeSeriesItem({
@@ -125,7 +114,8 @@ function prepareNewItem(data) {
       system: data.system,
       propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
       aggregate: defaultAggregation,
-      color: nextColor
+      color: nextColor,
+      scaleType: defaultScaleType
     }).toMap()
 
     return editedTimeSeries.set('newItem',  item)
@@ -198,4 +188,19 @@ function containsDefault(propertyDescriptions, suggestion) {
 
 function getDefaultAggregation(propertyDescriptions) {
   return timeSeriesDefaultsCursor().get('aggregate')
+}
+
+function getDefaultScaleType() {
+  let lastMasterItem = null;
+  timeSeriesCursor().forEach(function(item) {
+    if (!isSubitem(item.get('scaleType'))) {
+      lastMasterItem = item
+    }   
+  })
+
+  if (lastMasterItem == null) {
+    return 'auto'
+  }
+
+  return 'subitem-' + lastMasterItem.get('id')
 }

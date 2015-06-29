@@ -97,11 +97,8 @@ export default class Chart extends Component {
     const originalColumns = chartData.originalColumns
     let count = 0
 
-    console.log(originalColumns)
-
     for(var key in originalColumns) {
      var originalColumn = originalColumns[key];
-      console.log(originalColumn)
       count = count + originalColumn.length
     }
 
