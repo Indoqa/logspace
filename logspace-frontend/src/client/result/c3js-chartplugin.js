@@ -56,7 +56,7 @@ export function transformLogspaceResult(timeSeries, responseJson) {
       chartData.axisRanges.max.y = scale.max
       chartData.axes[item.get("id")] = 'y'
 
-    } else if (chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
+    } else if (isSubitem(item.get('scaleType')) && chartData.axisRanges.min.y == scale.min && chartData.axisRanges.max.y == scale.max)  {
       chartData.axes[item.get("id")] = 'y'
 
     } else if (chartData.axisRanges.max.y2 == 0) {
