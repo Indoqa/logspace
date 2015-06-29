@@ -12,7 +12,7 @@ import {Record} from 'immutable'
 import {register} from '../dispatcher'
 import {getRandomString} from '../../lib/getrandomstring'
 
-import {COLORS, isSubitem} from './constants'
+import {COLORS, isSubitem, getReference} from './constants'
 
 import {timeSeriesCursor} from '../state'
 import {timeSeriesDefaultsCursor} from '../state'
@@ -83,17 +83,35 @@ function addItem(item) {
 
 function updateItem(item) {
   timeSeriesCursor(timeSeries => {
-    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id })
-    var index = timeSeries.indexOf(itemToUpdate)
-    return timeSeries.set(index, Immutable.fromJS(item))
+    // map orphans to scale type 'auto'
+    const updatedList = timeSeries.map((eachItem) => {
+      if (isSubitem(item.scaleType) && getReference(eachItem.get('scaleType')) === item.id) {
+        return eachItem.set('scaleType', item.scaleType)
+      }
+
+      return eachItem
+    })
+
+    var itemToUpdate = updatedList.find(function(obj){ return obj.get('id') === item.id })
+    var index = updatedList.indexOf(itemToUpdate)
+    return updatedList.set(index, Immutable.fromJS(item))
   })
 }
 
 function deleteItem(data) {
   timeSeriesCursor(timeSeries => {
-    var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data })
-    var index = timeSeries.indexOf(itemToDelete)
-    return timeSeries.delete(timeSeries.indexOf(itemToDelete))
+    // map orphans to scale type 'auto'
+    const updatedList = timeSeries.map((item) => {
+      if (getReference(item.get('scaleType')) === data) {
+        return item.set('scaleType', 'auto')
+      }
+
+      return item
+    })
+
+    var itemToDelete = updatedList.find(function(obj){ return obj.get('id') === data })
+    var index = updatedList.indexOf(itemToDelete)
+    return updatedList.delete(updatedList.indexOf(itemToDelete))
   })
 }
 
