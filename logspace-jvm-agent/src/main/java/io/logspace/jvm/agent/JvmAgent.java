@@ -8,8 +8,10 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.AbstractSchedulerAgent;
+import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.order.AgentOrder;
 
+import java.io.File;
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
@@ -17,18 +19,22 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
 public final class JvmAgent extends AbstractSchedulerAgent {
 
     public static final String SYSTEM_PROPERTY_JVM_IDENTIFIER = "io.logspace.jvm-identifier";
+    public static final String SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL = "io.logspace.jvm-agent-description-url";
 
     private JvmAgent() {
         super("jvm/" + getJvmIdentifier(), "jvm");
     }
 
     public static JvmAgent create() {
+        initializeDescription();
         return new JvmAgent();
     }
 
@@ -41,6 +47,34 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         }
 
         return jvmIdentifier;
+    }
+
+    private static void initializeDescription() {
+        String agentDescriptionUrl = System.getProperty(SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL);
+
+        if (agentDescriptionUrl == null || agentDescriptionUrl.isEmpty()) {
+            throw new IllegalArgumentException("System Property: '" + SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL
+                    + "' not defined. Please set this property to valid logspace configuration file.");
+        }
+
+        try {
+            AgentControllerProvider.setDescription(new URL(agentDescriptionUrl));
+            return;
+        } catch (MalformedURLException e) {
+            // ignore
+        }
+
+        File file = new File(agentDescriptionUrl);
+        if (!file.exists()) {
+            throw new IllegalArgumentException("Could not load logspace configuration '" + agentDescriptionUrl
+                    + "'. Is the value correct? ");
+        }
+
+        try {
+            AgentControllerProvider.setDescription(file.toURI().toURL());
+        } catch (MalformedURLException e) {
+            // ignore
+        }
     }
 
     @Override

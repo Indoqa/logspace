@@ -30,11 +30,6 @@ public class JvmAgentTestIT {
 
     @Test
     public void test() {
-        TestAgentController.installIfRequired("./target/test-events.json");
-        TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
-
-        assertEquals(0, agentController.getCollectedEvents().size());
-
         JvmAgent jvmAgent = Premain.getAgent();
         assertNull(jvmAgent);
 
@@ -43,6 +38,7 @@ public class JvmAgentTestIT {
         jvmAgent = Premain.getAgent();
         assertNotNull(jvmAgent);
 
+        TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
         assertEquals(0, agentController.getCollectedEvents().size());
 
         jvmAgent.execute(null);
@@ -59,6 +55,10 @@ public class JvmAgentTestIT {
                 .size() >= 10);
 
         AgentControllerProvider.shutdown();
+    }
+
+    private String getDescriptionUrl() {
+        return JvmAgentTestIT.class.getResource("/logspace-jvm-agent.json").toExternalForm();
     }
 
     private File getJvmAgentJarFile() {
@@ -84,6 +84,7 @@ public class JvmAgentTestIT {
         try {
             VirtualMachine vm = VirtualMachine.attach(pid);
             System.setProperty(JvmAgent.SYSTEM_PROPERTY_JVM_IDENTIFIER, JVM_IDENTIFIER);
+            System.setProperty(JvmAgent.SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL, this.getDescriptionUrl());
             vm.loadAgent(jvmAgentJarFile.getAbsolutePath(), "");
             vm.detach();
         } catch (Exception e) {
