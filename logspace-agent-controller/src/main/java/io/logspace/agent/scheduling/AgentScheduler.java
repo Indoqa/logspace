@@ -24,7 +24,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.quartz.*;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.DisallowConcurrentExecution;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -129,9 +139,9 @@ public class AgentScheduler {
 
         InputStream resourceStream;
         if (isShaded()) {
-            resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-shaded-quartz.properties");
+            resourceStream = AgentScheduler.class.getResourceAsStream("logspace-shaded-quartz.properties");
         } else {
-            resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-quartz.properties");
+            resourceStream = AgentScheduler.class.getResourceAsStream("logspace-quartz.properties");
         }
 
         try {
