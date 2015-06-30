@@ -267,7 +267,7 @@ export default class Chart extends Component {
           type: 'category',
            padding: {
             left: 0,
-            right: 5,
+            right: 50,
           },
           tick: {
             count: this.getMaxTicks(chartData),
