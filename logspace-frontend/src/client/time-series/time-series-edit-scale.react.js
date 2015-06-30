@@ -52,6 +52,10 @@ export default class EditTimeSeriesScale extends Component {
   }
 
   getCurrentSelectedScaleHTML(scaleType) {
+    if (this.state.scaleTypeDropdownShown) {
+      return <div className='manual'><i> - Apply to existing or create a new scale - </i></div>
+    }
+
     if (scaleType === 'auto') {
       return <div className='manual'> Data (use min/max of result) </div>
     }
@@ -93,10 +97,6 @@ export default class EditTimeSeriesScale extends Component {
   }
 
    getPropertyScaleInput(agentDescription) {
-    if (this.props.editedTimeSeries.get("newItem").get('scaleType') === 'property') {
-      return
-    }
-
     const propertyScale = SCALES[agentDescription.get("propertyId")]
 
     if (propertyScale == null) {
@@ -115,10 +115,6 @@ export default class EditTimeSeriesScale extends Component {
   }
 
   getCustomDataInput() {
-    if (this.props.editedTimeSeries.get("newItem").get('scaleType') === 'auto') {
-      return
-    }
-
     return (
       <div key={'data'} className={'item'} onClick={() => onTimeSeriesPropertyChanged('scaleType', 'auto')}>
         <div className='manual'> Data (use min/max of result) </div>
@@ -127,10 +123,6 @@ export default class EditTimeSeriesScale extends Component {
   }
 
   getCustomRangeInput() {
-    if (this.props.editedTimeSeries.get("newItem").get('scaleType') === 'custom') {
-      return
-    }
-
     return (
       <div key={'custom'} className={'item'} onClick={() => onTimeSeriesPropertyChanged('scaleType', 'custom')}>
         <div className='manual'>  Custom range </div>
@@ -148,10 +140,6 @@ export default class EditTimeSeriesScale extends Component {
       }
 
       if (isSubitem(item.get('scaleType'))) {
-        return null
-      }
-
-      if (item.get('id') === getReference(me.props.editedTimeSeries.get("newItem").get('scaleType'))) {
         return null
       }
 
