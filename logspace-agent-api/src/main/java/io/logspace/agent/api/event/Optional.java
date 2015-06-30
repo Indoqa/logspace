@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 /**
  * A Java 7 implementation of Optional that can be replaced by the Java 8 equivalent.
  *
- * @see http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html
+ * @see "http://docs.oracle.com/javase/8/docs/api/java/util/Optional.html"
  */
 public final class Optional<T> {
 
