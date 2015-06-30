@@ -11,6 +11,7 @@ import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
 import moment from 'moment'
+import Intl from 'intl'
 import shallowEqual from 'react-pure-render/shallowEqual';
 
 import Component from '../components/component.react'
@@ -223,7 +224,8 @@ export default class Chart extends Component {
   }
 
   formatYTooltip(value, ratio, id, index) {
-    return this.originalColumns[id][index]
+    const yValue = this.originalColumns[id][index]
+    return new Intl.NumberFormat('en-US').format(yValue)
   }
 
   render() {
