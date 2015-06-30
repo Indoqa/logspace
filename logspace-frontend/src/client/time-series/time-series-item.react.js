@@ -7,30 +7,63 @@
  */
 
 import React from 'react';
+import classnames from 'classnames';
+
 import Component from '../components/component.react';
+
 import TimeSeriesLabel from './time-series-label.react';
 import {onTimeSeriesDeleted, onEditTimeSeries} from './actions';
+import {isSubitem} from './constants';
 
 require('./time-series-item.styl')
 
 export default class TimeSeriesItem extends Component {
 
-  render() {
-    const bgStyle = {
-      backgroundColor: this.props.item.get("color")
+  getAxisLabel(item) {
+    if (isSubitem(item.get('scaleType'))) {
+      return <span/>
     }
 
+    const classNames = 'axis axis-' + this.props.axis
+    return  <div className={classNames} title={this.getAxisTooltip()}/>
+  }
+
+  getAxisTooltip() {
+    if (this.props.axis == 1) {
+      return 'Scale is shown on left y axis'
+    }
+
+    if (this.props.axis == 2) {
+      return 'Scale is shown on right y axis'
+    }
+  }
+
+  render() {
+    const bgStyle = {
+      backgroundColor: this.props.item.get('color')
+    }
+    const item = this.props.item
+
+    const axisLabel = this.getAxisLabel(item)
+
     return (
-      <div className='time-series-item' onClick={() => onEditTimeSeries(this.props.item)}>
+      <div className={createTimeSeriesClassName(item)} onClick={() => onEditTimeSeries(item)}>
         <div className='color' style={bgStyle}></div>
         <div className='inner'>
-          <div className='axis'>  {this.props.item.get("axis")} </div>
-          <TimeSeriesLabel timeSeries={this.props.item} />
-          <span className='property'>{this.props.item.get("aggregate")} of {cleanPropertyName(this.props.item.get("propertyId"))}</span>
+          {axisLabel}
+          <TimeSeriesLabel timeSeries={item} />
+          <span className='property'>{item.get('aggregate')} of {cleanPropertyName(item.get('propertyId'))}</span>
         </div>
       </div>
     )
   }
+}
+
+function createTimeSeriesClassName(item) {
+  return classnames('time-series-item', {
+    subentry: isSubitem(item.get('scaleType')),
+    mainentry: !isSubitem(item.get('scaleType'))
+  })
 }
 
 export function cleanPropertyName(name) {

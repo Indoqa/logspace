@@ -11,6 +11,7 @@ import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
 import moment from 'moment'
+import Intl from 'intl'
 import shallowEqual from 'react-pure-render/shallowEqual';
 
 import Component from '../components/component.react'
@@ -97,11 +98,8 @@ export default class Chart extends Component {
     const originalColumns = chartData.originalColumns
     let count = 0
 
-    console.log(originalColumns)
-
     for(var key in originalColumns) {
      var originalColumn = originalColumns[key];
-      console.log(originalColumn)
       count = count + originalColumn.length
     }
 
@@ -226,7 +224,8 @@ export default class Chart extends Component {
   }
 
   formatYTooltip(value, ratio, id, index) {
-    return this.originalColumns[id][index]
+    const yValue = this.originalColumns[id][index]
+    return new Intl.NumberFormat('en-US').format(yValue)
   }
 
   render() {
@@ -268,7 +267,7 @@ export default class Chart extends Component {
           type: 'category',
            padding: {
             left: 0,
-            right: 5,
+            right: 50,
           },
           tick: {
             count: this.getMaxTicks(chartData),

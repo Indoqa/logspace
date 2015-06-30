@@ -4,6 +4,6 @@
   "parameters" : {
     "space-token" : "development",
     "base-url" : "http://localhost:4567",
-    "queue-file" : "${java.io.tmpdir}/logspace-monitor-event-queue.dat"
+    "queue-directory" : "${java.io.tmpdir}/logspace-monitor-event-queue"
   }
 }
