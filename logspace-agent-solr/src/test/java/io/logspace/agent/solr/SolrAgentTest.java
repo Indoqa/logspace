@@ -24,7 +24,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
-import com.indoqa.commons.solr.server.factory.SolrServerFactory;
+import com.indoqa.solr.server.factory.SolrServerFactory;
 
 public class SolrAgentTest {
 

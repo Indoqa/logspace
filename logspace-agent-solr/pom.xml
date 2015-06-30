@@ -102,8 +102,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.indoqa.commons</groupId>
-      <artifactId>indoqa-commons-solr-server-factory</artifactId>
+      <groupId>com.indoqa.solr</groupId>
+      <artifactId>spring-server</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
