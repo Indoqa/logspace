@@ -54,6 +54,8 @@ public final class ImmutableEvent implements Event {
      * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using
      * {@link UUID#randomUUID()} and <code>new {@link Date}</code>.
      *
+     * @param agentId The id of the agent recording this event.
+     * @param system The system recording this event.
      * @param type The event type.
      * @param globalEventId The global event id.
      * @param parentEventId The parent event id.

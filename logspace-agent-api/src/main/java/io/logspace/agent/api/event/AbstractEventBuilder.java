@@ -23,9 +23,33 @@ public abstract class AbstractEventBuilder {
 
     /**
      * Create an event builder with empty {@link #globalEventId} and empty {@link #parentEventId}.
+     *
+     * @param agentId The id of the agent recording this event.
+     *
+     * @param system The system recording this event.
+     *
+     * <br>
+     *            Returns a new event object.
      */
     protected AbstractEventBuilder(String agentId, String system) {
         this(agentId, system, Optional.<String> empty(), Optional.<String> empty());
+    }
+
+    /**
+     * Create an event builder that uses another event as starting point. It uses the others event <code>id</code> as
+     * the new event's {@link #parentEventId} and copies its {@link #globalEventId}.
+     *
+     * @param agentId The id of the agent recording this event.
+     *
+     * @param system The system recording this event.
+     *
+     * @param parentEvent The parent event to be used as template.
+     *
+     * <br>
+     *            Returns a new event object.
+     */
+    protected AbstractEventBuilder(String agentId, String system, Event parentEvent) {
+        this(agentId, system, Optional.of(parentEvent.getId()), parentEvent.getGlobalEventId());
     }
 
     protected AbstractEventBuilder(String agentId, String system, Optional<String> parentEventId, Optional<String> globalEventId) {
@@ -34,17 +58,6 @@ public abstract class AbstractEventBuilder {
 
         this.parentEventId = parentEventId;
         this.globalEventId = globalEventId;
-    }
-
-    /**
-     * Create an event builder that uses another event as starting point. It uses the others event <code>id</code> as
-     * the new event's {@link #parentEventId} and copies its {@link #globalEventId}.
-     *
-     * @param parentEvent The parent event to be used as template.
-     * @return A new event object.
-     */
-    protected AbstractEventBuilder(String agentId, String system, Event parentEvent) {
-        this(agentId, system, Optional.of(parentEvent.getId()), parentEvent.getGlobalEventId());
     }
 
     /**
@@ -77,48 +90,52 @@ public abstract class AbstractEventBuilder {
         this.properties.add(property);
     }
 
-    protected final void addProperty(String key, Boolean value) {
-        this.properties.add(new BooleanEventProperty(key, value));
-    }
-
     protected final void addProperty(DateEventProperty property) {
         this.properties.add(property);
-    }
-
-    protected final void addProperty(String key, Date value) {
-        this.properties.add(new DateEventProperty(key, value));
     }
 
     protected final void addProperty(DoubleEventProperty property) {
         this.properties.add(property);
     }
 
-    protected final void addProperty(String key, Double value) {
-        this.addProperty(new DoubleEventProperty(key, value));
-    }
-
     protected final void addProperty(FloatEventProperty property) {
         this.properties.add(property);
-    }
-
-    protected final void addProperty(String key, Float value) {
-        this.properties.add(new FloatEventProperty(key, value));
     }
 
     protected final void addProperty(IntegerEventProperty property) {
         this.properties.add(property);
     }
 
-    protected final void addProperty(String key, Integer value) {
-        this.properties.add(new IntegerEventProperty(key, value));
-    }
-
     protected final void addProperty(LongEventProperty property) {
         this.properties.add(property);
     }
 
+    protected final void addProperty(String key, Boolean value) {
+        this.properties.add(new BooleanEventProperty(key, value));
+    }
+
+    protected final void addProperty(String key, Date value) {
+        this.properties.add(new DateEventProperty(key, value));
+    }
+
+    protected final void addProperty(String key, Double value) {
+        this.addProperty(new DoubleEventProperty(key, value));
+    }
+
+    protected final void addProperty(String key, Float value) {
+        this.properties.add(new FloatEventProperty(key, value));
+    }
+
+    protected final void addProperty(String key, Integer value) {
+        this.properties.add(new IntegerEventProperty(key, value));
+    }
+
     protected final void addProperty(String key, Long value) {
         this.properties.add(new LongEventProperty(key, value));
+    }
+
+    protected final void addProperty(String key, String value) {
+        this.addProperty(new StringEventProperty(key, value));
     }
 
     /**
@@ -128,10 +145,6 @@ public abstract class AbstractEventBuilder {
      */
     protected final void addProperty(StringEventProperty property) {
         this.properties.add(property);
-    }
-
-    protected final void addProperty(String key, String value) {
-        this.addProperty(new StringEventProperty(key, value));
     }
 
     /**
