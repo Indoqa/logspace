@@ -95,10 +95,6 @@ public final class JvmAgent extends AbstractSchedulerAgent {
     }
 
     public void sendAgentAttachedEvent(String globalEventId) {
-        if (!this.isEnabled()) {
-            return;
-        }
-
         JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem(), globalEventId);
 
         this.addSystemInformation(eventBuilder);
@@ -107,10 +103,6 @@ public final class JvmAgent extends AbstractSchedulerAgent {
     }
 
     public String sendJvmStartEvent(String globalEventId) {
-        if (!this.isEnabled()) {
-            return "";
-        }
-
         JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem(), globalEventId);
 
         this.addSystemInformation(eventBuilder);
@@ -121,10 +113,6 @@ public final class JvmAgent extends AbstractSchedulerAgent {
     }
 
     public void sendJvmStopEvent(String globalEventId) {
-        if (!this.isEnabled()) {
-            return;
-        }
-
         JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem(), globalEventId);
         eventBuilder.setGlobalEventId(globalEventId);
         this.sendEvent(eventBuilder.toEvent());

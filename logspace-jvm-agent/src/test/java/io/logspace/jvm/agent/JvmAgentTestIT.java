@@ -39,7 +39,7 @@ public class JvmAgentTestIT {
         assertNotNull(jvmAgent);
 
         TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(1, agentController.getCollectedEvents().size());
 
         jvmAgent.execute(null);
 
