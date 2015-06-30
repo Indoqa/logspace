@@ -17,7 +17,7 @@ public interface AgentExecutor {
     /**
      * Time-based execution of the agent with its order.
      *
-     * @param agentOrder - The {@link AgentOrder} of the {@link Agent} to execute.
+     * @param agentOrder - The {@link AgentOrder} of the {@link io.logspace.agent.api.Agent Agent} to execute.
      */
     void executeScheduledAgent(AgentOrder agentOrder);
 
