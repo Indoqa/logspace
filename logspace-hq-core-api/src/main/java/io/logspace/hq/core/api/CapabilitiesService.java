@@ -27,7 +27,7 @@ public interface CapabilitiesService {
     /**
      * Retrieve the agentId for the globalAgentId.
      *
-     * @param globalAgentId
+     * @param globalAgentId The globalAgentId to retrieve the agentId for.
      * @return The agentId for the globalAgentId.
      */
     String getAgentId(String globalAgentId);
@@ -46,6 +46,8 @@ public interface CapabilitiesService {
      * Store the supplied {@link AgentControllerCapabilities}
      *
      * @param capabilities - The {@link AgentControllerCapabilities} to store.
+     *
+     * @throws IOException If an error occurs on storing the {@link AgentControllerCapabilities}.
      */
     void save(AgentControllerCapabilities capabilities) throws IOException;
 

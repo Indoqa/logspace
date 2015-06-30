@@ -8,7 +8,7 @@
 package io.logspace.hq.core.api;
 
 /**
- * Spaces are used to distinguish events from different sources.<br/>
+ * Spaces are used to distinguish events from different sources.<br>
  * To ensure some basic authentication for a space, authenticationTokens must be configured for a space, which consumers
  * must supply as an authenticationToken to store their events.
  */
