@@ -112,7 +112,7 @@ function createXAxisLabals(responseJson) {
   const gap = responseJson.dateRange.gap
 
   for (let i = start; i < end; i = i + (gap * 1000)) {
-    labels.push(moment.utc(new Date(i)))
+    labels.push(moment(new Date(i)))
   }
 
   return labels
