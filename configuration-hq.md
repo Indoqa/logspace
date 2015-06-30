@@ -41,7 +41,7 @@ Where `demo` is the space and `demo1234` is an authentication token for this spa
 
 ##Configurations
 
-The configuration files for the agent-orders have to be stored in the directory defined by the `logspace.hq-webapp.configs-directory` property.
+The configuration files for the agent-orders have to be stored in the directory defined by the `logspace.hq-webapp.orders-directory` property.
 
 The filename is used as the id of the agentController. These settings need to be configured:
 
