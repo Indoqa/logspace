@@ -18,10 +18,13 @@ import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.quartz.CronScheduleBuilder;
@@ -50,6 +53,9 @@ public class AgentScheduler {
     private static final String LOGSPACE_SCHEDULER_GROUP = "logspace";
     private static final String AGENT_SCHEDULER_GROUP = "logspace-agents";
 
+    private static final String QUARTZ_PREFIX = "org.quartz.";
+    private static final String PACKAGE_PLACEHOLDER = "PACKAGE_PLACEHOLDER.";
+
     private Scheduler scheduler;
 
     private final Map<String, AgentOrder> agentOrders = new HashMap<String, AgentOrder>();
@@ -65,15 +71,6 @@ public class AgentScheduler {
 
         this.initializeQuartzScheduler();
         this.initializeUpdateJob(updateInterval);
-    }
-
-    private static boolean isShaded() {
-        try {
-            Class.forName("io.logspace.agent.shaded.quartz.simpl.SimpleThreadPool");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
     }
 
     public void applyOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) {
@@ -137,26 +134,13 @@ public class AgentScheduler {
             return;
         }
 
-        InputStream resourceStream;
-        if (isShaded()) {
-            resourceStream = AgentScheduler.class.getResourceAsStream("logspace-shaded-quartz.properties");
-        } else {
-            resourceStream = AgentScheduler.class.getResourceAsStream("logspace-quartz.properties");
-        }
-
         try {
             StdSchedulerFactory factory = new StdSchedulerFactory();
-            factory.initialize(resourceStream);
+            factory.initialize(this.loadQuartzProperties());
             this.scheduler = factory.getScheduler();
             this.scheduler.start();
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             throw new AgentControllerInitializationException("Error while creating and starting a Quartz scheduler.", e);
-        } finally {
-            try {
-                resourceStream.close();
-            } catch (IOException e) {
-                // do nothing
-            }
         }
     }
 
@@ -174,6 +158,52 @@ public class AgentScheduler {
         } catch (SchedulerException e) {
             throw new AgentControllerInitializationException("Error while scheduling update job.", e);
         }
+    }
+
+    /**
+     * The properties file will be loaded and the keys will be prepended with the QUARTZ_PREFIX. <br/>
+     * If a value contains the literal PACKAGE_PLACEHOLDER the literal will be replaced with the QUARTZ_PREFIX.
+     *
+     * @return The modified quartz properties with aligned packagenames in keys and values.
+     */
+    private Properties loadQuartzProperties() {
+        InputStream resourceStream = AgentScheduler.class.getResourceAsStream("/logspace-quartz.properties");
+
+        try {
+            Properties properties = new Properties();
+            properties.load(resourceStream);
+
+            List<Object> keys = new ArrayList<Object>(properties.keySet());
+            for (Object eachKey : keys) {
+                String key = eachKey.toString();
+
+                properties.put(QUARTZ_PREFIX + key, this.replacePackagePlaceholderIfNecessary(properties.get(key)));
+                properties.remove(key);
+            }
+
+            return properties;
+        } catch (Exception e) {
+            throw new AgentControllerInitializationException("Error loading logspace-quartz.properties.", e);
+        } finally {
+            try {
+                resourceStream.close();
+            } catch (IOException e) {
+                // do nothing
+            }
+        }
+    }
+
+    private Object replacePackagePlaceholderIfNecessary(Object objectValue) {
+        if (!(objectValue instanceof String)) {
+            return objectValue;
+        }
+
+        String value = (String) objectValue;
+        if (!value.startsWith(PACKAGE_PLACEHOLDER)) {
+            return objectValue;
+        }
+
+        return value.replace(PACKAGE_PLACEHOLDER, QUARTZ_PREFIX);
     }
 
     private void scheduleAgentOrder(AgentOrder agentOrder) {
