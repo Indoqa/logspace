@@ -31,7 +31,13 @@
       <url>https://raw.githubusercontent.com/Indoqa/logspace/master/LICENSE</url>
     </license>
   </licenses>
-
+  
+  <scm>
+    <connection>scm:git:git@github.com:Indoqa/logspace.git</connection>
+    <developerConnection>scm:git:git@github.com:Indoqa/logspace.git</developerConnection>
+    <url>https://github.com/Indoqa/logspace</url>
+  </scm>
+  
   <distributionManagement>
     <repository>
       <id>indoqa-nexus-releases</id>
