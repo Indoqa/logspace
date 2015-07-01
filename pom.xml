@@ -53,7 +53,7 @@
 
   <properties>
     <project.build.compiler.version>1.8</project.build.compiler.version>
-    <project.license.rootDir>${basedir}</project.license.rootDir>
+    <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
     <indoqa-boot-version>0.2</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
