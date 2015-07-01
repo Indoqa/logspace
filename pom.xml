@@ -20,7 +20,7 @@
 
   <groupId>io.logspace</groupId>
   <artifactId>logspace</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Logspace</name>
   <inceptionYear>2015</inceptionYear>
 
@@ -35,7 +35,7 @@
     <connection>scm:git:git@github.com:Indoqa/logspace.git</connection>
     <developerConnection>scm:git:git@github.com:Indoqa/logspace.git</developerConnection>
     <url>https://github.com/Indoqa/logspace</url>
-    <tag>logspace-0.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
   
   <distributionManagement>
