@@ -268,11 +268,11 @@ export default class Chart extends Component {
           type: 'category',
            padding: {
             left: 0,
-            right: 5,
+            right: 0,
           },
           tick: {
             count: this.getMaxTicks(chartData),
-            fit: false,
+            fit: true,
             height: 130,
             rotate: 0,
             format: formatXAxisCallback
