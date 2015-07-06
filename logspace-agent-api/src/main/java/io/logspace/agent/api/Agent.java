@@ -10,7 +10,7 @@ package io.logspace.agent.api;
 import io.logspace.agent.api.order.AgentCapabilities;
 
 /**
- * An Agent is responsible for packaging collected information into {@link Event}s.
+ * An Agent is responsible for packaging collected information into {@link io.logspace.agent.api.event.Event Events}.
  *
  */
 public interface Agent {

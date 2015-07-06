@@ -31,7 +31,7 @@ import org.junit.Test;
 public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
     private static final String HQ_URL = "http://localhost:" + InfrastructureRule.TEST_PORT;
-    private static final String QUEUE_FILE = "./target/queue-file.dat";
+    private static final String QUEUE_DIRECTORY = "./target/";
     private static final String SPACE_TOKEN = "test";
 
     @Before
@@ -43,7 +43,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -56,7 +56,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingOrder() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("2", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
+        HqAgentController.install("2", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -69,7 +69,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testSimpleAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_FILE, SPACE_TOKEN);
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
@@ -92,7 +92,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testUnrecognizedSpaceToken() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_FILE, UUID.randomUUID().toString());
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, UUID.randomUUID().toString());
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();

@@ -30,7 +30,7 @@ public interface EventService {
     Object[] getData(DataDefinition dataDefinition);
 
     /**
-     * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br/>
+     * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>
      * This includes spaces, systems, {@link AgentDescription}s, propertyNames.
      *
      * @param input - The {@link SuggestionInput} to calculate suggestions for.

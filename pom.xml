@@ -8,20 +8,19 @@
     is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>com.indoqa</groupId>
     <artifactId>indoqa-oss-parent</artifactId>
-    <version>2</version>
+    <version>3</version>
   </parent>
 
   <groupId>io.logspace</groupId>
   <artifactId>logspace</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Logspace</name>
   <inceptionYear>2015</inceptionYear>
 
@@ -31,11 +30,32 @@
       <url>https://raw.githubusercontent.com/Indoqa/logspace/master/LICENSE</url>
     </license>
   </licenses>
+  
+  <scm>
+    <connection>scm:git:git@github.com:Indoqa/logspace.git</connection>
+    <developerConnection>scm:git:git@github.com:Indoqa/logspace.git</developerConnection>
+    <url>https://github.com/Indoqa/logspace</url>
+    <tag>HEAD</tag>
+  </scm>
+  
+  <distributionManagement>
+    <repository>
+      <id>indoqa-nexus-releases</id>
+      <name>Indoqa Nexus Releases</name>
+      <url>http://nexus.dev.indoqa.com/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>indoqa-nexus-snapshots</id>
+      <name>Indoqa Nexus Snapshots</name>
+      <url>http://nexus.dev.indoqa.com/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>  
 
   <properties>
     <project.build.compiler.version>1.8</project.build.compiler.version>
+    <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
-    <indoqa-boot-version>0.2-SNAPSHOT</indoqa-boot-version>
+    <indoqa-boot-version>0.2</indoqa-boot-version>
     <spring-version>4.1.4.RELEASE</spring-version>
     <solr-version>5.2.1</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
@@ -46,8 +66,8 @@
     <quartz-version>2.2.1</quartz-version>
     <!--<tape-version>1.2.3</tape-version> -->
 
-    <indoqa-commons-solr-server-factory-version>4.10.0-SNAPSHOT</indoqa-commons-solr-server-factory-version>
-    <solr-spring-client-version>5.1.0-SNAPSHOT</solr-spring-client-version>
+    <solr-spring-server-version>4.10.0</solr-spring-server-version>
+    <solr-spring-client-version>5.1.0</solr-spring-client-version>
     <indoqa-commons-jar-in-jar-version>1.2.1</indoqa-commons-jar-in-jar-version>
     <indoqa-commons-lang-version>1.0.17</indoqa-commons-lang-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
@@ -230,9 +250,9 @@
         <version>${indoqa-commons-lang-version}</version>
       </dependency>
       <dependency>
-        <groupId>com.indoqa.commons</groupId>
-        <artifactId>indoqa-commons-solr-server-factory</artifactId>
-        <version>${indoqa-commons-solr-server-factory-version}</version>
+        <groupId>com.indoqa.solr</groupId>
+        <artifactId>spring-server</artifactId>
+        <version>${solr-spring-server-version}</version>
       </dependency>
       <dependency>
         <groupId>com.indoqa.solr</groupId>
@@ -472,6 +492,13 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>com.indoqa.commons</groupId>
           <artifactId>indoqa-commons-cycle-maven-plugin</artifactId>

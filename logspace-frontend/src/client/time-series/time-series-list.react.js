@@ -11,13 +11,47 @@ import immutable from 'immutable';
 import Component from '../components/component.react';
 import TimeSeriesItem  from '../time-series/time-series-item.react'
 
+import {isSubitem, getReference} from './constants';
+
 export default class TimeSeriesList extends Component {
+  positionMap(items) {
+    const map = []
+
+    items.forEach(function(item, index) {
+      map[item.get('id')] = index
+    })
+
+    return map
+  }
+
+  getSortValue(item, index, positionMap) {
+    const scaleType = item.get('scaleType') 
+
+    if (!isSubitem(scaleType)) {
+      return index + '-0-master'
+    }
+
+    const reference = getReference(scaleType)
+    const indexOfReference = positionMap[reference]
+
+    return indexOfReference + '-' + index + '-subitem'
+  }
+
   render() {
-    const items = this.props.items;
+    const items = this.props.items
+    const positionMap = this.positionMap(items)
+    const sortedItems = items.sortBy((item, index) => this.getSortValue(item, index, positionMap))
+
+    let masterCount = 0
 
     return (
       <div className='time-series-list'>
-        {items.map(function(item) {
+        {sortedItems.map(function(item) {
+          if (!isSubitem(item.get('scaleType')) && masterCount < 2) {
+            masterCount++
+            return <TimeSeriesItem key={item.get("id")} item={item} axis={masterCount}/>;
+          }
+
           return <TimeSeriesItem key={item.get("id")} item={item} />;
         })}
       </div>

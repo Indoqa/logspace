@@ -15,6 +15,8 @@ public interface AgentControllerDescriptionDeserializer {
     /**
      * @param inputStream - The inputStream to deserialize from.
      *
+     * @throws IOException If an error occurs on deserilaziation.
+     *
      * @return The {@link AgentControllerDescription}
      */
     AgentControllerDescription fromJson(InputStream inputStream) throws IOException;

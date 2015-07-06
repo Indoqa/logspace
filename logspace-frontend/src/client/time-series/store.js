@@ -12,7 +12,7 @@ import {Record} from 'immutable'
 import {register} from '../dispatcher'
 import {getRandomString} from '../../lib/getrandomstring'
 
-import {COLORS} from './constants'
+import {COLORS, isSubitem, getReference} from './constants'
 
 import {timeSeriesCursor} from '../state'
 import {timeSeriesDefaultsCursor} from '../state'
@@ -33,7 +33,6 @@ const TimeSeriesItem = Record({
   type: 'spline',
   space: '',
   system: '',
-  axis: '',
   propertyDescriptions: []
 })
 
@@ -71,18 +70,6 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     case actions.rememberSelectedProperty:
       rememberSelectedProperty(data)
       break    
-
-    case actions.onAxisChanged:
-      timeSeriesCursor(timeSeries => {
-        const itemToUpdate = timeSeries
-          .find(function(obj){ return obj.get('id') === data.id })
-          .set('axis', data.axis)
-          
-        const index = timeSeries.indexOf(itemToUpdate)
-
-        return timeSeries.update(index, item => itemToUpdate)
-      })
-    break
   }
 })
 
@@ -96,17 +83,35 @@ function addItem(item) {
 
 function updateItem(item) {
   timeSeriesCursor(timeSeries => {
-    var itemToUpdate = timeSeries.find(function(obj){ return obj.get('id') === item.id })
-    var index = timeSeries.indexOf(itemToUpdate)
-    return timeSeries.set(index, Immutable.fromJS(item))
+    // map orphans to scale type 'auto'
+    const updatedList = timeSeries.map((eachItem) => {
+      if (isSubitem(item.scaleType) && getReference(eachItem.get('scaleType')) === item.id) {
+        return eachItem.set('scaleType', item.scaleType)
+      }
+
+      return eachItem
+    })
+
+    var itemToUpdate = updatedList.find(function(obj){ return obj.get('id') === item.id })
+    var index = updatedList.indexOf(itemToUpdate)
+    return updatedList.set(index, Immutable.fromJS(item))
   })
 }
 
 function deleteItem(data) {
   timeSeriesCursor(timeSeries => {
-    var itemToDelete = timeSeries.find(function(obj){ return obj.get('id') === data })
-    var index = timeSeries.indexOf(itemToDelete)
-    return timeSeries.delete(timeSeries.indexOf(itemToDelete))
+    // map orphans to scale type 'auto'
+    const updatedList = timeSeries.map((item) => {
+      if (getReference(item.get('scaleType')) === data) {
+        return item.set('scaleType', 'auto')
+      }
+
+      return item
+    })
+
+    var itemToDelete = updatedList.find(function(obj){ return obj.get('id') === data })
+    var index = updatedList.indexOf(itemToDelete)
+    return updatedList.delete(updatedList.indexOf(itemToDelete))
   })
 }
 
@@ -114,6 +119,8 @@ function prepareNewItem(data) {
   var nextColor = getNextColor()
   var defaultProperty = getDefaultProperty(data.propertyDescriptions)
   var defaultAggregation = getDefaultAggregation(data.propertyDescriptions)
+  var defaultScaleType = getDefaultScaleType()
+  
 
   editedTimeSeriesCursor(editedTimeSeries => {
     const item = new TimeSeriesItem({
@@ -125,7 +132,8 @@ function prepareNewItem(data) {
       system: data.system,
       propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
       aggregate: defaultAggregation,
-      color: nextColor
+      color: nextColor,
+      scaleType: defaultScaleType
     }).toMap()
 
     return editedTimeSeries.set('newItem',  item)
@@ -198,4 +206,19 @@ function containsDefault(propertyDescriptions, suggestion) {
 
 function getDefaultAggregation(propertyDescriptions) {
   return timeSeriesDefaultsCursor().get('aggregate')
+}
+
+function getDefaultScaleType() {
+  let lastMasterItem = null;
+  timeSeriesCursor().forEach(function(item) {
+    if (!isSubitem(item.get('scaleType'))) {
+      lastMasterItem = item
+    }   
+  })
+
+  if (lastMasterItem == null) {
+    return 'auto'
+  }
+
+  return 'subitem-' + lastMasterItem.get('id')
 }

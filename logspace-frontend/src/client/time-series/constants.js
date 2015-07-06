@@ -30,3 +30,15 @@ export const TYPES = [
   'line',
   'area'
 ]
+
+export function isSubitem(scaleType) {
+  return scaleType.indexOf('subitem-') == 0
+}
+
+export function getReference(scaleType) {
+  if (!isSubitem(scaleType)) {
+    return null
+  }
+
+  return scaleType.substring(8)
+}
