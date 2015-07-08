@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
 /**
@@ -93,6 +94,8 @@ public abstract class AbstractJsonSerializer {
 
     private JsonGenerator createJsonGenerator(OutputStream baos) throws IOException {
         JsonGenerator result = JSON_FACTORY.createGenerator(baos, UTF8);
+
+        result.configure(Feature.QUOTE_NON_NUMERIC_NUMBERS, false);
 
         if (this.logger.isDebugEnabled()) {
             result.setPrettyPrinter(new DefaultPrettyPrinter());

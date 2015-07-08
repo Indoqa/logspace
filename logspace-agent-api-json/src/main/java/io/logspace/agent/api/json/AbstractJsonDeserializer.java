@@ -15,6 +15,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.JsonToken;
 
 /**
@@ -96,6 +97,7 @@ public abstract class AbstractJsonDeserializer {
 
     protected void setData(byte[] data) throws IOException {
         this.jsonParser = JSON_FACTORY.createParser(data);
+        this.jsonParser.configure(Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
     }
 
     protected void setInputStream(InputStream inputStream) throws IOException {
