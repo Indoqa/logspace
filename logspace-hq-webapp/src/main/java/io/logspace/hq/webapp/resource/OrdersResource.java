@@ -83,15 +83,10 @@ public class OrdersResource extends AbstractSpaceResource {
         Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
     }
 
-    private File getOrderFile(String controllerId) {
-        return new File(this.ordersDirectory, controllerId + ".json");
-    }
-
     private String getOrder(Request req, Response res) throws IOException {
         this.validateSpace(req);
 
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
-        this.logger.debug("Retrieving order for AgentController with ID '{}'.", controllerId);
 
         File file = this.getOrderFile(controllerId);
         if (!file.exists()) {
@@ -103,9 +98,14 @@ public class OrdersResource extends AbstractSpaceResource {
             throw new NotModifiedException();
         }
 
+        this.logger.info("Serving order for AgentController with ID '{}'.", controllerId);
         try (InputStream inputStream = new FileInputStream(file)) {
             res.header("Last-Modified", formatHttpDate(new Date(file.lastModified())));
             return IOUtils.toString(inputStream, "UTF-8");
         }
+    }
+
+    private File getOrderFile(String controllerId) {
+        return new File(this.ordersDirectory, controllerId + ".json");
     }
 }
