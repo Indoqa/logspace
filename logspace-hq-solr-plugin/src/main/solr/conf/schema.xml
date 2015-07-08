@@ -73,7 +73,7 @@
   <dynamicField name="float_property_*" type="float" indexed="true" stored="true" multiValued="false" />
   <dynamicField name="integer_property_*" type="int" indexed="true" stored="true" multiValued="false" />
   <dynamicField name="long_property_*" type="long" indexed="true" stored="true" multiValued="false" />
-  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="false" />
+  <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
 
   <field name="property_id" type="string" indexed="true" stored="false" multiValued="true" />
 
