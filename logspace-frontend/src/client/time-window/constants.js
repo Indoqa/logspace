@@ -59,8 +59,9 @@ export const TimeWindowSelection = Record({
   label: '',
   start: () => moment().utc().startOf('day'), 
   end: () => moment().utc().startOf('day'),
-  dynamicDuration: 60,
-  dynamicUnit: units.get('second'),
+  type: 'shortcut',
+  dynamic: {},
+  shortcutId: null,
   gap: Immutable.fromJS({
     amount: 1,
     unit: units.get('hour')
@@ -69,6 +70,7 @@ export const TimeWindowSelection = Record({
 
 export const selections = [
   new TimeWindowSelection({
+    shortcutId: 1,
     label: 'Today',
     start: () => moment().startOf('day'), 
     end: () => moment().endOf('day'),
@@ -78,6 +80,7 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
+    shortcutId: 2,
     label: 'Yesterday',
     start: () => moment().subtract(1, 'days').startOf('day'), 
     end: () => moment().subtract(1, 'days').endOf('day'),
@@ -87,6 +90,7 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
+    shortcutId: 3,
     label: 'current hour',
     start: () => moment().startOf('hour'), 
     end: () => moment().endOf('hour'),
@@ -96,6 +100,7 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
+    shortcutId: 4,
     label: 'previous hour',
     start: () => moment().subtract(1, 'hours').startOf('hour'), 
     end: () => moment().subtract(1, 'hours').endOf('hour'),
@@ -105,6 +110,7 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
+    shortcutId: 5,
     label: 'last 60 minutes',
     start: () => moment().subtract(60, 'minutes'), 
     end: () => moment(),
@@ -115,3 +121,14 @@ export const selections = [
   })
 ]
 
+export function shortcutById(id) {
+  for(var shortcutIndex in selections) {
+    const shortcut = selections[shortcutIndex]
+    
+    if (shortcut.shortcutId === id) {
+      return shortcut
+    } 
+  }
+
+  return null
+}

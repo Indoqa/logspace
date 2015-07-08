@@ -24,8 +24,7 @@ export default class Options extends Component {
 
     reader.onloadend = function () {
       try {
-        const loadedState = JSON.parse(reader.result)
-        importState(loadedState)
+        importState(reader.result)
         refreshResult()
       } catch(e) {
         alert('Error importing file: ' + e)
@@ -41,24 +40,21 @@ export default class Options extends Component {
   }
 
   render() {
-    const exportedState = JSON.stringify(getExportState())
+    const exportedState = getExportState()
 
     return (
       <div className='options'>
-        <b>Export to file</b>
+        <b>Export current selection (time window and time series)</b>
         <br/>
         <br/>
-        <button className='exportButton waves-effect waves-light btn'>
-          <a
-            href={'data:text/json;charset=utf8,' + encodeURIComponent(exportedState)}
-            download={this.getDownloadName()}
-            target="_blank">
-            Export
-          </a>
-        </button>
+        <a className='exportButton waves-effect waves-light btn'
+          href={'data:text/json;charset=utf-8,' + encodeURIComponent(exportedState)}
+          download={this.getDownloadName()}>
+          Export
+        </a>
         <br/>
         <br/>
-        <b>Import file</b>
+        <b>Import selection</b>
         <br/>
         <br/>
         <Dropzone onDrop={this.onDrop} size={125} >

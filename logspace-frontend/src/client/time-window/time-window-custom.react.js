@@ -23,14 +23,16 @@ export default class TimeWindowCustom extends Component {
   constructor(props) {
     super(props);
 
+    const selection = props.timeWindow.toJS()
+
     this.state = {
       localState: Immutable.fromJS({
-        dateRange: moment.range(props.timeWindow.start(), props.timeWindow.end()),
+        dateRange: moment.range(selection.start(), selection.end()),
         time: {
-          start: props.timeWindow.start().format("HH:mm:ss"),
-          end: props.timeWindow.end().format("HH:mm:ss")
+          start: selection.start().format("HH:mm:ss"),
+          end: selection.end().format("HH:mm:ss")
         },
-        gap: props.timeWindow.gap
+        gap: selection.gap
       })
     }
   }
