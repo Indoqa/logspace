@@ -81,6 +81,10 @@ export default class TimeWindowCustom extends Component {
   submitCustom() {
     const state = this.state.localState.toJS()
 
+    if (state.gap.amount < 1) {
+      return
+    }
+
     const startDate = state.dateRange.start
     const endDate = state.dateRange.end
 
