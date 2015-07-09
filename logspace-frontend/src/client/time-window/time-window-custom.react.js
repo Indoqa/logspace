@@ -134,6 +134,7 @@ export default class TimeWindowCustom extends Component {
         <TimePicker
           value={state.time.start}
           style={{float: 'left', width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
+          format='HH:mm'
           onChange={(value) => this.onTimeChange('start', value)}
         />
         <button
@@ -142,10 +143,10 @@ export default class TimeWindowCustom extends Component {
         <TimePicker
           value={state.time.end}
           style={{float: 'left', width: '150', padding: 5, border: 'none', marginLeft: '20px'}}
+          format='HH:mm'
           onChange={(value) => this.onTimeChange('end', value)}
         />
       </div>
-    );
+    )
   }
-
 }

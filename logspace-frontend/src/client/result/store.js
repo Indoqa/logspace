@@ -124,8 +124,8 @@ function createRestRequest(timeSeries, timeWindow) {
   timeSeries.forEach(function(item) {
     request.dataDefinitions.push({
       'dateRange': {
-        'start': selection.start(),
-        'end': selection.end(),
+        'start': selection.start().seconds(0).milliseconds(0),
+        'end': selection.end().seconds(0).milliseconds(0),
         'gap': selection.gap.amount * selection.gap.unit.factor
       },
       'globalAgentId': item.get('agentId'),
