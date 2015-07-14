@@ -16,6 +16,9 @@ import moment from 'moment'
 import {onEditableState} from '../editable/actions'
 import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from './actions'
 
+import * as timeWindowActions from '../time-window/actions'
+import * as timeSeriesActions from '../time-series/actions'
+
 require ('./result-header.styl')
 
 export default class Header extends Component {
@@ -48,6 +51,12 @@ export default class Header extends Component {
     hide()
   }
 
+  resetAll() {
+    timeWindowActions.reset()
+    timeSeriesActions.reset()  
+    refreshResult()
+  }
+
   getPlayControls() {
     if (this.props.autoPlay) {
            return (
@@ -75,6 +84,7 @@ export default class Header extends Component {
       <div className='chart-header'>
         <div className='chart-options'>
           {playControls}
+          <span className='option pause' onClick={() => this.resetAll()}/>
           <select onChange={(e) => setChartType(e.target.value)} value={this.props.chartType}>
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>

@@ -29,8 +29,8 @@ export default class TimeWindowCustom extends Component {
       localState: Immutable.fromJS({
         dateRange: moment.range(selection.start(), selection.end()),
         time: {
-          start: selection.start().format("HH:mm:ss"),
-          end: selection.end().format("HH:mm:ss")
+          start: selection.start().format("HH:mm"),
+          end: selection.end().format("HH:mm")
         },
         gap: selection.gap
       })
@@ -52,8 +52,8 @@ export default class TimeWindowCustom extends Component {
   onTimeReset() {
     var newState = {
       time:{
-        start: '00:00:00',
-        end: '23:59:59'
+        start: '00:00',
+        end: '00:00'
       }
     };
 
@@ -88,16 +88,18 @@ export default class TimeWindowCustom extends Component {
     const startDate = state.dateRange.start
     const endDate = state.dateRange.end
 
-    const startTime = moment(state.time.start, "HH:mm:ss");
-    const endTime = moment(state.time.end, "HH:mm:ss");
+    const startTime = moment(state.time.start, "HH:mm");
+    const endTime = moment(state.time.end, "HH:mm");
 
     startDate.hour(startTime.hour())
     startDate.minute(startTime.minute())
-    startDate.second(startTime.second())
-
+    
     endDate.hour(endTime.hour())
     endDate.minute(endTime.minute())
-    endDate.second(endTime.second())
+    
+    if (endTime.hour() == 0 && endTime.minute() == 0) {
+      endDate.add(1, 'days')
+    }
 
     selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
   }

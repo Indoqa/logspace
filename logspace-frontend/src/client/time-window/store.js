@@ -14,7 +14,7 @@ import Immutable from 'immutable'
 import {timeWindowCursor} from '../state'
 import * as actions from './actions'
 
-import {TimeWindowSelection} from './constants'
+import {TimeWindowSelection, selections} from './constants'
 
 export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
@@ -75,5 +75,11 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
         return timeWindow.set('activeTab', data)
       })
       break  
+
+    case actions.reset:
+      timeWindowCursor(timeWindow => {
+        return timeWindow.set('selection', selections[0])
+      })
+      break
   }
 })

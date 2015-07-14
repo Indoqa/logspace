@@ -7,7 +7,10 @@
  */
 import State from '../lib/state'
 import moment from 'moment'
+import hash from 'hash-code'
+
 import {shortcutById} from './time-window/constants'
+import {refreshResult} from './result/actions'
 
 const VERSION = 2
 
@@ -21,16 +24,19 @@ export const resultCursor = state.cursor(['result'])
 export const suggestionCursor = state.cursor(['suggestions'])
 export const viewCursor = state.cursor(['view'])
 
+export function onApplicationInitialized() {
+	if(typeof(Storage) === "undefined") {
+	    return
+	} 
+
+	loadState(window.location.href)
+
+	state.addListener('change', onSaveStateChange)
+	window.addEventListener("hashchange", (e) => loadState(e.newURL))
+}
 
 export function getExportState() {
-	const timeWindow = timeWindowCursor().toJS()
-
-	return JSON.stringify({
-		version: VERSION,
-		timeWindow: timeWindow,
-		timeSeries: timeSeriesCursor().toJS(),
-		serializedTimeWindowRange: serializeTimeWindowRange(timeWindow)
-	})
+	return getExportState_(timeWindowCursor().toJS(), timeSeriesCursor().toJS())
 }
 
 export function importState(importedStateAsString) {
@@ -46,6 +52,62 @@ export function importState(importedStateAsString) {
 
 	const mergedState = state.get().merge(importedState)
 	state.set(mergedState)
+}
+
+function getExportState_(timeWindow, timeSeries) {
+	return JSON.stringify({
+		version: VERSION,
+		timeWindow: timeWindow,
+		timeSeries: timeSeries,
+		serializedTimeWindowRange: serializeTimeWindowRange(timeWindow)
+	})
+}
+
+function onSaveStateChange(state, previousState, path) {
+	if(typeof(Storage) === "undefined") {
+	    return
+	} 
+
+	if (!path || (path[0] != 'timeWindow' && path[0] != 'timeSeries')) {
+		return
+	}
+
+	saveStateChange(state)
+}
+
+function saveStateChange(state) {
+	const stateToExport = state.toJS()
+	const exportedStateAsString = getExportState_(stateToExport.timeWindow, stateToExport.timeSeries)
+	const key = hash.hashCode(exportedStateAsString);
+	
+	sessionStorage.setItem("logspaceHistory_" + key, exportedStateAsString)
+	location.hash = '/?h=' + key
+}
+
+function loadState(url) {
+	console.log('loading state from url',url)
+
+	const pos = url.lastIndexOf('?h=');
+
+	if (pos == -1) {
+		const initialstate = require('./initialstate')
+
+		state.set(state.get().merge({
+			timeWindow: initialstate.timeWindow,
+			timeSeries: initialstate.timeSeries
+		}))
+
+		refreshResult()
+		return
+	}
+
+	const hash = url.substring(pos + 3);
+  const savedState = sessionStorage.getItem("logspaceHistory_" + hash)
+
+	if (savedState) {
+		importState(savedState)
+		refreshResult()
+	}
 }
 
 function serializeTimeWindowRange(timeWindow) {	

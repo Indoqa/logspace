@@ -9,6 +9,10 @@
 import {dispatch} from '../dispatcher';
 import setToString from '../../lib/settostring';
 
+export function reset() {
+  dispatch(reset);
+}
+
 export function onShowTimeWindowForm() {
   dispatch(onShowTimeWindowForm);
 }
@@ -31,6 +35,6 @@ export function onTabOpen(tabIndex) {
 
 // Override actions toString for logging.
 setToString('timeWindow', {
-  selectCustomDate, selectPredefinedDate, onShowTimeWindowForm, selectDynamicDate,onTabOpen
+  selectCustomDate, selectPredefinedDate, onShowTimeWindowForm, selectDynamicDate,onTabOpen,reset
 });
   

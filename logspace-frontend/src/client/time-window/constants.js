@@ -73,7 +73,7 @@ export const selections = [
     shortcutId: 1,
     label: 'Today',
     start: () => moment().startOf('day'), 
-    end: () => moment().endOf('day'),
+    end: () => moment().add(1, 'days').startOf('day'),
     gap: Immutable.fromJS({
       amount: 1,
       unit: units.get('hour')
@@ -83,7 +83,7 @@ export const selections = [
     shortcutId: 2,
     label: 'Yesterday',
     start: () => moment().subtract(1, 'days').startOf('day'), 
-    end: () => moment().subtract(1, 'days').endOf('day'),
+    end: () => moment().startOf('day'),
     gap: Immutable.fromJS({
       amount: 1,
       unit: units.get('hour')

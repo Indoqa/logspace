@@ -14,7 +14,6 @@ import Tabs from 'react-simpletabs'
 import {getExportState, importState} from '../state'
 import {refreshResult} from '../result/actions'
 
-
 require('./options.styl')
 
 

@@ -20,6 +20,8 @@ import Component from '../components/component.react'
 
 import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
+import {refreshResult} from '../result/actions'
+import {onApplicationInitialized} from '../state'
 
 require('./time-series.styl')
 
@@ -30,7 +32,9 @@ export default class TimeSeries extends Component {
   }
 
   componentDidMount() {
+    onApplicationInitialized()
     onNewSuggestionQuery(null)
+    refreshResult()
   }
 
   render() {

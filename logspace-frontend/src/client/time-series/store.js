@@ -70,6 +70,10 @@ export const TimeSeriesStore_dispatchToken = register(({action, data}) => {
     case actions.rememberSelectedProperty:
       rememberSelectedProperty(data)
       break    
+
+    case actions.reset:
+      reset()
+      break      
   }
 })
 
@@ -112,6 +116,12 @@ function deleteItem(data) {
     var itemToDelete = updatedList.find(function(obj){ return obj.get('id') === data })
     var index = updatedList.indexOf(itemToDelete)
     return updatedList.delete(updatedList.indexOf(itemToDelete))
+  })
+}
+
+function reset() {
+  timeSeriesCursor(timeSeries => {
+    return timeSeries.clear()
   })
 }
 
