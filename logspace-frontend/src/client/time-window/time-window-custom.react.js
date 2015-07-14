@@ -53,7 +53,7 @@ export default class TimeWindowCustom extends Component {
     var newState = {
       time:{
         start: '00:00',
-        end: '00:00'
+        end: '23:59'
       }
     };
 
@@ -97,10 +97,6 @@ export default class TimeWindowCustom extends Component {
     endDate.hour(endTime.hour())
     endDate.minute(endTime.minute())
     
-    if (endTime.hour() == 0 && endTime.minute() == 0) {
-      endDate.add(1, 'days')
-    }
-
     selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
   }
 
