@@ -279,7 +279,10 @@ export default class Chart extends Component {
         },
         y: {
           show: true,
-          padding: 0,
+          padding: {
+            top: 5,
+            bottom: 10
+          },
           min: chartData.axisRanges.min.y,
           max: chartData.axisRanges.max.y
         },
@@ -330,7 +333,10 @@ export default class Chart extends Component {
 
     return {
       show: true,
-      padding: 0,
+      padding: {
+        top: 5,
+        bottom: 10
+      },
       min: chartData.axisRanges.min.y2,
       max: chartData.axisRanges.max.y2
     }
