@@ -51,11 +51,11 @@ export default class TimeSeries extends Component {
     return (
       <div className='time-series'>
         <div className='options-left'>
-          <a className='exportButton waves-effect waves-light btn' onClick={onShowOptions}
+          <a className='waves-effect waves-light btn' onClick={onShowOptions}
            >
             Import/Export
           </a>
-             <a className='exportButton waves-effect waves-light btn' onClick={this.resetAll}
+             <a className=' waves-effect waves-light btn' onClick={this.resetAll}
             >
            Reset
           </a>
