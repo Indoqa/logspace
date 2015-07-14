@@ -91,7 +91,7 @@ export const selections = [
   }),
   new TimeWindowSelection({
     shortcutId: 3,
-    label: 'current hour',
+    label: 'Current hour',
     start: () => moment().startOf('hour'), 
     end: () => moment().endOf('hour'),
     gap: Immutable.fromJS({
@@ -101,7 +101,7 @@ export const selections = [
   }),
   new TimeWindowSelection({
     shortcutId: 4,
-    label: 'previous hour',
+    label: 'Previous hour',
     start: () => moment().subtract(1, 'hours').startOf('hour'), 
     end: () => moment().subtract(1, 'hours').endOf('hour'),
     gap: Immutable.fromJS({
@@ -111,7 +111,7 @@ export const selections = [
   }),
   new TimeWindowSelection({
     shortcutId: 5,
-    label: 'last 60 minutes',
+    label: 'Last 60 minutes',
     start: () => moment().subtract(60, 'minutes'), 
     end: () => moment(),
     gap: Immutable.fromJS({

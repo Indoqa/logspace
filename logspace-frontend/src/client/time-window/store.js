@@ -48,7 +48,7 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
     case actions.selectDynamicDate:
       const dynamicSelection = new TimeWindowSelection({
-        label: 'last ' + data.duration + ' ' + data.unit.label,
+        label: 'Last ' + data.duration + ' ' + data.unit.label.toLowerCase(),
         type: 'dynamic',
         start: () => moment().subtract(data.duration, data.unit.label), 
         end: () => moment(),

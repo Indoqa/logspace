@@ -139,9 +139,10 @@ export default class TimeWindowCustom extends Component {
           format='HH:mm'
           onChange={(value) => this.onTimeChange('start', value)}
         />
-        <button
+        <a  
+          className='waves-effect waves-light btn inverted'
           onClick={() => this.onTimeReset()}
-          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '30px'}}>reset</button>
+          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '22px'}}>reset</a>
         <TimePicker
           value={state.time.end}
           style={{float: 'left', width: '150', padding: 5, border: 'none', marginLeft: '20px'}}

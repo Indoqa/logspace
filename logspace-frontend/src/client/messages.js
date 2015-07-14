@@ -11,10 +11,10 @@ export default {
   		header: {
   			null: "",
         options: "Options",
-		  	suggestions: "Select Agent",
-		  	timeWindow: "Change Time Window",
-		  	timeSeriesEdit: "Edit Time Series",
-		  	timeSeriesAdd: "Add new Time Series"
+		  	suggestions: "Select agent",
+		  	timeWindow: "Change time window",
+		  	timeSeriesEdit: "Edit time series",
+		  	timeSeriesAdd: "Add new time series"
   		}	
   	}
   }
