@@ -68,7 +68,8 @@ function onSaveStateChange(state, previousState, path) {
 	    return
 	} 
 
-	if (!path || (path[0] != 'timeWindow' && path[0] != 'timeSeries')) {
+	// TODO: find a better place to store this information
+	if (!path || (path[0] != 'timeWindow' && path[0] != 'timeSeries') ) {
 		return
 	}
 

@@ -12,6 +12,7 @@ import moment from 'moment'
 import Immutable from 'immutable'
 
 import {timeWindowCursor} from '../state'
+import {viewCursor} from '../state'
 import * as actions from './actions'
 
 import {TimeWindowSelection, selections} from './constants'
@@ -71,8 +72,8 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
       break
 
     case actions.onTabOpen:
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('activeTab', data)
+      viewCursor(view => {
+        return view.set('activeTimeWindowTab', data)
       })
       break  
 

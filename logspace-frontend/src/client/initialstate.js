@@ -20,7 +20,6 @@ export default {
   },
   'timeWindow': {
     selection: selections[0],
-    activeTab: 1,
     dynamic: {
       range: {
         amount: 60,
@@ -67,6 +66,7 @@ export default {
   },
   'view': {
     'activePanel': null,
+     activeTimeWindowTab: 1,
     'navDrawerCss': {
       'navigation-drawer' : true,
       'navigation-drawer-expanded' : false
