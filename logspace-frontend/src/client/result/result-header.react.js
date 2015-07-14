@@ -16,9 +16,6 @@ import moment from 'moment'
 import {onEditableState} from '../editable/actions'
 import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from './actions'
 
-import * as timeWindowActions from '../time-window/actions'
-import * as timeSeriesActions from '../time-series/actions'
-
 require ('./result-header.styl')
 
 export default class Header extends Component {
@@ -51,12 +48,6 @@ export default class Header extends Component {
     hide()
   }
 
-  resetAll() {
-    timeWindowActions.reset()
-    timeSeriesActions.reset()  
-    refreshResult()
-  }
-
   getPlayControls() {
     if (this.props.autoPlay) {
            return (
@@ -79,12 +70,12 @@ export default class Header extends Component {
 
   render() {
     const playControls = this.getPlayControls()
- 
+    const closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><path d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z" fill="#FFFFFF"/></svg>'
+
     return (
       <div className='chart-header'>
         <div className='chart-options'>
           {playControls}
-          <span className='option pause' onClick={() => this.resetAll()}/>
           <select onChange={(e) => setChartType(e.target.value)} value={this.props.chartType}>
             <option value={'bar'}>bar</option>
             <option value={'line'}>line</option>

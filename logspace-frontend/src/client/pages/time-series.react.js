@@ -22,6 +22,10 @@ import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
 import {refreshResult} from '../result/actions'
 import {onApplicationInitialized} from '../state'
+import {onShowOptions} from '../options/actions'
+
+import * as timeWindowActions from '../time-window/actions'
+import * as timeSeriesActions from '../time-series/actions'
 
 require('./time-series.styl')
 
@@ -37,9 +41,25 @@ export default class TimeSeries extends Component {
     refreshResult()
   }
 
+  resetAll() {
+    timeWindowActions.reset()
+    timeSeriesActions.reset()  
+    refreshResult()
+  }
+
   render() {
     return (
       <div className='time-series'>
+        <div className='options-left'>
+          <a className='exportButton waves-effect waves-light btn' onClick={onShowOptions}
+           >
+            Import/Export
+          </a>
+             <a className='exportButton waves-effect waves-light btn' onClick={this.resetAll}
+            >
+           Reset
+          </a>
+        </div>
 
         <div className={classnames(this.props.view.get('navDrawerCss').toJS())}>
           <div className="left">
