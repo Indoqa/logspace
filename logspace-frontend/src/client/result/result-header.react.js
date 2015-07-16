@@ -13,6 +13,9 @@ import Editable from '../editable/editable.react'
 import Chart from './result-chart.react'
 import moment from 'moment'
 
+import {default as LiteDropdown} from 'react-lite-dropdown';
+import 'react-lite-dropdown/src/style.css';
+
 import {onEditableState} from '../editable/actions'
 import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from './actions'
 
@@ -25,6 +28,15 @@ export default class Header extends Component {
     
     var me = this
     setInterval(function(){me.onProgress()}, 500)
+
+    this.state = {
+      chartTypeDropdownShown: false
+    }
+  }
+
+  toggleChartTypeDropdownShown() {
+    const currentValue = this.state.chartTypeDropdownShown 
+    this.setState({ chartTypeDropdownShown: !currentValue})
   }
 
   onProgress() {
@@ -76,16 +88,21 @@ export default class Header extends Component {
       <div className='chart-header'>
         <div className='chart-options'>
           {playControls}
-          <select onChange={(e) => setChartType(e.target.value)} value={this.props.chartType}>
-            <option value={'bar'}>bar</option>
-            <option value={'line'}>line</option>
-            <option value={'spline'}>spline</option>
-            <option value={'step'}>step</option>
-            <option value={'area'}>area</option>
-            <option value={'area-spline'}>area-spline</option>
-            <option value={'area-step'}>area-step</option>
-            <option value={'scatter'}>scatter</option>
-          </select>
+           <LiteDropdown
+            displayText={this.props.chartType}
+            defaultText={'not used'}
+            show={this.state.chartTypeDropdownShown}
+            onToggle={() => this.toggleChartTypeDropdownShown()}
+            name={'css-hook-demo'}>
+              <div className={'item'}  onClick={() => setChartType('bar')}>bar</div>
+              <div className={'item'}  onClick={() => setChartType('line')}>line</div>
+              <div className={'item'}  onClick={() => setChartType('spline')}>spline</div>
+              <div className={'item'}  onClick={() => setChartType('step')}>step</div>
+              <div className={'item'}  onClick={() => setChartType('area')}>area</div>
+              <div className={'item'}  onClick={() => setChartType('area-spline')}>area-spline</div>
+              <div className={'item'}  onClick={() => setChartType('area-step')}>area-step</div>
+              <div className={'item'}  onClick={() => setChartType('scatter')}>scatter</div>
+          </LiteDropdown>
         </div>
         <div className="chart-title">
           <Editable
@@ -102,6 +119,7 @@ export default class Header extends Component {
             <label>{this.props.chartTitle}</label>
           </Editable>
         </div>  
+
       </div>  
     )
   }

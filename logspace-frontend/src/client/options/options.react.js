@@ -44,18 +44,6 @@ export default class Options extends Component {
 
     return (
       <Tabs>
-        <Tabs.Panel title='Export'>
-          <div className='options'>
-            <b>Export current configuration (selected time window and time series) to a json file:</b>
-            <br/>
-            <br/>
-            <a className='exportButton waves-effect waves-light btn'
-              href={'data:text/json;charset=utf-8,' + encodeURIComponent(exportedState)}
-              download={this.getDownloadName()}>
-              Download file
-            </a>
-          </div>
-        </Tabs.Panel>
         <Tabs.Panel title='Import'>
           <div className='options'>
             <Dropzone onDrop={this.onDrop} size={225} >
@@ -70,6 +58,27 @@ export default class Options extends Component {
             </Dropzone>
           </div>
         </Tabs.Panel>
+        <Tabs.Panel title='Export'>
+          <div className='options'>
+            <b>Export current configuration (selected time window and time series) to a json file:</b>
+            <br/>
+            <br/>
+            <a className='exportButton waves-effect waves-light btn'
+              href={'data:text/json;charset=utf-8,' + encodeURIComponent(exportedState)}
+              download={this.getDownloadName()}>
+              Download file
+            </a>
+            <br/> 
+            <br/> 
+            <br/> 
+            <br/> 
+            <br/> 
+            <br/> 
+            <br/> 
+            <br/> 
+          </div>
+        </Tabs.Panel>
+        
       </Tabs>
     )
   }

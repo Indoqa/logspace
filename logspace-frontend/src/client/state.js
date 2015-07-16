@@ -91,24 +91,31 @@ function loadState(url) {
 	const pos = url.lastIndexOf('?h=');
 
 	if (pos == -1) {
-		const initialstate = require('./initialstate')
-
-		state.set(state.get().merge({
-			timeWindow: initialstate.timeWindow,
-			timeSeries: initialstate.timeSeries
-		}))
-
-		refreshResult()
+		resetState()
 		return
 	}
 
 	const hash = url.substring(pos + 3);
   const savedState = sessionStorage.getItem("logspaceHistory_" + hash)
 
-	if (savedState) {
-		importState(savedState)
-		refreshResult()
-	}
+	if (!savedState) {
+		resetState()
+		return
+	} 
+
+	importState(savedState)
+	refreshResult()
+}
+
+function resetState() {
+	const initialstate = require('./initialstate')
+
+	state.set(state.get().merge({
+		timeWindow: initialstate.timeWindow,
+		timeSeries: initialstate.timeSeries
+	}))
+
+	refreshResult()
 }
 
 function serializeTimeWindowRange(timeWindow) {	
