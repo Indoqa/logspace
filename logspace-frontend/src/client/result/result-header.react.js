@@ -94,14 +94,14 @@ export default class Header extends Component {
             show={this.state.chartTypeDropdownShown}
             onToggle={() => this.toggleChartTypeDropdownShown()}
             name={'css-hook-demo'}>
-              <div className={'item'}  onClick={() => setChartType('bar')}>bar</div>
-              <div className={'item'}  onClick={() => setChartType('line')}>line</div>
-              <div className={'item'}  onClick={() => setChartType('spline')}>spline</div>
-              <div className={'item'}  onClick={() => setChartType('step')}>step</div>
-              <div className={'item'}  onClick={() => setChartType('area')}>area</div>
-              <div className={'item'}  onClick={() => setChartType('area-spline')}>area-spline</div>
-              <div className={'item'}  onClick={() => setChartType('area-step')}>area-step</div>
-              <div className={'item'}  onClick={() => setChartType('scatter')}>scatter</div>
+              <div className={'item'}  onClick={() => setChartType('bar')}>Bar</div>
+              <div className={'item'}  onClick={() => setChartType('line')}>Line</div>
+              <div className={'item'}  onClick={() => setChartType('spline')}>Spline</div>
+              <div className={'item'}  onClick={() => setChartType('step')}>Step</div>
+              <div className={'item'}  onClick={() => setChartType('area')}>Area line</div>
+              <div className={'item'}  onClick={() => setChartType('area-spline')}>Area spline</div>
+              <div className={'item'}  onClick={() => setChartType('area-step')}>Area step</div>
+              <div className={'item'}  onClick={() => setChartType('scatter')}>Scatter</div>
           </LiteDropdown>
         </div>
         <div className="chart-title">
