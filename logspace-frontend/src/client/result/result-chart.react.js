@@ -225,7 +225,7 @@ export default class Chart extends Component {
 
   formatYTooltip(value, ratio, id, index) {
     const yValue = this.originalColumns[id][index]
-    return new Intl.NumberFormat('en-US').format(yValue)
+    return new Intl.NumberFormat('en-US', {minimumFractionDigits: 3}).format(yValue)
   }
 
   render() {
