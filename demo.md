@@ -14,11 +14,11 @@ See "Behind the Curtain" for details.
 The only requirement for running the *Logspace Demo* is that you have installed a Java Runtime Environment 8 (JRE8).
 We encourage you to use the latest version and stay up-to-date with security and bug fix releases.
 
+## Step 1: Download the Logspace Distribution
+First you need to download the **logspace-dist.zip** and extract it.
 
-## Step 1: The Logspace HQ
-First you need to download the **logspace-hq-webapp-runnable.jar**.
-
-The next step is to open a terminal, change to the directory you downloaded the JAR to and execute the following command:
+## Step 2: Start the Logspace HQ
+The next step is to open a terminal, change to the directory you extracted the **logspace-hq-webapp-runnable.jar** to and execute the following command:
 
 ````
 java -jar logspace-hq-webapp-runnable.jar --demo
@@ -31,10 +31,8 @@ Unless you have already collected some *Events* with this mode before, you will 
 To change this, we will start the *Logspace Monitor* in demo mode as well.
 
 
-## Step 2: The Logspace Monitor
-Download the **logspace-monitor-runnable.jar**.
-
-Now open a terminal, change to the directory you downloaded the JAR to and execute the following command:
+## Step 3: Run the Logspace Monitor
+Now open a second terminal, change to the directory you extracted the **logspace-monitor-runnable.jar** to and execute the following command:
 
 ````
 java -jar logspace-monitor-runnable.jar --demo
@@ -44,7 +42,7 @@ This will start the *Logspace Monitor* in demo mode.
 It will automatically try to connect to a *Logspace HQ* on the same computer on port 4567 and upload its monitoring data.
 
 
-## Step 3: Inspect your *Events*
+## Step 4: Inspect your *Events*
 With the *Monitor* and *HQ* running, you are collecting *Events* about the computer's CPU, memory, disk and swap utilization. Those *Events* are uploaded to the HQ and stored for further analysis.
 
 >Uploading, preparing and storing *Events* takes a little time, since it happens in a background thread using batch processing.<br/>
