@@ -24,6 +24,8 @@ export const resultCursor = state.cursor(['result'])
 export const suggestionCursor = state.cursor(['suggestions'])
 export const viewCursor = state.cursor(['view'])
 
+var lastHash;
+
 export function onApplicationInitialized() {
 	if(typeof(Storage) === "undefined") {
 	    return
@@ -82,20 +84,28 @@ function saveStateChange(state) {
 	const key = hash.hashCode(exportedStateAsString);
 	
 	sessionStorage.setItem("logspaceHistory_" + key, exportedStateAsString)
+	lastHash = key
 	location.hash = '/?h=' + key
 }
 
 function loadState(url) {
-	console.log('loading state from url',url)
-
 	const pos = url.lastIndexOf('?h=');
 
 	if (pos == -1) {
+		lastHash = ''
 		resetState()
 		return
 	}
 
-	const hash = url.substring(pos + 3);
+	const hash = url.substring(pos + 3)
+
+  if (hash == lastHash) {
+		return
+	}
+
+	lastHash = hash
+	
+	console.log('loading state from url',url)
   const savedState = sessionStorage.getItem("logspaceHistory_" + hash)
 
 	if (!savedState) {
