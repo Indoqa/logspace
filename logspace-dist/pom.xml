@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Logspace
+    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+    This program and the accompanying materials are made available under the terms of
+    the Eclipse Public License Version 1.0, which accompanies this distribution and
+    is available at http://www.eclipse.org/legal/epl-v10.html.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>io.logspace</groupId>
+    <artifactId>logspace</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>logspace-dist</artifactId>
+  <name>Logspace Distribution</name>
+  
+  <dependencies> 
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-webapp</artifactId>
+      <classifier>runnable</classifier>
+      <type>jar</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-monitor</artifactId>
+      <classifier>runnable</classifier>
+      <type>jar</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-jvm-agent</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <descriptor>src/main/assembly/dist.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>test-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>de.jutzig</groupId>
+            <artifactId>github-release-plugin</artifactId>
+            <configuration>
+              <repositoryId>https://github.com/Indoqa/logspace</repositoryId>
+              <releaseName>Logspace v${project.version}</releaseName>
+              <description>Distribution Zip v${project.version}</description>
+              <tag>v${project.version}</tag>
+              <artifact>${project.build.directory}/${project.artifactId}-${project.version}.zip</artifact>
+              
+            </configuration>
+            <executions>
+              <execution>
+                <id>upload-distribution</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>release</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

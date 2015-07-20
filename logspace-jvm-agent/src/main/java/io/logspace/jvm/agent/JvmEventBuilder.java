@@ -255,6 +255,6 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     }
 
     private String normalizeName(String name) {
-        return name.toLowerCase().replace(' ', '-');
+        return name.toLowerCase().replace(' ', '_');
     }
 }
