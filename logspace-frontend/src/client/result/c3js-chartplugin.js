@@ -71,11 +71,21 @@ export function transformLogspaceResult(timeSeries, responseJson) {
       chartData.axes[item.get("id")] = 'y'
 
       normalizer = (value) => {
-        const onePercentOfOriginal = (scale.max - scale.min) / 100
-        const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
-        const targetRange = chartData.axisRanges.max.y - chartData.axisRanges.min.y
+        const targetOffset = chartData.axisRanges.min.y
+        const targetRange = Math.min(chartData.axisRanges.max.y - targetOffset, 1)
         const onePercentOfTarget = targetRange / 100
-        return onePercentOfTarget * percentOfOriginal
+
+        const sourceRange = scale.max - scale.min
+
+        // constant value for all slots in this series -> map line to 50%
+        if (sourceRange == 0) {
+          return onePercentOfTarget * 50 + targetOffset
+        }
+
+        const onePercentOfOriginal = sourceRange / 100
+        const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
+
+        return onePercentOfTarget * percentOfOriginal + targetOffset
       }
     }
 
