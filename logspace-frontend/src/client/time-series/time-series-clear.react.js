@@ -10,7 +10,7 @@ import React from 'react';
 import Component from '../components/component.react';
 
 import {reset} from '../time-series/actions'
-
+import {refreshResult} from '../result/actions'
 
 export default class ClearTimeSeries extends Component {
 

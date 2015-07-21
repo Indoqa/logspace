@@ -17,11 +17,6 @@ require('./header.styl')
 
 export default class Header extends Component {
 
-  resetAll() {
-    timeSeriesActions.reset()  
-    refreshResult()
-  }
-
   render() {
     return (
       <div className='header'>
@@ -29,7 +24,7 @@ export default class Header extends Component {
           <span onClick={() => onShowOptions()}
                 dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}} />      
         </div>
-        <div className='logo' onClick={this.resetAll} >{title('Logspace')}</div>
+        <div className='logo'>{title('Logspace')}</div>
       </div>  
     )
   }

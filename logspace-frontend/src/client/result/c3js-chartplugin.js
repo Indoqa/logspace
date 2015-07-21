@@ -129,11 +129,25 @@ function createXAxisLabals(responseJson) {
 }
 
 function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
-  if (scaleType === 'auto') {
-    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }
+  let scale = {
+    min: null,
+    max: null
   }
 
-  return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
+  if (scaleType === 'auto') {
+    scale.min = Math.min.apply(Math, data)
+    scale.max = Math.max.apply(Math, data) 
+  } else {
+    scale.min = parseInt(scaleMin)
+    scale.max = parseInt(scaleMax)
+  }
+
+  if (scale.min == scale.max) {
+    scale.min = scale.min * 0.9
+    scale.max = scale.max * 1.1
+  }
+
+  return scale
 }
 
 function getAppliedScale(item, scaleMap) {
