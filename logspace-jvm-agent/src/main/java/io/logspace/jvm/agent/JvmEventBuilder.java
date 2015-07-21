@@ -122,11 +122,11 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     }
 
     public void setGarbageCollectorRunCount(String garbageCollectorName, long runCount) {
-        this.addProperty(this.normalizeName(garbageCollectorName) + "-" + PROPERTY_GARBAGE_COLLECTOR_RUN_COUNT, runCount);
+        this.addProperty(this.normalizeName(garbageCollectorName) + "_" + PROPERTY_GARBAGE_COLLECTOR_RUN_COUNT, runCount);
     }
 
     public void setGarbageCollectorTime(String garbageCollectorName, long collectionTime) {
-        this.addProperty(this.normalizeName(garbageCollectorName) + "-" + PROPERTY_GARBAGE_COLLECTOR_TIME, collectionTime);
+        this.addProperty(this.normalizeName(garbageCollectorName) + "_" + PROPERTY_GARBAGE_COLLECTOR_TIME, collectionTime);
     }
 
     public void setInitialHeapMemory(long initialHeapMemory) {
