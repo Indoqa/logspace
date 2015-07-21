@@ -129,7 +129,6 @@ export default class Chart extends Component {
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - environmentMarginTop
 
     const minWindowWidth = 1024
-    const minWindowHeight = windowHeight - 0
 
     const headerheight = 40
     const sidebarWidth = 250
@@ -137,7 +136,7 @@ export default class Chart extends Component {
     const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = Math.min(windowHeight, minWindowHeight) - chartPadding - headerheight
+    const height = windowHeight - chartPadding - headerheight
 
     return {
       width : width,
@@ -228,6 +227,10 @@ export default class Chart extends Component {
     return new Intl.NumberFormat('en-US', {minimumFractionDigits: 3}).format(yValue)
   }
 
+  formatYTick(value) {
+    return new Intl.NumberFormat('en-US').format(value)
+  }
+
   render() {
     return (
       <div className={'resultChart'}>
@@ -250,8 +253,10 @@ export default class Chart extends Component {
     const formatXAxisCallback = this.formatXAxis.bind(me)
     const formatXTooltipCallback = this.formatXTooltip.bind(me)
     const formatYTooltipCallback = this.formatYTooltip.bind(me)
+    const formatYTick = this.formatYTick.bind(me)
 
     const defaultType = this.props.chartType
+
 
     return {
       data: {
@@ -283,10 +288,13 @@ export default class Chart extends Component {
             top: 5,
             bottom: 10
           },
+          tick: {
+            format: formatYTick
+          },
           min: chartData.axisRanges.min.y,
           max: chartData.axisRanges.max.y
         },
-        y2: this.getY2Options(chartData)
+        y2: this.getY2Options(chartData, formatYTick)
       },
       grid: {
         x: {
@@ -324,7 +332,7 @@ export default class Chart extends Component {
     return 10
   }
 
-  getY2Options(chartData) {
+  getY2Options(chartData, formatYTick) {
     if (chartData.axisRanges.min.y2 == 0 && chartData.axisRanges.max.y2 == 0) {
       return {
         show: false
@@ -336,6 +344,9 @@ export default class Chart extends Component {
       padding: {
         top: 5,
         bottom: 10
+      },
+      tick: {
+        format: formatYTick
       },
       min: chartData.axisRanges.min.y2,
       max: chartData.axisRanges.max.y2
