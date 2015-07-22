@@ -9,7 +9,7 @@ title: Configuration HqAgentController
 
 - `base-url`: The url to the HQ, e.g. http://localhost:4567.
 - `space-token`: The space-token used for authentication, e.g. development.
-- `queue-file`: The path to the file which will be used for queueing events for upload.
+- `queue-directory`: The path to the directory where the files, for queueing events for upload, will be stored.
 
 ##Configuration via logspace.json
 
@@ -25,7 +25,7 @@ Example logspace.json
   "parameters" : {
     "space-token" : "development",
     "base-url" : "http://localhost:4567",
-    "queue-file" : "./logspace-event-queue.dat"
+    "queue-directory" : "./queues/"
   }
 }
 ```
