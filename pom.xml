@@ -20,7 +20,7 @@
 
   <groupId>io.logspace</groupId>
   <artifactId>logspace</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Logspace</name>
   <inceptionYear>2015</inceptionYear>
 
