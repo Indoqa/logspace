@@ -119,12 +119,14 @@ function createRestRequest(timeSeries, timeWindow) {
     'dataDefinitions': []
   }
 
+  const selection = timeWindow.get('selection').toJS()
+
   timeSeries.forEach(function(item) {
     request.dataDefinitions.push({
       'dateRange': {
-        'start': timeWindow.get('selection').start(),
-        'end': timeWindow.get('selection').end(),
-        'gap': timeWindow.get('selection').get('gap').get('amount') * timeWindow.get('selection').get('gap').get('unit').get('factor')
+        'start': selection.start().seconds(0).milliseconds(0),
+        'end': selection.end().seconds(59).milliseconds(999).add(1,'milliseconds'),
+        'gap': selection.gap.amount * selection.gap.unit.factor
       },
       'globalAgentId': item.get('agentId'),
       'propertyId': item.get('propertyId'),

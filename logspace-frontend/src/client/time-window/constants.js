@@ -59,8 +59,9 @@ export const TimeWindowSelection = Record({
   label: '',
   start: () => moment().utc().startOf('day'), 
   end: () => moment().utc().startOf('day'),
-  dynamicDuration: 60,
-  dynamicUnit: units.get('second'),
+  type: 'shortcut',
+  dynamic: {},
+  shortcutId: null,
   gap: Immutable.fromJS({
     amount: 1,
     unit: units.get('hour')
@@ -69,6 +70,7 @@ export const TimeWindowSelection = Record({
 
 export const selections = [
   new TimeWindowSelection({
+    shortcutId: 1,
     label: 'Today',
     start: () => moment().startOf('day'), 
     end: () => moment().endOf('day'),
@@ -78,16 +80,18 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
+    shortcutId: 2,
     label: 'Yesterday',
     start: () => moment().subtract(1, 'days').startOf('day'), 
-    end: () => moment().subtract(1, 'days').endOf('day'),
+    end: () => moment().subtract(1, 'days').endOf('day'), 
     gap: Immutable.fromJS({
       amount: 1,
       unit: units.get('hour')
     })
   }),
   new TimeWindowSelection({
-    label: 'current hour',
+    shortcutId: 3,
+    label: 'Current hour',
     start: () => moment().startOf('hour'), 
     end: () => moment().endOf('hour'),
     gap: Immutable.fromJS({
@@ -96,7 +100,8 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
-    label: 'previous hour',
+    shortcutId: 4,
+    label: 'Previous hour',
     start: () => moment().subtract(1, 'hours').startOf('hour'), 
     end: () => moment().subtract(1, 'hours').endOf('hour'),
     gap: Immutable.fromJS({
@@ -105,7 +110,8 @@ export const selections = [
     })
   }),
   new TimeWindowSelection({
-    label: 'last 60 minutes',
+    shortcutId: 5,
+    label: 'Last 60 minutes',
     start: () => moment().subtract(60, 'minutes'), 
     end: () => moment(),
     gap: Immutable.fromJS({
@@ -115,3 +121,14 @@ export const selections = [
   })
 ]
 
+export function shortcutById(id) {
+  for(var shortcutIndex in selections) {
+    const shortcut = selections[shortcutIndex]
+    
+    if (shortcut.shortcutId === id) {
+      return shortcut
+    } 
+  }
+
+  return null
+}

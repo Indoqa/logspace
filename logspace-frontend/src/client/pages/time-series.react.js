@@ -10,16 +10,19 @@ import {Link} from 'react-router'
 import classnames from 'classnames'
 
 import AddTimeSeries  from '../time-series/time-series-add.react'
+import ClearTimeSeries  from '../time-series/time-series-clear.react'
 import TimeSeriesList  from '../time-series/time-series-list.react'
 import TimeWindowValues  from '../time-window/time-window-values.react'
 import Result from '../result/result.react'
 import Drawer from '../drawer/drawer.react'
 import Header from '../header/header.react'
-
 import Component from '../components/component.react'
 
 import {onNewSuggestionQuery} from '../suggestions/actions'
 import {onShowTimeWindowForm} from '../time-window/actions'
+import {refreshResult} from '../result/actions'
+import {onApplicationInitialized} from '../state'
+import {onShowOptions} from '../options/actions'
 
 require('./time-series.styl')
 
@@ -30,19 +33,21 @@ export default class TimeSeries extends Component {
   }
 
   componentDidMount() {
+    onApplicationInitialized()
     onNewSuggestionQuery(null)
+    refreshResult()
   }
 
   render() {
     return (
       <div className='time-series'>
-
         <div className={classnames(this.props.view.get('navDrawerCss').toJS())}>
           <div className="left">
             <Header/>
             <TimeWindowValues timeWindow={this.props.timeWindow} />
             <div className='time-series-list-wrapper'>
               <TimeSeriesList items={this.props.timeSeries} />
+              <ClearTimeSeries count={this.props.timeSeries.size} />
               <AddTimeSeries count={this.props.timeSeries.size} />
             </div>
           </div>

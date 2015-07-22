@@ -70,6 +70,11 @@ export default class TimeWindowDynamic extends Component {
   
   submit() {
     const state = this.state.localState.toJS()
+    
+    if (state.range.amount < 1 || state.gap.amount < 1) {
+      return
+    }
+
     selectDynamicDate(state.range.amount, state.range.unit, state.gap)
   }
 

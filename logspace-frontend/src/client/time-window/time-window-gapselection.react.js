@@ -24,7 +24,6 @@ export default class GapSelection extends Component {
     }
   }
 
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       localState: this.state.localState.merge({
@@ -93,5 +92,4 @@ export default class GapSelection extends Component {
       </span>    
     )
   }
-
 }

@@ -178,7 +178,7 @@ export default class EditTimeSeriesScale extends Component {
 
     return (
       <div>    
-        <b>Select Scale</b>
+        <b>Select scale</b>
         <LiteDropdown
           displayText={selectedScaleTypeLabel}
           defaultText={'not used'}

@@ -11,6 +11,8 @@ import Component from '../components/component.react'
 import {onShowOptions} from '../options/actions'
 import {title} from '../environment'
 
+import * as timeSeriesActions from '../time-series/actions'
+
 require('./header.styl')
 
 export default class Header extends Component {
@@ -20,11 +22,12 @@ export default class Header extends Component {
       <div className='header'>
         <div className="options-button">
           <span onClick={() => onShowOptions()}
-                dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}} />
+                dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}} />      
         </div>
         <div className='logo'>{title('Logspace')}</div>
-      </div>
+      </div>  
     )
   }
 
 }
+

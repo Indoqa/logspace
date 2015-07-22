@@ -34,6 +34,10 @@ export function rememberSelectedProperty(value) {
   dispatch(rememberSelectedProperty, value);
 }
 
+export function reset() {
+  dispatch(reset);
+}
+
 setToString('timeSeries', {
-  onTimeSeriesSaved, onNewTimeSeries, onTimeSeriesDeleted, onEditTimeSeries, onTimeSeriesPropertyChanged, rememberSelectedProperty
+  onTimeSeriesSaved, onNewTimeSeries, onTimeSeriesDeleted, onEditTimeSeries, onTimeSeriesPropertyChanged, rememberSelectedProperty, reset
 });  

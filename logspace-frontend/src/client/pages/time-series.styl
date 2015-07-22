@@ -27,10 +27,19 @@
 
   .time-series-list-wrapper
     position absolute
-    height s("calc(100% - 140px)")
+    height s("calc(100% - 70px)")
     overflow-y auto
     overflow-x hidden
     width $navigation-drawer-width
+    
+    .delete-all
+      color #e5e5e5
+      display inline-block
+      font-size 12px
+      margin-top 7px
+      position absolute
+      right 24px
+      cursor pointer
 
   .time-series-list
     position relative
@@ -43,3 +52,13 @@
     margin-bottom 15px
     text-align center
     width $navigation-drawer-width
+
+ .options-left
+    position fixed
+    bottom 0
+    z-index 2
+    width 250px
+    a 
+      width 210px
+   
+ 

@@ -12,9 +12,10 @@ import moment from 'moment'
 import Immutable from 'immutable'
 
 import {timeWindowCursor} from '../state'
+import {viewCursor} from '../state'
 import * as actions from './actions'
 
-import {TimeWindowSelection} from './constants'
+import {TimeWindowSelection, selections} from './constants'
 
 export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
@@ -34,6 +35,7 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
       const customSelection = new TimeWindowSelection({
         label: customLabel,
+        type: 'custom',
         start: () => moment(data.start), 
         end: () => moment(data.end),
         gap: Immutable.fromJS(data.gap)
@@ -46,7 +48,8 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
 
     case actions.selectDynamicDate:
       const dynamicSelection = new TimeWindowSelection({
-        label: 'last ' + data.duration + ' ' + data.unit.label,
+        label: 'Last ' + data.duration + ' ' + data.unit.label.toLowerCase(),
+        type: 'dynamic',
         start: () => moment().subtract(data.duration, data.unit.label), 
         end: () => moment(),
         gap: Immutable.fromJS(data.gap)
@@ -69,9 +72,15 @@ export const TimeWindowStore_dispatchToken = register(({action, data}) => {
       break
 
     case actions.onTabOpen:
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('activeTab', data)
+      viewCursor(view => {
+        return view.set('activeTimeWindowTab', data)
       })
       break  
+
+    case actions.reset:
+      timeWindowCursor(timeWindow => {
+        return timeWindow.set('selection', selections[0])
+      })
+      break
   }
 })

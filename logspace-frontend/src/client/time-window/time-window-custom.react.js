@@ -23,14 +23,16 @@ export default class TimeWindowCustom extends Component {
   constructor(props) {
     super(props);
 
+    const selection = props.timeWindow.toJS()
+
     this.state = {
       localState: Immutable.fromJS({
-        dateRange: moment.range(props.timeWindow.start(), props.timeWindow.end()),
+        dateRange: moment.range(selection.start(), selection.end()),
         time: {
-          start: props.timeWindow.start().format("HH:mm:ss"),
-          end: props.timeWindow.end().format("HH:mm:ss")
+          start: selection.start().format("HH:mm"),
+          end: selection.end().format("HH:mm")
         },
-        gap: props.timeWindow.gap
+        gap: selection.gap
       })
     }
   }
@@ -50,8 +52,8 @@ export default class TimeWindowCustom extends Component {
   onTimeReset() {
     var newState = {
       time:{
-        start: '00:00:00',
-        end: '23:59:59'
+        start: '00:00',
+        end: '23:59'
       }
     };
 
@@ -79,20 +81,22 @@ export default class TimeWindowCustom extends Component {
   submitCustom() {
     const state = this.state.localState.toJS()
 
+    if (state.gap.amount < 1) {
+      return
+    }
+
     const startDate = state.dateRange.start
     const endDate = state.dateRange.end
 
-    const startTime = moment(state.time.start, "HH:mm:ss");
-    const endTime = moment(state.time.end, "HH:mm:ss");
+    const startTime = moment(state.time.start, "HH:mm");
+    const endTime = moment(state.time.end, "HH:mm");
 
     startDate.hour(startTime.hour())
     startDate.minute(startTime.minute())
-    startDate.second(startTime.second())
-
+    
     endDate.hour(endTime.hour())
     endDate.minute(endTime.minute())
-    endDate.second(endTime.second())
-
+    
     selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
   }
 
@@ -128,18 +132,20 @@ export default class TimeWindowCustom extends Component {
         <TimePicker
           value={state.time.start}
           style={{float: 'left', width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
+          format='HH:mm'
           onChange={(value) => this.onTimeChange('start', value)}
         />
-        <button
+        <a  
+          className='waves-effect waves-light btn inverted'
           onClick={() => this.onTimeReset()}
-          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '30px'}}>reset</button>
+          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '22px'}}>reset</a>
         <TimePicker
           value={state.time.end}
           style={{float: 'left', width: '150', padding: 5, border: 'none', marginLeft: '20px'}}
+          format='HH:mm'
           onChange={(value) => this.onTimeChange('end', value)}
         />
       </div>
-    );
+    )
   }
-
 }

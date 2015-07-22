@@ -71,11 +71,21 @@ export function transformLogspaceResult(timeSeries, responseJson) {
       chartData.axes[item.get("id")] = 'y'
 
       normalizer = (value) => {
-        const onePercentOfOriginal = (scale.max - scale.min) / 100
-        const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
-        const targetRange = chartData.axisRanges.max.y - chartData.axisRanges.min.y
+        const targetOffset = chartData.axisRanges.min.y
+        const targetRange = chartData.axisRanges.max.y - targetOffset
         const onePercentOfTarget = targetRange / 100
-        return onePercentOfTarget * percentOfOriginal
+
+        const sourceRange = scale.max - scale.min
+
+        // constant value for all slots in this series -> map line to 50%
+        if (sourceRange == 1) {
+          return onePercentOfTarget * 50 + targetOffset
+        }
+
+        const onePercentOfOriginal = sourceRange / 100
+        const percentOfOriginal = (value - scale.min) / onePercentOfOriginal
+
+        return onePercentOfTarget * percentOfOriginal + targetOffset
       }
     }
 
@@ -119,11 +129,25 @@ function createXAxisLabals(responseJson) {
 }
 
 function getTimeSeriesScale(scaleType, scaleMin, scaleMax, data) {
-  if (scaleType === 'auto') {
-    return { min: Math.min.apply(Math, data), max: Math.max.apply(Math, data) }
+  let scale = {
+    min: null,
+    max: null
   }
 
-  return { min: parseInt(scaleMin), max: parseInt(scaleMax) }
+  if (scaleType === 'auto') {
+    scale.min = Math.min.apply(Math, data)
+    scale.max = Math.max.apply(Math, data) 
+  } else {
+    scale.min = parseInt(scaleMin)
+    scale.max = parseInt(scaleMax)
+  }
+
+  if (scale.min == scale.max) {
+    scale.min = scale.min * 0.9
+    scale.max = scale.max * 1.1
+  }
+
+  return scale
 }
 
 function getAppliedScale(item, scaleMap) {

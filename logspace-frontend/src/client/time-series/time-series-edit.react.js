@@ -44,7 +44,7 @@ export default class EditTimeSeries extends Component {
         </div>
 
         <div className='details'>
-          <b>Select Property</b>
+          <b>Select property</b>
           <br/>
           {agentDescription.get("propertyDescriptions").map((property) => {
             const propertyId = property.get("id")
@@ -65,7 +65,7 @@ export default class EditTimeSeries extends Component {
           })}
 
           <br/>
-          <b>Select Aggregation </b>
+          <b>Select aggregation </b>
           <br/>
           <select name="aggregate" value={agentDescription.get("aggregate")} onChange={this.handleChange.bind(this)}>
             <option value="count">count</option>
@@ -77,7 +77,7 @@ export default class EditTimeSeries extends Component {
           <br/>
           <br/>
 
-          <b>Select Color </b>
+          <b>Select color </b>
           <br/>
           {COLORS.map(function(color) {
             const colorSyle = {
