@@ -9,14 +9,6 @@ package io.logspace.hq.core;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
-import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
-import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
-import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.hq.core.api.AgentDescription;
-import io.logspace.hq.core.api.CapabilitiesService;
-import io.logspace.hq.core.api.IdHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +34,15 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
+import io.logspace.agent.api.order.AgentCapabilities;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.PropertyDescription;
+import io.logspace.hq.core.api.AgentDescription;
+import io.logspace.hq.core.api.CapabilitiesService;
+import io.logspace.hq.core.api.IdHelper;
 
 @Named
 public class CapabilitiesServiceImpl implements CapabilitiesService {
@@ -105,7 +106,7 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
         if (capabilities.hasAgentCapabilities()) {
             for (AgentCapabilities eachAgentCapabilities : capabilities.getAgentCapabilities()) {
                 String globalAgentId = this.getGlobalAgentId(capabilities.getSpace().get(), capabilities.getSystem(),
-                        eachAgentCapabilities.getId());
+                    eachAgentCapabilities.getId());
 
                 AgentDescription agentDescription = new AgentDescription();
                 agentDescription.setGlobalId(globalAgentId);
@@ -139,7 +140,8 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
         Set<String> result = new HashSet<>();
 
         for (AgentCapabilities eachOldAgentCapabilities : capabilities.getAgentCapabilities()) {
-            result.add(this.getGlobalAgentId(capabilities.getSpace().get(), capabilities.getSystem(), eachOldAgentCapabilities.getId()));
+            result
+                .add(this.getGlobalAgentId(capabilities.getSpace().get(), capabilities.getSystem(), eachOldAgentCapabilities.getId()));
         }
 
         return result;

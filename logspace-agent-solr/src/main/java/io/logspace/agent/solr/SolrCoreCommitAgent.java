@@ -42,7 +42,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
         }
 
         SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getId(), this.getSystem(),
-                this.getCoreName());
+            this.getCoreName());
         solrEventBuilder.setWarmuptime(getLong(newSearcher.getStatistics(), "warmupTime"));
         this.sendEvent(solrEventBuilder.toEvent());
     }
@@ -64,7 +64,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
         }
 
         SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getSystem(),
-                this.getCoreName());
+            this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 

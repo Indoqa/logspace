@@ -25,8 +25,8 @@ public final class InvalidDataDefinitionException extends AbstractLogspaceResour
 
     public static InvalidDataDefinitionException illegalAggregate(PropertyType propertyType, Aggregate aggregate) {
         InvalidDataDefinitionException result = new InvalidDataDefinitionException(MessageFormat.format(
-                "Cannot combine a property of type ''{0}'' with aggregation ''{1}''. Supported aggregates for ''{2}'' are {3}",
-                propertyType, aggregate, propertyType, propertyType.getAllowedAggregates()));
+            "Cannot combine a property of type ''{0}'' with aggregation ''{1}''. Supported aggregates for ''{2}'' are {3}",
+            propertyType, aggregate, propertyType, propertyType.getAllowedAggregates()));
 
         result.setParameter("property-type", propertyType);
         result.setParameter("illegal-aggregate", aggregate);
@@ -37,7 +37,7 @@ public final class InvalidDataDefinitionException extends AbstractLogspaceResour
 
     public static InvalidDataDefinitionException invalidRange(Date start, Date end) {
         InvalidDataDefinitionException result = new InvalidDataDefinitionException(
-                format("The start of the range must be before its end."));
+            format("The start of the range must be before its end."));
 
         result.setParameter("start", start);
         result.setParameter("end", end);
@@ -46,9 +46,9 @@ public final class InvalidDataDefinitionException extends AbstractLogspaceResour
     }
 
     public static InvalidDataDefinitionException tooManyValues(int requestedValues, int maxValues) {
-        InvalidDataDefinitionException result = new InvalidDataDefinitionException(
-                format("Cannot create a data response with {0} values. The allowed maximum is {1}. Either decrease the range or increase the gap.",
-                        requestedValues, maxValues));
+        InvalidDataDefinitionException result = new InvalidDataDefinitionException(format(
+            "Cannot create a data response with {0} values. The allowed maximum is {1}. Either decrease the range or increase the gap.",
+            requestedValues, maxValues));
 
         result.setParameter("requested-values", requestedValues);
         result.setParameter("max-values", maxValues);

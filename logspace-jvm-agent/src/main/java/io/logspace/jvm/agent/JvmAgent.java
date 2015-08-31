@@ -43,8 +43,8 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         String jvmIdentifier = System.getProperty(SYSTEM_PROPERTY_JVM_IDENTIFIER);
 
         if (jvmIdentifier == null || jvmIdentifier.isEmpty()) {
-            throw new IllegalArgumentException("System Property: '" + SYSTEM_PROPERTY_JVM_IDENTIFIER
-                    + "' not defined. Please set this property to a unique value.");
+            throw new IllegalArgumentException(
+                "System Property: '" + SYSTEM_PROPERTY_JVM_IDENTIFIER + "' not defined. Please set this property to a unique value.");
         }
 
         return jvmIdentifier;
@@ -55,7 +55,7 @@ public final class JvmAgent extends AbstractSchedulerAgent {
 
         if (agentDescriptionUrl == null || agentDescriptionUrl.isEmpty()) {
             throw new IllegalArgumentException("System Property: '" + SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL
-                    + "' not defined. Please set this property to valid logspace configuration file.");
+                + "' not defined. Please set this property to valid logspace configuration file.");
         }
 
         try {
@@ -67,8 +67,8 @@ public final class JvmAgent extends AbstractSchedulerAgent {
 
         File file = new File(agentDescriptionUrl);
         if (!file.exists()) {
-            throw new IllegalArgumentException("Could not load logspace configuration '" + agentDescriptionUrl
-                    + "'. Is the value correct? ");
+            throw new IllegalArgumentException(
+                "Could not load logspace configuration '" + agentDescriptionUrl + "'. Is the value correct? ");
         }
 
         try {

@@ -35,8 +35,8 @@ public class AgentControllerOrderTest {
             expected.setAgentOrders(this.getRandomAgentOrders());
 
             String json = AgentControllerOrdersJsonSerializer.toJson(expected);
-            AgentControllerOrder actual = AgentControllerOrdersJsonDeserializer.fromJson(new ByteArrayInputStream(json
-                    .getBytes("UTF-8")));
+            AgentControllerOrder actual = AgentControllerOrdersJsonDeserializer
+                .fromJson(new ByteArrayInputStream(json.getBytes("UTF-8")));
 
             this.compare(expected, actual);
         }

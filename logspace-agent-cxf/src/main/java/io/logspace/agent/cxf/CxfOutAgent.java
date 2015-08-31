@@ -7,10 +7,6 @@
  */
 package io.logspace.agent.cxf;
 
-import io.logspace.agent.api.AbstractApplicationAgent;
-import io.logspace.agent.api.ApplicationAgent;
-import io.logspace.agent.api.order.AgentCapabilities;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -26,7 +22,11 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 
-public class CxfOutAgent extends AbstractPhaseInterceptor<Message> implements ApplicationAgent {
+import io.logspace.agent.api.AbstractApplicationAgent;
+import io.logspace.agent.api.ApplicationAgent;
+import io.logspace.agent.api.order.AgentCapabilities;
+
+public class CxfOutAgent extends AbstractPhaseInterceptor<Message>implements ApplicationAgent {
 
     private DelegateAgent delegateAgent;
 

@@ -73,15 +73,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         String spaceToken = agentControllerDescription.getParameterValue(SPACE_TOKEN_PARAMETER);
         this.hqClient = new HqClient(baseUrl, this.getId(), spaceToken);
 
-        int hqCommunicationInterval = Integer.parseInt(agentControllerDescription.getParameterValue(
-                HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
+        int hqCommunicationInterval = Integer.parseInt(agentControllerDescription
+            .getParameterValue(HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
 
         try {
             String queueDirectoryParameter = agentControllerDescription.getParameterValue(QUEUE_DIRECTORY_PARAMETER);
             if (queueDirectoryParameter == null) {
-                throw new AgentControllerInitializationException(format(
-                        "No queue directory is configured. Did you set parameter ''{0}''?", QUEUE_DIRECTORY_PARAMETER));
+                throw new AgentControllerInitializationException(
+                    format("No queue directory is configured. Did you set parameter ''{0}''?", QUEUE_DIRECTORY_PARAMETER));
             }
 
             File queueFile = getFile(queueDirectoryParameter, agentControllerDescription.getId());

@@ -85,7 +85,7 @@ public class AgentScheduler {
 
             if (eachAgentOrder.getTriggerType() == null) {
                 this.logger.error("Found order for agent with ID '{}' that has no trigger type. "
-                        + "This agent will not be able to produce any events!", agentId);
+                    + "This agent will not be able to produce any events!", agentId);
                 continue;
             }
 
@@ -151,8 +151,9 @@ public class AgentScheduler {
             JobDetail job = newJob(UpdateJob.class).withIdentity("update", LOGSPACE_SCHEDULER_GROUP).usingJobData(jobDataMap).build();
 
             Trigger trigger = newTrigger().withIdentity("update-trigger", LOGSPACE_SCHEDULER_GROUP)
-                    .startAt(new Date(System.currentTimeMillis() + UPDATE_START_DELAY))
-                    .withSchedule(simpleSchedule().withIntervalInSeconds(updateInterval).repeatForever()).build();
+                .startAt(new Date(System.currentTimeMillis() + UPDATE_START_DELAY))
+                .withSchedule(simpleSchedule().withIntervalInSeconds(updateInterval).repeatForever())
+                .build();
 
             this.scheduler.scheduleJob(job, trigger);
         } catch (SchedulerException e) {
@@ -208,8 +209,8 @@ public class AgentScheduler {
 
     private void scheduleAgentOrder(AgentOrder agentOrder) {
         if (agentOrder.getTriggerParameter().isPresent()) {
-            this.logger.info("Scheduling order for agent '{}' with trigger '{}' and parameter '{}'.", new Object[] {
-                    agentOrder.getId(), agentOrder.getTriggerType(), agentOrder.getTriggerParameter().get()});
+            this.logger.info("Scheduling order for agent '{}' with trigger '{}' and parameter '{}'.",
+                new Object[] {agentOrder.getId(), agentOrder.getTriggerType(), agentOrder.getTriggerParameter().get()});
         } else {
             this.logger.info("Scheduling order for agent '{}' with trigger '{}'.", agentOrder.getId(), agentOrder.getTriggerType());
         }
@@ -219,10 +220,13 @@ public class AgentScheduler {
         jobDataMap.put(KEY_AGENT_ORDER, agentOrder);
 
         JobDetail job = newJob(ScheduledAgentExecutionJob.class).withIdentity(agentOrder.getId(), AGENT_SCHEDULER_GROUP)
-                .usingJobData(jobDataMap).build();
+            .usingJobData(jobDataMap)
+            .build();
 
-        Trigger trigger = newTrigger().withIdentity(agentOrder.getId() + "-trigger", AGENT_SCHEDULER_GROUP).startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule(agentOrder.getTriggerParameter().get())).build();
+        Trigger trigger = newTrigger().withIdentity(agentOrder.getId() + "-trigger", AGENT_SCHEDULER_GROUP)
+            .startNow()
+            .withSchedule(CronScheduleBuilder.cronSchedule(agentOrder.getTriggerParameter().get()))
+            .build();
 
         try {
             this.scheduler.scheduleJob(job, trigger);

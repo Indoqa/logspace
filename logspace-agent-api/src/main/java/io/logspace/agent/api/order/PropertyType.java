@@ -20,8 +20,8 @@ import java.util.Set;
 
 public enum PropertyType {
 
-    BOOLEAN(count), DATE(count, min, max, avg), INTEGER(count, min, max, avg, sum), LONG(count, min, max, avg, sum), FLOAT(count, min,
-            max, avg, sum), DOUBLE(count, min, max, avg, sum), STRING(count);
+    BOOLEAN(count), DATE(count, min, max, avg), INTEGER(count, min, max, avg, sum), LONG(count, min, max, avg, sum),
+    FLOAT(count, min, max, avg, sum), DOUBLE(count, min, max, avg, sum), STRING(count);
 
     private static final Map<String, PropertyType> PROPERTY_TYPES = new HashMap<String, PropertyType>();
 

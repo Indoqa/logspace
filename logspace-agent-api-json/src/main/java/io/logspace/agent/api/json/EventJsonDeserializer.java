@@ -113,7 +113,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             EventPropertyJsonHandler<?> eventPropertyJsonHandler = EventPropertyJsonHandlers.getHandler(fieldName);
 
             this.validateField(FIELD_BOOLEAN_PROPERTIES, FIELD_DATE_PROPERTIES, FIELD_DOUBLE_PROPERTIES, FIELD_FLOAT_PROPERTIES,
-                    FIELD_INTEGER_PROPERTIES, FIELD_LONG_PROPERTIES, FIELD_STRING_PROPERTIES);
+                FIELD_INTEGER_PROPERTIES, FIELD_LONG_PROPERTIES, FIELD_STRING_PROPERTIES);
 
             this.prepareToken();
             this.validateToken(START_OBJECT);

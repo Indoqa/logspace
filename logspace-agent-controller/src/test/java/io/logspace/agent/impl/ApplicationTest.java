@@ -51,8 +51,8 @@ public class ApplicationTest {
         }
 
         public void triggerEvent() {
-            this.sendEvent(new ImmutableEvent("TEST", this.getSystem(), Optional.of("TEST"), Optional.<String> empty(), Optional
-                    .<String> empty(), null));
+            this.sendEvent(new ImmutableEvent("TEST", this.getSystem(), Optional.of("TEST"), Optional.<String> empty(),
+                Optional.<String> empty(), null));
         }
     }
 }

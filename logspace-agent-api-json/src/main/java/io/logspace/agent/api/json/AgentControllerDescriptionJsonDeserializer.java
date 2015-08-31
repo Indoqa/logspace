@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class AgentControllerDescriptionJsonDeserializer extends AbstractJsonDeserializer implements
-        AgentControllerDescriptionDeserializer {
+public final class AgentControllerDescriptionJsonDeserializer extends AbstractJsonDeserializer
+        implements AgentControllerDescriptionDeserializer {
 
     public static AgentControllerDescription fromJson(byte[] data) throws IOException {
         AgentControllerDescriptionJsonDeserializer deserializer = new AgentControllerDescriptionJsonDeserializer();

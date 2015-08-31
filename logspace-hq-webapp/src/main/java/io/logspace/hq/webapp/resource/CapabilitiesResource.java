@@ -39,8 +39,8 @@ public class CapabilitiesResource extends AbstractSpaceResource {
         String controllerId = req.params(PARAMETER_CONTROLLER_ID);
         this.logger.info("Storing capabilities of controller with ID '{}'.", controllerId);
 
-        AgentControllerCapabilities agentControllerCapabilities = AgentControllerCapabilitiesJsonDeserializer.fromJson(req
-                .bodyAsBytes());
+        AgentControllerCapabilities agentControllerCapabilities = AgentControllerCapabilitiesJsonDeserializer
+            .fromJson(req.bodyAsBytes());
         agentControllerCapabilities.setSpace(Optional.of(space));
 
         if (!controllerId.equals(agentControllerCapabilities.getId())) {

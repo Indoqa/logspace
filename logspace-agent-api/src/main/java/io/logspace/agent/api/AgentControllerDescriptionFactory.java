@@ -31,24 +31,24 @@ public final class AgentControllerDescriptionFactory {
 
         try {
             Class<? extends AgentControllerDescriptionDeserializer> deserializerClass = (Class<? extends AgentControllerDescriptionDeserializer>) Class
-                    .forName(deserializerClassName);
+                .forName(deserializerClassName);
 
             return deserializerClass.newInstance();
         } catch (ClassNotFoundException e) {
             if (DEFAULT_IMPLEMENTATION.equals(deserializerClassName)) {
                 throw new AgentControllerInitializationException("Could not load class '" + deserializerClassName
-                        + "' as deserializer for the logspace configuration. Is logspace-agent-json.jar part of the classpath?", e);
+                    + "' as deserializer for the logspace configuration. Is logspace-agent-json.jar part of the classpath?", e);
             }
 
             throw new AgentControllerInitializationException("Could not find class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Did you configure '" + IMPLEMENTATION_PROPERTY_NAME
-                    + "' properly?", e);
+                + "' as deserializer for the logspace configuration. Did you configure '" + IMPLEMENTATION_PROPERTY_NAME
+                + "' properly?", e);
         } catch (InstantiationException e) {
             throw new AgentControllerInitializationException("Could not instantiate class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Does this class have a default constructor?", e);
+                + "' as deserializer for the logspace configuration. Does this class have a default constructor?", e);
         } catch (IllegalAccessException e) {
             throw new AgentControllerInitializationException("Could not access the constructor of class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Does this class have a default constructor?", e);
+                + "' as deserializer for the logspace configuration. Does this class have a default constructor?", e);
         }
     }
 }

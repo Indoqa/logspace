@@ -106,8 +106,8 @@ public final class AgentControllerProvider {
         try {
             return constructor.newInstance(arguments);
         } catch (Exception e) {
-            throw new AgentControllerException("Failed to instantiate Agent Controller of class '" + constructor.getDeclaringClass()
-                    + "'.", e);
+            throw new AgentControllerException(
+                "Failed to instantiate Agent Controller of class '" + constructor.getDeclaringClass() + "'.", e);
         }
     }
 
@@ -142,7 +142,7 @@ public final class AgentControllerProvider {
         }
 
         throw new AgentControllerException("Could not find a suitable constructor for AgentController '" + agentControllerClass
-                + "'. Either a constructor accepting " + AgentControllerDescription.class + " or a default constructor is required.");
+            + "'. Either a constructor accepting " + AgentControllerDescription.class + " or a default constructor is required.");
     }
 
     private static void initializeDescription() {
@@ -211,8 +211,8 @@ public final class AgentControllerProvider {
         // assume the location is a file path
         File file = new File(logspaceConfig);
         if (!file.exists()) {
-            throw new AgentControllerInitializationException("Could not load logspace configuration from the configured location '"
-                    + logspaceConfig + "'. Is the value correct?");
+            throw new AgentControllerInitializationException(
+                "Could not load logspace configuration from the configured location '" + logspaceConfig + "'. Is the value correct?");
         }
 
         try {

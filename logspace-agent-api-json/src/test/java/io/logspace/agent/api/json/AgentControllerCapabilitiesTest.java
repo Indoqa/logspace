@@ -97,7 +97,7 @@ public class AgentControllerCapabilitiesTest {
         assertArrayEquals(expectedAgentCapabilities.getSupportedTriggerTypes(), actualAgentCapabilities.getSupportedTriggerTypes());
 
         this.comparePropertyDescriptions(expectedAgentCapabilities.getPropertyDescriptions(),
-                actualAgentCapabilities.getPropertyDescriptions());
+            actualAgentCapabilities.getPropertyDescriptions());
     }
 
     private void compare(AgentControllerCapabilities expected, AgentControllerCapabilities actual) {

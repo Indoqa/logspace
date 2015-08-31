@@ -40,7 +40,7 @@ public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
     @PostConstruct
     public void mapExceptions() {
         Spark.exception(AbstractLogspaceResourceException.class,
-                (e, req, res) -> this.mapLogspaceException(res, (AbstractLogspaceResourceException) e));
+            (e, req, res) -> this.mapLogspaceException(res, (AbstractLogspaceResourceException) e));
     }
 
     /**

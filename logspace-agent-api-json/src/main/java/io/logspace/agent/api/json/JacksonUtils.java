@@ -51,8 +51,8 @@ public final class JacksonUtils {
         try {
             return getTimeFormat().parse(value);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but found value '"
-                    + value + "'.", e);
+            throw new IllegalArgumentException(
+                "Expected date field of format '" + ISO_8601_DATE_FORMAT + "', but found value '" + value + "'.", e);
         }
     }
 
@@ -119,12 +119,12 @@ public final class JacksonUtils {
         }
 
         if (expected.length == 1) {
-            throw new IllegalArgumentException("Expected field of name '" + expected + "', but found field of name '" + fieldName
-                    + "'.");
+            throw new IllegalArgumentException(
+                "Expected field of name '" + expected + "', but found field of name '" + fieldName + "'.");
         }
 
-        throw new IllegalArgumentException("Expected field of name '" + Arrays.toString(expected) + "', but found field of name '"
-                + fieldName + "'.");
+        throw new IllegalArgumentException(
+            "Expected field of name '" + Arrays.toString(expected) + "', but found field of name '" + fieldName + "'.");
     }
 
     public static void validateTokenType(JsonToken token, JsonToken... expected) {
@@ -170,7 +170,8 @@ public final class JacksonUtils {
         }
     }
 
-    public static void writeOptionalIntField(JsonGenerator generator, String fieldName, Optional<Integer> optional) throws IOException {
+    public static void writeOptionalIntField(JsonGenerator generator, String fieldName, Optional<Integer> optional)
+            throws IOException {
         if (optional.isPresent()) {
             writeMandatoryIntField(generator, fieldName, optional.get());
         }

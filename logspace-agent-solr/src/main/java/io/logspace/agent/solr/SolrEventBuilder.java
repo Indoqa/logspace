@@ -189,51 +189,51 @@ public final class SolrEventBuilder extends AbstractEventBuilder {
 
     public static long getLong(NamedList<?> namedList, String name) {
         Object value = namedList.get(name);
-    
+
         if (value instanceof Number) {
             return ((Number) value).longValue();
         }
-    
+
         return 0;
     }
 
     public static int getInt(NamedList<?> namedList, String name) {
         Object value = namedList.get(name);
-    
+
         if (value instanceof Number) {
             return ((Number) value).intValue();
         }
-    
+
         return 0;
     }
 
     public static float getFloat(NamedList<?> namedList, String name) {
         Object value = namedList.get(name);
-    
+
         if (value instanceof Number) {
             return ((Number) value).floatValue();
         }
-    
+
         return 0;
     }
 
     public static double getDouble(NamedList<?> namedList, String name) {
         Object value = namedList.get(name);
-    
+
         if (value instanceof Number) {
             return ((Number) value).doubleValue();
         }
-    
+
         return 0;
     }
 
     public static boolean getBoolean(NamedList<?> namedList, String name) {
         Object value = namedList.get(name);
-    
+
         if (value instanceof Boolean) {
             return ((Boolean) value).booleanValue();
         }
-    
+
         return false;
     }
 }

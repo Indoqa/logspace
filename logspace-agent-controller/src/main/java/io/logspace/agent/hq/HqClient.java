@@ -53,8 +53,11 @@ public class HqClient {
         this.agentControllerId = agentControllerId;
         this.spaceToken = spaceToken;
 
-        RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(TIMEOUT).setConnectTimeout(TIMEOUT)
-                .setSocketTimeout(TIMEOUT).build();
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectionRequestTimeout(TIMEOUT)
+            .setConnectTimeout(TIMEOUT)
+            .setSocketTimeout(TIMEOUT)
+            .build();
         this.httpClient = HttpClients.custom().disableAutomaticRetries().setDefaultRequestConfig(requestConfig).build();
     }
 

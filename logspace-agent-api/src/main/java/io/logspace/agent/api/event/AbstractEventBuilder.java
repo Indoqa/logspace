@@ -27,26 +27,20 @@ public abstract class AbstractEventBuilder {
      * @param agentId The id of the agent recording this event.
      *
      * @param system The system recording this event.
-     *
-     * <br>
-     *            Returns a new event object.
      */
     protected AbstractEventBuilder(String agentId, String system) {
         this(agentId, system, Optional.<String> empty(), Optional.<String> empty());
     }
 
     /**
-     * Create an event builder that uses another event as starting point. It uses the others event <code>id</code> as
-     * the new event's {@link #parentEventId} and copies its {@link #globalEventId}.
+     * Create an event builder that uses another event as starting point. It uses the others event <code>id</code> as the new event's
+     * {@link #parentEventId} and copies its {@link #globalEventId}.
      *
      * @param agentId The id of the agent recording this event.
      *
      * @param system The system recording this event.
      *
      * @param parentEvent The parent event to be used as template.
-     *
-     * <br>
-     *            Returns a new event object.
      */
     protected AbstractEventBuilder(String agentId, String system, Event parentEvent) {
         this(agentId, system, Optional.of(parentEvent.getId()), parentEvent.getGlobalEventId());

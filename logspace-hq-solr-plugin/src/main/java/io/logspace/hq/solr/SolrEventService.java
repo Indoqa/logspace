@@ -191,7 +191,7 @@ public class SolrEventService implements EventService {
         }
 
         new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
-                AGENT_DESCRIPTION_REFRESH_INTERVAL);
+            AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     @Override
@@ -242,7 +242,8 @@ public class SolrEventService implements EventService {
 
         result.addField("id", event.getId());
 
-        result.addField(FIELD_GLOBAL_AGENT_ID, this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
+        result.addField(FIELD_GLOBAL_AGENT_ID,
+            this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
         result.addField(FIELD_SPACE, space);
         result.addField(FIELD_SYSTEM, event.getSystem());
         result.addField(FIELD_AGENT_ID, event.getAgentId());
@@ -280,8 +281,8 @@ public class SolrEventService implements EventService {
     private String createJsonFacets(DataDefinition dataDefinition) {
         PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidDataDefinitionException
-                    .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
+            throw InvalidDataDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+                dataDefinition.getAggregate());
         }
 
         FacetBuilder facetBuilder = new FacetBuilder();
@@ -336,7 +337,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-                || agentDescription.getPropertyDescriptions().isEmpty()) {
+            || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -372,8 +373,9 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader().getClusterState()
-                    .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
+            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+                .getClusterState()
+                .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
 
         Calendar calendar = Calendar.getInstance();

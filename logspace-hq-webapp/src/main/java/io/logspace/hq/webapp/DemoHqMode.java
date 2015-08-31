@@ -57,8 +57,8 @@ public class DemoHqMode implements HqMode {
 
             IOUtils.copy(resourceStream, outputStream);
         } catch (IOException e) {
-            throw new ApplicationInitializationException("Could not create file '" + fileName + "' in directory '" + outputDirectory
-                    + "'.", e);
+            throw new ApplicationInitializationException(
+                "Could not create file '" + fileName + "' in directory '" + outputDirectory + "'.", e);
         } finally {
             IOUtils.closeQuietly(outputStream);
             IOUtils.closeQuietly(resourceStream);
