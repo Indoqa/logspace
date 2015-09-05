@@ -42,7 +42,7 @@ public class AgentCapabilities {
     }
 
     public void setPropertyDescriptions(PropertyDescription[] propertyDescriptions) {
-        this.propertyDescriptions = propertyDescriptions;
+        this.propertyDescriptions = propertyDescriptions.clone();
     }
 
     public void setSupportedTriggerTypes(TriggerType... supportedTriggerTypes) {

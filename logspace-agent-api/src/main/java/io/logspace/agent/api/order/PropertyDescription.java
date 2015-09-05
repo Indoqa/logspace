@@ -59,7 +59,7 @@ public class PropertyDescription implements Comparable<PropertyDescription> {
     }
 
     public void setUnits(PropertyUnit[] units) {
-        this.units = units;
+        this.units = units.clone();
     }
 
     public static class PropertyUnit {
