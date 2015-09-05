@@ -20,7 +20,6 @@ public final class Premain {
         // hide utility class constructor
     }
 
-    @SuppressWarnings("unused")
     public static void agentmain(String args, Instrumentation inst) {
         agent = JvmAgent.create();
         globalEventId = createGlobalEventId();
@@ -30,7 +29,6 @@ public final class Premain {
         registerShutdownHook();
     }
 
-    @SuppressWarnings("unused")
     public static void premain(String args, Instrumentation inst) {
         agent = JvmAgent.create();
         globalEventId = createGlobalEventId();

@@ -7,23 +7,22 @@
  */
 package io.logspace.hq.webapp.resource;
 
-import io.logspace.hq.core.api.DataDefinition;
-import io.logspace.hq.core.api.DateRange;
-import io.logspace.hq.core.api.EventService;
-import io.logspace.hq.core.api.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.Suggestion;
-import io.logspace.hq.core.api.SuggestionInput;
-
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.indoqa.boot.AbstractJsonResourcesBase;
+
+import io.logspace.hq.core.api.DataDefinition;
+import io.logspace.hq.core.api.DateRange;
+import io.logspace.hq.core.api.EventService;
+import io.logspace.hq.core.api.InvalidDataDefinitionException;
+import io.logspace.hq.core.api.Suggestion;
+import io.logspace.hq.core.api.SuggestionInput;
 import spark.Request;
 import spark.Response;
-
-import com.indoqa.boot.AbstractJsonResourcesBase;
 
 @Named
 public class QueryResource extends AbstractJsonResourcesBase {
@@ -39,14 +38,12 @@ public class QueryResource extends AbstractJsonResourcesBase {
         this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
     }
 
-    @SuppressWarnings("unused")
     private Suggestion getSuggestion(Request req, Response res) {
         SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
 
         return this.eventService.getSuggestion(input);
     }
 
-    @SuppressWarnings("unused")
     private DataResponse postQuery(Request req, Response res) {
         DataResponse result = new DataResponse();
 

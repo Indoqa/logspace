@@ -18,7 +18,6 @@ public class SolrAgentInstaller extends AbstractSolrEventListener {
     }
 
     @Override
-    @SuppressWarnings("unused")
     public void newSearcher(SolrIndexSearcher newSearcher, SolrIndexSearcher currentSearcher) {
         new SolrCoreStatisticsAgent(this.getCore());
         new SolrCoreCommitAgent(this.getCore());
