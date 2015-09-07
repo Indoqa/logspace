@@ -16,7 +16,6 @@ import static io.logspace.agent.api.json.RandomHelper.getRandomLong;
 import static io.logspace.agent.api.json.RandomHelper.getRandomOptional;
 import static io.logspace.agent.api.json.RandomHelper.getRandomString;
 import static org.junit.Assert.assertEquals;
-import io.logspace.agent.api.event.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
+
+import io.logspace.agent.api.event.*;
 
 public class EventTest {
 
@@ -71,7 +72,7 @@ public class EventTest {
         assertEquals(expected.getAgentId(), actual.getAgentId());
         assertEquals(expected.getGlobalEventId(), actual.getGlobalEventId());
         assertEquals(expected.getParentEventId(), actual.getParentEventId());
-        assertEquals(expected.getTimestamp().getTime() / 1000, actual.getTimestamp().getTime() / 1000);
+        assertEquals(expected.getTimestamp().getTime(), actual.getTimestamp().getTime());
         assertEquals(expected.getType(), actual.getType());
 
         assertEquals(expected.getBooleanProperties(), actual.getBooleanProperties());

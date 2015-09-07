@@ -8,7 +8,6 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import io.logspace.agent.api.event.Optional;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -22,9 +21,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
+import io.logspace.agent.api.event.Optional;
+
 public final class JacksonUtils {
 
-    private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     private static final String TIMEZONE_UTC = "UTC";
 
     private JacksonUtils() {
