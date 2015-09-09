@@ -13,32 +13,13 @@ import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.order.Aggregate;
-import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyType;
-import io.logspace.hq.core.api.AgentDescription;
-import io.logspace.hq.core.api.CapabilitiesService;
-import io.logspace.hq.core.api.DataDefinition;
-import io.logspace.hq.core.api.DataRetrievalException;
-import io.logspace.hq.core.api.DateRange;
-import io.logspace.hq.core.api.EventService;
-import io.logspace.hq.core.api.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.Suggestion;
-import io.logspace.hq.core.api.SuggestionInput;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,18 +34,29 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.cloud.Slice;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.commons.lang.util.TimeTracker;
+
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.order.Aggregate;
+import io.logspace.agent.api.order.PropertyDescription;
+import io.logspace.agent.api.order.PropertyType;
+import io.logspace.hq.core.api.*;
 
 @Named
 public class SolrEventService implements EventService {
@@ -105,6 +97,26 @@ public class SolrEventService implements EventService {
     private Map<String, Slice> activeSlicesMap;
     private long nextSliceUpdate;
     private final Map<String, AgentDescription> cachedAgentDescriptions = new ConcurrentHashMap<>();
+
+    @Override
+    public InputStream executeDirectQuery(Map<String, String[]> parameters) {
+        SolrParams params = this.createSolrParams(parameters);
+
+        try {
+            QueryRequest request = new QueryRequest(params, METHOD.POST);
+            request.setResponseParser(new InputStreamResponseParser("json"));
+            QueryResponse response = request.process(this.solrClient);
+
+            InputStream inputStream = (InputStream) response.getResponse().get("stream");
+            if (inputStream != null) {
+                return inputStream;
+            }
+
+            return new ByteArrayInputStream(response.toString().getBytes("UTF-8"));
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Could not execute direct query with parameters " + parameters.toString() + ".", e);
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -329,6 +341,16 @@ public class SolrEventService implements EventService {
         result.setId(propertyId);
         result.setPropertyType(PropertyType.get(matcher.group(1)));
         result.setName(matcher.group(2));
+
+        return result;
+    }
+
+    private SolrParams createSolrParams(Map<String, String[]> parameters) {
+        ModifiableSolrParams result = new ModifiableSolrParams();
+
+        for (Entry<String, String[]> eachEntry : parameters.entrySet()) {
+            result.add(eachEntry.getKey(), eachEntry.getValue());
+        }
 
         return result;
     }

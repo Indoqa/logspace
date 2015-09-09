@@ -7,11 +7,16 @@
  */
 package io.logspace.hq.webapp.resource;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.commons.io.IOUtils;
 
 import com.indoqa.boot.AbstractJsonResourcesBase;
 
@@ -23,6 +28,7 @@ import io.logspace.hq.core.api.Suggestion;
 import io.logspace.hq.core.api.SuggestionInput;
 import spark.Request;
 import spark.Response;
+import spark.Spark;
 
 @Named
 public class QueryResource extends AbstractJsonResourcesBase {
@@ -36,6 +42,20 @@ public class QueryResource extends AbstractJsonResourcesBase {
     public void mount() {
         this.post("/query", (req, res) -> this.postQuery(req, res));
         this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
+
+        Spark.get("/direct-query", (req, res) -> this.getDirectQuery(req, res));
+    }
+
+    private Object getDirectQuery(Request req, Response res) throws IOException {
+        res.type("application/json");
+
+        Map<String, String[]> parameters = req.raw().getParameterMap();
+
+        InputStream inputStream = this.eventService.executeDirectQuery(parameters);
+        IOUtils.copy(inputStream, res.raw().getOutputStream());
+        inputStream.close();
+
+        return "";
     }
 
     private Suggestion getSuggestion(Request req, Response res) {
