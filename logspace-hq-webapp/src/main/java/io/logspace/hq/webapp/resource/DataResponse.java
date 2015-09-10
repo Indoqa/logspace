@@ -24,7 +24,7 @@ public class DataResponse {
     }
 
     public void setData(Object[][] data) {
-        this.data = data.clone();
+        this.data = data != null ? data.clone() : null;
     }
 
     public void setDateRange(DateRange dateRange) {
