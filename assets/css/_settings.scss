@@ -47,7 +47,7 @@ $base-line-height: 140%;
 // We use these to control various global styles
 $body-bg: #fff;
 $body-font-color: #333;
-$body-font-family: "Roboto","Open Sans", Arial, sans-serif;
+$body-font-family: "Yantramanav", sans-serif;
 // $body-font-weight: $font-weight-normal;
 // $body-font-style: normal;
 
@@ -163,7 +163,7 @@ $h6-font-size: 1rem;
 // We use these to style paragraphs
 // $paragraph-font-family: inherit;
 // $paragraph-font-weight: $font-weight-normal;
-$paragraph-font-size: 1rem;
+$paragraph-font-size: 1.1rem;
 // $paragraph-line-height: 1.6;
 $paragraph-margin-bottom: rem-calc(20);
 // $paragraph-aside-font-size: rem-calc(14);
@@ -179,7 +179,7 @@ $code-font-weight: normal;
 // We use these to style anchors
 $anchor-text-decoration: none;
 // $anchor-text-decoration-hover: none;
-$anchor-font-color: blue;
+$anchor-font-color: #0031B6;
 $anchor-font-color-hover: scale-color($anchor-font-color, $lightness: -14%);
 
 // We use these to style the <hr> element
