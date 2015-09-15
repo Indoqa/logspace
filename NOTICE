@@ -8,9 +8,6 @@ This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
 This product includes software developed by
-Daniel Steigerwald - The este.js project (https://github.com/steida/este/)
-
-This product includes software developed by
 Per Wendel - Spark (https://github.com/perwendel/spark)
 
 This product includes software developed by
@@ -24,3 +21,46 @@ slf4j.org (http://www.slf4j.org/)
 
 This product includes software developed by
 spring.io (http://projects.spring.io/spring-framework/)
+
+This product includes software developed by
+Daniel Steigerwald - The este.js project (https://github.com/este/este/)
+
+This product includes software developed by
+Facebook, Inc. (https://facebook.github.io/react/)
+
+This product includes software developed by
+Tim Wood, Iskren Chernev (http://momentjs.com/)
+
+This product includes software developed by
+Masayuki Tanaka (http://c3js.org/)
+
+This product includes software developed by
+Michael Bostock (http://d3js.org/)
+
+This product includes software developed by
+Matt Zabriskie (https://github.com/mzabriskie/axios)
+
+This product includes software developed by
+Petka Antonov (https://github.com/petkaantonov/bluebird)
+
+This product includes software developed by
+Facebook, Inc. (http://facebook.github.io/immutable-js/)
+
+TBD:
+"intl"
+"intl-messageformat": "^1.1.0",
+"intl-relativeformat": "^1.1.0",
+"normalize.css": "^3.0.2",
+"react-daterange-picker": "^0.8.1",
+"react-document-title": "^1.0.0",
+"react-dropzone": "^1.2.0",
+"react-hot-loader": "^1.1.4",
+"react-intl": "^1.1.0",
+"react-lite-dropdown": "^0.1.5",
+"react-pure-render": "^1.0.1",
+"react-router": "^0.13.1",
+"react-simpletabs": "^0.6.1",
+"react-time-picker": "^1.1.0",
+"hash-code": "^1.0.1"
+"halogen": "^0.1.8",
+"eventemitter3": "^1.0.1",    
