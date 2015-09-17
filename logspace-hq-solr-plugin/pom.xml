@@ -58,6 +58,11 @@
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-core</artifactId>
+      <optional>true</optional>
+    </dependency>
 
     <!-- Test -->
     <dependency>

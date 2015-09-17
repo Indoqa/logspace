@@ -14,9 +14,7 @@ import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -45,6 +43,9 @@ import org.apache.solr.common.cloud.Slice;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
+import org.apache.solr.request.LocalSolrQueryRequest;
+import org.apache.solr.response.JSONResponseWriter;
+import org.apache.solr.response.SolrQueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,6 +99,8 @@ public class SolrEventService implements EventService {
     private long nextSliceUpdate;
     private final Map<String, AgentDescription> cachedAgentDescriptions = new ConcurrentHashMap<>();
 
+    private final JSONResponseWriter jsonResponseWriter = new JSONResponseWriter();
+
     @Override
     public InputStream executeDirectQuery(Map<String, String[]> parameters) {
         SolrParams params = this.createSolrParams(parameters);
@@ -112,7 +115,7 @@ public class SolrEventService implements EventService {
                 return inputStream;
             }
 
-            return new ByteArrayInputStream(response.toString().getBytes("UTF-8"));
+            return this.serializeResponse(params, response);
         } catch (SolrException | SolrServerException | IOException e) {
             throw new DataRetrievalException("Could not execute direct query with parameters " + parameters.toString() + ".", e);
         }
@@ -454,6 +457,19 @@ public class SolrEventService implements EventService {
         result.setPropertyDescriptions(propertyDescriptions);
 
         return result;
+    }
+
+    private InputStream serializeResponse(SolrParams params, QueryResponse response) throws UnsupportedEncodingException, IOException {
+        LocalSolrQueryRequest solrQueryRequest = new LocalSolrQueryRequest(null, params);
+        SolrQueryResponse solrQueryResponse = new SolrQueryResponse();
+        solrQueryResponse.setAllValues(response.getResponse());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
+        this.jsonResponseWriter.write(writer, solrQueryRequest, solrQueryResponse);
+        writer.flush();
+
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 
     protected class RefreshAgentDescriptionCacheTask extends TimerTask {
