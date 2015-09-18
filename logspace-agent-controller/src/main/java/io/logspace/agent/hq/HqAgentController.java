@@ -10,22 +10,6 @@ package io.logspace.agent.hq;
 import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.text.MessageFormat.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.AgentControllerDescription.Parameter;
-import io.logspace.agent.api.AgentControllerException;
-import io.logspace.agent.api.AgentControllerInitializationException;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.SchedulerAgent;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
-import io.logspace.agent.api.util.ConsoleWriter;
-import io.logspace.agent.impl.AbstractAgentController;
-import io.logspace.agent.scheduling.AgentExecutor;
-import io.logspace.agent.scheduling.AgentScheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +25,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.squareup.tape.FileObjectQueue;
+
+import io.logspace.agent.api.*;
+import io.logspace.agent.api.AgentControllerDescription.Parameter;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
+import io.logspace.agent.api.util.ConsoleWriter;
+import io.logspace.agent.impl.AbstractAgentController;
+import io.logspace.agent.scheduling.AgentExecutor;
+import io.logspace.agent.scheduling.AgentScheduler;
 
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
@@ -69,31 +65,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
         this.setId(agentControllerDescription.getId());
 
-        String baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
-        String spaceToken = agentControllerDescription.getParameterValue(SPACE_TOKEN_PARAMETER);
-        this.hqClient = new HqClient(baseUrl, this.getId(), spaceToken);
-
-        int hqCommunicationInterval = Integer.parseInt(agentControllerDescription
-            .getParameterValue(HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
-        this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
-
-        try {
-            String queueDirectoryParameter = agentControllerDescription.getParameterValue(QUEUE_DIRECTORY_PARAMETER);
-            if (queueDirectoryParameter == null) {
-                throw new AgentControllerInitializationException(
-                    format("No queue directory is configured. Did you set parameter ''{0}''?", QUEUE_DIRECTORY_PARAMETER));
-            }
-
-            File queueFile = getFile(queueDirectoryParameter, agentControllerDescription.getId());
-            ConsoleWriter.writeSystem(format("Using queue file ''{0}''.", queueFile.getPath()));
-            this.persistentQueue = new FileObjectQueue<Event>(queueFile, new TapeEventConverter());
-        } catch (Exception e) {
-            throw new AgentControllerInitializationException("Could not initialize queue file.", e);
-        }
-
-        this.commitRunnable = new CommitRunnable();
-        this.setCommitDelay(DEFAULT_COMMIT_DELAY);
-        new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
+        this.initializePersistentQueue(agentControllerDescription);
+        this.initializeHqClient(agentControllerDescription);
+        this.initializeCommitRunnable();
+        this.initializeAgentScheduler(agentControllerDescription);
     }
 
     public static void install(String id, String baseUrl, String queueDirectory, String spaceToken) {
@@ -310,6 +285,40 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         synchronized (this.persistentQueue) {
             return this.persistentQueue.peek(this.uploadSize);
+        }
+    }
+
+    private void initializeAgentScheduler(AgentControllerDescription agentControllerDescription) {
+        int hqCommunicationInterval = Integer.parseInt(agentControllerDescription
+            .getParameterValue(HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
+        this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
+    }
+
+    private void initializeCommitRunnable() {
+        this.commitRunnable = new CommitRunnable();
+        this.setCommitDelay(DEFAULT_COMMIT_DELAY);
+        new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
+    }
+
+    private void initializeHqClient(AgentControllerDescription agentControllerDescription) {
+        String baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
+        String spaceToken = agentControllerDescription.getParameterValue(SPACE_TOKEN_PARAMETER);
+        this.hqClient = new HqClient(baseUrl, this.getId(), spaceToken);
+    }
+
+    private void initializePersistentQueue(AgentControllerDescription agentControllerDescription) {
+        try {
+            String queueDirectoryParameter = agentControllerDescription.getParameterValue(QUEUE_DIRECTORY_PARAMETER);
+            if (queueDirectoryParameter == null) {
+                throw new AgentControllerInitializationException(
+                    format("No queue directory is configured. Did you set parameter ''{0}''?", QUEUE_DIRECTORY_PARAMETER));
+            }
+
+            File queueFile = getFile(queueDirectoryParameter, agentControllerDescription.getId());
+            ConsoleWriter.writeSystem(format("Using queue file ''{0}''.", queueFile.getPath()));
+            this.persistentQueue = new FileObjectQueue<Event>(queueFile, new TapeEventConverter());
+        } catch (Exception e) {
+            throw new AgentControllerInitializationException("Could not initialize queue file.", e);
         }
     }
 
