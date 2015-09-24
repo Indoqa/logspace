@@ -5,10 +5,12 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp.resource;
+package io.logspace.hq.rest.resource;
 
 import io.logspace.hq.core.api.AbstractLogspaceResourceException;
 import io.logspace.hq.core.api.Spaces;
+import io.logspace.hq.rest.model.InvalidSpaceTokenException;
+import io.logspace.hq.rest.model.MissingSpaceTokenException;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

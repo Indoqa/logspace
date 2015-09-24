@@ -23,17 +23,9 @@
   <name>Logspace HQ RESTful resources</name>
 
   <dependencies>
-    <!-- Spark -->
     <dependency>
-      <groupId>com.sparkjava</groupId>
-      <artifactId>spark-core</artifactId>
-      <version>${spark-version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.indoqa</groupId>
+      <artifactId>indoqa-boot</artifactId>
     </dependency>
 
     <dependency>

@@ -5,9 +5,10 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp.resource;
+package io.logspace.hq.rest.resource;
 
 import io.logspace.hq.core.api.NotModifiedException;
+import io.logspace.hq.rest.model.OrderNotFoundException;
 
 import java.io.File;
 import java.io.FileInputStream;

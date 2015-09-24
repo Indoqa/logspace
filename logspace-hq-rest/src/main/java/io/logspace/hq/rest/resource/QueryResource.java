@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp.resource;
+package io.logspace.hq.rest.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +26,8 @@ import io.logspace.hq.core.api.EventService;
 import io.logspace.hq.core.api.InvalidDataDefinitionException;
 import io.logspace.hq.core.api.Suggestion;
 import io.logspace.hq.core.api.SuggestionInput;
+import io.logspace.hq.rest.model.DataQuery;
+import io.logspace.hq.rest.model.DataResponse;
 import spark.Request;
 import spark.Response;
 import spark.Spark;

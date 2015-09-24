@@ -7,14 +7,13 @@
  */
 package io.logspace.hq.webapp;
 
-import io.logspace.hq.webapp.resource.EmbeddedStaticResources;
-import io.logspace.hq.webapp.resource.ExternalStaticResources;
-
 import java.io.IOException;
 
-import spark.utils.IOUtils;
-
 import com.indoqa.boot.AbstractIndoqaBootApplication;
+
+import io.logspace.hq.rest.resource.EmbeddedStaticResources;
+import io.logspace.hq.rest.resource.ExternalStaticResources;
+import spark.utils.IOUtils;
 
 public class LogspaceHq extends AbstractIndoqaBootApplication {
 
@@ -75,8 +74,8 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
     }
 
     @Override
-    protected String getComponentScanBasePackage() {
-        return BASE_PACKAGE;
+    protected String[] getComponentScanBasePackages() {
+        return new String[] {BASE_PACKAGE};
     }
 
     @Override

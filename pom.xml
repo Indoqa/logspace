@@ -55,9 +55,8 @@
     <project.build.compiler.version>1.8</project.build.compiler.version>
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
-    <indoqa-boot-version>0.2</indoqa-boot-version>
-    <spark-version>2.2</spark-version>
-    <spring-version>4.1.4.RELEASE</spring-version>
+    <indoqa-boot-version>0.3-SNAPSHOT</indoqa-boot-version>
+    <spring-version>4.2.1.RELEASE</spring-version>
     <solr-version>5.2.1</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
 
@@ -109,19 +108,6 @@
         <groupId>com.indoqa</groupId>
         <artifactId>indoqa-boot</artifactId>
         <version>${indoqa-boot-version}</version>
-      </dependency>
-
-      <!-- Spark -->
-      <dependency>
-        <groupId>com.sparkjava</groupId>
-        <artifactId>spark-core</artifactId>
-        <version>${spark-version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <!-- Dependency Injection -->
@@ -205,19 +191,6 @@
         <groupId>cglib</groupId>
         <artifactId>cglib</artifactId>
         <version>2.2</version>
-      </dependency>
-
-      <!-- Spark -->
-      <dependency>
-        <groupId>com.sparkjava</groupId>
-        <artifactId>spark-core</artifactId>
-        <version>2.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <!-- Jetty -->

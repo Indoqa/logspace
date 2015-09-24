@@ -7,8 +7,6 @@
  */
 package io.logspace.hq.webapp;
 
-import io.logspace.agent.api.util.ConsoleWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,11 +15,13 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import spark.Spark;
-
 import com.indoqa.boot.AbstractIndoqaBootApplication.ApplicationInitializationException;
 
+import io.logspace.agent.api.util.ConsoleWriter;
+
 public class DemoHqMode implements HqMode {
+
+    private static final String SPARK_DEFAULT_PORT = "4567";
 
     public DemoHqMode() {
         super();
@@ -32,7 +32,7 @@ public class DemoHqMode implements HqMode {
     @Override
     public void afterInitialization() {
         ConsoleWriter.write("Logspace HQ now running in demo mode");
-        ConsoleWriter.write("Go to http://localhost:" + Spark.SPARK_DEFAULT_PORT);
+        ConsoleWriter.write("Go to http://localhost:" + SPARK_DEFAULT_PORT);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class DemoHqMode implements HqMode {
     }
 
     private void initializeDemoPort() {
-        System.setProperty("port", String.valueOf(Spark.SPARK_DEFAULT_PORT));
+        System.setProperty("port", String.valueOf(SPARK_DEFAULT_PORT));
     }
 
     private void initializeDemoSolr() {
