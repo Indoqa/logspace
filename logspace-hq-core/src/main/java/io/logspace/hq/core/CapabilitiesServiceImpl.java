@@ -7,8 +7,7 @@
  */
 package io.logspace.hq.core;
 
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import static java.nio.file.FileVisitResult.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,9 +78,9 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
 
     @PostConstruct
     public void initialize() throws IOException {
-        this.logger.info("Loading capabilities files from '{}'.", this.capabilitiesDirectory);
-
-        Files.walkFileTree(Paths.get(this.capabilitiesDirectory), new LoadCapabilitiesFileVisitor());
+        Path capabilitiesDir = Paths.get(this.capabilitiesDirectory);
+        this.logger.info("Loading capabilities files from '{}'.", capabilitiesDir.toAbsolutePath().toString());
+        Files.walkFileTree(capabilitiesDir, new LoadCapabilitiesFileVisitor());
     }
 
     @Override
