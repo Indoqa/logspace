@@ -10,6 +10,7 @@ package io.logspace.hq.webapp;
 import java.io.IOException;
 
 import com.indoqa.boot.AbstractIndoqaBootApplication;
+import com.indoqa.boot.ApplicationInitializationException;
 
 import io.logspace.hq.rest.resource.EmbeddedStaticResources;
 import io.logspace.hq.rest.resource.ExternalStaticResources;

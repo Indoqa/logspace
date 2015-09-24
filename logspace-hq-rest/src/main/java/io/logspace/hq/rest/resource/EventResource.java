@@ -8,9 +8,6 @@
 package io.logspace.hq.rest.resource;
 
 import static io.logspace.agent.api.HttpStatusCode.Accepted;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.json.EventJsonDeserializer;
-import io.logspace.hq.core.api.EventService;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -19,6 +16,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.EventJsonDeserializer;
+import io.logspace.hq.core.api.EventService;
 import spark.Request;
 import spark.Response;
 

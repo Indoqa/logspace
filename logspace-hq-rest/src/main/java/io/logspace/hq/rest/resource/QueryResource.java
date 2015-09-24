@@ -18,8 +18,6 @@ import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 
-import com.indoqa.boot.AbstractJsonResourcesBase;
-
 import io.logspace.hq.core.api.DataDefinition;
 import io.logspace.hq.core.api.DateRange;
 import io.logspace.hq.core.api.EventService;
@@ -33,7 +31,7 @@ import spark.Response;
 import spark.Spark;
 
 @Named
-public class QueryResource extends AbstractJsonResourcesBase {
+public class QueryResource extends AbstractLogspaceResourcesBase {
 
     public static final int MAX_STEPS = 10000;
 
@@ -44,8 +42,7 @@ public class QueryResource extends AbstractJsonResourcesBase {
     public void mount() {
         this.post("/query", (req, res) -> this.postQuery(req, res));
         this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
-
-        Spark.get("/direct-query", (req, res) -> this.getDirectQuery(req, res));
+        Spark.get(this.resolvePath("/direct-query"), (req, res) -> this.getDirectQuery(req, res));
     }
 
     private Object getDirectQuery(Request req, Response res) throws IOException {

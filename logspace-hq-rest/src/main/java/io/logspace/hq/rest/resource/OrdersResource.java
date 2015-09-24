@@ -7,9 +7,6 @@
  */
 package io.logspace.hq.rest.resource;
 
-import io.logspace.hq.core.api.NotModifiedException;
-import io.logspace.hq.rest.model.OrderNotFoundException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +24,8 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 
+import io.logspace.hq.core.api.NotModifiedException;
+import io.logspace.hq.rest.model.OrderNotFoundException;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
@@ -81,7 +80,7 @@ public class OrdersResource extends AbstractSpaceResource {
 
     @PostConstruct
     public void mount() {
-        Spark.get("/orders/:" + PARAMETER_CONTROLLER_ID, "application/json", (req, res) -> this.getOrder(req, res));
+        Spark.get(this.resolvePath("/orders/:" + PARAMETER_CONTROLLER_ID), "application/json", (req, res) -> this.getOrder(req, res));
     }
 
     private String getOrder(Request req, Response res) throws IOException {

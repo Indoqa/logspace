@@ -7,11 +7,6 @@
  */
 package io.logspace.hq.rest.resource;
 
-import io.logspace.hq.core.api.AbstractLogspaceResourceException;
-import io.logspace.hq.core.api.Spaces;
-import io.logspace.hq.rest.model.InvalidSpaceTokenException;
-import io.logspace.hq.rest.model.MissingSpaceTokenException;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -19,18 +14,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.logspace.hq.core.api.AbstractLogspaceResourceException;
+import io.logspace.hq.core.api.Spaces;
+import io.logspace.hq.rest.model.InvalidSpaceTokenException;
+import io.logspace.hq.rest.model.MissingSpaceTokenException;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
-
-import com.indoqa.boot.AbstractJsonResourcesBase;
 
 /**
  * Base class for resources, which need protection via spaces. See {@link Spaces}.<br>
  * Consumers must supply the space token header in their request.
  *
  */
-public abstract class AbstractSpaceResource extends AbstractJsonResourcesBase {
+public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBase {
 
     private static final String SPACE_TOKEN_HEADER = "logspace.space-token";
 

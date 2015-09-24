@@ -15,7 +15,7 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import com.indoqa.boot.AbstractIndoqaBootApplication.ApplicationInitializationException;
+import com.indoqa.boot.ApplicationInitializationException;
 
 import io.logspace.agent.api.util.ConsoleWriter;
 
