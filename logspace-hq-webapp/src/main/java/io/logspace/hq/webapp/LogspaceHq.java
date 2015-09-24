@@ -13,6 +13,9 @@ import com.indoqa.boot.AbstractIndoqaBootApplication;
 
 import io.logspace.hq.rest.resource.EmbeddedStaticResources;
 import io.logspace.hq.rest.resource.ExternalStaticResources;
+import io.logspace.hq.webapp.mode.DefaultHqMode;
+import io.logspace.hq.webapp.mode.DemoHqMode;
+import io.logspace.hq.webapp.mode.HqMode;
 import spark.utils.IOUtils;
 
 public class LogspaceHq extends AbstractIndoqaBootApplication {

@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp;
+package io.logspace.hq.webapp.mode;
 
 import java.io.File;
 import java.io.FileOutputStream;

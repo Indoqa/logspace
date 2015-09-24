@@ -5,17 +5,12 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.webapp;
+package io.logspace.hq.webapp.mode;
 
-public class DefaultHqMode implements HqMode {
+public interface HqMode {
 
-    @Override
-    public void afterInitialization() {
-        // default does nothing
-    }
+    void afterInitialization();
 
-    @Override
-    public void beforeInitialization() {
-        // default does nothing
-    }
+    void beforeInitialization();
+
 }
