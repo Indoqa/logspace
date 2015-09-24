@@ -34,11 +34,6 @@
       <artifactId>indoqa-commons-jarinjarloader</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-core</artifactId>
-    </dependency>
-
     <!-- Commons dependencies -->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -92,21 +87,7 @@
     <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent-api-json</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.logspace</groupId>
-      <artifactId>logspace-hq-solr-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.logspace</groupId>
-      <artifactId>logspace-hq-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.logspace</groupId>
-      <artifactId>logspace-frontend</artifactId>
-      <classifier>dist</classifier>
-      <type>zip</type>
+      <artifactId>logspace-hq-rest</artifactId>
     </dependency>
   </dependencies>
 
