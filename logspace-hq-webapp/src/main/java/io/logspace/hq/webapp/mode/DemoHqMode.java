@@ -82,6 +82,7 @@ public class DemoHqMode implements HqMode {
 
         ordersDir.mkdirs();
         this.createFile("/demo/orders/", ordersDir, "logspace-demo.json");
+        this.createFile("/demo/orders/", ordersDir, "logspace-sample.json");
     }
 
     private void initializeDemoLogging() {
@@ -114,5 +115,6 @@ public class DemoHqMode implements HqMode {
         System.setProperty("logspace.hq-webapp.space-tokens-directory", spaceTokensDir.getAbsolutePath());
 
         this.createFile("/demo/space-tokens/", spaceTokensDir, "demo.space-tokens");
+        this.createFile("/demo/space-tokens/", spaceTokensDir, "logspace-sample.space-tokens");
     }
 }
