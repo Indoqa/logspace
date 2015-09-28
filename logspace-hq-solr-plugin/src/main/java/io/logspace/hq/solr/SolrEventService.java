@@ -9,15 +9,27 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
+import static java.util.Calendar.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +60,7 @@ import org.apache.solr.response.JSONResponseWriter;
 import org.apache.solr.response.SolrQueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.commons.lang.util.TimeTracker;
@@ -57,7 +70,15 @@ import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
-import io.logspace.hq.core.api.*;
+import io.logspace.hq.core.api.AgentDescription;
+import io.logspace.hq.core.api.CapabilitiesService;
+import io.logspace.hq.core.api.DataDefinition;
+import io.logspace.hq.core.api.DataRetrievalException;
+import io.logspace.hq.core.api.DateRange;
+import io.logspace.hq.core.api.EventService;
+import io.logspace.hq.core.api.InvalidDataDefinitionException;
+import io.logspace.hq.core.api.Suggestion;
+import io.logspace.hq.core.api.SuggestionInput;
 
 @Named
 public class SolrEventService implements EventService {
@@ -85,6 +106,7 @@ public class SolrEventService implements EventService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
+    @Qualifier("logspace-events")
     private SolrClient solrClient;
 
     @Inject

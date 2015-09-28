@@ -10,6 +10,7 @@ package io.logspace.hq.solr;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ public class SolrPluginConfiguration {
     private String solrEmbeddedConfigurationDir;
 
     @Bean
+    @Qualifier("logspace-events")
     public SolrClientFactory getSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
         solrClientFactory.setUrl(this.solrBaseUrl);
