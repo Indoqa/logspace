@@ -37,7 +37,6 @@ public class EventResource extends AbstractSpaceResource {
         String space = this.getSpace(req);
         Collection<? extends Event> events = EventJsonDeserializer.fromJson(req.bodyAsBytes());
 
-        this.logger.info("Storing {} event(s) for space '{}'", events.size(), space);
         this.eventService.store(events, space);
 
         res.status(Accepted.getCode());

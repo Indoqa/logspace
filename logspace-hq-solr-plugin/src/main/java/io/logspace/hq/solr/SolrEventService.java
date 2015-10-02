@@ -238,13 +238,18 @@ public class SolrEventService implements EventService {
             return;
         }
 
-        this.logger.info("Storing {} event(s) for space '{}'.", events.size(), space);
+        String system = events.stream().findFirst().get().getSystem();
+        this.logger.debug("Storing {} event(s) for space '{}' from system {}", events.size(), space, system);
 
         try {
             Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
             this.solrClient.add(inputDocuments);
+
+            this.logger.debug("Successfully stored {} event(s) for space '{}' from system {}", events.size(), space, system);
         } catch (SolrServerException | IOException e) {
-            throw new EventStoreException("Failed to store " + events.size() + " events.", e);
+            String message = "Failed to store " + events.size() + " events.";
+            this.logger.error(message + " " + e.getClass().getName() + ": " + e.getMessage());
+            throw new EventStoreException(message, e);
         }
     }
 

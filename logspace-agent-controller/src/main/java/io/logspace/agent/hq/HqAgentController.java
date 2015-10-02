@@ -9,7 +9,7 @@ package io.logspace.agent.hq;
 
 import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.text.MessageFormat.format;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -253,7 +253,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.modifiedAgents = true;
     }
 
-    protected void performCommit() {
+    protected void performCommit(long commitDelayInSeconds) {
         try {
             do {
                 List<Event> eventsForUpload = this.getEventsForUpload();
@@ -265,11 +265,12 @@ public class HqAgentController extends AbstractAgentController implements AgentE
                 this.purgeUploadedEvents(eventsForUpload);
             } while (this.persistentQueue.size() >= this.uploadSize);
         } catch (ConnectException cex) {
-            this.logger.error("Could not upload events because the HQ was not available: {}", cex.getMessage());
+            this.logger.error("Could not upload events because the HQ was not available: {}. Trying in {} second(s) again.",
+                cex.getMessage(), commitDelayInSeconds);
         } catch (IOException ioex) {
-            this.logger.error("Failed to upload events.", ioex);
+            this.logger.error("Failed to upload events. Trying in " + commitDelayInSeconds + " second(s) again.", ioex);
         } catch (UploadException ue) {
-            this.logger.error("The HQ did not accept events", ue.getMessage());
+            this.logger.error("The HQ did not accept events: {} Trying in {} second(s) again.", ue.getMessage(), commitDelayInSeconds);
         }
     }
 
@@ -283,8 +284,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
 
         Integer commitDelay = agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);
-        this.logger.info("Committing after {} seconds.", commitDelay);
-        this.setCommitDelay(commitDelay);
+        this.logger.info("Committing after {} second(s).", commitDelay);
+        this.setCommitDelayInSeconds(commitDelay);
     }
 
     private List<Event> getEventsForUpload() {
@@ -303,7 +304,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     private void initializeCommitRunnable() {
         this.commitRunnable = new CommitRunnable();
-        this.setCommitDelay(DEFAULT_COMMIT_DELAY);
+        this.setCommitDelayInSeconds(DEFAULT_COMMIT_DELAY);
         new Thread(this.commitRunnable, "Logspace-Commit-Thread").start();
     }
 
@@ -337,8 +338,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
-    private void setCommitDelay(int commitDelay) {
-        this.commitRunnable.setCommitDelay(SECONDS.toMillis(commitDelay));
+    private void setCommitDelayInSeconds(int commitDelayInSeconds) {
+        this.commitRunnable.setCommitDelayInMilliseconds(SECONDS.toMillis(commitDelayInSeconds));
     }
 
     private void uploadCapabilities() throws IOException {
@@ -352,15 +353,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     private void uploadEvents(Collection<Event> events) throws IOException {
-        this.logger.debug("Uploading {} events to HQ.", events.size());
         this.hqClient.uploadEvents(events);
+        this.logger.info("Successfully uploaded {} event(s) to the HQ.", events.size());
     }
 
     private class CommitRunnable implements Runnable {
 
         private boolean run = true;
         private Thread executorThread;
-        private long commitDelay;
+        private long commitDelayInMilliseconds;
 
         public void commit() {
             this.wakeUp();
@@ -371,23 +372,24 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             this.executorThread = Thread.currentThread();
 
             while (true) {
-                HqAgentController.this.performCommit();
+                long commitDelayInSeconds = MILLISECONDS.toSeconds(this.commitDelayInMilliseconds);
+                HqAgentController.this.performCommit(commitDelayInSeconds);
 
                 synchronized (this) {
                     if (!this.run) {
                         break;
                     }
-                    this.sleep(this.commitDelay);
+                    this.sleep(this.commitDelayInMilliseconds);
                 }
             }
 
             HqAgentController.this.logger.info("CommitRunnable: Stopped.");
         }
 
-        public void setCommitDelay(long commitDelay) {
-            boolean commitDelayChanged = this.commitDelay != commitDelay;
+        public void setCommitDelayInMilliseconds(long commitDelay) {
+            boolean commitDelayChanged = this.commitDelayInMilliseconds != commitDelay;
 
-            this.commitDelay = commitDelay;
+            this.commitDelayInMilliseconds = commitDelay;
 
             if (commitDelayChanged) {
                 this.wakeUp();

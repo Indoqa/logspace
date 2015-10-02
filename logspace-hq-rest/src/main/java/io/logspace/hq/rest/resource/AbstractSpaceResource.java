@@ -25,7 +25,6 @@ import spark.Spark;
 /**
  * Base class for resources, which need protection via spaces. See {@link Spaces}.<br>
  * Consumers must supply the space token header in their request.
- *
  */
 public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBase {
 

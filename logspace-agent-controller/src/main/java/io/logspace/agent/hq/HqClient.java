@@ -8,12 +8,6 @@
 package io.logspace.agent.hq;
 
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
-import io.logspace.agent.api.AgentControllerInitializationException;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
-import io.logspace.agent.api.json.EventJsonSerializer;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.order.AgentControllerOrder;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -27,6 +21,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.logspace.agent.api.AgentControllerInitializationException;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
+import io.logspace.agent.api.json.EventJsonSerializer;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.order.AgentControllerOrder;
 
 public class HqClient {
 
@@ -91,12 +92,12 @@ public class HqClient {
     }
 
     public void uploadEvents(Collection<Event> events) throws IOException {
-        this.logger.info("Uploading {} event(s) using space-token '{}'.", events.size(), this.spaceToken);
-
-        HttpPost httpPost = new HttpPost(this.baseUrl + "/events");
+        String eventsUrl = this.baseUrl + "/events";
+        HttpPost httpPost = new HttpPost(eventsUrl);
         httpPost.setEntity(toJsonEntity(events));
         httpPost.addHeader("logspace.space-token", this.spaceToken);
 
+        this.logger.info("Uploading {} event(s) using space-token '{}' to {}", events.size(), this.spaceToken, eventsUrl);
         this.httpClient.execute(httpPost, new UploadEventsResponseHandler());
     }
 }
