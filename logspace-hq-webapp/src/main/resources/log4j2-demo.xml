@@ -11,7 +11,7 @@
 <Configuration status="INFO" debug="true">
   <Properties>
     <Property name="log-path">${sys:java.io.tmpdir}/logspace-demo/logs</Property>
-    <Property name="log-level">ERROR</Property>
+    <Property name="log-level">INFO</Property>
   </Properties>
 
   <Appenders>

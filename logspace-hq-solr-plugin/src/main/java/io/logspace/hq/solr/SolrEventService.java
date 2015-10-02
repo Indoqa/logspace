@@ -106,7 +106,7 @@ public class SolrEventService implements EventService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    @Qualifier("logspace-events")
+    @Qualifier("logspace-solr-client")
     private SolrClient solrClient;
 
     @Inject

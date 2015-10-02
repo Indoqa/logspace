@@ -29,7 +29,7 @@ public class SolrPluginConfiguration {
     private String solrEmbeddedConfigurationDir;
 
     @Bean
-    @Qualifier("logspace-events")
+    @Qualifier("logspace-solr-client")
     public SolrClientFactory getSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
         solrClientFactory.setUrl(this.solrBaseUrl);
