@@ -5,13 +5,16 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api;
+package io.logspace.hq.core.api.event;
 
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
 import io.logspace.agent.api.event.Event;
+import io.logspace.hq.core.api.model.AgentDescription;
+import io.logspace.hq.core.api.model.Suggestion;
+import io.logspace.hq.core.api.model.SuggestionInput;
 
 /**
  * The responsibilities of the event service are:

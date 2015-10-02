@@ -18,7 +18,7 @@ import javax.inject.Named;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonDeserializer;
-import io.logspace.hq.core.api.EventService;
+import io.logspace.hq.core.api.event.EventService;
 import spark.Request;
 import spark.Response;
 

@@ -18,12 +18,12 @@ import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 
-import io.logspace.hq.core.api.DataDefinition;
-import io.logspace.hq.core.api.DateRange;
-import io.logspace.hq.core.api.EventService;
-import io.logspace.hq.core.api.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.Suggestion;
-import io.logspace.hq.core.api.SuggestionInput;
+import io.logspace.hq.core.api.event.DataDefinition;
+import io.logspace.hq.core.api.event.DateRange;
+import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
+import io.logspace.hq.core.api.model.Suggestion;
+import io.logspace.hq.core.api.model.SuggestionInput;
 import io.logspace.hq.rest.model.DataQuery;
 import io.logspace.hq.rest.model.DataResponse;
 import spark.Request;

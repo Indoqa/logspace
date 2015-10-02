@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest.model;
 
-import io.logspace.hq.core.api.DateRange;
+import io.logspace.hq.core.api.event.DateRange;
 
 public class DataResponse {
 

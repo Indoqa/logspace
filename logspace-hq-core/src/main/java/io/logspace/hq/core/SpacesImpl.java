@@ -7,9 +7,9 @@
  */
 package io.logspace.hq.core;
 
-import io.logspace.hq.core.api.Spaces;
-
 import java.util.Map;
+
+import io.logspace.hq.core.api.model.Spaces;
 
 public class SpacesImpl implements Spaces {
 

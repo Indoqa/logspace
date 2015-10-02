@@ -8,7 +8,8 @@
 package io.logspace.hq.rest.model;
 
 import static io.logspace.agent.api.HttpStatusCode.BadRequest;
-import io.logspace.hq.core.api.AbstractLogspaceResourceException;
+
+import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
 
 public class InvalidControllerIdException extends AbstractLogspaceResourceException {
 

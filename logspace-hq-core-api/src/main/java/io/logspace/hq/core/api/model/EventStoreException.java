@@ -5,16 +5,16 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api;
+package io.logspace.hq.core.api.model;
 
 import static io.logspace.agent.api.HttpStatusCode.InternalServerError;
 
-public class DataRetrievalException extends AbstractLogspaceResourceException {
+public class EventStoreException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public DataRetrievalException(String message, Throwable e) {
-        super(message, InternalServerError, "DATA_RETRIEVAL_FAILED", e);
+    public EventStoreException(String message, Throwable e) {
+        super(message, InternalServerError, "EVENT_STORAGE_FAILED", e);
 
         this.setParameter("cause", e.getMessage());
     }

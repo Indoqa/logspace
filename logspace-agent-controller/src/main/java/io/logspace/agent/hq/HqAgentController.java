@@ -26,8 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import com.squareup.tape.FileObjectQueue;
 
-import io.logspace.agent.api.*;
+import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
+import io.logspace.agent.api.AgentControllerException;
+import io.logspace.agent.api.AgentControllerInitializationException;
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.SchedulerAgent;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
@@ -263,6 +268,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             this.logger.error("Could not upload events because the HQ was not available: {}", cex.getMessage());
         } catch (IOException ioex) {
             this.logger.error("Failed to upload events.", ioex);
+        } catch (UploadException ue) {
+            this.logger.error("The HQ did not accept events", ue.getMessage());
         }
     }
 

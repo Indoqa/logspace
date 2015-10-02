@@ -39,9 +39,9 @@ import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.hq.core.api.AgentDescription;
-import io.logspace.hq.core.api.CapabilitiesService;
-import io.logspace.hq.core.api.IdHelper;
+import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.api.model.AgentDescription;
+import io.logspace.hq.core.api.model.IdHelper;
 
 @Named
 public class CapabilitiesServiceImpl implements CapabilitiesService {

@@ -8,7 +8,6 @@
 package io.logspace.hq.core;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
-import io.logspace.hq.core.api.Spaces;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.indoqa.commons.lang.util.FileUtils;
+
+import io.logspace.hq.core.api.model.Spaces;
 
 @Configuration
 public class SpacesConfiguration {

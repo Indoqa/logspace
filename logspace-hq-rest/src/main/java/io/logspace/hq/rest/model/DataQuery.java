@@ -7,11 +7,11 @@
  */
 package io.logspace.hq.rest.model;
 
-import io.logspace.hq.core.api.DataDefinition;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import io.logspace.hq.core.api.event.DataDefinition;
 
 public class DataQuery implements Iterable<DataDefinition> {
 

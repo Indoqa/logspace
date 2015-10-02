@@ -70,15 +70,16 @@ import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
-import io.logspace.hq.core.api.AgentDescription;
-import io.logspace.hq.core.api.CapabilitiesService;
-import io.logspace.hq.core.api.DataDefinition;
-import io.logspace.hq.core.api.DataRetrievalException;
-import io.logspace.hq.core.api.DateRange;
-import io.logspace.hq.core.api.EventService;
-import io.logspace.hq.core.api.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.Suggestion;
-import io.logspace.hq.core.api.SuggestionInput;
+import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.api.event.DataDefinition;
+import io.logspace.hq.core.api.event.DateRange;
+import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.model.AgentDescription;
+import io.logspace.hq.core.api.model.DataRetrievalException;
+import io.logspace.hq.core.api.model.EventStoreException;
+import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
+import io.logspace.hq.core.api.model.Suggestion;
+import io.logspace.hq.core.api.model.SuggestionInput;
 
 @Named
 public class SolrEventService implements EventService {
@@ -243,7 +244,7 @@ public class SolrEventService implements EventService {
             Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
             this.solrClient.add(inputDocuments);
         } catch (SolrServerException | IOException e) {
-            this.logger.error("Failed to store events.", e);
+            throw new EventStoreException("Failed to store " + events.size() + " events.", e);
         }
     }
 

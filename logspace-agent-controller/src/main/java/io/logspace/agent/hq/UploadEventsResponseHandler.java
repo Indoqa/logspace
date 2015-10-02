@@ -14,8 +14,14 @@ import org.apache.http.client.ResponseHandler;
 
 public class UploadEventsResponseHandler implements ResponseHandler<Void> {
 
+    private static final int ACCEPTED = 202;
+
     @Override
     public Void handleResponse(final HttpResponse response) throws IOException {
+        if (response.getStatusLine().getStatusCode() != ACCEPTED) {
+            throw new UploadException("Error while uploading events to HQ.");
+        }
+
         return null;
     }
 }

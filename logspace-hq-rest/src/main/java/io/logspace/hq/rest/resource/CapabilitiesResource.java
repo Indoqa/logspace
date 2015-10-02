@@ -10,7 +10,7 @@ package io.logspace.hq.rest.resource;
 import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.hq.core.api.CapabilitiesService;
+import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.rest.model.InvalidControllerIdException;
 
 import java.io.IOException;

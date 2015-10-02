@@ -5,17 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.model;
+package io.logspace.hq.core.api.model;
 
-import static io.logspace.agent.api.HttpStatusCode.Forbidden;
+import static io.logspace.agent.api.HttpStatusCode.InternalServerError;
 
-import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
-
-public class MissingSpaceTokenException extends AbstractLogspaceResourceException {
+public class DataRetrievalException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public MissingSpaceTokenException(String message) {
-        super(message, Forbidden, "MISSING_SPACE_TOKEN");
+    public DataRetrievalException(String message, Throwable e) {
+        super(message, InternalServerError, "DATA_RETRIEVAL_FAILED", e);
+
+        this.setParameter("cause", e.getMessage());
     }
 }

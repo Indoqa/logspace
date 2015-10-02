@@ -5,9 +5,10 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api;
+package io.logspace.hq.core.api.capabilities;
 
 import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.hq.core.api.model.AgentDescription;
 
 import java.io.IOException;
 

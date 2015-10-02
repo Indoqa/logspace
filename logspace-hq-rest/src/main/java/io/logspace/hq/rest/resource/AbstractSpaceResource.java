@@ -14,8 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.logspace.hq.core.api.AbstractLogspaceResourceException;
-import io.logspace.hq.core.api.Spaces;
+import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
+import io.logspace.hq.core.api.model.Spaces;
 import io.logspace.hq.rest.model.InvalidSpaceTokenException;
 import io.logspace.hq.rest.model.MissingSpaceTokenException;
 import spark.Request;

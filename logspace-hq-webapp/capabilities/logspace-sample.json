@@ -1,0 +1,11 @@
+{
+  "id" : "logspace-sample",
+  "system" : "gandalf",
+  "space" : "logspace-sample",
+  "agent-capabilities" : [ {
+    "id" : "usage-agent",
+    "type" : "usage",
+    "trigger-types" : [ "Off", "Application" ],
+    "property-descriptions" : [ ]
+  } ]
+}
