@@ -33,6 +33,7 @@ public class DemoHqMode implements HqMode {
     public void afterInitialization() {
         ConsoleWriter.write("Logspace HQ now running in demo mode");
         ConsoleWriter.write("Go to http://localhost:" + SPARK_DEFAULT_PORT);
+        ConsoleWriter.write("");
     }
 
     @Override
