@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -213,29 +214,31 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     @Override
-    public void update() {
+    public void update(Date nextFireTime) {
         try {
             this.uploadCapabilities();
         } catch (ConnectException cex) {
-            this.logger.error("Could not upload capabilities because the HQ was not available: {}", cex.getMessage());
+            this.logger.error("Could not upload capabilities because the HQ was not available: {} - Will retry at {}",
+                cex.getMessage(), nextFireTime);
             // no need to try downloading as well
             return;
         } catch (IOException ioex) {
-            this.logger.error("Failed to upload capabilities.", ioex);
+            this.logger.error("Failed to upload capabilities. Will retry at " + nextFireTime, ioex);
         }
 
         try {
             this.downloadOrder();
         } catch (ConnectException cex) {
-            this.logger.error("Could not download orders because the HQ was not available: {}", cex.getMessage());
+            this.logger.error("Could not download orders because the HQ was not available: {} - Will retry at {}", cex.getMessage(),
+                nextFireTime);
         } catch (HttpResponseException hrex) {
             if (NotFound.matches(hrex.getStatusCode())) {
-                this.logger.error("There was no order available: {}", hrex.getMessage());
+                this.logger.error("There was no order available: {} - Will retry at {}", hrex.getMessage(), nextFireTime);
             } else {
-                this.logger.error("Failed to download order.", hrex);
+                this.logger.error("Failed to download order. Will retry at " + nextFireTime, hrex);
             }
         } catch (IOException ioex) {
-            this.logger.error("Failed to download order.", ioex);
+            this.logger.error("Failed to download order. Will retry at " + nextFireTime, ioex);
         }
     }
 

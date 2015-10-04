@@ -10,11 +10,6 @@ package io.logspace.agent.scheduling;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
-import io.logspace.agent.api.AgentControllerException;
-import io.logspace.agent.api.AgentControllerInitializationException;
-import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +37,12 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.logspace.agent.api.AgentControllerException;
+import io.logspace.agent.api.AgentControllerInitializationException;
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
 
 public class AgentScheduler {
 
@@ -254,9 +255,10 @@ public class AgentScheduler {
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
             JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
+            Date nextFireTime = context.getNextFireTime();
 
             AgentExecutor agentExecutor = (AgentExecutor) jobDataMap.get(KEY_AGENT_EXECUTOR);
-            agentExecutor.update();
+            agentExecutor.update(nextFireTime);
         }
     }
 }

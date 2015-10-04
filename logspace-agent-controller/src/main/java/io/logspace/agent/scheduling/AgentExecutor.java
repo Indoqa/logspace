@@ -7,6 +7,8 @@
  */
 package io.logspace.agent.scheduling;
 
+import java.util.Date;
+
 import io.logspace.agent.api.order.AgentOrder;
 
 /**
@@ -22,8 +24,10 @@ public interface AgentExecutor {
     void executeScheduledAgent(AgentOrder agentOrder);
 
     /**
-     * Time-based execution of updates.
+     * Time-based execution of updates (sending capabilities and receiving orders).
+     * 
+     * @param nextFireTime
      */
-    void update();
+    void update(Date nextFireTime);
 
 }
