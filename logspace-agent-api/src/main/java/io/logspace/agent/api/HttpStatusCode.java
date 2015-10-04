@@ -31,4 +31,8 @@ public enum HttpStatusCode {
     public boolean matches(int statusCode) {
         return this.code == statusCode;
     }
+
+    public boolean notMatches(int statusCode) {
+        return !this.matches(statusCode);
+    }
 }

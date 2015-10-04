@@ -245,7 +245,7 @@ public class SolrEventService implements EventService {
             Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
             this.solrClient.add(inputDocuments);
 
-            this.logger.debug("Successfully stored {} event(s) for space '{}' from system {}", events.size(), space, system);
+            this.logger.info("Successfully stored {} event(s) for space '{}' from system {}", events.size(), space, system);
         } catch (SolrServerException | IOException e) {
             String message = "Failed to store " + events.size() + " events.";
             this.logger.error(message + " " + e.getClass().getName() + ": " + e.getMessage());

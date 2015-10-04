@@ -7,6 +7,8 @@
  */
 package io.logspace.agent.hq;
 
+import static io.logspace.agent.api.HttpStatusCode.Accepted;
+
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -14,12 +16,10 @@ import org.apache.http.client.ResponseHandler;
 
 public class UploadEventsResponseHandler implements ResponseHandler<Void> {
 
-    private static final int ACCEPTED = 202;
-
     @Override
     public Void handleResponse(final HttpResponse response) throws IOException {
-        if (response.getStatusLine().getStatusCode() != ACCEPTED) {
-            throw new UploadException("Error while uploading events to HQ.");
+        if (Accepted.notMatches(response.getStatusLine().getStatusCode())) {
+            throw new UploadException();
         }
 
         return null;
