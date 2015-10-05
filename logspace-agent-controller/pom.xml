@@ -66,16 +66,16 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>compile</scope>
+    </dependency>    
 
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -111,7 +111,7 @@
           <shadeSourcesContent>true</shadeSourcesContent>
           <artifactSet>
             <excludes>
-              <exclude>org.slf4j:*</exclude>
+              <exclude>org.slf4j:slf4j-api</exclude>
               <exclude>io.logspace:logspace-agent-api</exclude>
             </excludes>
           </artifactSet>
@@ -123,6 +123,10 @@
             <relocation>
               <pattern>org.apache.commons.codec</pattern>
               <shadedPattern>io.logspace.agent.shaded.apache.commons.codec</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>org.apache.commons.logging</pattern>
+              <shadedPattern>io.logspace.agent.shaded.apache.commons.logging</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.fasterxml.jackson</pattern>
