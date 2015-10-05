@@ -112,6 +112,7 @@
           <artifactSet>
             <excludes>
               <exclude>org.slf4j:*</exclude>
+              <exclude>io.logspace:logspace-agent-api</exclude>
             </excludes>
           </artifactSet>
           <relocations>
