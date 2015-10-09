@@ -53,6 +53,23 @@ public interface EventService {
     Suggestion getSuggestion(SuggestionInput input);
 
     /**
+     * Retrieves stored {@link Event Events} matching the given filter.
+     *
+     * This method uses a cursor based approach which allows to efficiently retrieve the Event following a provided "cursor mark". The
+     * "cursor mark" needed for moving to the next page is always provided in the response. Paging can only move from one page to next,
+     * not to a previous page.
+     *
+     * The Events will always be sorted chronologically.
+     *
+     * @param eventFilter The {@link EventFilter} describing which Events to retrieve.
+     * @param count The maximum number of Events to retrieve.
+     * @param cursorMark The position from which to begin retrieving Events. '*' means from the beginning.
+     *
+     * @return A {@link EventPage Page of Events}
+     */
+    EventPage retrieve(EventFilter eventFilter, int count, String cursorMark);
+
+    /**
      * Store the supplied events in the space.
      *
      * @param events - {@link Event}s to store.

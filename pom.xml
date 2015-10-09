@@ -60,7 +60,7 @@
     <solr-version>5.2.1</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
 
-    <jackson-version>2.4.4</jackson-version>
+    <jackson-version>2.6.1</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
     <httpcore-version>4.3.3</httpcore-version>
     <quartz-version>2.2.1</quartz-version>

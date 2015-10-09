@@ -16,24 +16,82 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.StringUtils;
+
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonDeserializer;
+import io.logspace.hq.core.api.event.EventFilter;
+import io.logspace.hq.core.api.event.EventPage;
 import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.model.ParameterValueException;
 import spark.Request;
 import spark.Response;
 
 @Named
 public class EventResource extends AbstractSpaceResource {
 
+    private static final int MIN_COUNT = 1;
+    private static final int MAX_COUNT = 1000;
+
     @Inject
     private EventService eventService;
 
     @PostConstruct
     public void mount() {
-        this.post("/events", (req, res) -> this.logEvents(req, res));
+        this.put("/events", (req, res) -> this.putEvents(req, res));
+
+        this.get("/events", (req, res) -> this.getEvents(req, res));
+        this.post("/events", (req, res) -> this.postEvents(req, res));
     }
 
-    private String logEvents(Request req, Response res) throws IOException {
+    private EventPage getEvents(Request req, Response res) {
+        EventFilter eventFilter = this.readFilter(req.params("filter"));
+        int count = this.getParam(req, "count", 10, MIN_COUNT, MAX_COUNT);
+        String cursor = this.getParam(req, "cursor", "*");
+        return this.retrieveEvents(eventFilter, count, cursor);
+    }
+
+    private int getParam(Request request, String name, int defaultValue, int minValue, int maxValue) {
+        String value = StringUtils.trim(request.params(name));
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+
+        int result;
+        try {
+            result = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            throw ParameterValueException.unparsableValue(name, value);
+        }
+
+        if (result < minValue) {
+            throw ParameterValueException.valueTooSmall(name, result, minValue);
+        }
+
+        if (result > maxValue) {
+            throw ParameterValueException.valueTooLarge(name, result, maxValue);
+        }
+
+        return result;
+    }
+
+    private String getParam(Request req, String name, String defaultValue) {
+        String value = StringUtils.trim(req.params(name));
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    private EventPage postEvents(Request req, Response res) {
+        EventFilter eventFilter = this.readFilter(req.body());
+        int count = this.getParam(req, "count", 10, MIN_COUNT, MAX_COUNT);
+        String cursor = this.getParam(req, "cursor", "*");
+        return this.retrieveEvents(eventFilter, count, cursor);
+    }
+
+    private String putEvents(Request req, Response res) throws IOException {
         String space = this.getSpace(req);
         Collection<? extends Event> events = EventJsonDeserializer.fromJson(req.bodyAsBytes());
 
@@ -41,5 +99,17 @@ public class EventResource extends AbstractSpaceResource {
 
         res.status(Accepted.getCode());
         return null;
+    }
+
+    private EventFilter readFilter(String filterParam) {
+        if (StringUtils.isNotBlank(filterParam)) {
+            return this.getTransformer().toObject(filterParam, EventFilter.class);
+        }
+
+        return new EventFilter();
+    }
+
+    private EventPage retrieveEvents(EventFilter eventFilter, int count, String cursor) {
+        return this.eventService.retrieve(eventFilter, count, cursor);
     }
 }

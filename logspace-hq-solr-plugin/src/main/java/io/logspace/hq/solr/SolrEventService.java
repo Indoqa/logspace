@@ -9,27 +9,16 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.*;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +53,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.commons.lang.util.TimeTracker;
+import com.indoqa.commons.lang.util.TimeUtils;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -71,15 +61,8 @@ import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
-import io.logspace.hq.core.api.event.DataDefinition;
-import io.logspace.hq.core.api.event.DateRange;
-import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.model.AgentDescription;
-import io.logspace.hq.core.api.model.DataRetrievalException;
-import io.logspace.hq.core.api.model.EventStoreException;
-import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.model.Suggestion;
-import io.logspace.hq.core.api.model.SuggestionInput;
+import io.logspace.hq.core.api.event.*;
+import io.logspace.hq.core.api.model.*;
 
 @Named
 public class SolrEventService implements EventService {
@@ -233,6 +216,26 @@ public class SolrEventService implements EventService {
     }
 
     @Override
+    public EventPage retrieve(EventFilter eventFilter, int count, String cursorMark) {
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setRows(count);
+        solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
+
+        for (EventFilterElement eachElement : eventFilter) {
+            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
+        }
+
+        QueryResponse response = this.solrClient.query(solrQuery);
+
+        EventPage result = new EventPage();
+
+        result.setNextCursorMark(response.getNextCursorMark());
+        result.setCount(response.getResults().getNumFound());
+
+        return result;
+    }
+
+    @Override
     public void store(Collection<? extends Event> events, String space) {
         if (events == null || events.isEmpty()) {
             return;
@@ -278,6 +281,50 @@ public class SolrEventService implements EventService {
             document.addField(propertyId, eachProperty.getValue());
             document.addField(FIELD_PROPERTY_ID, propertyId);
         }
+    }
+
+    private void appendSolrValue(StringBuilder stringBuilder, Object value) {
+        if (value == null) {
+            stringBuilder.append('*');
+            return;
+        }
+
+        if (value instanceof Date) {
+            stringBuilder.append(TimeUtils.formatSolrDate((Date) value));
+        }
+
+        String result = String.valueOf(value);
+        if (StringUtils.isBlank(result)) {
+            stringBuilder.append('*');
+            return;
+        }
+
+        stringBuilder.append('"');
+        stringBuilder.append(result);
+        stringBuilder.append('"');
+    }
+
+    private String createFilterQuery(EventFilterElement eventFilterElement) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(eventFilterElement.getPropertyName());
+        stringBuilder.append(':');
+
+        if (eventFilterElement instanceof EqualsEventFilterElement) {
+            EqualsEventFilterElement equalsEventFilterElement = (EqualsEventFilterElement) eventFilterElement;
+            this.appendSolrValue(stringBuilder, equalsEventFilterElement.getValue());
+        }
+
+        if (eventFilterElement instanceof RangeEventFilterElement) {
+            RangeEventFilterElement rangeEventFilterElement = (RangeEventFilterElement) eventFilterElement;
+            stringBuilder.append('[');
+            this.appendSolrValue(stringBuilder, rangeEventFilterElement.getFrom());
+            stringBuilder.append(" TO ");
+            this.appendSolrValue(stringBuilder, rangeEventFilterElement.getTo());
+            stringBuilder.append(']');
+        }
+
+        return stringBuilder.toString();
     }
 
     private SolrInputDocument createInputDocument(Event event, String space) {
