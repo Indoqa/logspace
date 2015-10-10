@@ -8,6 +8,12 @@
 package io.logspace.hq.rest.resource;
 
 import static io.logspace.agent.api.HttpStatusCode.Accepted;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.EventJsonDeserializer;
+import io.logspace.hq.core.api.event.EventFilter;
+import io.logspace.hq.core.api.event.EventPage;
+import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.model.ParameterValueException;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -18,17 +24,15 @@ import javax.inject.Named;
 
 import org.apache.commons.lang.StringUtils;
 
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.json.EventJsonDeserializer;
-import io.logspace.hq.core.api.event.EventFilter;
-import io.logspace.hq.core.api.event.EventPage;
-import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.model.ParameterValueException;
 import spark.Request;
 import spark.Response;
 
 @Named
 public class EventResource extends AbstractSpaceResource {
+
+    private static final String PARAMETER_FILTER = "filter";
+    private static final String PARAMETER_CURSOR = "cursor";
+    private static final String PARAMETER_COUNT = "count";
 
     private static final int MIN_COUNT = 1;
     private static final int MAX_COUNT = 1000;
@@ -36,22 +40,7 @@ public class EventResource extends AbstractSpaceResource {
     @Inject
     private EventService eventService;
 
-    @PostConstruct
-    public void mount() {
-        this.put("/events", (req, res) -> this.putEvents(req, res));
-
-        this.get("/events", (req, res) -> this.getEvents(req, res));
-        this.post("/events", (req, res) -> this.postEvents(req, res));
-    }
-
-    private EventPage getEvents(Request req, Response res) {
-        EventFilter eventFilter = this.readFilter(req.params("filter"));
-        int count = this.getParam(req, "count", 10, MIN_COUNT, MAX_COUNT);
-        String cursor = this.getParam(req, "cursor", "*");
-        return this.retrieveEvents(eventFilter, count, cursor);
-    }
-
-    private int getParam(Request request, String name, int defaultValue, int minValue, int maxValue) {
+    private static int getParam(Request request, String name, int defaultValue, int minValue, int maxValue) {
         String value = StringUtils.trim(request.params(name));
         if (StringUtils.isBlank(value)) {
             return defaultValue;
@@ -75,7 +64,7 @@ public class EventResource extends AbstractSpaceResource {
         return result;
     }
 
-    private String getParam(Request req, String name, String defaultValue) {
+    private static String getParam(Request req, String name, String defaultValue) {
         String value = StringUtils.trim(req.params(name));
         if (StringUtils.isBlank(value)) {
             return defaultValue;
@@ -84,10 +73,25 @@ public class EventResource extends AbstractSpaceResource {
         return value;
     }
 
+    @PostConstruct
+    public void mount() {
+        this.put("/events", (req, res) -> this.putEvents(req, res));
+
+        this.get("/events", (req, res) -> this.getEvents(req, res));
+        this.post("/events", (req, res) -> this.postEvents(req, res));
+    }
+
+    private EventPage getEvents(Request req, Response res) {
+        EventFilter eventFilter = this.readFilter(req.params(PARAMETER_FILTER));
+        int count = getParam(req, PARAMETER_COUNT, 10, MIN_COUNT, MAX_COUNT);
+        String cursor = getParam(req, PARAMETER_CURSOR, "*");
+        return this.retrieveEvents(eventFilter, count, cursor);
+    }
+
     private EventPage postEvents(Request req, Response res) {
         EventFilter eventFilter = this.readFilter(req.body());
-        int count = this.getParam(req, "count", 10, MIN_COUNT, MAX_COUNT);
-        String cursor = this.getParam(req, "cursor", "*");
+        int count = getParam(req, PARAMETER_COUNT, 10, MIN_COUNT, MAX_COUNT);
+        String cursor = getParam(req, PARAMETER_CURSOR, "*");
         return this.retrieveEvents(eventFilter, count, cursor);
     }
 

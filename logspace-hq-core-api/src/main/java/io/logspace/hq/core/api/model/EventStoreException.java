@@ -13,9 +13,17 @@ public class EventStoreException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public EventStoreException(String message, Throwable e) {
-        super(message, InternalServerError, "EVENT_STORAGE_FAILED", e);
+    private EventStoreException(String message, String type, Throwable cause) {
+        super(message, InternalServerError, type);
 
-        this.setParameter("cause", e.getMessage());
+        this.setParameter("cause", cause);
+    }
+
+    public static EventStoreException retrieveFailed(String message, Throwable cause) {
+        return new EventStoreException(message, "EVENT_RETRIEVAL_FAILED", cause);
+    }
+
+    public static EventStoreException storeFailed(String message, Throwable cause) {
+        return new EventStoreException(message, "EVENT_STORAGE_FAILED", cause);
     }
 }

@@ -7,6 +7,16 @@
  */
 package io.logspace.hq.rest.resource;
 
+import io.logspace.hq.core.api.event.DataDefinition;
+import io.logspace.hq.core.api.event.DateRange;
+import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.event.NativeQueryParameters;
+import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
+import io.logspace.hq.core.api.model.Suggestion;
+import io.logspace.hq.core.api.model.SuggestionInput;
+import io.logspace.hq.rest.model.DataQuery;
+import io.logspace.hq.rest.model.DataResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -18,14 +28,6 @@ import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 
-import io.logspace.hq.core.api.event.DataDefinition;
-import io.logspace.hq.core.api.event.DateRange;
-import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.model.Suggestion;
-import io.logspace.hq.core.api.model.SuggestionInput;
-import io.logspace.hq.rest.model.DataQuery;
-import io.logspace.hq.rest.model.DataResponse;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
@@ -42,17 +44,21 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
     public void mount() {
         this.post("/query", (req, res) -> this.postQuery(req, res));
         this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
-        Spark.get(this.resolvePath("/direct-query"), (req, res) -> this.getDirectQuery(req, res));
+
+        Spark.get(this.resolvePath("/native-query"), (req, res) -> this.getNativeQuery(req, res));
+        Spark.post(this.resolvePath("/native-query"), (req, res) -> this.postNativeQuery(req, res));
     }
 
-    private Object getDirectQuery(Request req, Response res) throws IOException {
+    private void executeNativeQuery(Response res, Map<String, String[]> parameters) throws IOException {
         res.type("application/json");
-
-        Map<String, String[]> parameters = req.raw().getParameterMap();
 
         InputStream inputStream = this.eventService.executeDirectQuery(parameters);
         IOUtils.copy(inputStream, res.raw().getOutputStream());
         inputStream.close();
+    }
+
+    private Object getNativeQuery(Request req, Response res) throws IOException {
+        this.executeNativeQuery(res, req.raw().getParameterMap());
 
         return "";
     }
@@ -61,6 +67,14 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
         SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
 
         return this.eventService.getSuggestion(input);
+    }
+
+    private Object postNativeQuery(Request req, Response res) throws IOException {
+        NativeQueryParameters parameters = this.getTransformer().toObject(req.body(), NativeQueryParameters.class);
+
+        this.executeNativeQuery(res, parameters.getParameters());
+
+        return "";
     }
 
     private DataResponse postQuery(Request req, Response res) {
