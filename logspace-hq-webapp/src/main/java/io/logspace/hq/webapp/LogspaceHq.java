@@ -12,8 +12,8 @@ import java.io.IOException;
 import com.indoqa.boot.AbstractIndoqaBootApplication;
 import com.indoqa.boot.ApplicationInitializationException;
 
-import io.logspace.hq.rest.resource.EmbeddedStaticResources;
-import io.logspace.hq.rest.resource.ExternalStaticResources;
+import io.logspace.hq.rest.resource.EmbeddedStaticResource;
+import io.logspace.hq.rest.resource.ExternalStaticResource;
 import io.logspace.hq.webapp.mode.DefaultHqMode;
 import io.logspace.hq.webapp.mode.DemoHqMode;
 import io.logspace.hq.webapp.mode.HqMode;
@@ -84,8 +84,8 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected void initializeSpringBeans() {
-        this.getApplicationContext().register(EmbeddedStaticResources.class);
-        this.getApplicationContext().register(ExternalStaticResources.class);
+        this.getApplicationContext().register(EmbeddedStaticResource.class);
+        this.getApplicationContext().register(ExternalStaticResource.class);
     }
 
     @Override

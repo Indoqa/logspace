@@ -7,17 +7,17 @@
  */
 package io.logspace.hq.rest.resource;
 
-import static spark.Spark.externalStaticFileLocation;
+import static spark.Spark.staticFileLocation;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.context.annotation.Profile;
 
-@Profile("dev")
-public class ExternalStaticResources {
+@Profile("prod")
+public class EmbeddedStaticResource {
 
     @PostConstruct
     public void mount() {
-        externalStaticFileLocation("../logspace-frontend/build");
+        staticFileLocation("logspace-frontend");
     }
 }
