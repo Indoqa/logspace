@@ -48,8 +48,8 @@ public final class AgentControllerDescriptionJsonSerializer extends AbstractJson
     }
 
     private void writeAttributes(AgentControllerDescription description) throws IOException {
-        this.writeMandatoryField(FIELD_ID, description.getId());
-        this.writeMandatoryField(FIELD_CLASS_NAME, description.getClassName());
+        this.writeMandatoryStringField(FIELD_ID, description.getId());
+        this.writeMandatoryStringField(FIELD_CLASS_NAME, description.getClassName());
     }
 
     private void writeParameters(AgentControllerDescription description) throws IOException {
@@ -62,7 +62,7 @@ public final class AgentControllerDescriptionJsonSerializer extends AbstractJson
         this.startObject();
 
         for (Parameter eachParameter : description.getParameters()) {
-            this.writeMandatoryField(eachParameter.getName(), eachParameter.getValue());
+            this.writeMandatoryStringField(eachParameter.getName(), eachParameter.getValue());
         }
 
         this.endObject();

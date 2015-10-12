@@ -165,6 +165,14 @@ public final class JacksonUtils {
         generator.writeNumberField(fieldName, value);
     }
 
+    public static void writeMandatoryLongField(JsonGenerator generator, String fieldName, long value) throws IOException {
+        generator.writeNumberField(fieldName, value);
+    }
+
+    public static void writeMandatoryNumberField(JsonGenerator generator, String fieldName, double value) throws IOException {
+        generator.writeNumberField(fieldName, value);
+    }
+
     public static void writeOptionalField(JsonGenerator generator, String fieldName, Optional<String> optional) throws IOException {
         if (optional.isPresent()) {
             writeMandatoryField(generator, fieldName, optional.get());

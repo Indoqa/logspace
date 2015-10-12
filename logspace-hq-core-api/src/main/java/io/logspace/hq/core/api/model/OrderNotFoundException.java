@@ -5,17 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.model;
+package io.logspace.hq.core.api.model;
 
-import static io.logspace.agent.api.HttpStatusCode.BadRequest;
+import static io.logspace.agent.api.HttpStatusCode.NotFound;
 
-import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
-
-public class InvalidControllerIdException extends AbstractLogspaceResourceException {
+public class OrderNotFoundException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public InvalidControllerIdException(String message) {
-        super(message, BadRequest, "INVALID_CONTROLLER_ID");
+    public OrderNotFoundException(String message) {
+        super(message, NotFound, "ORDER_NOT_FOUND");
     }
 }

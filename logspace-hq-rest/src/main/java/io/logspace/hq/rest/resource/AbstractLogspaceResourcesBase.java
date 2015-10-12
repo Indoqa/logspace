@@ -10,55 +10,56 @@ package io.logspace.hq.rest.resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
-import spark.Request;
-
 import com.indoqa.boot.AbstractJsonResourcesBase;
+
+import io.logspace.hq.core.api.model.ParameterValueException;
+import spark.Request;
 
 public abstract class AbstractLogspaceResourcesBase extends AbstractJsonResourcesBase {
 
     @Value("${logspace.hq-rest.base-path}")
     private String basePath;
 
-    protected static String getParam(Request req, String name, String defaultValue) {
-        String value = StringUtils.trim(req.params(name));
+    protected static int getQueryParam(Request request, String name, int defaultValue, int minValue, int maxValue) {
+        String value = StringUtils.trim(request.queryParams(name));
         if (StringUtils.isBlank(value)) {
             return defaultValue;
         }
 
-        return value;
-    }
-
-    protected static String getRequiredParam(Request req, String name) {
-        String value = req.params(name);
-        if (StringUtils.isBlank(value)) {
-            throw ParameterValueException.missingQueryParameter(name);
-        }
-
-        return value;
-    }
-
-    protected static int getParam(Request request, String name, int defaultValue, int minValue, int maxValue) {
-        String value = StringUtils.trim(request.params(name));
-        if (StringUtils.isBlank(value)) {
-            return defaultValue;
-        }
-    
         int result;
         try {
             result = Integer.parseInt(value);
         } catch (NumberFormatException e) {
             throw ParameterValueException.unparsableValue(name, value);
         }
-    
+
         if (result < minValue) {
             throw ParameterValueException.valueTooSmall(name, result, minValue);
         }
-    
+
         if (result > maxValue) {
             throw ParameterValueException.valueTooLarge(name, result, maxValue);
         }
-    
+
         return result;
+    }
+
+    protected static String getQueryParam(Request req, String name, String defaultValue) {
+        String value = StringUtils.trim(req.queryParams(name));
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    protected static String getRequiredQueryParam(Request req, String name) {
+        String value = req.queryParams(name);
+        if (StringUtils.isBlank(value)) {
+            throw ParameterValueException.missingQueryParameter(name);
+        }
+
+        return value;
     }
 
     @Override

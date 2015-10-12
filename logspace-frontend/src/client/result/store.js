@@ -103,7 +103,7 @@ function refreshResult() {
 
   storeLoadingResult()
 
-  axios.post(restUrl('/query'), createRestRequest(timeSeries, timeWindow))
+  axios.post(restUrl('/time-series'), createRestRequest(timeSeries, timeWindow))
   .then(function (response) {
     storeSuccessResult(timeSeries, response.data, timeWindow)
   })

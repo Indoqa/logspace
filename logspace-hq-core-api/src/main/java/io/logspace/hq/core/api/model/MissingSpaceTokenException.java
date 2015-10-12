@@ -5,19 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.model;
+package io.logspace.hq.core.api.model;
 
 import static io.logspace.agent.api.HttpStatusCode.Forbidden;
 
-import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
-
-public class InvalidSpaceTokenException extends AbstractLogspaceResourceException {
+public class MissingSpaceTokenException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public InvalidSpaceTokenException(String spaceToken) {
-        super("Unrecognized space-token '" + spaceToken + "'.", Forbidden, "INVALID_SPACE_TOKEN");
-
-        this.setParameter("space-token", spaceToken);
+    public MissingSpaceTokenException(String message) {
+        super(message, Forbidden, "MISSING_SPACE_TOKEN");
     }
 }

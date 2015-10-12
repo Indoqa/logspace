@@ -16,7 +16,7 @@ public class EventStoreException extends AbstractLogspaceResourceException {
     private EventStoreException(String message, String type, Throwable cause) {
         super(message, InternalServerError, type);
 
-        this.setParameter("cause", cause);
+        this.setParameter("cause", cause.getMessage());
     }
 
     public static EventStoreException retrieveFailed(String message, Throwable cause) {

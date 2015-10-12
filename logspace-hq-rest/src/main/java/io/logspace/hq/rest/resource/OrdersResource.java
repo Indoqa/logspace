@@ -25,7 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 import io.logspace.hq.core.api.model.NotModifiedException;
-import io.logspace.hq.rest.model.OrderNotFoundException;
+import io.logspace.hq.core.api.model.OrderNotFoundException;
 import spark.Request;
 import spark.Response;
 import spark.Spark;

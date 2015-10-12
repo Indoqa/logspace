@@ -8,22 +8,23 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
-import static io.logspace.agent.api.event.Event.FIELD_AGENT_ID;
-import static io.logspace.agent.api.event.Event.FIELD_GLOBAL_EVENT_ID;
-import static io.logspace.agent.api.event.Event.FIELD_ID;
-import static io.logspace.agent.api.event.Event.FIELD_PARENT_EVENT_ID;
-import static io.logspace.agent.api.event.Event.FIELD_SYSTEM;
-import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
-import static io.logspace.agent.api.event.Event.FIELD_TYPE;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
+import static io.logspace.agent.api.event.Event.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+
 public final class EventJsonSerializer extends AbstractJsonSerializer {
+
+    private EventJsonSerializer(JsonGenerator jsonGenerator) {
+        super(jsonGenerator);
+    }
 
     private EventJsonSerializer(OutputStream outputStream) throws IOException {
         super(outputStream);
@@ -41,6 +42,11 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
         toJson(events, baos);
 
         return baos.toString(UTF8.getJavaName());
+    }
+
+    public static void toJson(Collection<? extends Event> events, JsonGenerator jsonGenerator) throws IOException {
+        EventJsonSerializer serializer = new EventJsonSerializer(jsonGenerator);
+        serializer.serialize(events);
     }
 
     public static void toJson(Collection<? extends Event> events, OutputStream outputStream) throws IOException {
@@ -68,10 +74,10 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
     }
 
     private void writeEvent(Event event) throws IOException {
-        this.writeMandatoryField(FIELD_ID, event.getId());
+        this.writeMandatoryStringField(FIELD_ID, event.getId());
         this.writeOptionalField(FIELD_TYPE, event.getType());
-        this.writeMandatoryField(FIELD_SYSTEM, event.getSystem());
-        this.writeMandatoryField(FIELD_AGENT_ID, event.getAgentId());
+        this.writeMandatoryStringField(FIELD_SYSTEM, event.getSystem());
+        this.writeMandatoryStringField(FIELD_AGENT_ID, event.getAgentId());
         this.writeMandatoryDateField(FIELD_TIMESTAMP, event.getTimestamp());
         this.writeOptionalField(FIELD_PARENT_EVENT_ID, event.getParentEventId());
         this.writeOptionalField(FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());

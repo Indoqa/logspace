@@ -13,26 +13,9 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
@@ -45,8 +28,6 @@ import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
 
 public class AgentScheduler {
-
-    private static final long UPDATE_START_DELAY = 1000;
 
     private static final String KEY_AGENT_ORDER = "agent-order";
     private static final String KEY_AGENT_EXECUTOR = "agent-executor";
@@ -74,7 +55,7 @@ public class AgentScheduler {
         this.initializeUpdateJob(updateInterval);
     }
 
-    public void applyOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) {
+    public void applyAgentControllerOrder(AgentControllerOrder agentControllerOrder, Collection<String> agentIds) {
         this.logger.info("Applying new AgentControllerOrder");
 
         this.clearAgentOrders();
@@ -101,6 +82,15 @@ public class AgentScheduler {
         }
     }
 
+    public void applyAgentOrder(AgentOrder agentOrder) {
+        String agentId = agentOrder.getId();
+        this.agentOrders.put(agentId, agentOrder);
+
+        if (agentOrder.getTriggerType() == TriggerType.Scheduler) {
+            this.scheduleAgentOrder(agentOrder);
+        }
+    }
+
     public void clearAgentOrders() {
         this.logger.info("Cancelling schedules for all agents.");
 
@@ -120,6 +110,17 @@ public class AgentScheduler {
         return this.agentOrders.get(agentId);
     }
 
+    public void removeAgentOrder(AgentOrder agentOrder) {
+        this.agentOrders.remove(agentOrder.getId());
+
+        try {
+            String triggerId = this.getTriggerId(agentOrder);
+            this.scheduler.unscheduleJob(new TriggerKey(triggerId, AGENT_SCHEDULER_GROUP));
+        } catch (SchedulerException e) {
+            this.logger.error("Failed to unschedule AgentOrder '{}'", agentOrder.getId(), e);
+        }
+    }
+
     public void stop() {
         this.logger.info("Stopping now.");
 
@@ -128,6 +129,10 @@ public class AgentScheduler {
         } catch (SchedulerException e) {
             this.logger.error("Failed to shutdown scheduler.", e);
         }
+    }
+
+    private String getTriggerId(AgentOrder agentOrder) {
+        return agentOrder.getId() + "-trigger";
     }
 
     private void initializeQuartzScheduler() {
@@ -152,7 +157,7 @@ public class AgentScheduler {
             JobDetail job = newJob(UpdateJob.class).withIdentity("update", LOGSPACE_SCHEDULER_GROUP).usingJobData(jobDataMap).build();
 
             Trigger trigger = newTrigger().withIdentity("update-trigger", LOGSPACE_SCHEDULER_GROUP)
-                .startAt(new Date(System.currentTimeMillis() + UPDATE_START_DELAY))
+                .startAt(new Date(System.currentTimeMillis() + updateInterval))
                 .withSchedule(simpleSchedule().withIntervalInSeconds(updateInterval).repeatForever())
                 .build();
 
@@ -224,7 +229,7 @@ public class AgentScheduler {
             .usingJobData(jobDataMap)
             .build();
 
-        Trigger trigger = newTrigger().withIdentity(agentOrder.getId() + "-trigger", AGENT_SCHEDULER_GROUP)
+        Trigger trigger = newTrigger().withIdentity(this.getTriggerId(agentOrder), AGENT_SCHEDULER_GROUP)
             .startNow()
             .withSchedule(CronScheduleBuilder.cronSchedule(agentOrder.getTriggerParameter().get()))
             .build();

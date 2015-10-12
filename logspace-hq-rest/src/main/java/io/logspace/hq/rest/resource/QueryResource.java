@@ -67,10 +67,10 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
 
     private Suggestion getSuggestion(Request req) {
         SuggestionInput input = new SuggestionInput();
-        input.setPropertyId(getParam(req, "property", null));
-        input.setSpaceId(getParam(req, "space", null));
-        input.setSystemId(getParam(req, "system", null));
-        input.setText(getParam(req, "input", null));
+        input.setPropertyId(getQueryParam(req, "property", null));
+        input.setSpaceId(getQueryParam(req, "space", null));
+        input.setSystemId(getQueryParam(req, "system", null));
+        input.setText(getQueryParam(req, "input", null));
 
         return this.getSuggestion(input);
     }

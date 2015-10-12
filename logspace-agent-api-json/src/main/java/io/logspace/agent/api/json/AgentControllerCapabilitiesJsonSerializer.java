@@ -50,8 +50,8 @@ public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJso
     }
 
     private void writeAgentCapabilities(AgentCapabilities agentCapabilities) throws IOException {
-        this.writeMandatoryField(FIELD_ID, agentCapabilities.getId());
-        this.writeMandatoryField(FIELD_TYPE, agentCapabilities.getType());
+        this.writeMandatoryStringField(FIELD_ID, agentCapabilities.getId());
+        this.writeMandatoryStringField(FIELD_TYPE, agentCapabilities.getType());
 
         this.writeField(FIELD_TRIGGER_TYPES);
         this.startArray();
@@ -88,14 +88,14 @@ public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJso
     }
 
     private void writeAttributes(AgentControllerCapabilities capabilities) throws IOException {
-        this.writeMandatoryField(FIELD_ID, capabilities.getId());
-        this.writeMandatoryField(FIELD_SYSTEM, capabilities.getSystem());
+        this.writeMandatoryStringField(FIELD_ID, capabilities.getId());
+        this.writeMandatoryStringField(FIELD_SYSTEM, capabilities.getSystem());
         this.writeOptionalField(FIELD_SPACE, capabilities.getSpace());
     }
 
     private void writePropertyDescription(PropertyDescription propertyDescription) throws IOException {
-        this.writeMandatoryField(FIELD_PROPERTY_NAME, propertyDescription.getName());
-        this.writeMandatoryField(FIELD_PROPERTY_TYPE, propertyDescription.getPropertyType().name());
+        this.writeMandatoryStringField(FIELD_PROPERTY_NAME, propertyDescription.getName());
+        this.writeMandatoryStringField(FIELD_PROPERTY_TYPE, propertyDescription.getPropertyType().name());
 
         if (propertyDescription.hasUnits()) {
             this.writeField(FIELD_PROPERTY_UNITS);

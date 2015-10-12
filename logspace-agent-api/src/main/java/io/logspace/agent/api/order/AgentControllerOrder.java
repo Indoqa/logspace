@@ -7,10 +7,10 @@
  */
 package io.logspace.agent.api.order;
 
-import io.logspace.agent.api.event.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import io.logspace.agent.api.event.Optional;
 
 public class AgentControllerOrder {
 
@@ -28,6 +28,16 @@ public class AgentControllerOrder {
 
     public void add(AgentOrder agentOrder) {
         this.agentOrders.add(agentOrder);
+    }
+
+    public AgentOrder getAgentOrder(String id) {
+        for (AgentOrder eachAgentOrder : this.agentOrders) {
+            if (eachAgentOrder.getId().equals(id)) {
+                return eachAgentOrder;
+            }
+        }
+
+        return null;
     }
 
     public List<AgentOrder> getAgentOrders() {

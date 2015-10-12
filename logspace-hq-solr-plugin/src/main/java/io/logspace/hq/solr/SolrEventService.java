@@ -12,37 +12,11 @@ import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.Aggregate;
-import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyType;
-import io.logspace.hq.core.api.capabilities.CapabilitiesService;
-import io.logspace.hq.core.api.event.DataDefinition;
-import io.logspace.hq.core.api.event.DateRange;
-import io.logspace.hq.core.api.event.StoredEvent;
-import io.logspace.hq.core.api.event.EqualsEventFilterElement;
-import io.logspace.hq.core.api.event.EventFilter;
-import io.logspace.hq.core.api.event.EventFilterElement;
-import io.logspace.hq.core.api.event.EventPage;
-import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.event.RangeEventFilterElement;
-import io.logspace.hq.core.api.model.AgentDescription;
-import io.logspace.hq.core.api.model.DataRetrievalException;
-import io.logspace.hq.core.api.model.EventStoreException;
-import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
-import io.logspace.hq.core.api.model.Suggestion;
-import io.logspace.hq.core.api.model.SuggestionInput;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -84,9 +58,20 @@ import org.springframework.beans.factory.annotation.Value;
 import com.indoqa.commons.lang.util.TimeTracker;
 import com.indoqa.commons.lang.util.TimeUtils;
 
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.order.Aggregate;
+import io.logspace.agent.api.order.PropertyDescription;
+import io.logspace.agent.api.order.PropertyType;
+import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.api.event.*;
+import io.logspace.hq.core.api.model.*;
+
 @Named
 public class SolrEventService implements EventService {
 
+    private static final String DEFAULT_SORT = "timestamp ASC, id ASC";
     private static final String FIELD_ID = "id";
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
@@ -233,7 +218,7 @@ public class SolrEventService implements EventService {
         }
 
         new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
-                AGENT_DESCRIPTION_REFRESH_INTERVAL);
+            AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     @Override
@@ -241,6 +226,7 @@ public class SolrEventService implements EventService {
         SolrQuery solrQuery = new SolrQuery("*:*");
         solrQuery.setRows(count);
         solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
+        solrQuery.set(SORT, DEFAULT_SORT);
 
         for (EventFilterElement eachElement : eventFilter) {
             solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
@@ -255,10 +241,10 @@ public class SolrEventService implements EventService {
             }
 
             result.setNextCursorMark(response.getNextCursorMark());
-            result.setCount(response.getResults().getNumFound());
+            result.setTotalCount(response.getResults().getNumFound());
 
             return result;
-        } catch (SolrServerException | IOException e) {
+        } catch (SolrServerException | IOException | SolrException e) {
             String message = "Failed to retrieve events.";
             this.logger.error(message, e);
             throw EventStoreException.retrieveFailed(message, e);
@@ -291,6 +277,7 @@ public class SolrEventService implements EventService {
         SolrQuery solrQuery = new SolrQuery("*:*");
         solrQuery.setStart(offset);
         solrQuery.setRows(count);
+        solrQuery.set(SORT, DEFAULT_SORT);
 
         for (EventFilterElement eachElement : eventFilter) {
             solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
@@ -429,7 +416,8 @@ public class SolrEventService implements EventService {
 
         result.addField(FIELD_ID, event.getId());
 
-        result.addField(FIELD_GLOBAL_AGENT_ID, this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
+        result.addField(FIELD_GLOBAL_AGENT_ID,
+            this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
         result.addField(FIELD_SPACE, space);
         result.addField(FIELD_SYSTEM, event.getSystem());
         result.addField(FIELD_AGENT_ID, event.getAgentId());
@@ -467,8 +455,8 @@ public class SolrEventService implements EventService {
     private String createJsonFacets(DataDefinition dataDefinition) {
         PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidDataDefinitionException
-                    .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
+            throw InvalidDataDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+                dataDefinition.getAggregate());
         }
 
         FacetBuilder facetBuilder = new FacetBuilder();
@@ -533,7 +521,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-                || agentDescription.getPropertyDescriptions().isEmpty()) {
+            || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -586,8 +574,9 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader().getClusterState()
-                    .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
+            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+                .getClusterState()
+                .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
 
         Calendar calendar = Calendar.getInstance();

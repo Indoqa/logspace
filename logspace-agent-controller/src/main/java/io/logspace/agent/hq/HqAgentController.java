@@ -9,7 +9,8 @@ package io.logspace.agent.hq;
 
 import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.text.MessageFormat.format;
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,13 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import com.squareup.tape.FileObjectQueue;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.*;
 import io.logspace.agent.api.AgentControllerDescription.Parameter;
-import io.logspace.agent.api.AgentControllerException;
-import io.logspace.agent.api.AgentControllerInitializationException;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.SchedulerAgent;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.AgentControllerOrder;
@@ -67,6 +63,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     private CommitRunnable commitRunnable;
     private int uploadSize = DEFAULT_UPLOAD_SIZE;
+    private AgentControllerOrder agentControllerOrder;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
         this.setId(agentControllerDescription.getId());
@@ -247,6 +244,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         super.onAgentRegistered(agent);
 
         this.modifiedAgents = true;
+
+        if (this.agentControllerOrder == null) {
+            return;
+        }
+
+        AgentOrder agentOrder = this.agentControllerOrder.getAgentOrder(agent.getId());
+        if (agentOrder != null) {
+            this.agentScheduler.applyAgentOrder(agentOrder);
+        }
     }
 
     @Override
@@ -254,6 +260,15 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         super.onAgentUnregistered(agent);
 
         this.modifiedAgents = true;
+
+        if (this.agentControllerOrder == null) {
+            return;
+        }
+
+        AgentOrder agentOrder = this.agentControllerOrder.getAgentOrder(agent.getId());
+        if (agentOrder != null) {
+            this.agentScheduler.removeAgentOrder(agentOrder);
+        }
     }
 
     protected void performCommit(long commitDelayInSeconds) {
@@ -278,15 +293,17 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     private void downloadOrder() throws IOException {
-        AgentControllerOrder agentControllerOrder = this.hqClient.downloadOrder();
-        if (agentControllerOrder == null) {
+        AgentControllerOrder order = this.hqClient.downloadOrder();
+        if (order == null) {
             return;
         }
 
         this.logger.info("Received new AgentControllerOrder from HQ.");
-        this.agentScheduler.applyOrder(agentControllerOrder, this.getAgentIds());
 
-        Integer commitDelay = agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);
+        this.agentControllerOrder = order;
+        this.agentScheduler.applyAgentControllerOrder(this.agentControllerOrder, this.getAgentIds());
+
+        Integer commitDelay = this.agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);
         this.logger.info("Committing after {} second(s).", commitDelay);
         this.setCommitDelayInSeconds(commitDelay);
     }
@@ -303,6 +320,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         int hqCommunicationInterval = Integer.parseInt(agentControllerDescription
             .getParameterValue(HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
+
+        // execute the first update within the initializing thread to ensure we're fully initialized
+        this.update(new Date(System.currentTimeMillis() + hqCommunicationInterval));
     }
 
     private void initializeCommitRunnable() {

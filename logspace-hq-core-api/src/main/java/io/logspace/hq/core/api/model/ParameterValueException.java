@@ -5,10 +5,9 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.resource;
+package io.logspace.hq.core.api.model;
 
 import io.logspace.agent.api.HttpStatusCode;
-import io.logspace.hq.core.api.model.AbstractLogspaceResourceException;
 
 import java.text.MessageFormat;
 

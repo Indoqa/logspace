@@ -58,8 +58,8 @@ public final class AgentControllerOrdersJsonSerializer extends AbstractJsonSeria
             for (AgentOrder eachAgentOrder : value.getAgentOrders()) {
                 this.startObject();
 
-                this.writeMandatoryField(FIELD_ID, eachAgentOrder.getId());
-                this.writeMandatoryField(FIELD_TRIGGER_TYPE, String.valueOf(eachAgentOrder.getTriggerType()));
+                this.writeMandatoryStringField(FIELD_ID, eachAgentOrder.getId());
+                this.writeMandatoryStringField(FIELD_TRIGGER_TYPE, String.valueOf(eachAgentOrder.getTriggerType()));
                 this.writeOptionalField(FIELD_TRIGGER_PARAMETER, eachAgentOrder.getTriggerParameter());
 
                 this.endObject();

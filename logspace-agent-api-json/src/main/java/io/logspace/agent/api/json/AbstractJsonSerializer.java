@@ -8,7 +8,6 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
-import io.logspace.agent.api.event.Optional;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,6 +21,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
+import io.logspace.agent.api.event.Optional;
+
 /**
  * Base class for JSON serializers. Simplifies handling of the {@link JsonGenerator}.
  */
@@ -33,7 +34,11 @@ public abstract class AbstractJsonSerializer {
 
     private JsonGenerator jsonGenerator;
 
-    public AbstractJsonSerializer(OutputStream outputStream) throws IOException {
+    protected AbstractJsonSerializer(JsonGenerator jsonGenerator) {
+        this.jsonGenerator = jsonGenerator;
+    }
+
+    protected AbstractJsonSerializer(OutputStream outputStream) throws IOException {
         super();
 
         this.jsonGenerator = this.createJsonGenerator(outputStream);
@@ -76,7 +81,11 @@ public abstract class AbstractJsonSerializer {
         JacksonUtils.writeMandatoryDoubleField(this.jsonGenerator, fieldName, value);
     }
 
-    protected void writeMandatoryField(String fieldName, String value) throws IOException {
+    protected void writeMandatoryLongField(String fieldName, long value) throws IOException {
+        JacksonUtils.writeMandatoryLongField(this.jsonGenerator, fieldName, value);
+    }
+
+    protected void writeMandatoryStringField(String fieldName, String value) throws IOException {
         JacksonUtils.writeMandatoryField(this.jsonGenerator, fieldName, value);
     }
 
@@ -96,6 +105,7 @@ public abstract class AbstractJsonSerializer {
         JsonGenerator result = JSON_FACTORY.createGenerator(baos, UTF8);
 
         result.configure(Feature.QUOTE_NON_NUMERIC_NUMBERS, false);
+        result.configure(Feature.AUTO_CLOSE_TARGET, false);
 
         if (this.logger.isDebugEnabled()) {
             result.setPrettyPrinter(new DefaultPrettyPrinter());
