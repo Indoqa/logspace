@@ -15,7 +15,7 @@ import io.logspace.hq.core.api.model.InvalidDataDefinitionException;
 import io.logspace.hq.core.api.model.Suggestion;
 import io.logspace.hq.core.api.model.SuggestionInput;
 import io.logspace.hq.rest.model.DataQuery;
-import io.logspace.hq.rest.model.DataResponse;
+import io.logspace.hq.rest.model.TimeSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,8 +42,10 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
 
     @PostConstruct
     public void mount() {
-        this.post("/query", (req, res) -> this.postQuery(req, res));
-        this.post("/suggest", (req, res) -> this.getSuggestion(req, res));
+        this.post("/time-series", (req, res) -> this.postTimeSeries(req));
+
+        this.get("/suggest", (req, res) -> this.getSuggestion(req));
+        this.post("/suggest", (req, res) -> this.postSuggestion(req));
 
         Spark.get(this.resolvePath("/native-query"), (req, res) -> this.getNativeQuery(req, res));
         Spark.post(this.resolvePath("/native-query"), (req, res) -> this.postNativeQuery(req, res));
@@ -63,9 +65,17 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
         return "";
     }
 
-    private Suggestion getSuggestion(Request req, Response res) {
-        SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
+    private Suggestion getSuggestion(Request req) {
+        SuggestionInput input = new SuggestionInput();
+        input.setPropertyId(getParam(req, "property", null));
+        input.setSpaceId(getParam(req, "space", null));
+        input.setSystemId(getParam(req, "system", null));
+        input.setText(getParam(req, "input", null));
 
+        return this.getSuggestion(input);
+    }
+
+    private Suggestion getSuggestion(SuggestionInput input) {
         return this.eventService.getSuggestion(input);
     }
 
@@ -77,8 +87,14 @@ public class QueryResource extends AbstractLogspaceResourcesBase {
         return "";
     }
 
-    private DataResponse postQuery(Request req, Response res) {
-        DataResponse result = new DataResponse();
+    private Suggestion postSuggestion(Request req) {
+        SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
+
+        return this.getSuggestion(input);
+    }
+
+    private TimeSeries postTimeSeries(Request req) {
+        TimeSeries result = new TimeSeries();
 
         DataQuery dataQuery = this.getTransformer().toObject(req.body(), DataQuery.class);
         this.validateDateRanges(dataQuery);

@@ -7,10 +7,10 @@
  */
 package io.logspace.hq.core.api.event;
 
+import io.logspace.agent.api.event.Event;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import io.logspace.agent.api.event.Event;
 
 public class EventPage {
 
@@ -19,6 +19,10 @@ public class EventPage {
     private String nextCursorMark;
 
     private long count;
+
+    public void addEvent(Event event) {
+        this.events.add(event);
+    }
 
     public long getCount() {
         return this.count;

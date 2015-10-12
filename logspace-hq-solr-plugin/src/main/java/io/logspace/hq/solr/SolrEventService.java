@@ -16,12 +16,14 @@ import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.core.api.event.DataDefinition;
 import io.logspace.hq.core.api.event.DateRange;
+import io.logspace.hq.core.api.event.StoredEvent;
 import io.logspace.hq.core.api.event.EqualsEventFilterElement;
 import io.logspace.hq.core.api.event.EventFilter;
 import io.logspace.hq.core.api.event.EventFilterElement;
@@ -57,12 +59,14 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.StreamingResponseCallback;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.cloud.Slice;
@@ -83,6 +87,7 @@ import com.indoqa.commons.lang.util.TimeUtils;
 @Named
 public class SolrEventService implements EventService {
 
+    private static final String FIELD_ID = "id";
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
 
@@ -242,9 +247,12 @@ public class SolrEventService implements EventService {
         }
 
         try {
-            QueryResponse response = this.solrClient.query(solrQuery);
-
             EventPage result = new EventPage();
+
+            QueryResponse response = this.solrClient.query(solrQuery);
+            for (SolrDocument eachSolrDocument : response.getResults()) {
+                result.addEvent(this.createEvent(eachSolrDocument));
+            }
 
             result.setNextCursorMark(response.getNextCursorMark());
             result.setCount(response.getResults().getNumFound());
@@ -276,6 +284,73 @@ public class SolrEventService implements EventService {
             this.logger.error(message, e);
             throw EventStoreException.storeFailed(message, e);
         }
+    }
+
+    @Override
+    public void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer) {
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setStart(offset);
+        solrQuery.setRows(count);
+
+        for (EventFilterElement eachElement : eventFilter) {
+            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
+        }
+
+        try {
+            this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));
+        } catch (SolrServerException | IOException e) {
+            String message = "Failed to stream events.";
+            this.logger.error(message, e);
+            throw EventStoreException.retrieveFailed(message, e);
+        }
+    }
+
+    protected Event createEvent(SolrDocument solrDocument) {
+        StoredEvent result = new StoredEvent();
+
+        result.setId(this.getString(solrDocument, FIELD_ID));
+
+        result.setSystem(this.getString(solrDocument, FIELD_SYSTEM));
+        result.setAgentId(this.getString(solrDocument, FIELD_AGENT_ID));
+
+        result.setType(this.getOptionalString(solrDocument, FIELD_TYPE));
+        result.setTimestamp(this.getDate(solrDocument, FIELD_TIMESTAMP));
+        result.setParentEventId(this.getOptionalString(solrDocument, FIELD_PARENT_ID));
+        result.setGlobalEventId(this.getOptionalString(solrDocument, FIELD_GLOBAL_ID));
+
+        for (Entry<String, Object> eachField : solrDocument) {
+            String fieldName = eachField.getKey();
+
+            if (fieldName.startsWith("boolean_property_")) {
+                result.addProperties(fieldName.substring("boolean_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("date_property_")) {
+                result.addProperties(fieldName.substring("date_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("double_property_")) {
+                result.addProperties(fieldName.substring("double_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("float_property_")) {
+                result.addProperties(fieldName.substring("float_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("integer_property_")) {
+                result.addProperties(fieldName.substring("integer_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("long_property_")) {
+                result.addProperties(fieldName.substring("long_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("string_property_")) {
+                result.addProperties(fieldName.substring("string_property_".length()), eachField.getValue());
+            }
+        }
+
+        return result;
     }
 
     protected void refreshAgentDescriptionCache() {
@@ -352,7 +427,7 @@ public class SolrEventService implements EventService {
     private SolrInputDocument createInputDocument(Event event, String space) {
         SolrInputDocument result = new SolrInputDocument();
 
-        result.addField("id", event.getId());
+        result.addField(FIELD_ID, event.getId());
 
         result.addField(FIELD_GLOBAL_AGENT_ID, this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
         result.addField(FIELD_SPACE, space);
@@ -470,6 +545,10 @@ public class SolrEventService implements EventService {
         return agentDescription;
     }
 
+    private Date getDate(SolrDocument solrDocument, String fieldName) {
+        return (Date) solrDocument.getFieldValue(fieldName);
+    }
+
     private String getFirstFacetValue(QueryResponse response, String fieldName) {
         FacetField facetField = response.getFacetField(fieldName);
 
@@ -483,6 +562,19 @@ public class SolrEventService implements EventService {
         }
 
         return values.get(0).getName();
+    }
+
+    private Optional<String> getOptionalString(SolrDocument solrDocument, String fieldName) {
+        String value = this.getString(solrDocument, fieldName);
+        if (value == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(value);
+    }
+
+    private String getString(SolrDocument solrDocument, String fieldName) {
+        return (String) solrDocument.getFieldValue(fieldName);
     }
 
     private String getTargetShard(Date timestamp) {
@@ -572,6 +664,29 @@ public class SolrEventService implements EventService {
         @Override
         public void run() {
             SolrEventService.this.refreshAgentDescriptionCache();
+        }
+    }
+
+    private final class EventStreamCallback extends StreamingResponseCallback {
+
+        private final EventStreamer eventStreamer;
+
+        public EventStreamCallback(EventStreamer eventStreamer) {
+            this.eventStreamer = eventStreamer;
+        }
+
+        @Override
+        public void streamDocListInfo(long numFound, long start, Float maxScore) {
+            // do nothing
+        }
+
+        @Override
+        public void streamSolrDocument(SolrDocument solrDocument) {
+            try {
+                this.eventStreamer.streamEvent(SolrEventService.this.createEvent(solrDocument));
+            } catch (IOException e) {
+                throw EventStoreException.retrieveFailed("Failed to stream events.", e);
+            }
         }
     }
 }

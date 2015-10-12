@@ -9,7 +9,7 @@ package io.logspace.hq.rest.model;
 
 import io.logspace.hq.core.api.event.DateRange;
 
-public class DataResponse {
+public class TimeSeries {
 
     private DateRange dateRange;
 

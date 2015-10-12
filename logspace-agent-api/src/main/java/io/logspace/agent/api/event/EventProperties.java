@@ -32,13 +32,6 @@ public class EventProperties {
         this.doubleProperties.add(e);
     }
 
-    public void add(EventProperty<?> property) {
-        if (property instanceof BooleanEventProperty) {
-            this.add((BooleanEventProperty) property);
-            return;
-        }
-    }
-
     public void add(FloatEventProperty e) {
         this.floatProperties.add(e);
     }

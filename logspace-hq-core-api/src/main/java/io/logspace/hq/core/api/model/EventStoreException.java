@@ -26,4 +26,8 @@ public class EventStoreException extends AbstractLogspaceResourceException {
     public static EventStoreException storeFailed(String message, Throwable cause) {
         return new EventStoreException(message, "EVENT_STORAGE_FAILED", cause);
     }
+
+    public static EventStoreException streamFailed(String message, Throwable cause) {
+        return new EventStoreException(message, "EVENT_STREAM_FAILED", cause);
+    }
 }

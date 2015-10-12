@@ -7,14 +7,15 @@
  */
 package io.logspace.hq.core.api.event;
 
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Map;
-
 import io.logspace.agent.api.event.Event;
 import io.logspace.hq.core.api.model.AgentDescription;
 import io.logspace.hq.core.api.model.Suggestion;
 import io.logspace.hq.core.api.model.SuggestionInput;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * The responsibilities of the event service are:
@@ -55,9 +56,9 @@ public interface EventService {
     /**
      * Retrieves stored {@link Event Events} matching the given filter.
      *
-     * This method uses a cursor based approach which allows to efficiently retrieve the Event following a provided "cursor mark". The
-     * "cursor mark" needed for moving to the next page is always provided in the response. Paging can only move from one page to next,
-     * not to a previous page.
+     * This method uses a cursor based approach which allows to efficiently retrieve the Event following a provided
+     * "cursor mark". The "cursor mark" needed for moving to the next page is always provided in the response. Paging
+     * can only move from one page to next, not to a previous page.
      *
      * The Events will always be sorted chronologically.
      *
@@ -77,4 +78,11 @@ public interface EventService {
      */
     void store(Collection<? extends Event> events, String space);
 
+    void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer);
+
+    interface EventStreamer {
+
+        void streamEvent(Event event) throws IOException;
+
+    }
 }
