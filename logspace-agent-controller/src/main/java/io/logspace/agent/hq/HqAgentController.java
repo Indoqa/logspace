@@ -320,9 +320,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         int hqCommunicationInterval = Integer.parseInt(agentControllerDescription
             .getParameterValue(HQ_COMMUNICATION_INTERVAL_PARAMETER, HQ_COMMUNICATION_INTERVAL_DEFAULT_VALUE));
         this.agentScheduler = new AgentScheduler(this, hqCommunicationInterval);
-
-        // execute the first update within the initializing thread to ensure we're fully initialized
-        this.update(new Date(System.currentTimeMillis() + hqCommunicationInterval));
     }
 
     private void initializeCommitRunnable() {

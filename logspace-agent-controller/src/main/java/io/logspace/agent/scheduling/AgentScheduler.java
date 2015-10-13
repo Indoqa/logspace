@@ -157,7 +157,6 @@ public class AgentScheduler {
             JobDetail job = newJob(UpdateJob.class).withIdentity("update", LOGSPACE_SCHEDULER_GROUP).usingJobData(jobDataMap).build();
 
             Trigger trigger = newTrigger().withIdentity("update-trigger", LOGSPACE_SCHEDULER_GROUP)
-                .startAt(new Date(System.currentTimeMillis() + updateInterval))
                 .withSchedule(simpleSchedule().withIntervalInSeconds(updateInterval).repeatForever())
                 .build();
 
