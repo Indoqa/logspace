@@ -11,13 +11,13 @@ The log files will be created in the directory denoted by the system property `l
 -Dlog-path=/logspace/logs
 ```
 
-The Logspace port can be configured via the systemproperty `port`, e.g. 
+The Logspace port can be configured via the system property `port`, e.g.
 
 ```
 -Dport=4569
 ```
 
-To configure the url to solr set the systemproperty `logspace.solr.base-url=`, e.g.
+To configure the url to Apache Solr set the system property `logspace.solr.base-url=`, e.g.
 
 ```
 -Dlogspace.solr.base-url=http://localhost:8983/solr/logspace.
@@ -33,4 +33,10 @@ The property `logspace.hq-webapp.capabilities-directory` defines the directory i
 
 ```
 -Dlogspace.hq-webapp.capabilities-directory=/logspace/capabilities
+```
+
+The property `logspace.hq-webapp.space-tokens-directory` defines the directory in which the spaces and their tokens are configured:
+
+```
+-Dlogspace.hq-webapp.space-tokens-directory=/logspace/space-tokens
 ```
