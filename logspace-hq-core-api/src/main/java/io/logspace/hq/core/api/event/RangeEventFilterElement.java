@@ -12,6 +12,16 @@ public class RangeEventFilterElement extends AbstractEventFilterElement {
     private Object from;
     private Object to;
 
+    public static EventFilterElement create(String property, Object from, Object to) {
+        RangeEventFilterElement result = new RangeEventFilterElement();
+
+        result.setPropertyName(property);
+        result.setFrom(from);
+        result.setTo(to);
+
+        return result;
+    }
+
     public Object getFrom() {
         return this.from;
     }

@@ -11,6 +11,15 @@ public class EqualsEventFilterElement extends AbstractEventFilterElement {
 
     private Object value;
 
+    public static EventFilterElement create(String property, String value) {
+        EqualsEventFilterElement result = new EqualsEventFilterElement();
+
+        result.setPropertyName(property);
+        result.setValue(value);
+
+        return result;
+    }
+
     public Object getValue() {
         return this.value;
     }
