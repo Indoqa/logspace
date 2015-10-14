@@ -8,7 +8,6 @@
 package io.logspace.hq.rest.resource;
 
 import static io.logspace.agent.api.HttpStatusCode.Accepted;
-import static io.logspace.hq.rest.transformer.EventPageTransformer.EVENT_PAGE_TRANSFORMER;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -43,9 +42,9 @@ public class EventResource extends AbstractSpaceResource {
 
     @PostConstruct
     public void mount() {
-        this.get("/events", (req, res) -> this.getEvents(req), EVENT_PAGE_TRANSFORMER);
+        this.get("/events", (req, res) -> this.getEvents(req));
         this.put("/events", (req, res) -> this.putEvents(req, res));
-        this.post("/events", (req, res) -> this.postEvents(req), EVENT_PAGE_TRANSFORMER);
+        this.post("/events", (req, res) -> this.postEvents(req));
     }
 
     private EventPage getEvents(Request req) {
@@ -56,7 +55,11 @@ public class EventResource extends AbstractSpaceResource {
     }
 
     private EventPage postEvents(Request req) {
+        this.logger.error("postEvents");
+
         EventFilter eventFilter = this.readFilter(req.body());
+        this.logger.error("eventFilter = {}", eventFilter);
+
         int count = getQueryParam(req, PARAMETER_COUNT, DEFAULT_COUNT, MIN_COUNT, MAX_RETRIEVAL_COUNT);
         String cursor = getQueryParam(req, PARAMETER_CURSOR, "*");
         return this.retrieveEvents(eventFilter, count, cursor);

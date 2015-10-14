@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.Optional;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -17,6 +15,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.JsonToken;
+
+import io.logspace.agent.api.event.Optional;
 
 /**
  * Base class for JSON deserializers. Simplifies handling of the {@link JsonParser}.
@@ -96,12 +96,16 @@ public abstract class AbstractJsonDeserializer {
     }
 
     protected void setData(byte[] data) throws IOException {
-        this.jsonParser = JSON_FACTORY.createParser(data);
-        this.jsonParser.configure(Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+        this.setJsonParser(JSON_FACTORY.createParser(data));
     }
 
     protected void setInputStream(InputStream inputStream) throws IOException {
-        this.jsonParser = JSON_FACTORY.createParser(inputStream);
+        this.setJsonParser(JSON_FACTORY.createParser(inputStream));
+    }
+
+    protected void setJsonParser(JsonParser jsonParser) {
+        this.jsonParser = jsonParser;
+        this.jsonParser.configure(Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
     }
 
     protected void validateEnd() {

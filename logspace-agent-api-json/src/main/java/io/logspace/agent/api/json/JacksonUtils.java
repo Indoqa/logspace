@@ -83,6 +83,17 @@ public final class JacksonUtils {
         return result;
     }
 
+    public static Long readMandatoryLongField(JsonParser parser, String fieldName) throws IOException {
+        prepareToken(parser);
+
+        validateTokenType(parser.getCurrentToken(), FIELD_NAME);
+        validateFieldName(parser.getCurrentName(), fieldName);
+
+        Long result = parser.nextLongValue(0);
+        consumeToken(parser);
+        return result;
+    }
+
     public static Optional<String> readOptionalField(JsonParser parser, String fieldName) throws IOException {
         prepareToken(parser);
 
@@ -150,15 +161,11 @@ public final class JacksonUtils {
             formattedValue = getTimeFormat().format(value);
         }
 
-        writeMandatoryField(generator, fieldName, formattedValue);
+        writeMandatoryStringField(generator, fieldName, formattedValue);
     }
 
     public static void writeMandatoryDoubleField(JsonGenerator generator, String fieldName, double value) throws IOException {
         generator.writeNumberField(fieldName, value);
-    }
-
-    public static void writeMandatoryField(JsonGenerator generator, String fieldName, String value) throws IOException {
-        generator.writeStringField(fieldName, value);
     }
 
     public static void writeMandatoryIntField(JsonGenerator generator, String fieldName, int value) throws IOException {
@@ -173,9 +180,13 @@ public final class JacksonUtils {
         generator.writeNumberField(fieldName, value);
     }
 
+    public static void writeMandatoryStringField(JsonGenerator generator, String fieldName, String value) throws IOException {
+        generator.writeStringField(fieldName, value);
+    }
+
     public static void writeOptionalField(JsonGenerator generator, String fieldName, Optional<String> optional) throws IOException {
         if (optional.isPresent()) {
-            writeMandatoryField(generator, fieldName, optional.get());
+            writeMandatoryStringField(generator, fieldName, optional.get());
         }
     }
 

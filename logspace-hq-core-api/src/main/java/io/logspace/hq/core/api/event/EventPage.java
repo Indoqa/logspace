@@ -10,8 +10,13 @@ package io.logspace.hq.core.api.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import io.logspace.agent.api.event.Event;
 
+@JsonDeserialize(using = EventPageDeserializer.class)
+@JsonSerialize(using = EventPageSerializer.class)
 public class EventPage {
 
     private List<Event> events = new ArrayList<>();

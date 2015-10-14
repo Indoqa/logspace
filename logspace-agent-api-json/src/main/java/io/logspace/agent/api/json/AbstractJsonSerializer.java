@@ -86,7 +86,7 @@ public abstract class AbstractJsonSerializer {
     }
 
     protected void writeMandatoryStringField(String fieldName, String value) throws IOException {
-        JacksonUtils.writeMandatoryField(this.jsonGenerator, fieldName, value);
+        JacksonUtils.writeMandatoryStringField(this.jsonGenerator, fieldName, value);
     }
 
     protected void writeOptionalField(String fieldName, Optional<String> value) throws IOException {

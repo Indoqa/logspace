@@ -94,6 +94,7 @@
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
     <module>logspace-hq-rest</module>
+    <module>logspace-hq-rest-api</module>
     <module>logspace-hq-solr-plugin</module>
     <module>logspace-hq-webapp</module>
     <module>logspace-it</module>

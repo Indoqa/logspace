@@ -7,19 +7,19 @@
  */
 package io.logspace.agent.api.json;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
-import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
+import static com.fasterxml.jackson.core.JsonToken.*;
 import static io.logspace.agent.api.event.Event.*;
-import io.logspace.agent.api.event.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonParser;
+
+import io.logspace.agent.api.event.*;
 
 public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
@@ -35,20 +35,30 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         this.setInputStream(inputStream);
     }
 
+    private EventJsonDeserializer(JsonParser parser) {
+        super();
+
+        this.setJsonParser(parser);
+    }
+
     public static Event eventFromJson(byte[] data) throws IOException {
         return new EventJsonDeserializer(data).deserializeSingleEvent();
     }
 
-    public static Collection<? extends Event> fromJson(byte[] data) throws IOException {
-        return new EventJsonDeserializer(data).deserialize();
+    public static List<Event> fromJson(byte[] data) throws IOException {
+        return new EventJsonDeserializer(data).deserialize(true);
     }
 
-    public static Collection<? extends Event> fromJson(InputStream inputStream) throws IOException {
-        return new EventJsonDeserializer(inputStream).deserialize();
+    public static List<Event> fromJson(InputStream inputStream) throws IOException {
+        return new EventJsonDeserializer(inputStream).deserialize(true);
     }
 
-    private Collection<? extends Event> deserialize() throws IOException {
-        Collection<Event> result = new ArrayList<Event>();
+    public static List<Event> fromJson(JsonParser parser) throws IOException {
+        return new EventJsonDeserializer(parser).deserialize(false);
+    }
+
+    private List<Event> deserialize(boolean validateEnd) throws IOException {
+        List<Event> result = new ArrayList<Event>();
 
         this.prepareToken();
         this.validateToken(START_ARRAY);
@@ -66,7 +76,10 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         this.prepareToken();
-        this.validateEnd();
+
+        if (validateEnd) {
+            this.validateEnd();
+        }
 
         return result;
     }
