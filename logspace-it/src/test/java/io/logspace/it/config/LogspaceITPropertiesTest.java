@@ -5,19 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.resource;
+package io.logspace.it.config;
 
-import static spark.Spark.staticFileLocation;
-
-import javax.annotation.PostConstruct;
-
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
-@Profile("prod")
-public class EmbeddedStaticResources {
-
-    @PostConstruct
-    public void mount() {
-        staticFileLocation("logspace-frontend");
-    }
+@Configuration
+@PropertySource("classpath:/io/logspace/it/config/logspace-it_TEST.properties")
+@Profile("test")
+public class LogspaceITPropertiesTest {
+    // properties only
 }

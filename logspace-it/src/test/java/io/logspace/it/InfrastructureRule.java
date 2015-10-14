@@ -8,7 +8,6 @@
 package io.logspace.it;
 
 import static com.indoqa.commons.lang.util.FileUtils.getCanonicalFile;
-import io.logspace.hq.webapp.LogspaceHq;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -17,6 +16,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
+
+import io.logspace.hq.webapp.LogspaceHq;
 
 public class InfrastructureRule extends ExternalResource {
 
@@ -71,14 +72,12 @@ public class InfrastructureRule extends ExternalResource {
         File solrDataDirectory = getCanonicalFile(new File("./target/solr"));
         FileUtils.deleteDirectory(solrDataDirectory);
 
-        System.setProperty("log-path", "./target");
-        System.setProperty("logspace.solr.base-url", solrDataDirectory.toURI().toString());
-
         File capabilitiesDirectory = new File("./target/capabilities");
         capabilitiesDirectory.mkdirs();
-        System.setProperty("logspace.hq-webapp.capabilities-directory", capabilitiesDirectory.getAbsolutePath());
 
         System.setProperty("port", String.valueOf(TEST_PORT));
+        System.setProperty("log-path", "./target");
+        System.setProperty("spring.profiles.active", "prod,test");
 
         this.logspaceHq = new LogspaceHq();
         this.logspaceHq.invoke();

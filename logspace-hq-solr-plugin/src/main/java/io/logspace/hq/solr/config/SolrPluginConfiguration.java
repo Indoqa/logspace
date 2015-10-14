@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.solr.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import com.indoqa.solr.spring.client.SolrClientFactory;
 
 @Configuration
-@PropertySource("classpath:/io/logspace/hq/solr/logspace-hq-solr.properties")
 public class SolrPluginConfiguration {
 
     @Value("${logspace.solr.base-url}")

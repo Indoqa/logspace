@@ -5,19 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.resource;
+package io.logspace.hq.webapp.config;
 
-import static spark.Spark.externalStaticFileLocation;
-
-import javax.annotation.PostConstruct;
-
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
+@Configuration
+@PropertySource("classpath:/io/logspace/hq/webapp/config/logspace-hq-webapp_DEV.properties")
 @Profile("dev")
-public class ExternalStaticResources {
-
-    @PostConstruct
-    public void mount() {
-        externalStaticFileLocation("../logspace-frontend/build");
-    }
+public class LogspaceWebappPropertiesDev {
+    // properties only
 }
