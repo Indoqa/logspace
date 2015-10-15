@@ -12,8 +12,8 @@ import java.io.IOException;
 import com.indoqa.boot.AbstractIndoqaBootApplication;
 import com.indoqa.boot.ApplicationInitializationException;
 
-import io.logspace.hq.rest.resource.EmbeddedStaticResource;
-import io.logspace.hq.rest.resource.ExternalStaticResource;
+import io.logspace.hq.rest.EmbeddedStaticResource;
+import io.logspace.hq.rest.ExternalStaticResource;
 import io.logspace.hq.webapp.mode.DefaultHqMode;
 import io.logspace.hq.webapp.mode.DemoHqMode;
 import io.logspace.hq.webapp.mode.HqMode;

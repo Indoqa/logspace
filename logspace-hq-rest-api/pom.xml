@@ -24,6 +24,12 @@
   <name>Logspace HQ RESTful API</name>
 
   <dependencies>
+    <!-- Jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
     <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
@@ -32,6 +38,13 @@
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-agent-api-json</artifactId>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

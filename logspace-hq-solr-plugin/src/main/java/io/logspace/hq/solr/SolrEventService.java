@@ -65,8 +65,16 @@ import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
-import io.logspace.hq.core.api.event.*;
-import io.logspace.hq.core.api.model.*;
+import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.event.StoredEvent;
+import io.logspace.hq.rest.api.*;
+import io.logspace.hq.rest.api.event.*;
+import io.logspace.hq.rest.api.suggestion.AgentDescription;
+import io.logspace.hq.rest.api.suggestion.Suggestion;
+import io.logspace.hq.rest.api.suggestion.SuggestionInput;
+import io.logspace.hq.rest.api.timeseries.DateRange;
+import io.logspace.hq.rest.api.timeseries.InvalidTimeSeriesDefinitionException;
+import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 
 @Named
 public class SolrEventService implements EventService {
@@ -135,7 +143,7 @@ public class SolrEventService implements EventService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object[] getData(DataDefinition dataDefinition) {
+    public Object[] getData(TimeSeriesDefinition dataDefinition) {
         SolrQuery solrQuery = new SolrQuery("*:*");
 
         solrQuery.setRows(0);
@@ -452,10 +460,10 @@ public class SolrEventService implements EventService {
         return result;
     }
 
-    private String createJsonFacets(DataDefinition dataDefinition) {
+    private String createJsonFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidDataDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
                 dataDefinition.getAggregate());
         }
 

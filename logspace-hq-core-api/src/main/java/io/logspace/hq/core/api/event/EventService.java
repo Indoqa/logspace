@@ -7,15 +7,18 @@
  */
 package io.logspace.hq.core.api.event;
 
-import io.logspace.agent.api.event.Event;
-import io.logspace.hq.core.api.model.AgentDescription;
-import io.logspace.hq.core.api.model.Suggestion;
-import io.logspace.hq.core.api.model.SuggestionInput;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
+
+import io.logspace.agent.api.event.Event;
+import io.logspace.hq.rest.api.event.EventFilter;
+import io.logspace.hq.rest.api.event.EventPage;
+import io.logspace.hq.rest.api.suggestion.AgentDescription;
+import io.logspace.hq.rest.api.suggestion.Suggestion;
+import io.logspace.hq.rest.api.suggestion.SuggestionInput;
+import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 
 /**
  * The responsibilities of the event service are:
@@ -37,12 +40,12 @@ public interface EventService {
     InputStream executeDirectQuery(Map<String, String[]> parameters);
 
     /**
-     * Retrieve stored data for the given {@link DataDefinition}
+     * Retrieve stored data for the given {@link TimeSeriesDefinition}
      *
-     * @param dataDefinition - The {@link DataDefinition} defining the query.
-     * @return The matching {@link Event} properties for the {@link DataDefinition}
+     * @param dataDefinition - The {@link TimeSeriesDefinition} defining the query.
+     * @return The matching {@link Event} properties for the {@link TimeSeriesDefinition}
      */
-    Object[] getData(DataDefinition dataDefinition);
+    Object[] getData(TimeSeriesDefinition dataDefinition);
 
     /**
      * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>
@@ -56,9 +59,9 @@ public interface EventService {
     /**
      * Retrieves stored {@link Event Events} matching the given filter.
      *
-     * This method uses a cursor based approach which allows to efficiently retrieve the Event following a provided
-     * "cursor mark". The "cursor mark" needed for moving to the next page is always provided in the response. Paging
-     * can only move from one page to next, not to a previous page.
+     * This method uses a cursor based approach which allows to efficiently retrieve the Event following a provided "cursor mark". The
+     * "cursor mark" needed for moving to the next page is always provided in the response. Paging can only move from one page to next,
+     * not to a previous page.
      *
      * The Events will always be sorted chronologically.
      *

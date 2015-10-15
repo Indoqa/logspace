@@ -8,7 +8,7 @@
 package io.logspace.hq.core.api.capabilities;
 
 import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.hq.core.api.model.AgentDescription;
+import io.logspace.hq.rest.api.suggestion.AgentDescription;
 
 import java.io.IOException;
 

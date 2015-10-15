@@ -72,7 +72,7 @@ function refreshSelections() {
     propertyId: (request.property)?request.property.id:null,
   }
 
-  axios.post(restUrl('/suggest'), translatedRequest)
+  axios.post(restUrl('/suggestion'), translatedRequest)
   .then(function (response) {
     storeSuccessResult(response.data)
   })

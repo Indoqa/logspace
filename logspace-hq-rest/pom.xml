@@ -59,6 +59,10 @@
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-rest-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
       <artifactId>logspace-hq-solr-plugin</artifactId>
     </dependency>
     <dependency>
