@@ -81,7 +81,9 @@ import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 @Named
 public class SolrEventService implements EventService {
 
-    private static final String DEFAULT_SORT = "timestamp ASC, id ASC";
+    private static final String SORT_CRON_ASC = "timestamp ASC, id ASC";
+    private static final String SORT_CRON_DESC = "timestamp DESC, id ASC";
+
     private static final String FIELD_ID = "id";
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
@@ -233,32 +235,12 @@ public class SolrEventService implements EventService {
 
     @Override
     public EventPage retrieve(EventFilter eventFilter, int count, String cursorMark) {
-        SolrQuery solrQuery = new SolrQuery("*:*");
-        solrQuery.setRows(count);
-        solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
-        solrQuery.set(SORT, DEFAULT_SORT);
+        return this.retrieve(eventFilter, count, cursorMark, SORT_CRON_ASC);
+    }
 
-        for (EventFilterElement eachElement : eventFilter) {
-            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
-        }
-
-        try {
-            EventPage result = new EventPage();
-
-            QueryResponse response = this.solrClient.query(solrQuery);
-            for (SolrDocument eachSolrDocument : response.getResults()) {
-                result.addEvent(this.createEvent(eachSolrDocument));
-            }
-
-            result.setNextCursorMark(response.getNextCursorMark());
-            result.setTotalCount(response.getResults().getNumFound());
-
-            return result;
-        } catch (SolrServerException | IOException | SolrException e) {
-            String message = "Failed to retrieve events.";
-            this.logger.error(message, e);
-            throw EventStoreException.retrieveFailed(message, e);
-        }
+    @Override
+    public EventPage retrieveReversed(EventFilter eventFilter, int count, String cursorMark) {
+        return this.retrieve(eventFilter, count, cursorMark, SORT_CRON_DESC);
     }
 
     @Override
@@ -287,7 +269,7 @@ public class SolrEventService implements EventService {
         SolrQuery solrQuery = new SolrQuery("*:*");
         solrQuery.setStart(offset);
         solrQuery.setRows(count);
-        solrQuery.set(SORT, DEFAULT_SORT);
+        solrQuery.set(SORT, SORT_CRON_ASC);
 
         for (EventFilterElement eachElement : eventFilter) {
             solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
@@ -656,6 +638,35 @@ public class SolrEventService implements EventService {
         result.setPropertyDescriptions(propertyDescriptions);
 
         return result;
+    }
+
+    private EventPage retrieve(EventFilter eventFilter, int count, String cursorMark, String sort) {
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setRows(count);
+        solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
+        solrQuery.set(SORT, sort);
+
+        for (EventFilterElement eachElement : eventFilter) {
+            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
+        }
+
+        try {
+            EventPage result = new EventPage();
+
+            QueryResponse response = this.solrClient.query(solrQuery);
+            for (SolrDocument eachSolrDocument : response.getResults()) {
+                result.addEvent(this.createEvent(eachSolrDocument));
+            }
+
+            result.setNextCursorMark(response.getNextCursorMark());
+            result.setTotalCount(response.getResults().getNumFound());
+
+            return result;
+        } catch (SolrServerException | IOException | SolrException e) {
+            String message = "Failed to retrieve events.";
+            this.logger.error(message, e);
+            throw EventStoreException.retrieveFailed(message, e);
+        }
     }
 
     private InputStream serializeResponse(SolrParams params, QueryResponse response) throws UnsupportedEncodingException, IOException {

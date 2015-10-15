@@ -63,15 +63,26 @@ public interface EventService {
      * "cursor mark" needed for moving to the next page is always provided in the response. Paging can only move from one page to next,
      * not to a previous page.
      *
-     * The Events will always be sorted chronologically.
+     * The Events are sorted by ascending chronological order.
      *
      * @param eventFilter The {@link EventFilter} describing which Events to retrieve.
      * @param count The maximum number of Events to retrieve.
      * @param cursorMark The position from which to begin retrieving Events. '*' means from the beginning.
      *
-     * @return A {@link EventPage Page of Events}
+     * @return A {@link EventPage} Page of Events sorted by ascending chronological order.
      */
     EventPage retrieve(EventFilter eventFilter, int count, String cursorMark);
+
+    /**
+     * The same as {@link EventService#retrieve(EventFilter, int, String)} but sorted by descending chronological order.
+     *
+     * @param eventFilter The {@link EventFilter} describing which Events to retrieve.
+     * @param count The maximum number of Events to retrieve.
+     * @param cursorMark The position from which to begin retrieving Events. '*' means from the beginning.
+     *
+     * @return A {@link EventPage} Page of Events sorted by descending chronological order.
+     */
+    EventPage retrieveReversed(EventFilter eventFilter, int count, String cursorMark);
 
     /**
      * Store the supplied events in the space.
