@@ -7,12 +7,15 @@
  */
 package io.logspace.hq.rest.api.event;
 
+import java.util.List;
+
 public class EventFilterElementBuilder {
 
     private String property;
     private String value;
     private Object to;
     private Object from;
+    private List<String> values;
 
     public EventFilterElement build() {
         if (this.value != null) {
@@ -21,6 +24,10 @@ public class EventFilterElementBuilder {
 
         if (this.from != null || this.to != null) {
             return RangeEventFilterElement.create(this.property, this.from, this.to);
+        }
+
+        if (this.values != null) {
+            return MultiValueEventFilterElement.create(this.property, this.values);
         }
 
         return null;
@@ -40,5 +47,9 @@ public class EventFilterElementBuilder {
 
     public void withValue(String value) {
         this.value = value;
+    }
+
+    public void withValues(List<String> values) {
+        this.values = values;
     }
 }

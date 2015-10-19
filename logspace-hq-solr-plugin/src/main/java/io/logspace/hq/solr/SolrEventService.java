@@ -67,7 +67,8 @@ import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.StoredEvent;
-import io.logspace.hq.rest.api.*;
+import io.logspace.hq.rest.api.DataRetrievalException;
+import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
@@ -414,6 +415,19 @@ public class SolrEventService implements EventService {
             stringBuilder.append(" TO ");
             this.appendSolrValue(stringBuilder, rangeEventFilterElement.getTo());
             stringBuilder.append(']');
+        }
+
+        if (eventFilterElement instanceof MultiValueEventFilterElement) {
+            MultiValueEventFilterElement multiValueEventFilterElement = (MultiValueEventFilterElement) eventFilterElement;
+            stringBuilder.append('(');
+            for (Iterator<String> iterator = multiValueEventFilterElement.getValues().iterator(); iterator.hasNext();) {
+                this.appendSolrValue(stringBuilder, iterator.next());
+
+                if (iterator.hasNext()) {
+                    stringBuilder.append(" OR ");
+                }
+            }
+            stringBuilder.append(')');
         }
 
         return stringBuilder.toString();
