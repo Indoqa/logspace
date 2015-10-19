@@ -116,13 +116,13 @@ function refreshResult() {
 
 function createRestRequest(timeSeries, timeWindow) {
   var request = {
-    'dataDefinitions': []
+    'definitions': []
   }
 
   const selection = timeWindow.get('selection').toJS()
 
   timeSeries.forEach(function(item) {
-    request.dataDefinitions.push({
+    request.definitions.push({
       'dateRange': {
         'start': selection.start().seconds(0).milliseconds(0),
         'end': selection.end().seconds(59).milliseconds(999).add(1,'milliseconds'),
