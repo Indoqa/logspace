@@ -31,7 +31,7 @@ It contains all the necessary interfaces and abstract implementations to write y
 ## A simple agent
 Generally there are two types of agents:
 
-- The ApplicationAgent is triggered by the application. It is useful if the application "knows" when an event should be produces.
+- The *ApplicationAgent* is triggered by the application. It is useful if the application "knows" when an event should be produces.
 - The SchedulerAgent is triggered by a scheduler. It is useful if producing an event should be controlled on a time-based manner.
 
 In order to keep this tutorial simple, an ApplicationAgent will be implemented. Using it from within your application code is as simple as using a logging framework:
@@ -81,7 +81,7 @@ public class UsageAgent extends AbstractApplicationAgent {
 }
 ````
 
-It is recommended to use the AbstractApplicationAgent because it take care of establishing the communication with the *agent controller*. The agent controller collects all events within your application.
+It is recommended to use the AbstractApplicationAgent because it takes care of establishing the communication with the *agent controller*. The agent controller collects all events within your application.
 
 A Logspace agent packages all information into *Events*. An *Event* is defined by the interface ```io.logspace.agent.api.event.Event```. This interface defines the general attributes of all *Events*, like an ID and a timestamp.
 

@@ -16,7 +16,7 @@ Stores multiple events in Logspace.
     </tr>
     <tr>
       <td>Method</td>
-      <td><code>POST</code></td>
+      <td><code>PUT</code></td>
     </tr>
     <tr>
       <td>URL Parameters</td>
@@ -101,7 +101,7 @@ If the supplied space-token is not configured:
 
   ```
   curl 'http://<logspace-hq.server>:4567/events' \
-    -X POST \
+    -X PUT \
     -d @request.json \
     --header "Content-Type:application/json" \
     --header "logspace.space-token:development"
