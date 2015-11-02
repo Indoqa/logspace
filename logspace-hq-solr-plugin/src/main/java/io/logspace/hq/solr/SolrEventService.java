@@ -61,6 +61,7 @@ import com.indoqa.commons.lang.util.TimeUtils;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.json.EventPage;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;

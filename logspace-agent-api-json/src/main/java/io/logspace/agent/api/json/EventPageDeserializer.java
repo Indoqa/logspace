@@ -5,22 +5,27 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.api.event;
+package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
 import static io.logspace.agent.api.json.JacksonUtils.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-import io.logspace.agent.api.json.EventJsonDeserializer;
-
 public class EventPageDeserializer extends JsonDeserializer<EventPage> {
+
+    public static EventPage fromJson(InputStream inputStream) throws IOException {
+        JsonParser parser = new JsonFactory().createParser(inputStream);
+        return new EventPageDeserializer().deserialize(parser, null);
+    }
 
     @Override
     public EventPage deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException, JsonProcessingException {

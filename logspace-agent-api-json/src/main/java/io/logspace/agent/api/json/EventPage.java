@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.api.event;
+package io.logspace.agent.api.json;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import io.logspace.agent.api.event.Event;
 @JsonSerialize(using = EventPageSerializer.class)
 public class EventPage {
 
-    private List<Event> events = new ArrayList<>();
+    private List<Event> events = new ArrayList<Event>();
 
     private String nextCursorMark;
 

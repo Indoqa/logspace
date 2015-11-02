@@ -20,9 +20,9 @@ import org.apache.commons.lang.StringUtils;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonDeserializer;
+import io.logspace.agent.api.json.EventPage;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.event.EventPage;
 import spark.Request;
 import spark.Response;
 

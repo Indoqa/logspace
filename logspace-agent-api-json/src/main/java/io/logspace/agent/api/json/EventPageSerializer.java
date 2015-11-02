@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.api.event;
+package io.logspace.agent.api.json;
 
 import java.io.IOException;
 
@@ -13,9 +13,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
-import io.logspace.agent.api.json.EventJsonSerializer;
-import io.logspace.agent.api.json.JacksonUtils;
 
 public class EventPageSerializer extends JsonSerializer<EventPage> {
 

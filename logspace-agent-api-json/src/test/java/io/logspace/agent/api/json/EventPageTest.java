@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest.api.event;
+package io.logspace.agent.api.json;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.logspace.agent.api.event.DefaultEventBuilder;
-import io.logspace.hq.rest.api.event.EventPage;
+import io.logspace.agent.api.json.EventPage;
 
 public class EventPageTest {
 

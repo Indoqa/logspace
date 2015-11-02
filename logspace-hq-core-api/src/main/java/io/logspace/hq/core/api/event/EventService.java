@@ -13,8 +13,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.EventPage;
 import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.event.EventPage;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
