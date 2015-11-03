@@ -9,12 +9,12 @@ package io.logspace.agent.hq;
 
 import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.text.MessageFormat.format;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.NoRouteToHostException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -42,8 +42,9 @@ import io.logspace.agent.scheduling.AgentScheduler;
 
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
-    private static final int DEFAULT_UPLOAD_SIZE = 1000;
+    private static final int UPLOAD_SIZE = 1000;
     private static final int DEFAULT_COMMIT_DELAY = 300;
+    private static final int RETRY_DELAY = 60;
 
     private static final String BASE_URL_PARAMETER = "base-url";
     private static final String SPACE_TOKEN_PARAMETER = "space-token";
@@ -62,7 +63,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private AgentScheduler agentScheduler;
 
     private CommitRunnable commitRunnable;
-    private int uploadSize = DEFAULT_UPLOAD_SIZE;
+
     private AgentControllerOrder agentControllerOrder;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
@@ -161,11 +162,13 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     @Override
     public void send(Collection<Event> events) {
         synchronized (this.persistentQueue) {
+            int previousQueueSize = this.persistentQueue.size();
+
             for (Event eachEvent : events) {
                 this.persistentQueue.add(eachEvent);
             }
 
-            if (this.persistentQueue.size() >= this.uploadSize) {
+            if (previousQueueSize < UPLOAD_SIZE && this.persistentQueue.size() >= UPLOAD_SIZE) {
                 this.commitRunnable.commit();
             }
         }
@@ -174,9 +177,11 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     @Override
     public void send(Event event) {
         synchronized (this.persistentQueue) {
+            int previousQueueSize = this.persistentQueue.size();
+
             this.persistentQueue.add(event);
 
-            if (this.persistentQueue.size() >= this.uploadSize) {
+            if (previousQueueSize < UPLOAD_SIZE && this.persistentQueue.size() >= UPLOAD_SIZE) {
                 this.commitRunnable.commit();
             }
         }
@@ -214,6 +219,11 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     public void update(Date nextFireTime) {
         try {
             this.uploadCapabilities();
+        } catch (NoRouteToHostException nrthex) {
+            this.logger.error("Could not upload capabilities because the HQ was not available: {} - Will retry at {}",
+                nrthex.getMessage(), nextFireTime);
+            // no need to try downloading as well
+            return;
         } catch (ConnectException cex) {
             this.logger.error("Could not upload capabilities because the HQ was not available: {} - Will retry at {}",
                 cex.getMessage(), nextFireTime);
@@ -271,7 +281,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
     }
 
-    protected void performCommit(long commitDelayInSeconds) {
+    protected void performCommit() {
         try {
             do {
                 List<Event> eventsForUpload = this.getEventsForUpload();
@@ -281,14 +291,21 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
                 this.uploadEvents(eventsForUpload);
                 this.purgeUploadedEvents(eventsForUpload);
-            } while (this.persistentQueue.size() >= this.uploadSize);
+            } while (this.persistentQueue.size() >= UPLOAD_SIZE);
+        } catch (NoRouteToHostException nrthex) {
+            this.logger.error("Could not upload events because the HQ was not available: {}. Trying again in {} seconds.",
+                nrthex.getMessage(), RETRY_DELAY);
+            new RetryThread(this.commitRunnable, RETRY_DELAY).start();
         } catch (ConnectException cex) {
-            this.logger.error("Could not upload events because the HQ was not available: {}. Trying in {} second(s) again.",
-                cex.getMessage(), commitDelayInSeconds);
+            this.logger.error("Could not upload events because the HQ was not available: {}. Trying again in {} seconds.",
+                cex.getMessage(), RETRY_DELAY);
+            new RetryThread(this.commitRunnable, RETRY_DELAY).start();
         } catch (IOException ioex) {
-            this.logger.error("Failed to upload events. Trying in " + commitDelayInSeconds + " second(s) again.", ioex);
-        } catch (UploadException ue) {
-            this.logger.error("The HQ did not accept events: {} Trying in {} second(s) again.", ue.getMessage(), commitDelayInSeconds);
+            this.logger.error("Failed to upload events. Trying again in {} seconds.", RETRY_DELAY, ioex);
+            new RetryThread(this.commitRunnable, RETRY_DELAY).start();
+        } catch (UploadException uex) {
+            this.logger.error("The HQ did not accept events: {} Trying again in {} seconds.", uex.getMessage(), RETRY_DELAY);
+            new RetryThread(this.commitRunnable, RETRY_DELAY).start();
         }
     }
 
@@ -312,7 +329,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.logger.debug("Retrieving events to be committed.");
 
         synchronized (this.persistentQueue) {
-            return this.persistentQueue.peek(this.uploadSize);
+            return this.persistentQueue.peek(UPLOAD_SIZE);
         }
     }
 
@@ -392,8 +409,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             this.executorThread = Thread.currentThread();
 
             while (true) {
-                long commitDelayInSeconds = MILLISECONDS.toSeconds(this.commitDelayInMilliseconds);
-                HqAgentController.this.performCommit(commitDelayInSeconds);
+                HqAgentController.this.performCommit();
 
                 synchronized (this) {
                     if (!this.run) {
@@ -446,6 +462,29 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
         private synchronized void wakeUp() {
             this.notifyAll();
+        }
+    }
+
+    private static class RetryThread extends Thread {
+
+        private final CommitRunnable commitRunnable;
+        private final int delaySeconds;
+
+        public RetryThread(CommitRunnable commitRunnable, int delaySeconds) {
+            super();
+            this.commitRunnable = commitRunnable;
+            this.delaySeconds = delaySeconds;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(SECONDS.toMillis(this.delaySeconds));
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+
+            this.commitRunnable.commit();
         }
     }
 }
