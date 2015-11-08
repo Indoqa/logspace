@@ -69,7 +69,7 @@ public abstract class AbstractJsonSerializer {
         this.jsonGenerator.writeStartObject();
     }
 
-    protected void writeField(String fieldName) throws IOException {
+    protected void writeFieldName(String fieldName) throws IOException {
         this.jsonGenerator.writeFieldName(fieldName);
     }
 

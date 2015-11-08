@@ -71,6 +71,10 @@ public abstract class AbstractJsonDeserializer {
         return this.jsonParser.nextTextValue();
     }
 
+    protected void nextValue() throws IOException {
+        this.jsonParser.nextValue();
+    }
+
     protected void prepareToken() throws IOException {
         JacksonUtils.prepareToken(this.jsonParser);
     }
@@ -81,6 +85,10 @@ public abstract class AbstractJsonDeserializer {
 
     protected String readMandatoryField(String fieldName) throws IOException {
         return JacksonUtils.readMandatoryField(this.jsonParser, fieldName);
+    }
+
+    protected Long readMandatoryLongField(String fieldName) throws IOException {
+        return JacksonUtils.readMandatoryLongField(this.jsonParser, fieldName);
     }
 
     protected Optional<String> readOptionalField(String fieldName) throws IOException {
@@ -109,15 +117,15 @@ public abstract class AbstractJsonDeserializer {
     }
 
     protected void validateEnd() {
-        this.validateToken((JsonToken) null);
+        this.validateTokenType((JsonToken) null);
     }
 
-    protected void validateField(String... expected) throws IOException {
+    protected void validateFieldName(String... expected) throws IOException {
         JacksonUtils.validateFieldName(this.jsonParser.getCurrentName(), expected);
         this.jsonParser.nextToken();
     }
 
-    protected void validateToken(JsonToken... expected) {
+    protected void validateTokenType(JsonToken... expected) {
         JacksonUtils.validateTokenType(this.jsonParser.getCurrentToken(), expected);
     }
 }

@@ -52,7 +52,7 @@ public final class AgentControllerOrdersJsonSerializer extends AbstractJsonSeria
 
     private void writeAgentOrders(AgentControllerOrder value) throws IOException {
         if (value.hasAgentOrders()) {
-            this.writeField(FIELD_AGENT_ORDERS);
+            this.writeFieldName(FIELD_AGENT_ORDERS);
             this.startArray();
 
             for (AgentOrder eachAgentOrder : value.getAgentOrders()) {

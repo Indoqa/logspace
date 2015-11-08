@@ -51,7 +51,7 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         AgentControllerCapabilities result = new AgentControllerCapabilities();
 
         this.prepareToken();
-        this.validateToken(START_OBJECT);
+        this.validateTokenType(START_OBJECT);
         this.consumeToken();
 
         result.setId(this.readMandatoryField(FIELD_ID));
@@ -60,10 +60,10 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
 
         this.prepareToken();
         if (this.hasToken(FIELD_NAME)) {
-            this.validateField(FIELD_AGENT_CAPABILITIES);
+            this.validateFieldName(FIELD_AGENT_CAPABILITIES);
 
             this.prepareToken();
-            this.validateToken(START_ARRAY);
+            this.validateTokenType(START_ARRAY);
             this.consumeToken();
 
             while (true) {
@@ -73,19 +73,19 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
                     break;
                 }
 
-                this.validateToken(START_OBJECT);
+                this.validateTokenType(START_OBJECT);
                 this.consumeToken();
 
                 result.add(this.readAgentCapabilities());
 
                 this.prepareToken();
-                this.validateToken(END_OBJECT);
+                this.validateTokenType(END_OBJECT);
                 this.consumeToken();
             }
         }
 
         this.prepareToken();
-        this.validateToken(END_OBJECT);
+        this.validateTokenType(END_OBJECT);
         this.consumeToken();
 
         this.prepareToken();
@@ -101,11 +101,11 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         result.setType(this.readMandatoryField(FIELD_TYPE));
 
         this.prepareToken();
-        this.validateToken(FIELD_NAME);
-        this.validateField(FIELD_TRIGGER_TYPES);
+        this.validateTokenType(FIELD_NAME);
+        this.validateFieldName(FIELD_TRIGGER_TYPES);
 
         this.prepareToken();
-        this.validateToken(START_ARRAY);
+        this.validateTokenType(START_ARRAY);
         this.consumeToken();
 
         List<TriggerType> triggerTypes = new ArrayList<TriggerType>();
@@ -122,11 +122,11 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         result.setSupportedTriggerTypes(triggerTypes.toArray(new TriggerType[triggerTypes.size()]));
 
         this.prepareToken();
-        this.validateToken(FIELD_NAME);
-        this.validateField(FIELD_PROPERTY_DESCRIPTIONS);
+        this.validateTokenType(FIELD_NAME);
+        this.validateFieldName(FIELD_PROPERTY_DESCRIPTIONS);
 
         this.prepareToken();
-        this.validateToken(START_ARRAY);
+        this.validateTokenType(START_ARRAY);
         this.consumeToken();
 
         List<PropertyDescription> propertyDescriptions = new ArrayList<PropertyDescription>();
@@ -137,13 +137,13 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
                 break;
             }
 
-            this.validateToken(START_OBJECT);
+            this.validateTokenType(START_OBJECT);
             this.consumeToken();
 
             propertyDescriptions.add(this.readPropertyDescription());
 
             this.prepareToken();
-            this.validateToken(END_OBJECT);
+            this.validateTokenType(END_OBJECT);
             this.consumeToken();
         }
         result.setPropertyDescriptions(propertyDescriptions.toArray(new PropertyDescription[propertyDescriptions.size()]));
@@ -159,11 +159,11 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
 
         this.prepareToken();
         if (this.hasToken(FIELD_NAME)) {
-            this.validateToken(FIELD_NAME);
-            this.validateField(FIELD_PROPERTY_UNITS);
+            this.validateTokenType(FIELD_NAME);
+            this.validateFieldName(FIELD_PROPERTY_UNITS);
 
             this.prepareToken();
-            this.validateToken(START_OBJECT);
+            this.validateTokenType(START_OBJECT);
             this.consumeToken();
 
             List<PropertyUnit> propertyUnits = new ArrayList<PropertyUnit>();

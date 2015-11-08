@@ -21,30 +21,32 @@ import org.apache.commons.lang.StringUtils;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonDeserializer;
 import io.logspace.agent.api.json.EventPage;
+import io.logspace.agent.api.json.EventPageJsonSerializer;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.rest.api.event.EventFilter;
 import spark.Request;
 import spark.Response;
+import spark.ResponseTransformer;
 
 @Named
 public class EventResource extends AbstractSpaceResource {
 
     private static final String PARAMETER_FILTER = "filter";
-    private static final String PARAMETER_CURSOR = "cursor";
 
+    private static final String PARAMETER_CURSOR = "cursor";
     private static final String PARAMETER_COUNT = "count";
+
     private static final int DEFAULT_COUNT = 10;
     private static final int MIN_COUNT = 0;
     private static final int MAX_RETRIEVAL_COUNT = 1000;
-
     @Inject
     private EventService eventService;
 
     @PostConstruct
     public void mount() {
-        this.get("/events", (req, res) -> this.getEvents(req));
+        this.get("/events", (req, res) -> this.getEvents(req), new EventPageResponseTransformer());
         this.put("/events", (req, res) -> this.putEvents(req, res));
-        this.post("/events", (req, res) -> this.postEvents(req));
+        this.post("/events", (req, res) -> this.postEvents(req), new EventPageResponseTransformer());
     }
 
     private EventPage getEvents(Request req) {
@@ -85,5 +87,17 @@ public class EventResource extends AbstractSpaceResource {
 
     private EventPage retrieveEvents(EventFilter eventFilter, int count, String cursor) {
         return this.eventService.retrieve(eventFilter, count, cursor);
+    }
+
+    private class EventPageResponseTransformer implements ResponseTransformer {
+
+        @Override
+        public String render(Object model) throws Exception {
+            if (model instanceof EventPage) {
+                return EventPageJsonSerializer.toJson((EventPage) model);
+            }
+
+            return model.toString();
+        }
     }
 }

@@ -11,10 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.logspace.agent.api.event.DefaultEventBuilder;
-import io.logspace.agent.api.json.EventPage;
 
 public class EventPageTest {
 
@@ -26,10 +23,9 @@ public class EventPageTest {
         eventPage.addEvent(new DefaultEventBuilder("agent-id", "system").toEvent());
         eventPage.addEvent(new DefaultEventBuilder("agent-id", "system").toEvent());
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(eventPage);
+        String json = EventPageJsonSerializer.toJson(eventPage);
 
-        EventPage loadedEventPage = objectMapper.readValue(json, EventPage.class);
+        EventPage loadedEventPage = EventPageJsonDeserializer.fromJson(json.getBytes("UTF-8"));
         assertEquals(eventPage.getTotalCount(), loadedEventPage.getTotalCount());
         assertEquals(eventPage.getNextCursorMark(), loadedEventPage.getNextCursorMark());
         assertEquals(eventPage.getEvents().size(), loadedEventPage.getEvents().size());

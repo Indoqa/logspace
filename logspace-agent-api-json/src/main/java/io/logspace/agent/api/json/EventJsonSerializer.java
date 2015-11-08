@@ -97,7 +97,7 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
             return;
         }
 
-        this.writeField(handler.getFieldName());
+        this.writeFieldName(handler.getFieldName());
 
         this.startObject();
         for (EventProperty<T> eachProperty : properties) {

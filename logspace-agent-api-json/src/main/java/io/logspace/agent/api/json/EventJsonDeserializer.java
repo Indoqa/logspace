@@ -61,7 +61,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         List<Event> result = new ArrayList<Event>();
 
         this.prepareToken();
-        this.validateToken(START_ARRAY);
+        this.validateTokenType(START_ARRAY);
         this.consumeToken();
 
         while (true) {
@@ -86,13 +86,13 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
 
     private Event deserializeSingleEvent() throws IOException {
         this.prepareToken();
-        this.validateToken(START_OBJECT);
+        this.validateTokenType(START_OBJECT);
         this.consumeToken();
 
         Event result = this.readEvent();
 
         this.prepareToken();
-        this.validateToken(END_OBJECT);
+        this.validateTokenType(END_OBJECT);
         this.consumeToken();
 
         return result;
@@ -125,23 +125,23 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             String fieldName = this.getCurrentName();
             EventPropertyJsonHandler<?> eventPropertyJsonHandler = EventPropertyJsonHandlers.getHandler(fieldName);
 
-            this.validateField(FIELD_BOOLEAN_PROPERTIES, FIELD_DATE_PROPERTIES, FIELD_DOUBLE_PROPERTIES, FIELD_FLOAT_PROPERTIES,
+            this.validateFieldName(FIELD_BOOLEAN_PROPERTIES, FIELD_DATE_PROPERTIES, FIELD_DOUBLE_PROPERTIES, FIELD_FLOAT_PROPERTIES,
                 FIELD_INTEGER_PROPERTIES, FIELD_LONG_PROPERTIES, FIELD_STRING_PROPERTIES);
 
             this.prepareToken();
-            this.validateToken(START_OBJECT);
+            this.validateTokenType(START_OBJECT);
             this.consumeToken();
 
             while (true) {
                 this.prepareToken();
-                this.validateToken(FIELD_NAME, END_OBJECT);
+                this.validateTokenType(FIELD_NAME, END_OBJECT);
 
                 if (this.hasToken(END_OBJECT)) {
                     this.consumeToken();
                     break;
                 }
 
-                this.validateToken(FIELD_NAME);
+                this.validateTokenType(FIELD_NAME);
 
                 eventPropertyJsonHandler.readEventProperty(result, this.getJsonParser());
                 this.consumeToken();

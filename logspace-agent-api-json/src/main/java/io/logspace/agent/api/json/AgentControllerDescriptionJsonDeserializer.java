@@ -41,7 +41,7 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
         AgentControllerDescription result = new AgentControllerDescription();
 
         this.prepareToken();
-        this.validateToken(START_OBJECT);
+        this.validateTokenType(START_OBJECT);
         this.consumeToken();
 
         result.setId(this.readMandatoryField(FIELD_ID));
@@ -52,16 +52,16 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
             List<Parameter> parameters = new ArrayList<Parameter>();
             result.setParameters(parameters);
 
-            this.validateField(FIELD_PARAMETERS);
+            this.validateFieldName(FIELD_PARAMETERS);
 
             this.prepareToken();
-            this.validateToken(START_OBJECT);
+            this.validateTokenType(START_OBJECT);
             this.consumeToken();
 
             while (true) {
                 this.prepareToken();
 
-                this.validateToken(END_OBJECT, FIELD_NAME);
+                this.validateTokenType(END_OBJECT, FIELD_NAME);
 
                 if (this.hasToken(END_OBJECT)) {
                     this.consumeToken();
@@ -73,7 +73,7 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
         }
 
         this.prepareToken();
-        this.validateToken(END_OBJECT);
+        this.validateTokenType(END_OBJECT);
         this.consumeToken();
 
         this.prepareToken();

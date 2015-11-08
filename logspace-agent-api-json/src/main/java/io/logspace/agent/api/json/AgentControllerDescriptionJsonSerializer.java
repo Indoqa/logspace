@@ -57,7 +57,7 @@ public final class AgentControllerDescriptionJsonSerializer extends AbstractJson
             return;
         }
 
-        this.writeField(FIELD_PARAMETERS);
+        this.writeFieldName(FIELD_PARAMETERS);
 
         this.startObject();
 

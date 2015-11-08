@@ -53,14 +53,14 @@ public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJso
         this.writeMandatoryStringField(FIELD_ID, agentCapabilities.getId());
         this.writeMandatoryStringField(FIELD_TYPE, agentCapabilities.getType());
 
-        this.writeField(FIELD_TRIGGER_TYPES);
+        this.writeFieldName(FIELD_TRIGGER_TYPES);
         this.startArray();
         for (TriggerType eachTriggerType : agentCapabilities.getSupportedTriggerTypes()) {
             this.writeString(eachTriggerType.name());
         }
         this.endArray();
 
-        this.writeField(FIELD_PROPERTY_DESCRIPTIONS);
+        this.writeFieldName(FIELD_PROPERTY_DESCRIPTIONS);
         this.startArray();
         if (agentCapabilities.hasPropertyDescriptions()) {
             for (PropertyDescription eachPropertyDescription : agentCapabilities.getPropertyDescriptions()) {
@@ -77,7 +77,7 @@ public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJso
             return;
         }
 
-        this.writeField(FIELD_AGENT_CAPABILITIES);
+        this.writeFieldName(FIELD_AGENT_CAPABILITIES);
         this.startArray();
         for (AgentCapabilities eachAgentCapabilities : agentCapabilities) {
             this.startObject();
@@ -98,7 +98,7 @@ public final class AgentControllerCapabilitiesJsonSerializer extends AbstractJso
         this.writeMandatoryStringField(FIELD_PROPERTY_TYPE, propertyDescription.getPropertyType().name());
 
         if (propertyDescription.hasUnits()) {
-            this.writeField(FIELD_PROPERTY_UNITS);
+            this.writeFieldName(FIELD_PROPERTY_UNITS);
 
             this.startObject();
 

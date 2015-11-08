@@ -7,26 +7,18 @@
  */
 package io.logspace.agent.api.json;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
-import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_AGENT_ORDERS;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_COUNT;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_SECONDS;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_ID;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_PARAMETER;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_TYPE;
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
+import static com.fasterxml.jackson.core.JsonToken.*;
+import static io.logspace.agent.api.order.AgentControllerOrder.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.logspace.agent.api.event.Optional;
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
 
 public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDeserializer {
 
@@ -44,11 +36,11 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
         AgentControllerOrder result = new AgentControllerOrder();
 
         this.prepareToken();
-        this.validateToken(START_OBJECT);
+        this.validateTokenType(START_OBJECT);
         this.consumeToken();
 
         this.prepareToken();
-        this.validateToken(FIELD_NAME);
+        this.validateTokenType(FIELD_NAME);
 
         if (this.hasField(FIELD_AGENT_ORDERS)) {
             this.advance();
@@ -57,7 +49,7 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
             result.setAgentOrders(agentOrders);
 
             this.prepareToken();
-            this.validateToken(START_ARRAY);
+            this.validateTokenType(START_ARRAY);
             this.consumeToken();
 
             while (true) {
@@ -68,13 +60,13 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
                     break;
                 }
 
-                this.validateToken(START_OBJECT);
+                this.validateTokenType(START_OBJECT);
                 this.consumeToken();
 
                 agentOrders.add(this.readAgentOrder());
 
                 this.prepareToken();
-                this.validateToken(END_OBJECT);
+                this.validateTokenType(END_OBJECT);
                 this.consumeToken();
             }
         }
@@ -83,7 +75,7 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
         result.setCommitMaxSeconds(this.readOptionalIntField(FIELD_COMMIT_MAX_SECONDS));
 
         this.prepareToken();
-        this.validateToken(END_OBJECT);
+        this.validateTokenType(END_OBJECT);
         this.consumeToken();
 
         this.prepareToken();
