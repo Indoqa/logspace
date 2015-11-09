@@ -12,6 +12,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:/io/logspace/hq/webapp/config/logspace-hq-webapp.properties")
+// @Profile("prod")
 public class LogspaceWebappProperties {
+
     // properties only
 }
