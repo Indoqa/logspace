@@ -21,23 +21,24 @@ public class ParameterValueException extends AbstractLogspaceResourceException {
 
     public static ParameterValueException missingQueryParameter(String parameterName) {
         return new ParameterValueException(MessageFormat.format("Missing query parameter ''{0}''.", parameterName),
-                "MISSING_QUERY_PARAMETER_VALUE");
+            "MISSING_QUERY_PARAMETER_VALUE");
     }
 
     public static ParameterValueException unparsableValue(String parameterName, String value) {
-        return new ParameterValueException(MessageFormat.format("Could not parse ''{0}'' as value for parameter ''{1}''.", value,
-                parameterName), "UNPARSABLE_PARAMETER_VALUE");
+        return new ParameterValueException(
+            MessageFormat.format("Could not parse ''{0}'' as value for parameter ''{1}''.", value, parameterName),
+            "UNPARSABLE_PARAMETER_VALUE");
     }
 
     public static ParameterValueException valueTooLarge(String parameterName, Object value, Object max) {
-        return new ParameterValueException(MessageFormat.format(
-                "Invalid value ''{0}'' for parameter ''{1}''. It is above the allowed maximum of {2}", value, parameterName, max),
-                "INVALID_PARAMETER_VALUE");
+        return new ParameterValueException(MessageFormat
+            .format("Invalid value ''{0}'' for parameter ''{1}''. It is above the allowed maximum of {2}", value, parameterName, max),
+            "INVALID_PARAMETER_VALUE");
     }
 
     public static ParameterValueException valueTooSmall(String parameterName, Object value, Object min) {
-        return new ParameterValueException(MessageFormat.format(
-                "Invalid value ''{0}'' for parameter ''{1}''. It is below the allowed minimum of {2}", value, parameterName, min),
-                "INVALID_PARAMETER_VALUE");
+        return new ParameterValueException(MessageFormat
+            .format("Invalid value ''{0}'' for parameter ''{1}''. It is below the allowed minimum of {2}", value, parameterName, min),
+            "INVALID_PARAMETER_VALUE");
     }
 }
