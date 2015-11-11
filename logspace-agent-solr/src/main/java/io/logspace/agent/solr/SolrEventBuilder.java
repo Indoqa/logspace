@@ -10,7 +10,6 @@ package io.logspace.agent.solr;
 import org.apache.solr.common.util.NamedList;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
-import io.logspace.agent.api.event.Optional;
 
 public final class SolrEventBuilder extends AbstractEventBuilder {
 
@@ -44,34 +43,84 @@ public final class SolrEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_FILTER_CACHE_HIT_RATIO = "filter_cache_hit_ratio";
     public static final String PROPERTY_FILTER_CACHE_SIZE = "filter_cache_size";
 
-    private static final Optional<String> STATISTICS_EVENT_TYPE = Optional.of("solr/core/statistics");
-    private static final Optional<String> COMMIT_EVENT_TYPE = Optional.of("solr/core/commit");
-    private static final Optional<String> SOFT_COMMIT_EVENT_TYPE = Optional.of("solr/core/soft-commit");
-    private static final Optional<String> NEW_SEARCHER_EVENT_TYPE = Optional.of("solr/core/new-searcher");
+    private static final String STATISTICS_EVENT_TYPE = "solr/core/statistics";
+    private static final String COMMIT_EVENT_TYPE = "solr/core/commit";
+    private static final String SOFT_COMMIT_EVENT_TYPE = "solr/core/soft-commit";
+    private static final String NEW_SEARCHER_EVENT_TYPE = "solr/core/new-searcher";
 
-    private Optional<String> eventType;
+    private String eventType;
 
-    private SolrEventBuilder(String agentId, String system, Optional<String> eventType, String coreName) {
-        super(agentId, system);
+    private SolrEventBuilder(String agentId, String system, String marker, String eventType, String coreName) {
+        super(agentId, system, marker);
 
         this.eventType = eventType;
         this.addProperty(PROPERTY_CORE_NAME, coreName);
     }
 
-    public static SolrEventBuilder createCommitBuilder(String agentId, String system, String coreName) {
-        return new SolrEventBuilder(agentId, system, COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createCommitBuilder(String agentId, String system, String marker, String coreName) {
+        return new SolrEventBuilder(agentId, system, marker, COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String system, String coreName) {
-        return new SolrEventBuilder(agentId, system, NEW_SEARCHER_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String system, String marker, String coreName) {
+        return new SolrEventBuilder(agentId, system, marker, NEW_SEARCHER_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String system, String coreName) {
-        return new SolrEventBuilder(agentId, system, SOFT_COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String system, String marker, String coreName) {
+        return new SolrEventBuilder(agentId, system, marker, SOFT_COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createStatisticsBuilder(String agentId, String system, String coreName) {
-        return new SolrEventBuilder(agentId, system, STATISTICS_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createStatisticsBuilder(String agentId, String system, String marker, String coreName) {
+        return new SolrEventBuilder(agentId, system, marker, STATISTICS_EVENT_TYPE, coreName);
+    }
+
+    public static boolean getBoolean(NamedList<?> namedList, String name) {
+        Object value = namedList.get(name);
+
+        if (value instanceof Boolean) {
+            return ((Boolean) value).booleanValue();
+        }
+
+        return false;
+    }
+
+    public static double getDouble(NamedList<?> namedList, String name) {
+        Object value = namedList.get(name);
+
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+
+        return 0;
+    }
+
+    public static float getFloat(NamedList<?> namedList, String name) {
+        Object value = namedList.get(name);
+
+        if (value instanceof Number) {
+            return ((Number) value).floatValue();
+        }
+
+        return 0;
+    }
+
+    public static int getInt(NamedList<?> namedList, String name) {
+        Object value = namedList.get(name);
+
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+
+        return 0;
+    }
+
+    public static long getLong(NamedList<?> namedList, String name) {
+        Object value = namedList.get(name);
+
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+
+        return 0;
     }
 
     public void set75thPercentileRequestTime(double requestTime) {
@@ -183,57 +232,7 @@ public final class SolrEventBuilder extends AbstractEventBuilder {
     }
 
     @Override
-    protected Optional<String> getType() {
+    protected String getType() {
         return this.eventType;
-    }
-
-    public static long getLong(NamedList<?> namedList, String name) {
-        Object value = namedList.get(name);
-
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-
-        return 0;
-    }
-
-    public static int getInt(NamedList<?> namedList, String name) {
-        Object value = namedList.get(name);
-
-        if (value instanceof Number) {
-            return ((Number) value).intValue();
-        }
-
-        return 0;
-    }
-
-    public static float getFloat(NamedList<?> namedList, String name) {
-        Object value = namedList.get(name);
-
-        if (value instanceof Number) {
-            return ((Number) value).floatValue();
-        }
-
-        return 0;
-    }
-
-    public static double getDouble(NamedList<?> namedList, String name) {
-        Object value = namedList.get(name);
-
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue();
-        }
-
-        return 0;
-    }
-
-    public static boolean getBoolean(NamedList<?> namedList, String name) {
-        Object value = namedList.get(name);
-
-        if (value instanceof Boolean) {
-            return ((Boolean) value).booleanValue();
-        }
-
-        return false;
     }
 }

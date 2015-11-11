@@ -20,22 +20,18 @@ public final class Premain {
         // hide utility class constructor
     }
 
+    @SuppressWarnings("unused")
     public static void agentmain(String args, Instrumentation inst) {
-        agent = JvmAgent.create();
-        globalEventId = createGlobalEventId();
+        initialize();
 
-        agent.sendAgentAttachedEvent(globalEventId);
-
-        registerShutdownHook();
+        sendAttachedEvent();
     }
 
+    @SuppressWarnings("unused")
     public static void premain(String args, Instrumentation inst) {
-        agent = JvmAgent.create();
-        globalEventId = createGlobalEventId();
+        initialize();
 
-        agent.sendJvmStartEvent(globalEventId);
-
-        registerShutdownHook();
+        sendStartEvent();
     }
 
     protected static JvmAgent getAgent() {
@@ -46,8 +42,34 @@ public final class Premain {
         return globalEventId;
     }
 
+    protected static void sendAttachedEvent() {
+        agent.sendAgentAttachedEvent(globalEventId);
+    }
+
+    protected static void sendShutdownEvent() {
+        agent.sendJvmStopEvent(globalEventId);
+    }
+
+    protected static void sendStartEvent() {
+        agent.sendJvmStartEvent(globalEventId);
+    }
+
     private static String createGlobalEventId() {
         return UUID.randomUUID().toString();
+    }
+
+    private static void initialize() {
+        initializeAgent();
+        initializeGlobalEventId();
+        registerShutdownHook();
+    }
+
+    private static void initializeAgent() {
+        agent = JvmAgent.create();
+    }
+
+    private static void initializeGlobalEventId() {
+        globalEventId = createGlobalEventId();
     }
 
     private static void registerShutdownHook() {
@@ -62,7 +84,7 @@ public final class Premain {
 
         @Override
         public void run() {
-            Premain.getAgent().sendJvmStopEvent(Premain.getGlobalEventId());
+            Premain.sendShutdownEvent();
         }
     }
 }

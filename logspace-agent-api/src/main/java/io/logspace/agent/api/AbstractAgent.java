@@ -58,6 +58,10 @@ abstract class AbstractAgent implements Agent {
         return this.agentController;
     }
 
+    protected String getMarker() {
+        return this.agentController.getMarker();
+    }
+
     protected String getSystem() {
         return this.agentController.getSystem();
     }

@@ -8,7 +8,6 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
-import io.logspace.agent.api.event.Optional;
 
 public final class JvmEventBuilder extends AbstractEventBuilder {
 
@@ -45,12 +44,12 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_AVAILABLE_PROCESSORS = "available_processors";
     public static final String PROPERTY_CPU_ENDIAN = "cpu_endian";
 
-    private static final Optional<String> JVM_EVENT_TYPE = Optional.of("jvm/statistics");
+    private static final String JVM_EVENT_TYPE = "jvm/statistics";
 
-    private static final Optional<String> JVM_START_EVENT_TYPE = Optional.of("jvm/start");
-    private static final Optional<String> JVM_STOP_EVENT_TYPE = Optional.of("jvm/stop");
+    private static final String JVM_START_EVENT_TYPE = "jvm/start";
+    private static final String JVM_STOP_EVENT_TYPE = "jvm/stop";
 
-    private static final Optional<String> JVM_AGENT_ATTACHED_EVENT_TYPE = Optional.of("jvm/agent-attached");
+    private static final String JVM_AGENT_ATTACHED_EVENT_TYPE = "jvm/agent-attached";
 
     private static final String PROPERTY_JAVA_RUNTIME_NAME = "java_runtime_name";
     private static final String PROPERTY_JAVA_RUNTIME_VERSION = "java_runtime_version";
@@ -71,34 +70,28 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     private static final String PROPERTY_USER_NAME = "user_name";
     private static final String PROPERTY_USER_TIMEZONE = "user_timezone";
 
-    private Optional<String> eventType;
+    private String eventType;
 
-    private JvmEventBuilder(String agentId, String system, Optional<String> eventType) {
-        super(agentId, system);
+    private JvmEventBuilder(String agentId, String system, String marker, String eventType) {
+        super(agentId, system, marker);
 
         this.eventType = eventType;
     }
 
-    public static JvmEventBuilder createJvmAgentAttachedBuilder(String agentId, String system, String globalEventId) {
-        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_AGENT_ATTACHED_EVENT_TYPE);
-        jvmEventBuilder.setGlobalEventId(globalEventId);
-        return jvmEventBuilder;
+    public static JvmEventBuilder createJvmAgentAttachedBuilder(String agentId, String system, String marker) {
+        return new JvmEventBuilder(agentId, system, marker, JVM_AGENT_ATTACHED_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmBuilder(String agentId, String system) {
-        return new JvmEventBuilder(agentId, system, JVM_EVENT_TYPE);
+    public static JvmEventBuilder createJvmBuilder(String agentId, String system, String marker) {
+        return new JvmEventBuilder(agentId, system, marker, JVM_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmStartBuilder(String agentId, String system, String globalEventId) {
-        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_START_EVENT_TYPE);
-        jvmEventBuilder.setGlobalEventId(globalEventId);
-        return jvmEventBuilder;
+    public static JvmEventBuilder createJvmStartBuilder(String agentId, String system, String marker) {
+        return new JvmEventBuilder(agentId, system, marker, JVM_START_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmStopBuilder(String agentId, String system, String globalEventId) {
-        JvmEventBuilder jvmEventBuilder = new JvmEventBuilder(agentId, system, JVM_STOP_EVENT_TYPE);
-        jvmEventBuilder.setGlobalEventId(globalEventId);
-        return jvmEventBuilder;
+    public static JvmEventBuilder createJvmStopBuilder(String agentId, String system, String marker) {
+        return new JvmEventBuilder(agentId, system, marker, JVM_STOP_EVENT_TYPE);
     }
 
     public void setAvailableProcessors(int availableProcessors) {
@@ -250,7 +243,7 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     }
 
     @Override
-    protected Optional<String> getType() {
+    protected String getType() {
         return this.eventType;
     }
 

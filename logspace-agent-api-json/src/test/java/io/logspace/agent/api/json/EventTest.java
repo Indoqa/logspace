@@ -7,23 +7,12 @@
  */
 package io.logspace.agent.api.json;
 
-import static io.logspace.agent.api.json.RandomHelper.getRandomBoolean;
-import static io.logspace.agent.api.json.RandomHelper.getRandomDate;
-import static io.logspace.agent.api.json.RandomHelper.getRandomDouble;
-import static io.logspace.agent.api.json.RandomHelper.getRandomFloat;
-import static io.logspace.agent.api.json.RandomHelper.getRandomInt;
-import static io.logspace.agent.api.json.RandomHelper.getRandomLong;
-import static io.logspace.agent.api.json.RandomHelper.getRandomOptional;
-import static io.logspace.agent.api.json.RandomHelper.getRandomString;
+import static io.logspace.agent.api.json.RandomHelper.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -74,6 +63,7 @@ public class EventTest {
         assertEquals(expected.getParentEventId(), actual.getParentEventId());
         assertEquals(expected.getTimestamp().getTime(), actual.getTimestamp().getTime());
         assertEquals(expected.getType(), actual.getType());
+        assertEquals(expected.getMarker(), actual.getMarker());
 
         assertEquals(expected.getBooleanProperties(), actual.getBooleanProperties());
         assertEquals(expected.getDateProperties(), actual.getDateProperties());
@@ -87,14 +77,15 @@ public class EventTest {
     private Event createRandomEvent() {
         TestEvent result = new TestEvent();
 
-        result.setGlobalEventId(getRandomOptional());
+        result.setGlobalEventId(getRandomOptionalString());
         result.setId(getRandomString());
         result.setSystem(getRandomString());
         result.setAgentId(getRandomString());
-        result.setParentEventId(getRandomOptional());
+        result.setParentEventId(getRandomOptionalString());
         result.setProperties(this.createRandomProperties());
         result.setTimestamp(new Date());
-        result.setType(getRandomOptional());
+        result.setType(getRandomOptionalString());
+        result.setMarker(getRandomOptionalString());
 
         return result;
     }
@@ -154,10 +145,12 @@ public class EventTest {
         private String id;
         private String system;
         private String agentId;
-        private Optional<String> globalEventId;
-        private Optional<String> parentEventId;
-        private Optional<String> type;
+        private String globalEventId;
+        private String parentEventId;
+        private String type;
         private Date timestamp;
+        private String marker;
+
         private EventProperties properties;
 
         @Override
@@ -186,7 +179,7 @@ public class EventTest {
         }
 
         @Override
-        public Optional<String> getGlobalEventId() {
+        public String getGlobalEventId() {
             return this.globalEventId;
         }
 
@@ -206,7 +199,12 @@ public class EventTest {
         }
 
         @Override
-        public Optional<String> getParentEventId() {
+        public String getMarker() {
+            return this.marker;
+        }
+
+        @Override
+        public String getParentEventId() {
             return this.parentEventId;
         }
 
@@ -226,7 +224,7 @@ public class EventTest {
         }
 
         @Override
-        public Optional<String> getType() {
+        public String getType() {
             return this.type;
         }
 
@@ -239,7 +237,7 @@ public class EventTest {
             this.agentId = agentId;
         }
 
-        public void setGlobalEventId(Optional<String> globalEventId) {
+        public void setGlobalEventId(String globalEventId) {
             this.globalEventId = globalEventId;
         }
 
@@ -247,7 +245,11 @@ public class EventTest {
             this.id = id;
         }
 
-        public void setParentEventId(Optional<String> parentEventId) {
+        public void setMarker(String marker) {
+            this.marker = marker;
+        }
+
+        public void setParentEventId(String parentEventId) {
             this.parentEventId = parentEventId;
         }
 
@@ -263,7 +265,7 @@ public class EventTest {
             this.timestamp = timestamp;
         }
 
-        public void setType(Optional<String> type) {
+        public void setType(String type) {
             this.type = type;
         }
     }

@@ -7,11 +7,11 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.order.AgentOrder;
-
 import java.lang.management.ManagementFactory;
 
 import com.sun.management.OperatingSystemMXBean;
+
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class SwapAgent extends AbstractOsAgent {
 
@@ -36,7 +36,7 @@ public final class SwapAgent extends AbstractOsAgent {
         long freeSwapSpace = operatingSystemMXBean.getFreeSwapSpaceSize();
         long usedSwapSpace = totalSwapSpace - freeSwapSpace;
 
-        OsEventBuilder eventBuilder = OsEventBuilder.createSwapBuilder(this.getId(), this.getSystem());
+        OsEventBuilder eventBuilder = OsEventBuilder.createSwapBuilder(this.getId(), this.getSystem(), this.getMarker());
 
         eventBuilder.setTotalSwapSpace(totalSwapSpace);
         eventBuilder.setFreeSwapSpace(freeSwapSpace);

@@ -7,9 +7,9 @@
  */
 package io.logspace.agent.api;
 
-import io.logspace.agent.api.event.Event;
-
 import java.util.Collection;
+
+import io.logspace.agent.api.event.Event;
 
 /**
  * The AgentController is responsible for un-/registering {@link Agent}s and sending of {@link Event}s.
@@ -26,6 +26,11 @@ public interface AgentController {
      * @return The Id of the AgentController
      */
     String getId();
+
+    /**
+     * @return The current marker. This may be <code>null</code>.
+     */
+    String getMarker();
 
     /**
      * @return The systems name.

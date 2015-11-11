@@ -7,12 +7,12 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.order.AgentOrder;
-
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class DiskAgent extends AbstractOsAgent {
 
@@ -41,7 +41,7 @@ public final class DiskAgent extends AbstractOsAgent {
             long usableSpace = store.getUsableSpace();
             long unallocatedSpace = store.getUnallocatedSpace();
 
-            OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem());
+            OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem(), this.getMarker());
 
             eventBuilder.setDiskPath(root.toString());
             eventBuilder.setTotalDiskSpace(totalSpace);

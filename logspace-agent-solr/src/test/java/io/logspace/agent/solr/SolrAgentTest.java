@@ -8,10 +8,6 @@
 package io.logspace.agent.solr;
 
 import static org.junit.Assert.assertEquals;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.test.TestAgentController;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -25,6 +21,11 @@ import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
 import com.indoqa.solr.server.factory.SolrServerFactory;
+
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.test.TestAgentController;
 
 public class SolrAgentTest {
 
@@ -67,11 +68,11 @@ public class SolrAgentTest {
         assertEquals(2, collectedEvents.size());
         Event event = collectedEvents.get(0);
         assertEquals("Embedded Core", getProperty(event.getStringProperties(), "core_name"));
-        assertEquals("solr/core/commit", event.getType().get());
+        assertEquals("solr/core/commit", event.getType());
 
         event = collectedEvents.get(1);
         assertEquals("Embedded Core", getProperty(event.getStringProperties(), "core_name"));
-        assertEquals("solr/core/new-searcher", event.getType().get());
+        assertEquals("solr/core/new-searcher", event.getType());
 
         solrServerFactory.destroy();
         AgentControllerProvider.shutdown();

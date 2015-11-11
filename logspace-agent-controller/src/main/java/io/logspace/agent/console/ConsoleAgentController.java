@@ -7,15 +7,15 @@
  */
 package io.logspace.agent.console;
 
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+
 import io.logspace.agent.api.AgentControllerDescription;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.util.ConsoleWriter;
 import io.logspace.agent.impl.AbstractAgentController;
-
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
 
 public class ConsoleAgentController extends AbstractAgentController {
 
@@ -25,7 +25,7 @@ public class ConsoleAgentController extends AbstractAgentController {
     private final String messagePattern;
 
     public ConsoleAgentController(AgentControllerDescription agentControllerDescription) {
-        super();
+        super(agentControllerDescription);
 
         this.messagePattern = agentControllerDescription.getParameterValue(MESSAGE_PATTERN_PARAMETER_NAME, DEFAULT_MESSAGE_PATTERN);
     }
@@ -49,10 +49,10 @@ public class ConsoleAgentController extends AbstractAgentController {
         StringBuilder stringBuilder = new StringBuilder(this.messagePattern);
 
         this.replace(stringBuilder, "{id}", event.getId());
-        this.replace(stringBuilder, "{global-id}", event.getGlobalEventId().orElse("none"));
-        this.replace(stringBuilder, "{parent-id}", event.getParentEventId().orElse("none"));
+        this.replace(stringBuilder, "{global-id}", event.getGlobalEventId());
+        this.replace(stringBuilder, "{parent-id}", event.getParentEventId());
         this.replace(stringBuilder, "{agent-id}", event.getAgentId());
-        this.replace(stringBuilder, "{type}", event.getType().orElse(null));
+        this.replace(stringBuilder, "{type}", event.getType());
         this.replace(stringBuilder, "{timestamp}", this.formatDate(event.getTimestamp()));
         this.replace(stringBuilder, "{properties}", this.formatProperties(event));
 

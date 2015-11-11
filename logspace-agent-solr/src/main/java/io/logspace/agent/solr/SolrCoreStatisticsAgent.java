@@ -7,13 +7,7 @@
  */
 package io.logspace.agent.solr;
 
-import static io.logspace.agent.solr.SolrEventBuilder.getBoolean;
-import static io.logspace.agent.solr.SolrEventBuilder.getDouble;
-import static io.logspace.agent.solr.SolrEventBuilder.getFloat;
-import static io.logspace.agent.solr.SolrEventBuilder.getInt;
-import static io.logspace.agent.solr.SolrEventBuilder.getLong;
-import io.logspace.agent.api.AbstractSchedulerAgent;
-import io.logspace.agent.api.order.AgentOrder;
+import static io.logspace.agent.solr.SolrEventBuilder.*;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -23,6 +17,9 @@ import java.util.Map;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.core.SolrInfoMBean;
+
+import io.logspace.agent.api.AbstractSchedulerAgent;
+import io.logspace.agent.api.order.AgentOrder;
 
 public class SolrCoreStatisticsAgent extends AbstractSchedulerAgent {
 
@@ -74,7 +71,7 @@ public class SolrCoreStatisticsAgent extends AbstractSchedulerAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getId(), this.getSystem(),
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getId(), this.getSystem(), this.getMarker(),
             this.getCoreName());
 
         Map<String, SolrInfoMBean> infoRegistry = this.solrCore.getInfoRegistry();

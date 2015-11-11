@@ -7,10 +7,10 @@
  */
 package io.logspace.hq.core.api.event;
 
-import io.logspace.agent.api.event.*;
-
 import java.util.Collection;
 import java.util.Date;
+
+import io.logspace.agent.api.event.*;
 
 public class StoredEvent implements Event {
 
@@ -18,9 +18,11 @@ public class StoredEvent implements Event {
     private String system;
     private String agentId;
     private Date timestamp;
-    private Optional<String> parentEventId;
-    private Optional<String> globalEventId;
-    private Optional<String> type;
+    private String parentEventId;
+    private String globalEventId;
+    private String type;
+    private String marker;
+
     private EventProperties properties = new EventProperties();
 
     public void addProperties(String propertyName, Object value) {
@@ -59,7 +61,7 @@ public class StoredEvent implements Event {
     }
 
     @Override
-    public Optional<String> getGlobalEventId() {
+    public String getGlobalEventId() {
         return this.globalEventId;
     }
 
@@ -79,7 +81,12 @@ public class StoredEvent implements Event {
     }
 
     @Override
-    public Optional<String> getParentEventId() {
+    public String getMarker() {
+        return this.marker;
+    }
+
+    @Override
+    public String getParentEventId() {
         return this.parentEventId;
     }
 
@@ -99,7 +106,7 @@ public class StoredEvent implements Event {
     }
 
     @Override
-    public Optional<String> getType() {
+    public String getType() {
         return this.type;
     }
 
@@ -112,7 +119,7 @@ public class StoredEvent implements Event {
         this.agentId = agentId;
     }
 
-    public void setGlobalEventId(Optional<String> globalEventId) {
+    public void setGlobalEventId(String globalEventId) {
         this.globalEventId = globalEventId;
     }
 
@@ -120,7 +127,11 @@ public class StoredEvent implements Event {
         this.id = id;
     }
 
-    public void setParentEventId(Optional<String> parentEventId) {
+    public void setMarker(String marker) {
+        this.marker = marker;
+    }
+
+    public void setParentEventId(String parentEventId) {
         this.parentEventId = parentEventId;
     }
 
@@ -136,7 +147,7 @@ public class StoredEvent implements Event {
         this.timestamp = timestamp;
     }
 
-    public void setType(Optional<String> type) {
+    public void setType(String type) {
         this.type = type;
     }
 

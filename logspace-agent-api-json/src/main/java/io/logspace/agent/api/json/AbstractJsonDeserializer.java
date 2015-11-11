@@ -16,8 +16,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.JsonToken;
 
-import io.logspace.agent.api.event.Optional;
-
 /**
  * Base class for JSON deserializers. Simplifies handling of the {@link JsonParser}.
  */
@@ -91,11 +89,11 @@ public abstract class AbstractJsonDeserializer {
         return JacksonUtils.readMandatoryLongField(this.jsonParser, fieldName);
     }
 
-    protected Optional<String> readOptionalField(String fieldName) throws IOException {
+    protected String readOptionalField(String fieldName) throws IOException {
         return JacksonUtils.readOptionalField(this.jsonParser, fieldName);
     }
 
-    protected Optional<Integer> readOptionalIntField(String fieldName) throws IOException {
+    protected Integer readOptionalIntField(String fieldName) throws IOException {
         return JacksonUtils.readOptionalIntField(this.jsonParser, fieldName);
     }
 

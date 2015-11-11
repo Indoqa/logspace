@@ -7,15 +7,14 @@
  */
 package io.logspace.agent.impl;
 
-import io.logspace.agent.api.AbstractApplicationAgent;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.ImmutableEvent;
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.test.TestAgentController;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import io.logspace.agent.api.AbstractApplicationAgent;
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.ImmutableEvent;
+import io.logspace.agent.test.TestAgentController;
 
 public class ApplicationTest {
 
@@ -51,8 +50,7 @@ public class ApplicationTest {
         }
 
         public void triggerEvent() {
-            this.sendEvent(new ImmutableEvent("TEST", this.getSystem(), Optional.of("TEST"), Optional.<String> empty(),
-                Optional.<String> empty(), null));
+            this.sendEvent(new ImmutableEvent("TEST", this.getSystem(), "TEST", null, null, null, null));
         }
     }
 }

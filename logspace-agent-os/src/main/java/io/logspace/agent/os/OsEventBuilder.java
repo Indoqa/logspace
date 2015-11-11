@@ -8,8 +8,6 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.Optional;
 
 public final class OsEventBuilder extends AbstractEventBuilder {
 
@@ -33,42 +31,38 @@ public final class OsEventBuilder extends AbstractEventBuilder {
     private static final String PROPERTY_SWAP_TOTAL_SPACE = "swap_total_space";
     private static final String PROPERTY_SWAP_USED_SPACE = "swap_used_space";
 
-    private static final Optional<String> MEMORY_EVENT_TYPE = Optional.of("os/memory");
-    private static final Optional<String> CPU_EVENT_TYPE = Optional.of("os/cpu");
-    private static final Optional<String> SYSTEM_LOAD_EVENT_TYPE = Optional.of("os/system_load");
-    private static final Optional<String> SWAP_EVENT_TYPE = Optional.of("os/swap");
-    private static final Optional<String> DISK_EVENT_TYPE = Optional.of("os/disk");
+    private static final String MEMORY_EVENT_TYPE = "os/memory";
+    private static final String CPU_EVENT_TYPE = "os/cpu";
+    private static final String SYSTEM_LOAD_EVENT_TYPE = "os/system_load";
+    private static final String SWAP_EVENT_TYPE = "os/swap";
+    private static final String DISK_EVENT_TYPE = "os/disk";
 
-    private Optional<String> eventType;
+    private String eventType;
 
-    private OsEventBuilder(String agentId, String system, Event parentEvent) {
-        super(agentId, system, parentEvent);
-    }
-
-    private OsEventBuilder(String agentId, String system, Optional<String> eventType) {
-        super(agentId, system);
+    private OsEventBuilder(String agentId, String system, String marker, String eventType) {
+        super(agentId, system, marker);
 
         this.eventType = eventType;
     }
 
-    public static OsEventBuilder createCpuBuilder(String agentId, String system) {
-        return new OsEventBuilder(agentId, system, CPU_EVENT_TYPE);
+    public static OsEventBuilder createCpuBuilder(String agentId, String system, String marker) {
+        return new OsEventBuilder(agentId, system, marker, CPU_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createDiskBuilder(String agentId, String system) {
-        return new OsEventBuilder(agentId, system, DISK_EVENT_TYPE);
+    public static OsEventBuilder createDiskBuilder(String agentId, String system, String marker) {
+        return new OsEventBuilder(agentId, system, marker, DISK_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createMemoryBuilder(String agentId, String system) {
-        return new OsEventBuilder(agentId, system, MEMORY_EVENT_TYPE);
+    public static OsEventBuilder createMemoryBuilder(String agentId, String system, String marker) {
+        return new OsEventBuilder(agentId, system, marker, MEMORY_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSwapBuilder(String agentId, String system) {
-        return new OsEventBuilder(agentId, system, SWAP_EVENT_TYPE);
+    public static OsEventBuilder createSwapBuilder(String agentId, String system, String marker) {
+        return new OsEventBuilder(agentId, system, marker, SWAP_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSystemLoadBuilder(String agentId, String system) {
-        return new OsEventBuilder(agentId, system, SYSTEM_LOAD_EVENT_TYPE);
+    public static OsEventBuilder createSystemLoadBuilder(String agentId, String system, String marker) {
+        return new OsEventBuilder(agentId, system, marker, SYSTEM_LOAD_EVENT_TYPE);
     }
 
     public OsEventBuilder setCommittedVirtualMemory(long maxMemory) {
@@ -150,7 +144,7 @@ public final class OsEventBuilder extends AbstractEventBuilder {
      * @see io.logspace.agent.api.event.AbstractEventBuilder#getType()
      */
     @Override
-    protected Optional<String> getType() {
+    protected String getType() {
         return this.eventType;
     }
 }

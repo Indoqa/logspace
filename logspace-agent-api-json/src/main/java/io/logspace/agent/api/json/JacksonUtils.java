@@ -21,8 +21,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
-import io.logspace.agent.api.event.Optional;
-
 public final class JacksonUtils {
 
     private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -94,33 +92,33 @@ public final class JacksonUtils {
         return result;
     }
 
-    public static Optional<String> readOptionalField(JsonParser parser, String fieldName) throws IOException {
+    public static String readOptionalField(JsonParser parser, String fieldName) throws IOException {
         prepareToken(parser);
 
         if (parser.getCurrentToken() != FIELD_NAME) {
-            return Optional.empty();
+            return null;
         }
 
         if (!parser.getCurrentName().equals(fieldName)) {
-            return Optional.empty();
+            return null;
         }
 
         String result = parser.nextTextValue();
         consumeToken(parser);
-        return Optional.of(result);
+        return result;
     }
 
-    public static Optional<Integer> readOptionalIntField(JsonParser parser, String fieldName) throws IOException {
+    public static Integer readOptionalIntField(JsonParser parser, String fieldName) throws IOException {
         prepareToken(parser);
 
         validateTokenType(parser.getCurrentToken(), FIELD_NAME);
         if (!parser.getCurrentName().equals(fieldName)) {
-            return Optional.empty();
+            return null;
         }
 
         int result = parser.nextIntValue(0);
         consumeToken(parser);
-        return Optional.of(result);
+        return result;
     }
 
     public static void validateFieldName(String fieldName, String... expected) {
@@ -184,16 +182,15 @@ public final class JacksonUtils {
         generator.writeStringField(fieldName, value);
     }
 
-    public static void writeOptionalField(JsonGenerator generator, String fieldName, Optional<String> optional) throws IOException {
-        if (optional.isPresent()) {
-            writeMandatoryStringField(generator, fieldName, optional.get());
+    public static void writeOptionalField(JsonGenerator generator, String fieldName, String value) throws IOException {
+        if (value != null) {
+            writeMandatoryStringField(generator, fieldName, value);
         }
     }
 
-    public static void writeOptionalIntField(JsonGenerator generator, String fieldName, Optional<Integer> optional)
-            throws IOException {
-        if (optional.isPresent()) {
-            writeMandatoryIntField(generator, fieldName, optional.get());
+    public static void writeOptionalIntField(JsonGenerator generator, String fieldName, Integer value) throws IOException {
+        if (value != null) {
+            writeMandatoryIntField(generator, fieldName, value);
         }
     }
 

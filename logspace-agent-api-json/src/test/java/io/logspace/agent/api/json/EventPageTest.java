@@ -20,8 +20,8 @@ public class EventPageTest {
         EventPage eventPage = new EventPage();
         eventPage.setTotalCount(10);
         eventPage.setNextCursorMark("abcdef");
-        eventPage.addEvent(new DefaultEventBuilder("agent-id", "system").toEvent());
-        eventPage.addEvent(new DefaultEventBuilder("agent-id", "system").toEvent());
+        eventPage.addEvent(new DefaultEventBuilder("agent-id", "system", "marker").toEvent());
+        eventPage.addEvent(new DefaultEventBuilder("agent-id", "system", "marker").toEvent());
 
         String json = EventPageJsonSerializer.toJson(eventPage);
 

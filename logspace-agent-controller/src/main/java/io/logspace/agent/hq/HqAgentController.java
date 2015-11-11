@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +55,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private boolean modifiedAgents;
+    private final AtomicBoolean modifiedAgents = new AtomicBoolean(false);
 
     private FileObjectQueue<Event> persistentQueue;
 
@@ -67,7 +68,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private AgentControllerOrder agentControllerOrder;
 
     public HqAgentController(AgentControllerDescription agentControllerDescription) {
-        this.setId(agentControllerDescription.getId());
+        super(agentControllerDescription);
 
         this.initializePersistentQueue(agentControllerDescription);
         this.initializeHqClient(agentControllerDescription);
@@ -75,7 +76,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.initializeAgentScheduler(agentControllerDescription);
     }
 
-    public static void install(String id, String baseUrl, String queueDirectory, String spaceToken) {
+    public static void install(String id, String baseUrl, String queueDirectory, String spaceToken, String marker) {
         AgentControllerDescription description = new AgentControllerDescription();
 
         description.setClassName(HqAgentController.class.getName());
@@ -83,6 +84,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
         description.addParameter(Parameter.create(QUEUE_DIRECTORY_PARAMETER, queueDirectory));
         description.addParameter(Parameter.create(SPACE_TOKEN_PARAMETER, spaceToken));
+        description.addParameter(Parameter.create(MARKER_PARAMETER, marker));
 
         AgentControllerProvider.setDescription(description);
     }
@@ -253,7 +255,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     protected void onAgentRegistered(Agent agent) {
         super.onAgentRegistered(agent);
 
-        this.modifiedAgents = true;
+        this.modifiedAgents.set(true);
 
         if (this.agentControllerOrder == null) {
             return;
@@ -269,7 +271,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     protected void onAgentUnregistered(Agent agent) {
         super.onAgentUnregistered(agent);
 
-        this.modifiedAgents = true;
+        this.modifiedAgents.set(true);
 
         if (this.agentControllerOrder == null) {
             return;
@@ -320,7 +322,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.agentControllerOrder = order;
         this.agentScheduler.applyAgentControllerOrder(this.agentControllerOrder, this.getAgentIds());
 
-        Integer commitDelay = this.agentControllerOrder.getCommitMaxSeconds().orElse(DEFAULT_COMMIT_DELAY);
+        Integer commitDelay = this.agentControllerOrder.getCommitMaxSeconds();
+        if (commitDelay == null) {
+            commitDelay = DEFAULT_COMMIT_DELAY;
+        }
         this.logger.info("Committing after {} second(s).", commitDelay);
         this.setCommitDelayInSeconds(commitDelay);
     }
@@ -380,13 +385,13 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     private void uploadCapabilities() throws IOException {
-        if (!this.modifiedAgents) {
+        if (!this.modifiedAgents.get()) {
             return;
         }
 
         AgentControllerCapabilities capabilities = this.getCapabilities();
         this.hqClient.uploadCapabilities(capabilities);
-        this.modifiedAgents = false;
+        this.modifiedAgents.set(false);
     }
 
     private void uploadEvents(Collection<Event> events) throws IOException {

@@ -13,13 +13,6 @@ import static io.logspace.agent.api.json.RandomHelper.getRandomString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
-import io.logspace.agent.api.order.PropertyType;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +20,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
+
+import io.logspace.agent.api.order.*;
+import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
 
 public class AgentControllerCapabilitiesTest {
 
@@ -81,7 +77,7 @@ public class AgentControllerCapabilitiesTest {
             AgentControllerCapabilities expected = new AgentControllerCapabilities();
             expected.setId(getRandomString());
             expected.setSystem(getRandomString());
-            expected.setSpace(Optional.of(getRandomString()));
+            expected.setSpace(getRandomString());
             expected.setAgentCapabilities(this.getRandomAgentCapabilities());
 
             String json = AgentControllerCapabilitiesJsonSerializer.toJson(expected);

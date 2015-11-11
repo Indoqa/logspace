@@ -7,10 +7,10 @@
  */
 package io.logspace.agent.os;
 
-import io.logspace.agent.api.order.AgentOrder;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class CpuAgent extends AbstractOsAgent {
 
@@ -26,7 +26,7 @@ public final class CpuAgent extends AbstractOsAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem());
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem(), this.getMarker());
 
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
         eventBuilder.setProcessorCount(operatingSystemMXBean.getAvailableProcessors());

@@ -81,6 +81,7 @@ public final class EventJsonSerializer extends AbstractJsonSerializer {
         this.writeMandatoryDateField(FIELD_TIMESTAMP, event.getTimestamp());
         this.writeOptionalField(FIELD_PARENT_EVENT_ID, event.getParentEventId());
         this.writeOptionalField(FIELD_GLOBAL_EVENT_ID, event.getGlobalEventId());
+        this.writeOptionalField(FIELD_MARKER, event.getMarker());
 
         this.writeProperties(EventPropertyJsonHandlers.getBooleanHandler(), event.getBooleanProperties());
         this.writeProperties(EventPropertyJsonHandlers.getDateHandler(), event.getDateProperties());

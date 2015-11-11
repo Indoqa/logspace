@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.order.AgentControllerOrder;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.api.order.TriggerType;
@@ -94,7 +93,7 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
         if (this.hasToken(FIELD_NAME)) {
             result.setTriggerParameter(this.readOptionalField(FIELD_TRIGGER_PARAMETER));
         } else {
-            result.setTriggerParameter(Optional.<String> empty());
+            result.setTriggerParameter(null);
         }
 
         return result;

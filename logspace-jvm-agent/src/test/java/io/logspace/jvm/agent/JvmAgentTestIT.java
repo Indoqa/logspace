@@ -7,13 +7,7 @@
  */
 package io.logspace.jvm.agent;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.test.TestAgentController;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -23,6 +17,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.sun.tools.attach.VirtualMachine;
+
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.test.TestAgentController;
 
 public class JvmAgentTestIT {
 
@@ -48,7 +46,7 @@ public class JvmAgentTestIT {
 
         Event event = collectedEvents.get(0);
         assertEquals("jvm/" + JVM_IDENTIFIER, event.getAgentId());
-        assertEquals(Premain.getGlobalEventId(), event.getGlobalEventId().get());
+        assertEquals(Premain.getGlobalEventId(), event.getGlobalEventId());
         assertTrue("Expected at least 16 string properties, but received " + event.getStringProperties().size(),
             event.getStringProperties().size() >= 16);
 

@@ -8,10 +8,6 @@
 package io.logspace.agent.api.json;
 
 import static org.junit.Assert.assertEquals;
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,6 +18,10 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.api.order.TriggerType;
+
 public class AgentControllerOrderTest {
 
     private static final Random RANDOM = new Random();
@@ -30,8 +30,8 @@ public class AgentControllerOrderTest {
     public void test() throws IOException {
         for (int i = 0; i < 100; i++) {
             AgentControllerOrder expected = new AgentControllerOrder();
-            expected.setCommitMaxCount(Optional.of(RANDOM.nextInt(Integer.MAX_VALUE)));
-            expected.setCommitMaxSeconds(Optional.of(RANDOM.nextInt(Integer.MAX_VALUE)));
+            expected.setCommitMaxCount(RANDOM.nextInt(Integer.MAX_VALUE));
+            expected.setCommitMaxSeconds(RANDOM.nextInt(Integer.MAX_VALUE));
             expected.setAgentOrders(this.getRandomAgentOrders());
 
             String json = AgentControllerOrdersJsonSerializer.toJson(expected);
@@ -67,9 +67,9 @@ public class AgentControllerOrderTest {
 
             agentOrder.setId(UUID.randomUUID().toString());
             if (RANDOM.nextBoolean()) {
-                agentOrder.setTriggerParameter(Optional.of(UUID.randomUUID().toString()));
+                agentOrder.setTriggerParameter(UUID.randomUUID().toString());
             } else {
-                agentOrder.setTriggerParameter(Optional.<String> empty());
+                agentOrder.setTriggerParameter(null);
             }
             agentOrder.setTriggerType(TriggerType.values()[RANDOM.nextInt(TriggerType.values().length)]);
 

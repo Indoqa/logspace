@@ -16,8 +16,9 @@ public abstract class AbstractEventBuilder {
 
     private final String agentId;
     private final String system;
-    private Optional<String> globalEventId;
-    private Optional<String> parentEventId;
+    private final String marker;
+    private String globalEventId;
+    private String parentEventId;
 
     private final EventProperties properties = new EventProperties();
 
@@ -28,8 +29,8 @@ public abstract class AbstractEventBuilder {
      *
      * @param system The system recording this event.
      */
-    protected AbstractEventBuilder(String agentId, String system) {
-        this(agentId, system, Optional.<String> empty(), Optional.<String> empty());
+    protected AbstractEventBuilder(String agentId, String system, String marker) {
+        this(agentId, system, marker, null, null);
     }
 
     /**
@@ -42,13 +43,14 @@ public abstract class AbstractEventBuilder {
      *
      * @param parentEvent The parent event to be used as template.
      */
-    protected AbstractEventBuilder(String agentId, String system, Event parentEvent) {
-        this(agentId, system, Optional.of(parentEvent.getId()), parentEvent.getGlobalEventId());
+    protected AbstractEventBuilder(String agentId, String system, String marker, Event parentEvent) {
+        this(agentId, system, marker, parentEvent.getId(), parentEvent.getGlobalEventId());
     }
 
-    protected AbstractEventBuilder(String agentId, String system, Optional<String> parentEventId, Optional<String> globalEventId) {
+    protected AbstractEventBuilder(String agentId, String system, String marker, String parentEventId, String globalEventId) {
         this.agentId = agentId;
         this.system = system;
+        this.marker = marker;
 
         this.parentEventId = parentEventId;
         this.globalEventId = globalEventId;
@@ -61,7 +63,7 @@ public abstract class AbstractEventBuilder {
      * @return This event build object.
      */
     public AbstractEventBuilder setGlobalEventId(String globalEventId) {
-        this.globalEventId = Optional.of(globalEventId);
+        this.globalEventId = globalEventId;
         return this;
     }
 
@@ -72,12 +74,13 @@ public abstract class AbstractEventBuilder {
      * @return This event builder object.
      */
     public AbstractEventBuilder setParentEventId(String parentEventId) {
-        this.parentEventId = Optional.of(parentEventId);
+        this.parentEventId = parentEventId;
         return this;
     }
 
     public final Event toEvent() {
-        return new ImmutableEvent(this.agentId, this.system, this.getType(), this.globalEventId, this.parentEventId, this.properties);
+        return new ImmutableEvent(this.agentId, this.system, this.getType(), this.globalEventId, this.parentEventId, this.marker,
+            this.properties);
     }
 
     protected final void addProperty(BooleanEventProperty property) {
@@ -144,6 +147,6 @@ public abstract class AbstractEventBuilder {
     /**
      * @return The optional type of the event.
      */
-    protected abstract Optional<String> getType();
+    protected abstract String getType();
 
 }

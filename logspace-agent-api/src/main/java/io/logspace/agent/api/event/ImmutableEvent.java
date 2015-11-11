@@ -34,21 +34,23 @@ public final class ImmutableEvent implements Event {
     /**
      * The optional type of the event indicating what properties are expected.
      */
-    private final Optional<String> type;
+    private final String type;
 
     /**
      * A optional global event is the root for multiple sub events.
      */
-    private final Optional<String> globalEventId;
+    private final String globalEventId;
 
     /**
      * The optional direct predecessor event related to this event.
      */
-    private final Optional<String> parentEventId;
+    private final String parentEventId;
 
     private final EventProperties properties;
 
     private final String system;
+
+    private final String marker;
 
     /**
      * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using {@link UUID#randomUUID()}
@@ -59,10 +61,11 @@ public final class ImmutableEvent implements Event {
      * @param type The event type.
      * @param globalEventId The global event id.
      * @param parentEventId The parent event id.
+     * @param marker The marker.
      * @param properties The properties.
      */
-    public ImmutableEvent(String agentId, String system, Optional<String> type, Optional<String> globalEventId,
-            Optional<String> parentEventId, EventProperties properties) {
+    public ImmutableEvent(String agentId, String system, String type, String globalEventId, String parentEventId, String marker,
+            EventProperties properties) {
         this.id = UUID.randomUUID().toString();
         this.agentId = agentId;
         this.system = system;
@@ -71,6 +74,7 @@ public final class ImmutableEvent implements Event {
         this.type = type;
         this.globalEventId = globalEventId;
         this.parentEventId = parentEventId;
+        this.marker = marker;
 
         if (properties == null) {
             this.properties = new EventProperties();
@@ -97,6 +101,9 @@ public final class ImmutableEvent implements Event {
         return this.id.equals(other.id);
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getAgentId()
+     */
     @Override
     public String getAgentId() {
         return this.agentId;
@@ -110,16 +117,25 @@ public final class ImmutableEvent implements Event {
         return this.properties.getBooleanProperties();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getDateProperties()
+     */
     @Override
     public Collection<DateEventProperty> getDateProperties() {
         return this.properties.getDateProperties();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getDoubleProperties()
+     */
     @Override
     public Collection<DoubleEventProperty> getDoubleProperties() {
         return this.properties.getDoubleProperties();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getFloatProperties()
+     */
     @Override
     public Collection<FloatEventProperty> getFloatProperties() {
         return this.properties.getFloatProperties();
@@ -129,7 +145,7 @@ public final class ImmutableEvent implements Event {
      * @see io.logspace.agent.api.event.Event#getGlobalEventId()
      */
     @Override
-    public Optional<String> getGlobalEventId() {
+    public String getGlobalEventId() {
         return this.globalEventId;
     }
 
@@ -141,29 +157,49 @@ public final class ImmutableEvent implements Event {
         return this.id;
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getIntegerProperties()
+     */
     @Override
     public Collection<IntegerEventProperty> getIntegerProperties() {
         return this.properties.getIntegerProperties();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getLongProperties()
+     */
     @Override
     public Collection<LongEventProperty> getLongProperties() {
         return this.properties.getLongProperties();
     }
 
     /**
+     * @see io.logspace.agent.api.event.Event#getMarker()
+     */
+    @Override
+    public String getMarker() {
+        return this.marker;
+    }
+
+    /**
      * @see io.logspace.agent.api.event.Event#getParentEventId()
      */
     @Override
-    public Optional<String> getParentEventId() {
+    public String getParentEventId() {
         return this.parentEventId;
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getStringProperties()
+     */
     @Override
     public Collection<StringEventProperty> getStringProperties() {
         return this.properties.getStringProperties();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#getSystem()
+     */
     @Override
     public String getSystem() {
         return this.system;
@@ -181,7 +217,7 @@ public final class ImmutableEvent implements Event {
      * @see io.logspace.agent.api.event.Event#getType()
      */
     @Override
-    public Optional<String> getType() {
+    public String getType() {
         return this.type;
     }
 
@@ -193,6 +229,9 @@ public final class ImmutableEvent implements Event {
         return this.id.hashCode();
     }
 
+    /**
+     * @see io.logspace.agent.api.event.Event#hasProperties()
+     */
     @Override
     public boolean hasProperties() {
         return !this.properties.isEmpty();

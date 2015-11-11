@@ -7,18 +7,16 @@
  */
 package io.logspace.hq.rest;
 
-import io.logspace.agent.api.event.Optional;
-import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.hq.core.api.capabilities.CapabilitiesService;
-import io.logspace.hq.rest.api.InvalidControllerIdException;
-
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.rest.api.InvalidControllerIdException;
 import spark.Request;
 
 @Named
@@ -42,7 +40,7 @@ public class CapabilitiesResource extends AbstractSpaceResource {
 
         AgentControllerCapabilities agentControllerCapabilities = AgentControllerCapabilitiesJsonDeserializer
             .fromJson(req.bodyAsBytes());
-        agentControllerCapabilities.setSpace(Optional.of(space));
+        agentControllerCapabilities.setSpace(space);
 
         if (!controllerId.equals(agentControllerCapabilities.getId())) {
             throw new InvalidControllerIdException("The ID in the path does not match the ID in the payload.");

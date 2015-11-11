@@ -7,14 +7,6 @@
  */
 package io.logspace.agent.test;
 
-import io.logspace.agent.api.AgentControllerDescription;
-import io.logspace.agent.api.AgentControllerException;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.AgentControllerDescription.Parameter;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.json.EventJsonSerializer;
-import io.logspace.agent.impl.AbstractAgentController;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,6 +14,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerDescription.Parameter;
+import io.logspace.agent.api.AgentControllerException;
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.json.EventJsonSerializer;
+import io.logspace.agent.impl.AbstractAgentController;
 
 public class TestAgentController extends AbstractAgentController {
 
@@ -32,7 +32,7 @@ public class TestAgentController extends AbstractAgentController {
     private final OutputStream outputStream;
 
     public TestAgentController(AgentControllerDescription agentControllerDescription) {
-        super();
+        super(agentControllerDescription);
 
         String outputFile = agentControllerDescription.getParameterValue(OUTPUT_FILE_PARAMETER, DEFAULT_OUTPUT_FILE);
         try {

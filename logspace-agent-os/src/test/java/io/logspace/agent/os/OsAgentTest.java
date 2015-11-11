@@ -8,9 +8,6 @@
 package io.logspace.agent.os;
 
 import static org.junit.Assert.assertEquals;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.test.TestAgentController;
 
 import java.io.IOException;
 import java.nio.file.FileStore;
@@ -23,6 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
+
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.test.TestAgentController;
 
 public class OsAgentTest {
 
@@ -48,7 +49,7 @@ public class OsAgentTest {
         for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
             Event eachEvent = iterator.next();
 
-            if (type.equals(eachEvent.getType().orElse(""))) {
+            if (type.equals(eachEvent.getType())) {
                 result.add(eachEvent);
                 iterator.remove();
             }

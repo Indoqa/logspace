@@ -10,8 +10,6 @@ package io.logspace.agent.api.order;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.logspace.agent.api.event.Optional;
-
 public class AgentControllerOrder {
 
     public static final String FIELD_COMMIT_MAX_COUNT = "commit-max-count";
@@ -23,8 +21,8 @@ public class AgentControllerOrder {
 
     private List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
 
-    private Optional<Integer> commitMaxSeconds;
-    private Optional<Integer> commitMaxCount;
+    private Integer commitMaxSeconds;
+    private Integer commitMaxCount;
 
     public void add(AgentOrder agentOrder) {
         this.agentOrders.add(agentOrder);
@@ -52,11 +50,11 @@ public class AgentControllerOrder {
         return this.agentOrders.size();
     }
 
-    public Optional<Integer> getCommitMaxCount() {
+    public Integer getCommitMaxCount() {
         return this.commitMaxCount;
     }
 
-    public Optional<Integer> getCommitMaxSeconds() {
+    public Integer getCommitMaxSeconds() {
         return this.commitMaxSeconds;
     }
 
@@ -68,11 +66,11 @@ public class AgentControllerOrder {
         this.agentOrders = agentOrders;
     }
 
-    public void setCommitMaxCount(Optional<Integer> commitMaxCount) {
+    public void setCommitMaxCount(Integer commitMaxCount) {
         this.commitMaxCount = commitMaxCount;
     }
 
-    public void setCommitMaxSeconds(Optional<Integer> commitMaxSeconds) {
+    public void setCommitMaxSeconds(Integer commitMaxSeconds) {
         this.commitMaxSeconds = commitMaxSeconds;
     }
 }

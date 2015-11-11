@@ -213,9 +213,9 @@ public class AgentScheduler {
     }
 
     private void scheduleAgentOrder(AgentOrder agentOrder) {
-        if (agentOrder.getTriggerParameter().isPresent()) {
+        if (agentOrder.getTriggerParameter() != null) {
             this.logger.info("Scheduling order for agent '{}' with trigger '{}' and parameter '{}'.",
-                new Object[] {agentOrder.getId(), agentOrder.getTriggerType(), agentOrder.getTriggerParameter().get()});
+                new Object[] {agentOrder.getId(), agentOrder.getTriggerType(), agentOrder.getTriggerParameter()});
         } else {
             this.logger.info("Scheduling order for agent '{}' with trigger '{}'.", agentOrder.getId(), agentOrder.getTriggerType());
         }
@@ -230,7 +230,7 @@ public class AgentScheduler {
 
         Trigger trigger = newTrigger().withIdentity(this.getTriggerId(agentOrder), AGENT_SCHEDULER_GROUP)
             .startNow()
-            .withSchedule(CronScheduleBuilder.cronSchedule(agentOrder.getTriggerParameter().get()))
+            .withSchedule(CronScheduleBuilder.cronSchedule(agentOrder.getTriggerParameter()))
             .build();
 
         try {

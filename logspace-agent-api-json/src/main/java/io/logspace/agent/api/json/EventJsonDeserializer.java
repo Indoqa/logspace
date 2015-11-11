@@ -108,6 +108,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         event.setTimestamp(this.readMandatoryDateField(FIELD_TIMESTAMP));
         event.setParentEventId(this.readOptionalField(FIELD_PARENT_EVENT_ID));
         event.setGlobalEventId(this.readOptionalField(FIELD_GLOBAL_EVENT_ID));
+        event.setMarker(this.readOptionalField(FIELD_MARKER));
         event.setProperties(this.readProperties());
 
         return event;
@@ -155,9 +156,11 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         private String system;
         private String agentId;
         private Date timestamp;
-        private Optional<String> parentEventId;
-        private Optional<String> globalEventId;
-        private Optional<String> type;
+        private String parentEventId;
+        private String globalEventId;
+        private String type;
+        private String marker;
+
         private EventProperties properties = new EventProperties();
 
         @Override
@@ -186,7 +189,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         @Override
-        public Optional<String> getGlobalEventId() {
+        public String getGlobalEventId() {
             return this.globalEventId;
         }
 
@@ -206,7 +209,12 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         @Override
-        public Optional<String> getParentEventId() {
+        public String getMarker() {
+            return this.marker;
+        }
+
+        @Override
+        public String getParentEventId() {
             return this.parentEventId;
         }
 
@@ -226,7 +234,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
         }
 
         @Override
-        public Optional<String> getType() {
+        public String getType() {
             return this.type;
         }
 
@@ -239,7 +247,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             this.agentId = agentId;
         }
 
-        public void setGlobalEventId(Optional<String> globalEventId) {
+        public void setGlobalEventId(String globalEventId) {
             this.globalEventId = globalEventId;
         }
 
@@ -247,7 +255,11 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             this.id = id;
         }
 
-        public void setParentEventId(Optional<String> parentEventId) {
+        public void setMarker(String marker) {
+            this.marker = marker;
+        }
+
+        public void setParentEventId(String parentEventId) {
             this.parentEventId = parentEventId;
         }
 
@@ -263,7 +275,7 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
             this.timestamp = timestamp;
         }
 
-        public void setType(Optional<String> type) {
+        public void setType(String type) {
             this.type = type;
         }
     }

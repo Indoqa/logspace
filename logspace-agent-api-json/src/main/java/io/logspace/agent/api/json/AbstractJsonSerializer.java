@@ -21,8 +21,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 
-import io.logspace.agent.api.event.Optional;
-
 /**
  * Base class for JSON serializers. Simplifies handling of the {@link JsonGenerator}.
  */
@@ -89,11 +87,11 @@ public abstract class AbstractJsonSerializer {
         JacksonUtils.writeMandatoryStringField(this.jsonGenerator, fieldName, value);
     }
 
-    protected void writeOptionalField(String fieldName, Optional<String> value) throws IOException {
+    protected void writeOptionalField(String fieldName, String value) throws IOException {
         JacksonUtils.writeOptionalField(this.jsonGenerator, fieldName, value);
     }
 
-    protected void writeOptionalIntField(String fieldName, Optional<Integer> value) throws IOException {
+    protected void writeOptionalIntField(String fieldName, Integer value) throws IOException {
         JacksonUtils.writeOptionalIntField(this.jsonGenerator, fieldName, value);
     }
 

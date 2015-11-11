@@ -33,6 +33,7 @@ public interface Event {
     String FIELD_AGENT_ID = "agent-id";
     String FIELD_PARENT_EVENT_ID = "pid";
     String FIELD_GLOBAL_EVENT_ID = "gid";
+    String FIELD_MARKER = "marker";
     String FIELD_BOOLEAN_PROPERTIES = "boolean-properties";
     String FIELD_DATE_PROPERTIES = "date-properties";
     String FIELD_DOUBLE_PROPERTIES = "double-properties";
@@ -42,24 +43,9 @@ public interface Event {
     String FIELD_STRING_PROPERTIES = "string-properties";
 
     /**
-     * @return The optional global event ID.
-     */
-    Optional<String> getGlobalEventId();
-
-    /**
      * @return The ID of the Agent which produced this event.
      */
     String getAgentId();
-
-    /**
-     * @return The id.
-     */
-    String getId();
-
-    /**
-     * @return The optional parent event ID.
-     */
-    Optional<String> getParentEventId();
 
     /**
      * @return The properties carrying Booleans. If there are no properties, the collection is empty.
@@ -72,6 +58,26 @@ public interface Event {
     Collection<DateEventProperty> getDateProperties();
 
     /**
+     * @return The properties carrying Doubles. If there are no properties, the collection is empty.
+     */
+    Collection<DoubleEventProperty> getDoubleProperties();
+
+    /**
+     * @return The properties carrying Floats. If there are no properties, the collection is empty.
+     */
+    Collection<FloatEventProperty> getFloatProperties();
+
+    /**
+     * @return The optional global event ID.
+     */
+    String getGlobalEventId();
+
+    /**
+     * @return The id.
+     */
+    String getId();
+
+    /**
      * @return The properties carrying Integers. If there are no properties, the collection is empty.
      */
     Collection<IntegerEventProperty> getIntegerProperties();
@@ -81,20 +87,22 @@ public interface Event {
      */
     Collection<LongEventProperty> getLongProperties();
 
-    /**
-     * @return The properties carrying Floats. If there are no properties, the collection is empty.
-     */
-    Collection<FloatEventProperty> getFloatProperties();
+    String getMarker();
 
     /**
-     * @return The properties carrying Doubles. If there are no properties, the collection is empty.
+     * @return The optional parent event ID.
      */
-    Collection<DoubleEventProperty> getDoubleProperties();
+    String getParentEventId();
 
     /**
      * @return The properties carrying Strings. If there are no properties, the collection is empty.
      */
     Collection<StringEventProperty> getStringProperties();
+
+    /**
+     * @return The system of the event.
+     */
+    String getSystem();
 
     /**
      * @return The timestamp of the creation time.
@@ -104,12 +112,7 @@ public interface Event {
     /**
      * @return The optional type of the event.
      */
-    Optional<String> getType();
-
-    /**
-     * @return The system of the event.
-     */
-    String getSystem();
+    String getType();
 
     /**
      * @return A boolean indicating if this event has properties.

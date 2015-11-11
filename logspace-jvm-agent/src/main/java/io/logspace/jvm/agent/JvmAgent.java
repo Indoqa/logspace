@@ -7,23 +7,17 @@
  */
 package io.logspace.jvm.agent;
 
-import io.logspace.agent.api.AbstractSchedulerAgent;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.order.AgentOrder;
-
 import java.io.File;
-import java.lang.management.ClassLoadingMXBean;
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.ThreadMXBean;
+import java.lang.management.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.sun.management.UnixOperatingSystemMXBean;
+
+import io.logspace.agent.api.AbstractSchedulerAgent;
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class JvmAgent extends AbstractSchedulerAgent {
 
@@ -83,7 +77,7 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         if (!this.isEnabled()) {
             return;
         }
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmBuilder(this.getId(), this.getSystem());
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmBuilder(this.getId(), this.getSystem(), this.getMarker());
 
         this.addOperatingSystemProperties(eventBuilder);
         this.addGarbageCollectorProperties(eventBuilder);
@@ -95,16 +89,18 @@ public final class JvmAgent extends AbstractSchedulerAgent {
     }
 
     public void sendAgentAttachedEvent(String globalEventId) {
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem(), globalEventId);
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmAgentAttachedBuilder(this.getId(), this.getSystem(), this.getMarker());
 
+        eventBuilder.setGlobalEventId(globalEventId);
         this.addSystemInformation(eventBuilder);
 
         this.sendEvent(eventBuilder.toEvent());
     }
 
     public String sendJvmStartEvent(String globalEventId) {
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem(), globalEventId);
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStartBuilder(this.getId(), this.getSystem(), this.getMarker());
 
+        eventBuilder.setGlobalEventId(globalEventId);
         this.addSystemInformation(eventBuilder);
 
         Event event = eventBuilder.toEvent();
@@ -113,7 +109,7 @@ public final class JvmAgent extends AbstractSchedulerAgent {
     }
 
     public void sendJvmStopEvent(String globalEventId) {
-        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem(), globalEventId);
+        JvmEventBuilder eventBuilder = JvmEventBuilder.createJvmStopBuilder(this.getId(), this.getSystem(), this.getMarker());
         eventBuilder.setGlobalEventId(globalEventId);
         this.sendEvent(eventBuilder.toEvent());
     }

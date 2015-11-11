@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.api.order;
 
-import io.logspace.agent.api.event.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class AgentControllerCapabilities {
 
     private String system;
 
-    private Optional<String> space = Optional.empty();
+    private String space;
 
     private List<AgentCapabilities> agentCapabilities = new ArrayList<AgentCapabilities>();
 
@@ -51,7 +49,7 @@ public class AgentControllerCapabilities {
         return this.id;
     }
 
-    public Optional<String> getSpace() {
+    public String getSpace() {
         return this.space;
     }
 
@@ -71,7 +69,7 @@ public class AgentControllerCapabilities {
         this.id = id;
     }
 
-    public void setSpace(Optional<String> space) {
+    public void setSpace(String space) {
         this.space = space;
     }
 

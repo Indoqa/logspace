@@ -8,10 +8,11 @@
 package io.logspace.agent.os;
 
 import static io.logspace.agent.os.OsEventBuilder.createMemoryBuilder;
-import io.logspace.agent.api.order.AgentOrder;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class MemoryAgent extends AbstractOsAgent {
 
@@ -35,7 +36,7 @@ public final class MemoryAgent extends AbstractOsAgent {
 
         com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
 
-        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem());
+        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem(), this.getMarker());
 
         osEventBuilder.setTotalMemory(operatingSystem.getTotalPhysicalMemorySize());
         osEventBuilder.setFreeMemory(operatingSystem.getFreePhysicalMemorySize());

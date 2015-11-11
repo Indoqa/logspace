@@ -22,7 +22,7 @@ public final class JournalAgent extends AbstractApplicationAgent {
     }
 
     public void triggerEvent(String category, String message) {
-        JournalEventBuilder eventBuilder = JournalEventBuilder.createJournalBuilder(this.getId(), this.getSystem());
+        JournalEventBuilder eventBuilder = JournalEventBuilder.createJournalBuilder(this.getId(), this.getSystem(), this.getMarker());
 
         eventBuilder.setCategory(category);
         eventBuilder.setMessage(message);

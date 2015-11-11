@@ -8,7 +8,6 @@
 package io.logspace.agent.api.json;
 
 import static java.util.concurrent.TimeUnit.DAYS;
-import io.logspace.agent.api.event.Optional;
 
 import java.util.Date;
 import java.util.Random;
@@ -58,12 +57,12 @@ public class RandomHelper {
         return RANDOM.nextLong();
     }
 
-    public static Optional<String> getRandomOptional() {
+    public static String getRandomOptionalString() {
         if (RANDOM.nextBoolean()) {
-            return Optional.empty();
+            return null;
         }
 
-        return Optional.of(getRandomString());
+        return getRandomString();
     }
 
     public static String getRandomString() {

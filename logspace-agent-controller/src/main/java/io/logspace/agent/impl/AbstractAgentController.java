@@ -7,12 +7,6 @@
  */
 package io.logspace.agent.impl;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentController;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.util.ConsoleWriter;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -20,44 +14,78 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AgentController;
+import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentControllerCapabilities;
+import io.logspace.agent.api.util.ConsoleWriter;
+
 /**
- *
  * Base class for {@link AgentController}s. Initializes the system name and handles un-/registering of {@link Agent}s.
- *
  */
 public abstract class AbstractAgentController implements AgentController {
+
+    protected static final String MARKER_PARAMETER = "marker";
 
     private final Map<String, Agent> agents = new ConcurrentHashMap<String, Agent>();
 
     private String id;
     private String system;
+    private String marker;
 
-    protected AbstractAgentController() {
+    protected AbstractAgentController(AgentControllerDescription agentControllerDescription) {
         super();
+
+        this.id = agentControllerDescription.getId();
+        this.marker = agentControllerDescription.getParameterValue(MARKER_PARAMETER);
 
         this.initalizeSystem();
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#flush()
+     */
     @Override
     public void flush() {
         // default does nothing
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#getId()
+     */
     @Override
     public String getId() {
         return this.id;
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#getMarker()
+     */
+    @Override
+    public String getMarker() {
+        return this.marker;
+    }
+
+    /**
+     * @see io.logspace.agent.api.AgentController#getSystem()
+     */
     @Override
     public String getSystem() {
         return this.system;
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#isAgentEnabled(java.lang.String)
+     */
     @Override
     public boolean isAgentEnabled(String agentId) {
         return true;
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#register(io.logspace.agent.api.Agent)
+     */
     @Override
     public final void register(Agent agent) {
         this.agents.put(agent.getId(), agent);
@@ -65,24 +93,25 @@ public abstract class AbstractAgentController implements AgentController {
         this.onAgentRegistered(agent);
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#send(io.logspace.agent.api.event.Event)
+     */
     @Override
     public void send(Event event) {
         this.send(Collections.singleton(event));
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setSystem(String system) {
-        this.system = system;
-    }
-
+    /**
+     * @see io.logspace.agent.api.AgentController#shutdown()
+     */
     @Override
     public void shutdown() {
         // default does nothing
     }
 
+    /**
+     * @see io.logspace.agent.api.AgentController#unregister(io.logspace.agent.api.Agent)
+     */
     @Override
     public final void unregister(Agent agent) {
         this.agents.remove(agent.getId());
@@ -147,6 +176,10 @@ public abstract class AbstractAgentController implements AgentController {
      */
     protected void onAgentUnregistered(Agent agent) {
         // default does nothing
+    }
+
+    protected void setMarker(String marker) {
+        this.marker = marker;
     }
 
     private void initalizeSystem() {

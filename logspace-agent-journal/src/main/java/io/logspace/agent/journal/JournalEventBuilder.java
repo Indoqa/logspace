@@ -8,25 +8,24 @@
 package io.logspace.agent.journal;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
-import io.logspace.agent.api.event.Optional;
 
 public final class JournalEventBuilder extends AbstractEventBuilder {
 
     private static final String PROPERTY_CATEGORY = "category";
     private static final String PROPERTY_MESSAGE = "message";
 
-    private static final Optional<String> JOURNAL_EVENT_TYPE = Optional.of("journal");
+    private static final String JOURNAL_EVENT_TYPE = "journal";
 
-    private Optional<String> eventType;
+    private String eventType;
 
-    private JournalEventBuilder(String agentId, String system, Optional<String> eventType) {
-        super(agentId, system);
+    private JournalEventBuilder(String agentId, String system, String marker, String eventType) {
+        super(agentId, system, marker);
 
         this.eventType = eventType;
     }
 
-    public static JournalEventBuilder createJournalBuilder(String agentId, String system) {
-        return new JournalEventBuilder(agentId, system, JOURNAL_EVENT_TYPE);
+    public static JournalEventBuilder createJournalBuilder(String agentId, String system, String marker) {
+        return new JournalEventBuilder(agentId, system, marker, JOURNAL_EVENT_TYPE);
     }
 
     public JournalEventBuilder setCategory(String category) {
@@ -43,7 +42,7 @@ public final class JournalEventBuilder extends AbstractEventBuilder {
      * @see io.logspace.agent.api.event.AbstractEventBuilder#getType()
      */
     @Override
-    protected Optional<String> getType() {
+    protected String getType() {
         return this.eventType;
     }
 }

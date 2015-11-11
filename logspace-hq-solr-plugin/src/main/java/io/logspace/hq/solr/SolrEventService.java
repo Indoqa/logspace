@@ -9,8 +9,7 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
+import static java.util.Calendar.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
@@ -60,7 +59,6 @@ import com.indoqa.commons.lang.util.TimeUtils;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.Optional;
 import io.logspace.agent.api.json.EventPage;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
@@ -97,6 +95,7 @@ public class SolrEventService implements EventService {
     private static final String FIELD_AGENT_ID = "agent_id";
     private static final String FIELD_GLOBAL_AGENT_ID = "global_agent_id";
     private static final String FIELD_TYPE = "type";
+    private static final String FIELD_MARKER = "marker";
 
     private static final String FIELD_GLOBAL_ID = "global_id";
     private static final String FIELD_PARENT_ID = "parent_id";
@@ -302,54 +301,6 @@ public class SolrEventService implements EventService {
         }
     }
 
-    protected Event createEvent(SolrDocument solrDocument) {
-        StoredEvent result = new StoredEvent();
-
-        result.setId(this.getString(solrDocument, FIELD_ID));
-
-        result.setSystem(this.getString(solrDocument, FIELD_SYSTEM));
-        result.setAgentId(this.getString(solrDocument, FIELD_AGENT_ID));
-
-        result.setType(this.getOptionalString(solrDocument, FIELD_TYPE));
-        result.setTimestamp(this.getDate(solrDocument, FIELD_TIMESTAMP));
-        result.setParentEventId(this.getOptionalString(solrDocument, FIELD_PARENT_ID));
-        result.setGlobalEventId(this.getOptionalString(solrDocument, FIELD_GLOBAL_ID));
-
-        for (Entry<String, Object> eachField : solrDocument) {
-            String fieldName = eachField.getKey();
-
-            if (fieldName.startsWith("boolean_property_")) {
-                result.addProperties(fieldName.substring("boolean_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("date_property_")) {
-                result.addProperties(fieldName.substring("date_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("double_property_")) {
-                result.addProperties(fieldName.substring("double_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("float_property_")) {
-                result.addProperties(fieldName.substring("float_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("integer_property_")) {
-                result.addProperties(fieldName.substring("integer_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("long_property_")) {
-                result.addProperties(fieldName.substring("long_property_".length()), eachField.getValue());
-            }
-
-            if (fieldName.startsWith("string_property_")) {
-                result.addProperties(fieldName.substring("string_property_".length()), eachField.getValue());
-            }
-        }
-
-        return result;
-    }
-
     protected void refreshAgentDescriptionCache() {
         for (String eachGlobalAgentId : this.cachedAgentDescriptions.keySet()) {
             try {
@@ -398,6 +349,53 @@ public class SolrEventService implements EventService {
         stringBuilder.append('"');
     }
 
+    private Event createEvent(SolrDocument solrDocument) {
+        StoredEvent result = new StoredEvent();
+
+        result.setId(this.getString(solrDocument, FIELD_ID));
+        result.setSystem(this.getString(solrDocument, FIELD_SYSTEM));
+        result.setAgentId(this.getString(solrDocument, FIELD_AGENT_ID));
+        result.setType(this.getString(solrDocument, FIELD_TYPE));
+        result.setMarker(this.getString(solrDocument, FIELD_MARKER));
+        result.setTimestamp(this.getDate(solrDocument, FIELD_TIMESTAMP));
+        result.setParentEventId(this.getString(solrDocument, FIELD_PARENT_ID));
+        result.setGlobalEventId(this.getString(solrDocument, FIELD_GLOBAL_ID));
+
+        for (Entry<String, Object> eachField : solrDocument) {
+            String fieldName = eachField.getKey();
+
+            if (fieldName.startsWith("boolean_property_")) {
+                result.addProperties(fieldName.substring("boolean_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("date_property_")) {
+                result.addProperties(fieldName.substring("date_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("double_property_")) {
+                result.addProperties(fieldName.substring("double_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("float_property_")) {
+                result.addProperties(fieldName.substring("float_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("integer_property_")) {
+                result.addProperties(fieldName.substring("integer_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("long_property_")) {
+                result.addProperties(fieldName.substring("long_property_".length()), eachField.getValue());
+            }
+
+            if (fieldName.startsWith("string_property_")) {
+                result.addProperties(fieldName.substring("string_property_".length()), eachField.getValue());
+            }
+        }
+
+        return result;
+    }
+
     private String createFilterQuery(EventFilterElement eventFilterElement) {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -444,11 +442,11 @@ public class SolrEventService implements EventService {
         result.addField(FIELD_SPACE, space);
         result.addField(FIELD_SYSTEM, event.getSystem());
         result.addField(FIELD_AGENT_ID, event.getAgentId());
-
-        result.addField(FIELD_TYPE, event.getType().orElse(null));
+        result.addField(FIELD_TYPE, event.getType());
+        result.addField(FIELD_MARKER, event.getMarker());
         result.addField(FIELD_TIMESTAMP, event.getTimestamp());
-        result.addField(FIELD_PARENT_ID, event.getParentEventId().orElse(null));
-        result.addField(FIELD_GLOBAL_ID, event.getGlobalEventId().orElse(null));
+        result.addField(FIELD_PARENT_ID, event.getParentEventId());
+        result.addField(FIELD_GLOBAL_ID, event.getGlobalEventId());
 
         this.addProperties(result, event.getBooleanProperties(), "boolean_property_");
         this.addProperties(result, event.getDateProperties(), "date_property_");
@@ -573,15 +571,6 @@ public class SolrEventService implements EventService {
         }
 
         return values.get(0).getName();
-    }
-
-    private Optional<String> getOptionalString(SolrDocument solrDocument, String fieldName) {
-        String value = this.getString(solrDocument, fieldName);
-        if (value == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(value);
     }
 
     private String getString(SolrDocument solrDocument, String fieldName) {

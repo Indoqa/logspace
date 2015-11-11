@@ -8,16 +8,7 @@
 package io.logspace.it.test;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import io.logspace.agent.api.AbstractSchedulerAgent;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.DefaultEventBuilder;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.order.AgentOrder;
-import io.logspace.agent.hq.HqAgentController;
-import io.logspace.it.AbstractLogspaceTest;
-import io.logspace.it.InfrastructureRule;
+import static org.junit.Assert.*;
 
 import java.util.UUID;
 
@@ -28,11 +19,21 @@ import org.apache.solr.common.SolrDocument;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.logspace.agent.api.AbstractSchedulerAgent;
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.DefaultEventBuilder;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.order.AgentOrder;
+import io.logspace.agent.hq.HqAgentController;
+import io.logspace.it.AbstractLogspaceTest;
+import io.logspace.it.InfrastructureRule;
+
 public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
     private static final String HQ_URL = "http://localhost:" + InfrastructureRule.TEST_PORT;
     private static final String QUEUE_DIRECTORY = "./target/";
     private static final String SPACE_TOKEN = "test";
+    private static final String MARKER = "marker";
 
     @Before
     public void before() {
@@ -43,7 +44,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN, MARKER);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -56,7 +57,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testMissingOrder() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("2", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
+        HqAgentController.install("2", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN, MARKER);
         AgentControllerProvider.getAgentController();
 
         this.waitFor(5, SECONDS);
@@ -69,7 +70,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testSimpleAgent() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN);
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, SPACE_TOKEN, MARKER);
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
@@ -85,6 +86,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
         int documentCount = 0;
         for (SolrDocument eachDocument : queryResponse.getResults()) {
             assertEquals(String.valueOf(++documentCount), eachDocument.getFirstValue("global_id"));
+            assertEquals(MARKER, eachDocument.getFirstValue("marker"));
         }
     }
 
@@ -92,7 +94,7 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
     public void testUnrecognizedSpaceToken() {
         assertEquals(0, this.commitAndGetSolrDocumentCount("*:*"));
 
-        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, UUID.randomUUID().toString());
+        HqAgentController.install("1", HQ_URL, QUEUE_DIRECTORY, UUID.randomUUID().toString(), MARKER);
         TestAgent testAgent = new TestAgent();
         this.waitFor(5, SECONDS);
         AgentControllerProvider.shutdown();
@@ -111,7 +113,8 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
         @Override
         public void execute(AgentOrder agentOrder) {
-            Event event = new DefaultEventBuilder(this.getId(), "TEST").setGlobalEventId(String.valueOf(++this.eventCount)).toEvent();
+            Event event = new DefaultEventBuilder(this.getId(), "TEST-SYSTEM", this.getMarker())
+                .setGlobalEventId(String.valueOf(++this.eventCount)).toEvent();
             this.sendEvent(event);
         }
 

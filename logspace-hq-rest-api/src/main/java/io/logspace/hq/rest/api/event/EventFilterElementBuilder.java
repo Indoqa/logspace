@@ -33,23 +33,23 @@ public class EventFilterElementBuilder {
         return null;
     }
 
-    public void withFrom(Object from) {
-        this.from = from;
+    public void withFrom(Object fromParameter) {
+        this.from = fromParameter;
     }
 
-    public void withProperty(String property) {
-        this.property = property;
+    public void withProperty(String propertyParameter) {
+        this.property = propertyParameter;
     }
 
-    public void withTo(Object to) {
-        this.to = to;
+    public void withTo(Object toParameter) {
+        this.to = toParameter;
     }
 
-    public void withValue(String value) {
-        this.value = value;
+    public void withValue(String valueParameter) {
+        this.value = valueParameter;
     }
 
-    public void withValues(List<String> values) {
-        this.values = values;
+    public void withValues(List<String> valuesParameter) {
+        this.values = valuesParameter;
     }
 }

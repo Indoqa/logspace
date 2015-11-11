@@ -7,11 +7,16 @@
  */
 package io.logspace.agent.impl;
 
-import io.logspace.agent.api.event.Event;
-
 import java.util.Collection;
 
+import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.event.Event;
+
 public class DummyAgentController extends AbstractAgentController {
+
+    public DummyAgentController(AgentControllerDescription agentControllerDescription) {
+        super(agentControllerDescription);
+    }
 
     @Override
     public void send(Collection<Event> events) {

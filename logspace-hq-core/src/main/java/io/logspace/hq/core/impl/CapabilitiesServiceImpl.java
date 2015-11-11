@@ -13,18 +13,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
@@ -104,14 +95,14 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
 
         if (capabilities.hasAgentCapabilities()) {
             for (AgentCapabilities eachAgentCapabilities : capabilities.getAgentCapabilities()) {
-                String globalAgentId = this.getGlobalAgentId(capabilities.getSpace().get(), capabilities.getSystem(),
+                String globalAgentId = this.getGlobalAgentId(capabilities.getSpace(), capabilities.getSystem(),
                     eachAgentCapabilities.getId());
 
                 AgentDescription agentDescription = new AgentDescription();
                 agentDescription.setGlobalId(globalAgentId);
                 agentDescription.setName(eachAgentCapabilities.getId());
                 agentDescription.setSystem(capabilities.getSystem());
-                agentDescription.setSpace(capabilities.getSpace().get());
+                agentDescription.setSpace(capabilities.getSpace());
                 agentDescription.setPropertyDescriptions(this.asSortedList(eachAgentCapabilities));
 
                 this.agentDescriptions.put(globalAgentId, agentDescription);
@@ -139,8 +130,7 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
         Set<String> result = new HashSet<>();
 
         for (AgentCapabilities eachOldAgentCapabilities : capabilities.getAgentCapabilities()) {
-            result
-                .add(this.getGlobalAgentId(capabilities.getSpace().get(), capabilities.getSystem(), eachOldAgentCapabilities.getId()));
+            result.add(this.getGlobalAgentId(capabilities.getSpace(), capabilities.getSystem(), eachOldAgentCapabilities.getId()));
         }
 
         return result;

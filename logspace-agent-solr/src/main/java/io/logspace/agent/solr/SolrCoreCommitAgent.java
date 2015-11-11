@@ -8,12 +8,13 @@
 package io.logspace.agent.solr;
 
 import static io.logspace.agent.solr.SolrEventBuilder.getLong;
-import io.logspace.agent.api.AbstractApplicationAgent;
 
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.core.SolrEventListener;
 import org.apache.solr.search.SolrIndexSearcher;
+
+import io.logspace.agent.api.AbstractApplicationAgent;
 
 public class SolrCoreCommitAgent extends AbstractApplicationAgent implements SolrEventListener {
 
@@ -41,7 +42,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getId(), this.getSystem(),
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getId(), this.getSystem(), this.getMarker(),
             this.getCoreName());
         solrEventBuilder.setWarmuptime(getLong(newSearcher.getStatistics(), "warmupTime"));
         this.sendEvent(solrEventBuilder.toEvent());
@@ -53,7 +54,8 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createCommitBuilder(this.getId(), this.getSystem(), this.getCoreName());
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createCommitBuilder(this.getId(), this.getSystem(), this.getMarker(),
+            this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 
@@ -63,7 +65,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getSystem(),
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getSystem(), this.getMarker(),
             this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
