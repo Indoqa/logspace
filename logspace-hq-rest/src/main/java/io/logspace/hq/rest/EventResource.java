@@ -57,11 +57,7 @@ public class EventResource extends AbstractSpaceResource {
     }
 
     private EventPage postEvents(Request req) {
-        this.logger.error("postEvents");
-
         EventFilter eventFilter = this.readFilter(req.body());
-        this.logger.error("eventFilter = {}", eventFilter);
-
         int count = getQueryParam(req, PARAMETER_COUNT, DEFAULT_COUNT, MIN_COUNT, MAX_RETRIEVAL_COUNT);
         String cursor = getQueryParam(req, PARAMETER_CURSOR, "*");
         return this.retrieveEvents(eventFilter, count, cursor);
