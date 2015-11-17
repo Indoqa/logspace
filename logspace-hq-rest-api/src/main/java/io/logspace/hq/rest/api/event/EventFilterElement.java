@@ -12,6 +12,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = EventFilterElementBuilder.class)
 public interface EventFilterElement {
 
-    String getPropertyName();
+    String getProperty();
 
 }

@@ -476,7 +476,10 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         private final int delaySeconds;
 
         public RetryThread(CommitRunnable commitRunnable, int delaySeconds) {
-            super();
+            super("Logspace-Upload-Retry");
+
+            this.setDaemon(true);
+
             this.commitRunnable = commitRunnable;
             this.delaySeconds = delaySeconds;
         }

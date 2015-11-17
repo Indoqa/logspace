@@ -15,6 +15,10 @@ public class EventFilter implements Iterable<EventFilterElement> {
 
     private List<EventFilterElement> elements = new ArrayList<EventFilterElement>();
 
+    public void add(EventFilterElement element) {
+        this.elements.add(element);
+    }
+
     public List<EventFilterElement> getElements() {
         return this.elements;
     }

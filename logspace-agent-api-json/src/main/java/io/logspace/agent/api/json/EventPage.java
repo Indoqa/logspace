@@ -8,11 +8,12 @@
 package io.logspace.agent.api.json;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import io.logspace.agent.api.event.Event;
 
-public class EventPage {
+public class EventPage implements Iterable<Event> {
 
     private List<Event> events = new ArrayList<Event>();
 
@@ -34,6 +35,11 @@ public class EventPage {
 
     public long getTotalCount() {
         return this.totalCount;
+    }
+
+    @Override
+    public Iterator<Event> iterator() {
+        return this.events.iterator();
     }
 
     public void setEvents(List<Event> events) {

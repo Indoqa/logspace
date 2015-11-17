@@ -17,7 +17,7 @@ public class MultiValueEventFilterElement extends AbstractEventFilterElement {
     public static MultiValueEventFilterElement create(String property, List<String> values) {
         MultiValueEventFilterElement result = new MultiValueEventFilterElement();
 
-        result.setPropertyName(property);
+        result.setProperty(property);
         result.setValues(values);
 
         return result;

@@ -9,14 +9,14 @@ package io.logspace.hq.rest.api.event;
 
 public abstract class AbstractEventFilterElement implements EventFilterElement {
 
-    private String propertyName;
+    private String property;
 
     @Override
-    public String getPropertyName() {
-        return this.propertyName;
+    public String getProperty() {
+        return this.property;
     }
 
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
+    public void setProperty(String property) {
+        this.property = property;
     }
 }

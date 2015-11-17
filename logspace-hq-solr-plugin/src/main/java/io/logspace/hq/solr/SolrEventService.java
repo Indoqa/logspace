@@ -381,7 +381,7 @@ public class SolrEventService implements EventService {
     private String createFilterQuery(EventFilterElement eventFilterElement) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(eventFilterElement.getPropertyName());
+        stringBuilder.append(eventFilterElement.getProperty());
         stringBuilder.append(':');
 
         if (eventFilterElement instanceof EqualsEventFilterElement) {

@@ -15,7 +15,7 @@ public class RangeEventFilterElement extends AbstractEventFilterElement {
     public static EventFilterElement create(String property, Object from, Object to) {
         RangeEventFilterElement result = new RangeEventFilterElement();
 
-        result.setPropertyName(property);
+        result.setProperty(property);
         result.setFrom(from);
         result.setTo(to);
 

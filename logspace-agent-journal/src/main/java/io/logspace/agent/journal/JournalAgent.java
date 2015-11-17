@@ -8,6 +8,7 @@
 package io.logspace.agent.journal;
 
 import io.logspace.agent.api.AbstractApplicationAgent;
+import io.logspace.agent.api.event.Event;
 
 public final class JournalAgent extends AbstractApplicationAgent {
 
@@ -21,12 +22,19 @@ public final class JournalAgent extends AbstractApplicationAgent {
         return new JournalAgent(id);
     }
 
-    public void triggerEvent(String category, String message) {
+    public String triggerEvent(String category, String message) {
+        return this.triggerEvent(category, message, null);
+    }
+
+    public String triggerEvent(String category, String message, String parentEventId) {
         JournalEventBuilder eventBuilder = JournalEventBuilder.createJournalBuilder(this.getId(), this.getSystem(), this.getMarker());
 
+        eventBuilder.setParentEventId(parentEventId);
         eventBuilder.setCategory(category);
         eventBuilder.setMessage(message);
 
-        this.sendEvent(eventBuilder.toEvent());
+        Event event = eventBuilder.toEvent();
+        this.sendEvent(event);
+        return event.getId();
     }
 }
