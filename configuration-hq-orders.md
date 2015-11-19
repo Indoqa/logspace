@@ -7,7 +7,7 @@ title: Configuration HQ - Orders
 
 The configuration files for the agent orders are stored in the directory defined by the `logspace.hq-webapp.orders-directory` property.
 
-The filename is used as the id of the agentController. These settings need to be configured:
+The filename is used as the id of the agent controller. These settings need to be configured:
 
   - Agent orders - for each agent
     - The `id` of the agent.
@@ -36,4 +36,3 @@ Example content of logspace-demo.json
   "commit-max-seconds" : 10
 }
 ```
-
