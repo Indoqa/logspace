@@ -8,6 +8,7 @@
 package io.logspace.agent.os;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.EventBuilderData;
 
 public final class OsEventBuilder extends AbstractEventBuilder {
 
@@ -39,30 +40,30 @@ public final class OsEventBuilder extends AbstractEventBuilder {
 
     private String eventType;
 
-    private OsEventBuilder(String agentId, String system, String marker, String eventType) {
-        super(agentId, system, marker);
+    private OsEventBuilder(EventBuilderData eventBuilderData, String eventType) {
+        super(eventBuilderData);
 
         this.eventType = eventType;
     }
 
-    public static OsEventBuilder createCpuBuilder(String agentId, String system, String marker) {
-        return new OsEventBuilder(agentId, system, marker, CPU_EVENT_TYPE);
+    public static OsEventBuilder createCpuBuilder(EventBuilderData eventBuilderData) {
+        return new OsEventBuilder(eventBuilderData, CPU_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createDiskBuilder(String agentId, String system, String marker) {
-        return new OsEventBuilder(agentId, system, marker, DISK_EVENT_TYPE);
+    public static OsEventBuilder createDiskBuilder(EventBuilderData eventBuilderData) {
+        return new OsEventBuilder(eventBuilderData, DISK_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createMemoryBuilder(String agentId, String system, String marker) {
-        return new OsEventBuilder(agentId, system, marker, MEMORY_EVENT_TYPE);
+    public static OsEventBuilder createMemoryBuilder(EventBuilderData eventBuilderData) {
+        return new OsEventBuilder(eventBuilderData, MEMORY_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSwapBuilder(String agentId, String system, String marker) {
-        return new OsEventBuilder(agentId, system, marker, SWAP_EVENT_TYPE);
+    public static OsEventBuilder createSwapBuilder(EventBuilderData eventBuilderData) {
+        return new OsEventBuilder(eventBuilderData, SWAP_EVENT_TYPE);
     }
 
-    public static OsEventBuilder createSystemLoadBuilder(String agentId, String system, String marker) {
-        return new OsEventBuilder(agentId, system, marker, SYSTEM_LOAD_EVENT_TYPE);
+    public static OsEventBuilder createSystemLoadBuilder(EventBuilderData eventBuilderData) {
+        return new OsEventBuilder(eventBuilderData, SYSTEM_LOAD_EVENT_TYPE);
     }
 
     public OsEventBuilder setCommittedVirtualMemory(long maxMemory) {

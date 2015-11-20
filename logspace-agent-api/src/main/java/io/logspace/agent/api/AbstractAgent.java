@@ -8,6 +8,7 @@
 package io.logspace.agent.api;
 
 import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventBuilderData;
 import io.logspace.agent.api.order.AgentCapabilities;
 import io.logspace.agent.api.order.TriggerType;
 
@@ -58,12 +59,8 @@ abstract class AbstractAgent implements Agent {
         return this.agentController;
     }
 
-    protected String getMarker() {
-        return this.agentController.getMarker();
-    }
-
-    protected String getSystem() {
-        return this.agentController.getSystem();
+    protected EventBuilderData getEventBuilderData() {
+        return new EventBuilderData(this.getId(), this.agentController.getSystem(), this.agentController.getMarker());
     }
 
     protected final boolean isEnabled() {

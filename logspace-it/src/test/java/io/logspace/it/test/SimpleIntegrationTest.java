@@ -22,7 +22,6 @@ import org.junit.Test;
 import io.logspace.agent.api.AbstractSchedulerAgent;
 import io.logspace.agent.api.AgentControllerProvider;
 import io.logspace.agent.api.event.DefaultEventBuilder;
-import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentOrder;
 import io.logspace.agent.hq.HqAgentController;
 import io.logspace.it.AbstractLogspaceTest;
@@ -113,9 +112,9 @@ public class SimpleIntegrationTest extends AbstractLogspaceTest {
 
         @Override
         public void execute(AgentOrder agentOrder) {
-            Event event = new DefaultEventBuilder(this.getId(), "TEST-SYSTEM", this.getMarker())
-                .setGlobalEventId(String.valueOf(++this.eventCount)).toEvent();
-            this.sendEvent(event);
+            DefaultEventBuilder builder = new DefaultEventBuilder(this.getEventBuilderData());
+            builder.setGlobalEventId(String.valueOf(++this.eventCount));
+            this.sendEvent(builder.toEvent());
         }
 
         public int getEventCount() {

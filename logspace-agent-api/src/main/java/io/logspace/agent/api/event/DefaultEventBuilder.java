@@ -12,8 +12,12 @@ package io.logspace.agent.api.event;
  */
 public class DefaultEventBuilder extends AbstractEventBuilder {
 
-    public DefaultEventBuilder(String agentId, String system, String marker) {
-        super(agentId, system, marker);
+    public DefaultEventBuilder(EventBuilderData eventBuilderData) {
+        super(eventBuilderData);
+    }
+
+    public DefaultEventBuilder(String id, String system, String marker) {
+        this(new EventBuilderData(id, system, marker));
     }
 
     @Override

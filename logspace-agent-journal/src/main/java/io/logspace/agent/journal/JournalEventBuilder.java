@@ -8,6 +8,7 @@
 package io.logspace.agent.journal;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.EventBuilderData;
 
 public final class JournalEventBuilder extends AbstractEventBuilder {
 
@@ -18,14 +19,14 @@ public final class JournalEventBuilder extends AbstractEventBuilder {
 
     private String eventType;
 
-    private JournalEventBuilder(String agentId, String system, String marker, String eventType) {
-        super(agentId, system, marker);
+    private JournalEventBuilder(EventBuilderData eventBuilderData, String eventType) {
+        super(eventBuilderData);
 
         this.eventType = eventType;
     }
 
-    public static JournalEventBuilder createJournalBuilder(String agentId, String system, String marker) {
-        return new JournalEventBuilder(agentId, system, marker, JOURNAL_EVENT_TYPE);
+    public static JournalEventBuilder createJournalBuilder(EventBuilderData eventBuilderData) {
+        return new JournalEventBuilder(eventBuilderData, JOURNAL_EVENT_TYPE);
     }
 
     public JournalEventBuilder setCategory(String category) {

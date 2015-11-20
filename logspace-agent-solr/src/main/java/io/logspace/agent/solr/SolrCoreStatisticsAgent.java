@@ -71,7 +71,7 @@ public class SolrCoreStatisticsAgent extends AbstractSchedulerAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getId(), this.getSystem(), this.getMarker(),
+        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createStatisticsBuilder(this.getEventBuilderData(),
             this.getCoreName());
 
         Map<String, SolrInfoMBean> infoRegistry = this.solrCore.getInfoRegistry();

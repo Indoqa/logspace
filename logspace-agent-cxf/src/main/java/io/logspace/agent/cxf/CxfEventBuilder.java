@@ -8,6 +8,7 @@
 package io.logspace.agent.cxf;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.EventBuilderData;
 
 public class CxfEventBuilder extends AbstractEventBuilder {
 
@@ -27,8 +28,8 @@ public class CxfEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_GLOBAL_REQUEST_ID = "global_request_id";
     public static final String PROPERTY_PARENT_REQUEST_ID = "parent_request_id";
 
-    public CxfEventBuilder(String agentId, String system, String marker) {
-        super(agentId, system, marker);
+    public CxfEventBuilder(EventBuilderData eventBuilderData) {
+        super(eventBuilderData);
     }
 
     public CxfEventBuilder setDomain(String domain) {

@@ -36,7 +36,7 @@ public final class MemoryAgent extends AbstractOsAgent {
 
         com.sun.management.OperatingSystemMXBean operatingSystem = (com.sun.management.OperatingSystemMXBean) operatingSystemBean;
 
-        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getId(), this.getSystem(), this.getMarker());
+        OsEventBuilder osEventBuilder = createMemoryBuilder(this.getEventBuilderData());
 
         osEventBuilder.setTotalMemory(operatingSystem.getTotalPhysicalMemorySize());
         osEventBuilder.setFreeMemory(operatingSystem.getFreePhysicalMemorySize());

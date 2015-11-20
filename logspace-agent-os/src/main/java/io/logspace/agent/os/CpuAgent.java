@@ -26,7 +26,7 @@ public final class CpuAgent extends AbstractOsAgent {
 
     @Override
     public void execute(AgentOrder agentOrder) {
-        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getId(), this.getSystem(), this.getMarker());
+        OsEventBuilder eventBuilder = OsEventBuilder.createCpuBuilder(this.getEventBuilderData());
 
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
         eventBuilder.setProcessorCount(operatingSystemMXBean.getAvailableProcessors());

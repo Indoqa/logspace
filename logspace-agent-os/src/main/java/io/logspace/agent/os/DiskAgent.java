@@ -41,7 +41,7 @@ public final class DiskAgent extends AbstractOsAgent {
             long usableSpace = store.getUsableSpace();
             long unallocatedSpace = store.getUnallocatedSpace();
 
-            OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getId(), this.getSystem(), this.getMarker());
+            OsEventBuilder eventBuilder = OsEventBuilder.createDiskBuilder(this.getEventBuilderData());
 
             eventBuilder.setDiskPath(root.toString());
             eventBuilder.setTotalDiskSpace(totalSpace);

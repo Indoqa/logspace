@@ -7,7 +7,7 @@
  */
 package io.logspace.agent.solr;
 
-import static io.logspace.agent.solr.SolrEventBuilder.getLong;
+import static io.logspace.agent.solr.SolrEventBuilder.*;
 
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
@@ -42,8 +42,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createNewSearcherBuilder(this.getId(), this.getSystem(), this.getMarker(),
-            this.getCoreName());
+        SolrEventBuilder solrEventBuilder = createNewSearcherBuilder(this.getEventBuilderData(), this.getCoreName());
         solrEventBuilder.setWarmuptime(getLong(newSearcher.getStatistics(), "warmupTime"));
         this.sendEvent(solrEventBuilder.toEvent());
     }
@@ -54,8 +53,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createCommitBuilder(this.getId(), this.getSystem(), this.getMarker(),
-            this.getCoreName());
+        SolrEventBuilder solrEventBuilder = createCommitBuilder(this.getEventBuilderData(), this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 
@@ -65,8 +63,7 @@ public class SolrCoreCommitAgent extends AbstractApplicationAgent implements Sol
             return;
         }
 
-        SolrEventBuilder solrEventBuilder = SolrEventBuilder.createSoftCommitBuilder(this.getId(), this.getSystem(), this.getMarker(),
-            this.getCoreName());
+        SolrEventBuilder solrEventBuilder = createSoftCommitBuilder(this.getEventBuilderData(), this.getCoreName());
         this.sendEvent(solrEventBuilder.toEvent());
     }
 

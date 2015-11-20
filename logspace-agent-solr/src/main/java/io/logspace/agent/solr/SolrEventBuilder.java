@@ -10,6 +10,7 @@ package io.logspace.agent.solr;
 import org.apache.solr.common.util.NamedList;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.EventBuilderData;
 
 public final class SolrEventBuilder extends AbstractEventBuilder {
 
@@ -50,27 +51,27 @@ public final class SolrEventBuilder extends AbstractEventBuilder {
 
     private String eventType;
 
-    private SolrEventBuilder(String agentId, String system, String marker, String eventType, String coreName) {
-        super(agentId, system, marker);
+    private SolrEventBuilder(EventBuilderData eventBuilderData, String eventType, String coreName) {
+        super(eventBuilderData);
 
         this.eventType = eventType;
         this.addProperty(PROPERTY_CORE_NAME, coreName);
     }
 
-    public static SolrEventBuilder createCommitBuilder(String agentId, String system, String marker, String coreName) {
-        return new SolrEventBuilder(agentId, system, marker, COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createCommitBuilder(EventBuilderData eventBuilderData, String coreName) {
+        return new SolrEventBuilder(eventBuilderData, COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createNewSearcherBuilder(String agentId, String system, String marker, String coreName) {
-        return new SolrEventBuilder(agentId, system, marker, NEW_SEARCHER_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createNewSearcherBuilder(EventBuilderData eventBuilderData, String coreName) {
+        return new SolrEventBuilder(eventBuilderData, NEW_SEARCHER_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createSoftCommitBuilder(String agentId, String system, String marker, String coreName) {
-        return new SolrEventBuilder(agentId, system, marker, SOFT_COMMIT_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createSoftCommitBuilder(EventBuilderData eventBuilderData, String coreName) {
+        return new SolrEventBuilder(eventBuilderData, SOFT_COMMIT_EVENT_TYPE, coreName);
     }
 
-    public static SolrEventBuilder createStatisticsBuilder(String agentId, String system, String marker, String coreName) {
-        return new SolrEventBuilder(agentId, system, marker, STATISTICS_EVENT_TYPE, coreName);
+    public static SolrEventBuilder createStatisticsBuilder(EventBuilderData eventBuilderData, String coreName) {
+        return new SolrEventBuilder(eventBuilderData, STATISTICS_EVENT_TYPE, coreName);
     }
 
     public static boolean getBoolean(NamedList<?> namedList, String name) {

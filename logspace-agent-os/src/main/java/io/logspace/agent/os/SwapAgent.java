@@ -36,7 +36,7 @@ public final class SwapAgent extends AbstractOsAgent {
         long freeSwapSpace = operatingSystemMXBean.getFreeSwapSpaceSize();
         long usedSwapSpace = totalSwapSpace - freeSwapSpace;
 
-        OsEventBuilder eventBuilder = OsEventBuilder.createSwapBuilder(this.getId(), this.getSystem(), this.getMarker());
+        OsEventBuilder eventBuilder = OsEventBuilder.createSwapBuilder(this.getEventBuilderData());
 
         eventBuilder.setTotalSwapSpace(totalSwapSpace);
         eventBuilder.setFreeSwapSpace(freeSwapSpace);

@@ -8,6 +8,7 @@
 package io.logspace.jvm.agent;
 
 import io.logspace.agent.api.event.AbstractEventBuilder;
+import io.logspace.agent.api.event.EventBuilderData;
 
 public final class JvmEventBuilder extends AbstractEventBuilder {
 
@@ -72,26 +73,26 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
 
     private String eventType;
 
-    private JvmEventBuilder(String agentId, String system, String marker, String eventType) {
-        super(agentId, system, marker);
+    private JvmEventBuilder(EventBuilderData eventBuilderData, String eventType) {
+        super(eventBuilderData);
 
         this.eventType = eventType;
     }
 
-    public static JvmEventBuilder createJvmAgentAttachedBuilder(String agentId, String system, String marker) {
-        return new JvmEventBuilder(agentId, system, marker, JVM_AGENT_ATTACHED_EVENT_TYPE);
+    public static JvmEventBuilder createJvmAgentAttachedBuilder(EventBuilderData eventBuilderData) {
+        return new JvmEventBuilder(eventBuilderData, JVM_AGENT_ATTACHED_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmBuilder(String agentId, String system, String marker) {
-        return new JvmEventBuilder(agentId, system, marker, JVM_EVENT_TYPE);
+    public static JvmEventBuilder createJvmBuilder(EventBuilderData eventBuilderData) {
+        return new JvmEventBuilder(eventBuilderData, JVM_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmStartBuilder(String agentId, String system, String marker) {
-        return new JvmEventBuilder(agentId, system, marker, JVM_START_EVENT_TYPE);
+    public static JvmEventBuilder createJvmStartBuilder(EventBuilderData eventBuilderData) {
+        return new JvmEventBuilder(eventBuilderData, JVM_START_EVENT_TYPE);
     }
 
-    public static JvmEventBuilder createJvmStopBuilder(String agentId, String system, String marker) {
-        return new JvmEventBuilder(agentId, system, marker, JVM_STOP_EVENT_TYPE);
+    public static JvmEventBuilder createJvmStopBuilder(EventBuilderData eventBuilderData) {
+        return new JvmEventBuilder(eventBuilderData, JVM_STOP_EVENT_TYPE);
     }
 
     public void setAvailableProcessors(int availableProcessors) {

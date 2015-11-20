@@ -14,9 +14,8 @@ import java.util.Date;
  */
 public abstract class AbstractEventBuilder {
 
-    private final String agentId;
-    private final String system;
-    private final String marker;
+    private final EventBuilderData eventBuilderData;
+
     private String globalEventId;
     private String parentEventId;
 
@@ -29,8 +28,8 @@ public abstract class AbstractEventBuilder {
      *
      * @param system The system recording this event.
      */
-    protected AbstractEventBuilder(String agentId, String system, String marker) {
-        this(agentId, system, marker, null, null);
+    protected AbstractEventBuilder(EventBuilderData eventBuilderData) {
+        this(eventBuilderData, null, null);
     }
 
     /**
@@ -43,15 +42,12 @@ public abstract class AbstractEventBuilder {
      *
      * @param parentEvent The parent event to be used as template.
      */
-    protected AbstractEventBuilder(String agentId, String system, String marker, Event parentEvent) {
-        this(agentId, system, marker, parentEvent.getId(), parentEvent.getGlobalEventId());
+    protected AbstractEventBuilder(EventBuilderData eventBuilderData, Event parentEvent) {
+        this(eventBuilderData, parentEvent.getId(), parentEvent.getGlobalEventId());
     }
 
-    protected AbstractEventBuilder(String agentId, String system, String marker, String parentEventId, String globalEventId) {
-        this.agentId = agentId;
-        this.system = system;
-        this.marker = marker;
-
+    protected AbstractEventBuilder(EventBuilderData eventBuilderData, String parentEventId, String globalEventId) {
+        this.eventBuilderData = eventBuilderData;
         this.parentEventId = parentEventId;
         this.globalEventId = globalEventId;
     }
@@ -79,8 +75,8 @@ public abstract class AbstractEventBuilder {
     }
 
     public final Event toEvent() {
-        return new ImmutableEvent(this.agentId, this.system, this.getType(), this.globalEventId, this.parentEventId, this.marker,
-            this.properties);
+        return new ImmutableEvent(this.eventBuilderData.getAgentId(), this.eventBuilderData.getSystem(), this.getType(),
+            this.globalEventId, this.parentEventId, this.eventBuilderData.getMarker(), this.properties);
     }
 
     protected final void addProperty(BooleanEventProperty property) {
