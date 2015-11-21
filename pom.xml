@@ -77,7 +77,7 @@
 
     <slf4j-version>1.7.13</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3.0</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
+    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
 
     <junit-version>4.12</junit-version>
   </properties>
@@ -531,10 +531,6 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>com.indoqa.commons</groupId>
-        <artifactId>indoqa-commons-cycle-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
@@ -589,11 +585,9 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
       </plugin>
-      <!-- What's this? -->
       <plugin>
         <groupId>de.jutzig</groupId>
         <artifactId>github-release-plugin</artifactId>
-        <version>1.1.1</version>
       </plugin>      
     </plugins>
   </build>
