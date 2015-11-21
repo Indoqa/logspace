@@ -38,8 +38,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.indoqa.commons</groupId>
-      <artifactId>indoqa-commons-lang</artifactId>
+      <groupId>com.indoqa</groupId>
+      <artifactId>indoqa-lang</artifactId>
     </dependency>
 
     <!-- Dependency Injection -->

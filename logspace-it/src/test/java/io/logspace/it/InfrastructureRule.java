@@ -7,7 +7,7 @@
  */
 package io.logspace.it;
 
-import static com.indoqa.commons.lang.util.FileUtils.getCanonicalFile;
+import static com.indoqa.lang.util.FileUtils.getCanonicalFile;
 
 import java.io.File;
 import java.lang.reflect.Field;
