@@ -77,7 +77,7 @@
 
     <slf4j-version>1.7.13</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3</log4j-version><!-- can't upgrade to 2.4.1 because this leads to compilation errors ?!? -->
+    <log4j-version>2.3.0</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
 
     <junit-version>4.12</junit-version>
   </properties>
