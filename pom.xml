@@ -16,7 +16,7 @@
   <parent>
     <groupId>com.indoqa</groupId>
     <artifactId>indoqa-oss-parent</artifactId>
-    <version>3</version>
+    <version>4-SNAPSHOT</version>
   </parent>
 
   <groupId>io.logspace</groupId>
@@ -57,11 +57,11 @@
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
     <indoqa-boot-version>0.3-SNAPSHOT</indoqa-boot-version>
-    <spring-version>4.2.1.RELEASE</spring-version>
+    <spring-version>4.2.3.RELEASE</spring-version>
     <solr-version>5.2.1</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
 
-    <jackson-version>2.6.1</jackson-version>
+    <jackson-version>2.6.2</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
     <httpcore-version>4.3.3</httpcore-version>
     <quartz-version>2.2.1</quartz-version>
@@ -75,9 +75,9 @@
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
-    <slf4j-version>1.7.7</slf4j-version>
+    <slf4j-version>1.7.13</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.1</log4j-version>
+    <log4j-version>2.3</log4j-version>
 
     <junit-version>4.12</junit-version>
   </properties>
@@ -123,43 +123,10 @@
       <!-- Spring Framework -->
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
+        <artifactId>spring-framework-bom</artifactId>
         <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context-support</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-expression</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <version>${spring-version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
 
       <!-- Jackson -->
@@ -506,6 +473,16 @@
             <skip>true</skip>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.3</version>
+          <configuration>
+            <source>${project.build.compiler.version}</source>
+            <target>${project.build.compiler.version}</target>
+            <encoding>${project.build.sourceEncoding}</encoding>
+          </configuration>
+        </plugin>        
         <plugin>
           <groupId>com.indoqa.commons</groupId>
           <artifactId>indoqa-commons-cycle-maven-plugin</artifactId>
