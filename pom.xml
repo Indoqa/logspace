@@ -69,9 +69,10 @@
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
     <solr-spring-client-version>5.1.0</solr-spring-client-version>
-    <solr-facet-api-version>0.1-SNAPSHOT</solr-facet-api-version>
+    <solr-facet-api-version>0.1</solr-facet-api-version>
     <indoqa-commons-jar-in-jar-version>1.2.1</indoqa-commons-jar-in-jar-version>
-    <indoqa-lang-version>1.0.0-SNAPSHOT</indoqa-lang-version>
+    <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
+    <indoqa-lang-version>1.0.0</indoqa-lang-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
 
@@ -224,9 +225,9 @@
         <version>${solr-spring-client-version}</version>
       </dependency>
       <dependency>
-        <groupId>com.indoqa.commons</groupId>
-        <artifactId>indoqa-commons-jarinjarloader</artifactId>
-        <version>${indoqa-commons-jar-in-jar-version}</version>
+        <groupId>com.indoqa</groupId>
+        <artifactId>jar-in-jar</artifactId>
+        <version>${indoqa-jar-in-jar-version}</version>
       </dependency>
 
       <!-- Solr / Lucene -->
