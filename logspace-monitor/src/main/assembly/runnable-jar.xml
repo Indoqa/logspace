@@ -21,13 +21,13 @@
       <unpack>false</unpack>
       <scope>runtime</scope>
       <excludes>
-        <exclude>com.indoqa.commons:indoqa-commons-jarinjarloader</exclude>
+        <exclude>com.indoqa:jar-in-jar</exclude>
       </excludes>
     </dependencySet>
     <dependencySet>
       <unpack>true</unpack>
       <includes>
-        <include>com.indoqa.commons:indoqa-commons-jarinjarloader</include>
+        <include>com.indoqa:jar-in-jar</include>
       </includes>
     </dependencySet>
   </dependencySets>

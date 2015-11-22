@@ -30,8 +30,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.indoqa.commons</groupId>
-      <artifactId>indoqa-commons-jarinjarloader</artifactId>
+      <groupId>com.indoqa</groupId>
+      <artifactId>jar-in-jar</artifactId>
     </dependency>
 
     <!-- Commons dependencies -->
@@ -101,7 +101,7 @@
           </descriptors>
           <archive>
             <manifest>
-              <mainClass>com.indoqa.commons.jarinjarloader.Main</mainClass>
+              <mainClass>com.indoqa.jarinjar.Main</mainClass>
             </manifest>
             <manifestEntries>
               <Implementation-Build>${project.version}</Implementation-Build>
