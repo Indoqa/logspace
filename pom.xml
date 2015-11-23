@@ -84,7 +84,6 @@
   </properties>
 
   <modules>
-    <module>logspace-agent-all</module>
     <module>logspace-agent-api</module>
     <module>logspace-agent-api-json</module>
     <module>logspace-agent-controller</module>
