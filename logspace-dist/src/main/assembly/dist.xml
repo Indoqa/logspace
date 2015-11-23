@@ -28,10 +28,20 @@
       <outputDirectory>${project.artifactId}-${project.version}</outputDirectory>
     </dependencySet>
   </dependencySets>
+
   <fileSets>
     <fileSet>
       <outputDirectory>${project.artifactId}-${project.version}/solr-schema</outputDirectory>
       <directory>../logspace-hq-solr-plugin/src/main/resources/META-INF/solr/logspace/conf</directory>
     </fileSet>
   </fileSets>    
+
+  <files>
+    <file>
+      <source>../LICENSE</source>
+    </file>
+    <file>
+      <source>../NOTICE</source>
+    </file>
+  </files>
 </assembly>
