@@ -36,10 +36,6 @@
       <groupId>io.logspace</groupId>
       <artifactId>logspace-agent-controller</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-    </dependency>
         
     <!-- Test -->
     <dependency>
@@ -83,7 +79,7 @@
             <relocation>
               <pattern>org.slf4j</pattern>
               <shadedPattern>io.logspace.jvm.agent.shaded.slf4j</shadedPattern>
-            </relocation>
+            </relocation>          
           </relocations>
           <filters>
             <filter>
