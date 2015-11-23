@@ -17,12 +17,12 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
     public static final String PROPERTY_INITIAL_HEAP_MEMORY = "initial_heap_memory";
     public static final String PROPERTY_MAX_HEAP_MEMORY = "max_heap_memory";
     public static final String PROPERTY_USED_HEAP_MEMORY = "used_heap_memory";
-    public static final String PROPERTY_COMMITED_HEAP_MEMORY = "commited_heap_memory";
+    public static final String PROPERTY_COMMITTED_HEAP_MEMORY = "committed_heap_memory";
 
     public static final String PROPERTY_INITIAL_NON_HEAP_MEMORY = "initial_non_heap_memory";
     public static final String PROPERTY_MAX_NON_HEAP_MEMORY = "max_non_heap_memory";
     public static final String PROPERTY_USED_NON_HEAP_MEMORY = "used_non_heap_memory";
-    public static final String PROPERTY_COMMITED_NON_HEAP_MEMORY = "commited_non_heap_memory";
+    public static final String PROPERTY_COMMITTED_NON_HEAP_MEMORY = "committed_non_heap_memory";
 
     public static final String PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT = "object_pending_finalization_count";
 
@@ -99,12 +99,12 @@ public final class JvmEventBuilder extends AbstractEventBuilder {
         this.addProperty(PROPERTY_AVAILABLE_PROCESSORS, availableProcessors);
     }
 
-    public void setCommitedHeapMemory(long commitedHeapMemory) {
-        this.addProperty(PROPERTY_COMMITED_HEAP_MEMORY, commitedHeapMemory);
+    public void setCommittedHeapMemory(long commitedHeapMemory) {
+        this.addProperty(PROPERTY_COMMITTED_HEAP_MEMORY, commitedHeapMemory);
     }
 
-    public void setCommitedNonHeapMemory(long commitedNonHeapMemory) {
-        this.addProperty(PROPERTY_COMMITED_NON_HEAP_MEMORY, commitedNonHeapMemory);
+    public void setCommittedNonHeapMemory(long commitedNonHeapMemory) {
+        this.addProperty(PROPERTY_COMMITTED_NON_HEAP_MEMORY, commitedNonHeapMemory);
     }
 
     public void setCpuEndian(String cpuEndian) {

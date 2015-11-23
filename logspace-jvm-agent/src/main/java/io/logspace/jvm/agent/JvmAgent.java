@@ -22,7 +22,7 @@ import io.logspace.agent.api.order.AgentOrder;
 public final class JvmAgent extends AbstractSchedulerAgent {
 
     public static final String SYSTEM_PROPERTY_JVM_IDENTIFIER = "io.logspace.jvm-identifier";
-    public static final String SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL = "io.logspace.jvm-agent-description-url";
+    public static final String SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL = "io.logspace.jvm-logspace.config";
 
     private JvmAgent() {
         super("jvm/" + getJvmIdentifier(), "jvm");
@@ -140,13 +140,13 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         eventBuilder.setInitialHeapMemory(heapMemoryUsage.getInit());
         eventBuilder.setMaxHeapMemory(heapMemoryUsage.getMax());
         eventBuilder.setUsedHeapMemory(heapMemoryUsage.getUsed());
-        eventBuilder.setCommitedHeapMemory(heapMemoryUsage.getCommitted());
+        eventBuilder.setCommittedHeapMemory(heapMemoryUsage.getCommitted());
 
         MemoryUsage nonHeapMemoryUsage = memoryMXBean.getNonHeapMemoryUsage();
         eventBuilder.setInitialNonHeapMemory(nonHeapMemoryUsage.getInit());
         eventBuilder.setMaxNonHeapMemory(nonHeapMemoryUsage.getMax());
         eventBuilder.setUsedNonHeapMemory(nonHeapMemoryUsage.getUsed());
-        eventBuilder.setCommitedNonHeapMemory(nonHeapMemoryUsage.getCommitted());
+        eventBuilder.setCommittedNonHeapMemory(nonHeapMemoryUsage.getCommitted());
 
         eventBuilder.setObjectPendingFinalizationCount(memoryMXBean.getObjectPendingFinalizationCount());
     }
