@@ -284,6 +284,10 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jmx</artifactId>
           </exclusion>
+         <exclusion>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+          </exclusion>
           <exclusion>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-annotations</artifactId>
@@ -305,12 +309,24 @@
             <artifactId>lucene-analyzers-kuromoji</artifactId>
           </exclusion>
           <exclusion>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-morfologik</artifactId>
+            <groupId>com.carrotsearch</groupId>
+            <artifactId>hppc</artifactId>
           </exclusion>
           <exclusion>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-phonetic</artifactId>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+            <artifactId>concurrentlinkedhashmap-lru</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
