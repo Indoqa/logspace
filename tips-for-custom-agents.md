@@ -3,7 +3,7 @@ layout: default
 title: Tips for custom Agents
 ---
 
-# Tips for custom Agents
+# Tips for Custom Agents
 
 An *Event* can carry as many or as few *EventProperties* as desired.<br/>
 There is no schema and if some of your *Events* are missing some *EventProperties*, Logspace will not complain.
