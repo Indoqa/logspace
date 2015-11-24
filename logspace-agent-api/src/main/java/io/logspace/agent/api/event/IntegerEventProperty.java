@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * An {@link EventProperty} carrying a {@link Integer} as value.
+ */
 public class IntegerEventProperty extends AbstractEventProperty<Integer> {
 
     public IntegerEventProperty(String key, Integer value) {

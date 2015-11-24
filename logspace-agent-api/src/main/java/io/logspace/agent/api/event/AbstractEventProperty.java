@@ -7,6 +7,13 @@
  */
 package io.logspace.agent.api.event;
 
+import java.text.MessageFormat;
+
+/**
+ * Abstract base class for implementing an {@link EventProperty} allowing type-safe property values using generics.
+ *
+ * @param <T> The type of the value.
+ */
 public abstract class AbstractEventProperty<T> implements EventProperty<T> {
 
     /**
@@ -67,9 +74,6 @@ public abstract class AbstractEventProperty<T> implements EventProperty<T> {
         return true;
     }
 
-    /**
-     * @return The key.
-     */
     @Override
     public final String getKey() {
         return this.key;
@@ -88,5 +92,10 @@ public abstract class AbstractEventProperty<T> implements EventProperty<T> {
         final int prime = 31;
         int result = prime + (this.key == null ? 0 : this.key.hashCode());
         return prime * result + (this.getValue() == null ? 0 : this.getValue().hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("[{0} = {1}]", this.key, this.value);
     }
 }

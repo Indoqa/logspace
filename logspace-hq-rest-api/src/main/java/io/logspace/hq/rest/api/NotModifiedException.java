@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest.api;
 
-import static io.logspace.agent.api.HttpStatusCode.NotModified;
+import static io.logspace.hq.rest.api.HttpStatusCode.NotModified;
 
 public class NotModifiedException extends AbstractLogspaceResourceException {
 

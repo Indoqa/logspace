@@ -17,50 +17,59 @@ import java.util.UUID;
 public final class ImmutableEvent implements Event {
 
     /**
-     * A unique identifier of the event.
+     * The unique identifier of this Event.
      */
     private final String id;
 
     /**
-     * The ID of the Agent which produced the event.
+     * The ID of the Agent which produced this Event.
      */
     private final String agentId;
 
     /**
-     * The event's creation time.
+     * The Event's creation time.
      */
     private final Date timestamp;
 
     /**
-     * The optional type of the event indicating what properties are expected.
+     * The optional type of this Event, indicating what properties are to be expected.
      */
     private final String type;
 
     /**
-     * A optional global event is the root for multiple sub events.
+     * The system this Event was created on.
+     */
+    private final String system;
+
+    /**
+     * The optional marker.
+     */
+    private final String marker;
+
+    /**
+     * An optional global Event is the root for multiple sub Events.
      */
     private final String globalEventId;
 
     /**
-     * The optional direct predecessor event related to this event.
+     * The optional direct predecessor Event related to this Event.
      */
     private final String parentEventId;
 
+    /**
+     * The properties of this Event.
+     */
     private final EventProperties properties;
 
-    private final String system;
-
-    private final String marker;
-
     /**
-     * Create an new event: the <code>id</code> and the <code>timestamp</code> are set automatically by using {@link UUID#randomUUID()}
+     * Create an new Event: the <code>id</code> and the <code>timestamp</code> are set automatically by using {@link UUID#randomUUID()}
      * and <code>new {@link Date}</code>.
      *
-     * @param agentId The id of the agent recording this event.
-     * @param system The system recording this event.
-     * @param type The event type.
-     * @param globalEventId The global event id.
-     * @param parentEventId The parent event id.
+     * @param agentId The id of the agent recording this Event.
+     * @param system The system recording this Event.
+     * @param type The Event type.
+     * @param globalEventId The global Event id.
+     * @param parentEventId The parent Event id.
      * @param marker The marker.
      * @param properties The properties.
      */

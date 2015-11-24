@@ -7,7 +7,6 @@
  */
 package io.logspace.agent.hq;
 
-import static io.logspace.agent.api.HttpStatusCode.NotFound;
 import static java.text.MessageFormat.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -43,6 +42,7 @@ import io.logspace.agent.scheduling.AgentScheduler;
 
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
+    private static final int HTTP_NOT_FOUND = 404;
     private static final int UPLOAD_SIZE = 1000;
     private static final int DEFAULT_COMMIT_DELAY = 300;
     private static final int RETRY_DELAY = 60;
@@ -117,7 +117,8 @@ public class HqAgentController extends AbstractAgentController implements AgentE
 
             String propertyValue = System.getProperty(propertyName);
             if (propertyValue == null) {
-                throw new AgentControllerException("Could not resolve property '" + propertyName + "' in '" + value + "'.");
+                throw new AgentControllerInitializationException(
+                    "Could not resolve property '" + propertyName + "' in '" + value + "'.");
             }
 
             matcher.appendReplacement(stringBuffer, propertyValue.replace('\\', '/'));
@@ -241,7 +242,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
             this.logger.error("Could not download orders because the HQ was not available: {} - Will retry at {}", cex.getMessage(),
                 nextFireTime);
         } catch (HttpResponseException hrex) {
-            if (NotFound.matches(hrex.getStatusCode())) {
+            if (hrex.getStatusCode() == HTTP_NOT_FOUND) {
                 this.logger.error("There was no order available: {} - Will retry at {}", hrex.getMessage(), nextFireTime);
             } else {
                 this.logger.error("Failed to download order. Will retry at " + nextFireTime, hrex);

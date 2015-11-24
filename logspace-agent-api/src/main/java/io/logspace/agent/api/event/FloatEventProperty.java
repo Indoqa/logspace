@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * An {@link EventProperty} carrying a {@link Float} as value.
+ */
 public class FloatEventProperty extends AbstractEventProperty<Float> {
 
     public FloatEventProperty(String key, Float value) {

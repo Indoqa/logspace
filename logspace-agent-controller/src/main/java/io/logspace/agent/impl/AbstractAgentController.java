@@ -80,6 +80,10 @@ public abstract class AbstractAgentController implements AgentController {
      */
     @Override
     public boolean isAgentEnabled(String agentId) {
+        if (!this.agents.containsKey(agentId)) {
+            return false;
+        }
+
         return true;
     }
 

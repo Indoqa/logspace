@@ -10,10 +10,10 @@ package io.logspace.agent.api;
 import java.util.Collection;
 
 import io.logspace.agent.api.event.Event;
+import sun.management.resources.agent;
 
 /**
- * The AgentController is responsible for un-/registering {@link Agent}s and sending of {@link Event}s.
- *
+ * The AgentController is responsible for un-/registering {@link Agent Agents} and handling of {@link Event Events}.
  */
 public interface AgentController {
 
@@ -23,7 +23,7 @@ public interface AgentController {
     void flush();
 
     /**
-     * @return The Id of the AgentController
+     * @return The ID of the AgentController
      */
     String getId();
 
@@ -33,30 +33,39 @@ public interface AgentController {
     String getMarker();
 
     /**
-     * @return The systems name.
+     * @return The system's name.
      */
     String getSystem();
 
+    /**
+     * Determines whether the {@link Agent} with the given <code>agentId</code> is enabled or not.<br>
+     * If no Agent is currently registered with AgentController this method should return <code>false</code>.
+     *
+     * @param agentId The ID of the Agent to check.
+     *
+     * @return <code>true</code> if an Agent with the given <code>agentId</code> is registered and enabled.
+     */
     boolean isAgentEnabled(String agentId);
 
     /**
-     * Registers an agent with this AgentController.
+     * Registers an {@link Agent} with this AgentController.<br>
+     * Registering an Agent more than once has no effect.
      *
-     * @param agent - The agent to be registered.
+     * @param agent - The Agent to be registered.
      */
     void register(Agent agent);
 
     /**
-     * Sends multiple {@link Event}s.
+     * Sends multiple {@link Event Events}.
      *
-     * @param events - {@link Event}s to send.
+     * @param events - The Events to be sent.
      */
     void send(Collection<Event> events);
 
     /**
      * Sends a single {@link Event}.
      *
-     * @param event - The {@link Event} to send.
+     * @param event - The Event to be sent.
      */
     void send(Event event);
 
@@ -66,9 +75,9 @@ public interface AgentController {
     void shutdown();
 
     /**
-     * Unregisters an agent with this AgentController.
+     * Unregisters an {@link agent} with this AgentController.
      *
-     * @param agent - The {@link Agent} to be unregistered.
+     * @param agent - The Agent to be unregistered.
      */
     void unregister(Agent agent);
 

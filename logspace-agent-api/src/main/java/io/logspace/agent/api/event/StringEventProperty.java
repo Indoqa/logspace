@@ -7,19 +7,12 @@
  */
 package io.logspace.agent.api.event;
 
-import java.text.MessageFormat;
-
 /**
- * An immutable key-value pair representation of an event property containing a String.
+ * An {@link EventProperty} carrying a {@link String} as value.
  */
 public class StringEventProperty extends AbstractEventProperty<String> {
 
     public StringEventProperty(String key, String value) {
         super(key, value);
-    }
-
-    @Override
-    public String toString() {
-        return MessageFormat.format("[String-Property key={0}, value={1}]", this.getKey(), this.getValue());
     }
 }

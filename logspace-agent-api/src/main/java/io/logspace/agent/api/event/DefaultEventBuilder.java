@@ -8,7 +8,7 @@
 package io.logspace.agent.api.event;
 
 /**
- * Default event builder implementation which sets an empty type.
+ * Default implementation of an event builder which sets an empty type.
  */
 public class DefaultEventBuilder extends AbstractEventBuilder {
 

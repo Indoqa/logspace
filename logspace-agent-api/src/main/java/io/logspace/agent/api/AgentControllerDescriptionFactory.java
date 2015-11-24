@@ -10,6 +10,15 @@ package io.logspace.agent.api;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * A factory for creating {@link AgentControllerDescription AgentControllerDescriptions}.<br>
+ * <br>
+ * Internally, this factory uses an {@link AgentControllerDescriptionDeserializer} to read AgentControllerDescriptions from an
+ * {@link InputStream}. The actual implementation to be used can be configured with the system-property
+ * 'logspace.configuration-deserializer'.<br>
+ * If no implementation is configured, this factory will fall back to using the
+ * {@link io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer}
+ */
 public final class AgentControllerDescriptionFactory {
 
     private static final String IMPLEMENTATION_PROPERTY_NAME = "logspace.configuration-deserializer";
@@ -22,7 +31,7 @@ public final class AgentControllerDescriptionFactory {
 
     public static AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
         AgentControllerDescriptionDeserializer deserializer = getDeserializer();
-        return deserializer.fromJson(inputStream);
+        return deserializer.read(inputStream);
     }
 
     @SuppressWarnings("unchecked")

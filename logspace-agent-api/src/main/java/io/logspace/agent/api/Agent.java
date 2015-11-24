@@ -11,23 +11,21 @@ import io.logspace.agent.api.order.AgentCapabilities;
 
 /**
  * An Agent is responsible for packaging collected information into {@link io.logspace.agent.api.event.Event Events}.
- *
  */
 public interface Agent {
 
     /**
-     *
-     * @return {@link AgentCapabilities} of this agent.
+     * @return {@link AgentCapabilities} of this Agent.
      */
     AgentCapabilities getCapabilities();
 
     /**
-     * @return The unique id of this agent.
+     * @return The unique ID of this Agent.
      */
     String getId();
 
     /**
-     * The type describes the intention of this agent.
+     * The type describes the intention of this Agent.
      *
      * @return The type of this agent.
      */

@@ -11,15 +11,15 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * The event is the core part of the logspace domain:
+ * The Event is the core part of the logspace domain:
  * <ul>
  * <li>they must have a globally unique identifier,</li>
  * <li>they must have a timestamp</li>
  * <li>they can have a type,</li>
- * <li>they can reference other events
+ * <li>they can reference other Events
  * <ul>
- * <li>a global event which is the root cause for other events</li>
- * <li>a parent event which is the direct predecessor event</li>
+ * <li>a global Event which is the root cause for other Events</li>
+ * <li>a parent Event which is the direct predecessor Event</li>
  * </ul>
  * <li>and the can carry any additional information in the form of a collection of key-value pairs.
  * </ul>
@@ -43,7 +43,7 @@ public interface Event {
     String FIELD_STRING_PROPERTIES = "string-properties";
 
     /**
-     * @return The ID of the Agent which produced this event.
+     * @return The ID of the Agent which produced this Event.
      */
     String getAgentId();
 
@@ -68,7 +68,7 @@ public interface Event {
     Collection<FloatEventProperty> getFloatProperties();
 
     /**
-     * @return The optional global event ID.
+     * @return The optional global Event ID.
      */
     String getGlobalEventId();
 
@@ -87,10 +87,13 @@ public interface Event {
      */
     Collection<LongEventProperty> getLongProperties();
 
+    /**
+     * @return The optional marker of the Event.
+     */
     String getMarker();
 
     /**
-     * @return The optional parent event ID.
+     * @return The optional parent Event ID.
      */
     String getParentEventId();
 
@@ -100,7 +103,7 @@ public interface Event {
     Collection<StringEventProperty> getStringProperties();
 
     /**
-     * @return The system of the event.
+     * @return The system of the Event.
      */
     String getSystem();
 
@@ -110,12 +113,12 @@ public interface Event {
     Date getTimestamp();
 
     /**
-     * @return The optional type of the event.
+     * @return The optional type of the Event.
      */
     String getType();
 
     /**
-     * @return A boolean indicating if this event has properties.
+     * @return A boolean indicating if this Event has properties.
      */
     boolean hasProperties();
 

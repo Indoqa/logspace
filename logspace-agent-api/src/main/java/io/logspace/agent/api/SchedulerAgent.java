@@ -15,9 +15,9 @@ import io.logspace.agent.api.order.AgentOrder;
 public interface SchedulerAgent extends Agent {
 
     /**
-     * This method will be called by a scheduler.
+     * This method will be called by a scheduler when the execution of the Agent is due.
      *
-     * @param agentOrder - The {@link AgentOrder}
+     * @param agentOrder - The {@link AgentOrder} to be executed
      */
     void execute(AgentOrder agentOrder);
 

@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest.api;
 
-import static io.logspace.agent.api.HttpStatusCode.NotFound;
+import static io.logspace.hq.rest.api.HttpStatusCode.NotFound;
 
 public class OrderNotFoundException extends AbstractLogspaceResourceException {
 

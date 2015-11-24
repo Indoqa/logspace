@@ -10,6 +10,9 @@ package io.logspace.agent.api.event;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * A collection of {@link EventProperty EventProperties}.
+ */
 public class EventProperties {
 
     private final Collection<BooleanEventProperty> booleanProperties = new ArrayList<BooleanEventProperty>();
@@ -77,6 +80,8 @@ public class EventProperties {
     }
 
     public boolean isEmpty() {
-        return false;
+        return this.booleanProperties.isEmpty() && this.dateProperties.isEmpty() && this.doubleProperties.isEmpty()
+            && this.floatProperties.isEmpty() && this.integerProperties.isEmpty() && this.longProperties.isEmpty()
+            && this.stringProperties.isEmpty();
     }
 }

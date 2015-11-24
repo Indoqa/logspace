@@ -10,13 +10,17 @@ package io.logspace.agent.api.event;
 import java.util.Date;
 
 /**
- * Base class for event builders. Extend it to simplify property handling by providing explicit methods.
+ * Base class for Event Builders.<br>
+ * Each instance is intended for creating a single Event. <br>
+ * <br>
+ * Subclasses should provide additional methods for setting specific {@link EventProperty EventProperties}.
  */
 public abstract class AbstractEventBuilder {
 
     private final EventBuilderData eventBuilderData;
 
     private String globalEventId;
+
     private String parentEventId;
 
     private final EventProperties properties = new EventProperties();
@@ -29,27 +33,7 @@ public abstract class AbstractEventBuilder {
      * @param system The system recording this event.
      */
     protected AbstractEventBuilder(EventBuilderData eventBuilderData) {
-        this(eventBuilderData, null, null);
-    }
-
-    /**
-     * Create an event builder that uses another event as starting point. It uses the others event <code>id</code> as the new event's
-     * {@link #parentEventId} and copies its {@link #globalEventId}.
-     *
-     * @param agentId The id of the agent recording this event.
-     *
-     * @param system The system recording this event.
-     *
-     * @param parentEvent The parent event to be used as template.
-     */
-    protected AbstractEventBuilder(EventBuilderData eventBuilderData, Event parentEvent) {
-        this(eventBuilderData, parentEvent.getId(), parentEvent.getGlobalEventId());
-    }
-
-    protected AbstractEventBuilder(EventBuilderData eventBuilderData, String parentEventId, String globalEventId) {
         this.eventBuilderData = eventBuilderData;
-        this.parentEventId = parentEventId;
-        this.globalEventId = globalEventId;
     }
 
     /**

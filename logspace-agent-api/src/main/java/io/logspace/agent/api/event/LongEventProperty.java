@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * An {@link EventProperty} carrying a {@link Long} as value.
+ */
 public class LongEventProperty extends AbstractEventProperty<Long> {
 
     public LongEventProperty(String key, Long value) {

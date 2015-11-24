@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.hq;
 
-import static io.logspace.agent.api.HttpStatusCode.Accepted;
-
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -18,7 +16,7 @@ public class UploadEventsResponseHandler implements ResponseHandler<Void> {
 
     @Override
     public Void handleResponse(final HttpResponse response) throws IOException {
-        if (Accepted.notMatches(response.getStatusLine().getStatusCode())) {
+        if (response.getStatusLine().getStatusCode() != 202) {
             throw new UploadException();
         }
 

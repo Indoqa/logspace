@@ -7,8 +7,6 @@
  */
 package io.logspace.hq.rest.api;
 
-import io.logspace.agent.api.HttpStatusCode;
-
 import java.util.HashMap;
 import java.util.Map;
 

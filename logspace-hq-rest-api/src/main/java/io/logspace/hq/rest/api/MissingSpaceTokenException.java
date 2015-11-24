@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest.api;
 
-import static io.logspace.agent.api.HttpStatusCode.Forbidden;
+import static io.logspace.hq.rest.api.HttpStatusCode.Forbidden;
 
 public class MissingSpaceTokenException extends AbstractLogspaceResourceException {
 

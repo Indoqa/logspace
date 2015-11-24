@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * An {@link EventProperty} carrying a {@link Boolean} as value.
+ */
 public class BooleanEventProperty extends AbstractEventProperty<Boolean> {
 
     public BooleanEventProperty(String key, Boolean value) {

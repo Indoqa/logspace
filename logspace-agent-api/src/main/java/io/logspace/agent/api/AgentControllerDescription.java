@@ -11,6 +11,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A description for instantiating and configuring an {@link AgentController}.
+ */
 public class AgentControllerDescription {
 
     public static final String FIELD_ID = "id";
@@ -19,10 +22,19 @@ public class AgentControllerDescription {
     public static final String FIELD_PARAMETER_NAME = "parameter-name";
     public static final String FIELD_PARAMETER_VALUE = "parameter-value";
 
+    /**
+     * The fully-qualified class name of the AgentController implementation to be used.
+     */
     private String className;
 
+    /**
+     * The ID of the AgentController.
+     */
     private String id;
 
+    /**
+     * The {@link Parameter Parameters} to be forwared to the AgentController.
+     */
     private List<Parameter> parameters = new ArrayList<Parameter>();
 
     public void addParameter(Parameter parameter) {
@@ -94,9 +106,19 @@ public class AgentControllerDescription {
         this.parameters = parameters;
     }
 
+    /**
+     * A configuration parameter in an {@link AgentControllerDescription}.
+     */
     public static class Parameter {
 
+        /**
+         * The name of the Parameter.
+         */
         private String name;
+
+        /**
+         * The value of the Parameter.
+         */
         private String value;
 
         public static Parameter create(String name, String value) {

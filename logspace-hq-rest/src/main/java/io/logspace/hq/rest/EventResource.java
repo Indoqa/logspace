@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest;
 
-import static io.logspace.agent.api.HttpStatusCode.Accepted;
+import static io.logspace.hq.rest.api.HttpStatusCode.Accepted;
 
 import java.io.IOException;
 import java.util.Collection;

@@ -7,10 +7,13 @@
  */
 package io.logspace.agent.api;
 
-import static io.logspace.agent.api.order.TriggerType.Application;
-import static io.logspace.agent.api.order.TriggerType.Off;
+import static io.logspace.agent.api.order.TriggerType.*;
+
 import io.logspace.agent.api.order.TriggerType;
 
+/**
+ * Base class for all {@link Agent Agents} that will be triggered by an application.
+ */
 public abstract class AbstractApplicationAgent extends AbstractAgent implements ApplicationAgent {
 
     private static final TriggerType[] TRIGGER_TYPES = new TriggerType[] {Off, Application};

@@ -7,8 +7,6 @@
  */
 package io.logspace.agent.api;
 
-import io.logspace.agent.api.util.ConsoleWriter;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +16,25 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
+import io.logspace.agent.api.util.ConsoleWriter;
+
+/**
+ * Factory for creating the {@link AgentController}.<br>
+ * <br>
+ * This class implements the lookup mechanism for find a {@link AgentControllerDescription} if none has been set programmatically:
+ * <ol>
+ * <li>Check the system-property 'logspace.config'. If a value is set, treat it as URL or file path and try to load the description
+ * using {@link #setDescription(URL)}.</li>
+ * <li>If the file './logspace.json' exists, try to load the description using {@link #setDescription(URL)}</li>
+ * <li>If the resource '/logspace-test.json' exists in classpath, try to load the description using {@link #setDescription(URL)}</li>
+ * <li>If the resource '/logspace.json' exists in classpath, try to load the description using {@link #setDescription(URL)}</li>
+ * <li>If the resource '/logspace-default.json' exists in classpath, try to load the description using {@link #setDescription(URL)}
+ * </li>
+ * </ol>
+ * If none of these locations exist, initializing an {@link AgentController} will fail.
+ *
+ * Setting an AgentControllerDescription programmatically will override the default lookup mechanism.
+ */
 public final class AgentControllerProvider {
 
     public static final String PROPERTY_LOGSPACE_CONFIG = "logspace.config";
@@ -31,12 +48,22 @@ public final class AgentControllerProvider {
         // hide utility class constructor
     }
 
+    /**
+     * Flush the current {@link AgentController}.<br>
+     * This method does nothing if no AgentController is initialized.
+     */
     public static synchronized void flush() {
         if (agentController != null) {
             agentController.flush();
         }
     }
 
+    /**
+     * Get the currently configured {@link AgentController}.<br>
+     * This method will initialize the AgentController if necessary.
+     *
+     * @return The current AgentController.
+     */
     public static synchronized AgentController getAgentController() {
         if (agentController == null) {
             agentController = initialize();
@@ -45,28 +72,61 @@ public final class AgentControllerProvider {
         return agentController;
     }
 
+    /**
+     * @return <code>true</code> if an {@link AgentController} is initialized, <code>false</code> otherwise.
+     */
     public static synchronized boolean isInitialized() {
         return agentController != null;
     }
 
+    /**
+     * Sets the {@link AgentControllerDescription} to be used for initializing the {@link AgentController}.<br>
+     * <br>
+     * This method will fail with an {@link AgentControllerInitializationException} if the AgentController has already been
+     * initialized.<br>
+     * Calling this method will <code>null</code> will revert back to the default lookup mechanism.
+     *
+     * @param agentControllerDescription The AgentControllerDescription to be set.
+     */
     public static synchronized void setDescription(AgentControllerDescription agentControllerDescription) {
         if (isInitialized()) {
-            throw new AgentControllerException("Cannot set a new description after the AgentController has already been initialized.");
+            throw new AgentControllerInitializationException(
+                "Cannot set a new description after the AgentController has already been initialized.");
         }
 
         AgentControllerProvider.agentControllerDescription = agentControllerDescription;
     }
 
+    /**
+     * Set the {@link AgentControllerDescription} by reading it from the given {@link InputStream} and close the InputStream.<br>
+     * <br>
+     * This method expects the InputStream to provide a description in a format, that can be read by the
+     * {@link AgentControllerDescriptionFactory}.<br>
+     * This method will fail with an {@link AgentControllerInitializationException} if the AgentController has already been initialized
+     * or the AgentControllerDescription could not be loaded from the InputStream.
+     *
+     * @param inputStream The InputStream to read the AgentControllerDescription from.
+     */
     public static synchronized void setDescription(InputStream inputStream) {
         try {
             setDescription(AgentControllerDescriptionFactory.fromJson(inputStream));
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load logspace configuration.", ioex);
+            throw new AgentControllerInitializationException("Could not load logspace configuration.", ioex);
         } finally {
             closeQuietly(inputStream);
         }
     }
 
+    /**
+     * Set the {@link AgentControllerDescription} by reading it from the given {@link URL}.<br>
+     * <br>
+     * This method expects the URL to point to a description in a format, that can be read by the
+     * {@link AgentControllerDescriptionFactory}.<br>
+     * This method will fail with an {@link AgentControllerInitializationException} if the AgentController has already been initialized
+     * or the {@link AgentControllerDescription} could not be loaded from the URL.
+     *
+     * @param descriptionURL The URL to read the AgentControllerDescription from.
+     */
     public static synchronized void setDescription(URL descriptionURL) {
         if (descriptionURL == null) {
             return;
@@ -76,10 +136,20 @@ public final class AgentControllerProvider {
             setDescription(descriptionURL.openStream());
             ConsoleWriter.writeSystem(MessageFormat.format("Loaded logspace configuration from ''{0}''.", descriptionURL));
         } catch (IOException ioex) {
-            throw new AgentControllerException("Could not load logspace configuration from URL '" + descriptionURL + "'.", ioex);
+            throw new AgentControllerInitializationException(
+                "Could not load logspace configuration from URL '" + descriptionURL + "'.", ioex);
         }
     }
 
+    /**
+     * Flush the current {@link AgentController} and shut it down.<br>
+     * After a successful call to this method, {@link #isInitialized()} will return <code>false</code> and a new
+     * {@link AgentControllerDescription} can be set.<br>
+     * A call to {@link #getAgentController()} will initialize a new AgentController, using the last AgentControllerDescription
+     * configured. <br>
+     * <br>
+     * This method does nothing if no AgentController is initialized.
+     */
     public static synchronized void shutdown() {
         if (agentController == null) {
             return;
@@ -106,7 +176,7 @@ public final class AgentControllerProvider {
         try {
             return constructor.newInstance(arguments);
         } catch (Exception e) {
-            throw new AgentControllerException(
+            throw new AgentControllerInitializationException(
                 "Failed to instantiate Agent Controller of class '" + constructor.getDeclaringClass() + "'.", e);
         }
     }
@@ -141,8 +211,9 @@ public final class AgentControllerProvider {
             return (AgentController) executeConstructor(constructor);
         }
 
-        throw new AgentControllerException("Could not find a suitable constructor for AgentController '" + agentControllerClass
-            + "'. Either a constructor accepting " + AgentControllerDescription.class + " or a default constructor is required.");
+        throw new AgentControllerInitializationException(
+            "Could not find a suitable constructor for AgentController '" + agentControllerClass + "'. Either a constructor accepting "
+                + AgentControllerDescription.class + " or a default constructor is required.");
     }
 
     private static void initializeDescription() {
@@ -165,7 +236,7 @@ public final class AgentControllerProvider {
         initializeDescriptionFromClasspath();
 
         if (!hasDescription()) {
-            throw new AgentControllerException("Could not find any description.");
+            throw new AgentControllerInitializationException("Could not find any description.");
         }
     }
 
@@ -225,13 +296,14 @@ public final class AgentControllerProvider {
     @SuppressWarnings("unchecked")
     private static Class<? extends AgentController> loadClass(AgentControllerDescription description) {
         if (description.getClassName() == null) {
-            throw new AgentControllerException("The Agent Controller class is unconfigured.");
+            throw new AgentControllerInitializationException("The Agent Controller class is unconfigured.");
         }
 
         try {
             return (Class<? extends AgentController>) Class.forName(description.getClassName());
         } catch (ClassNotFoundException cnfex) {
-            throw new AgentControllerException("Could not load Agent Controller class '" + description.getClassName() + "'.", cnfex);
+            throw new AgentControllerInitializationException(
+                "Could not load Agent Controller class '" + description.getClassName() + "'.", cnfex);
         }
     }
 }

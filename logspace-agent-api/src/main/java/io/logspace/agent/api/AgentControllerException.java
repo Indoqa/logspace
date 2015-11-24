@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api;
 
+/**
+ * A {@link RuntimeException} that can be thrown by {@link AgentController AgentControllers} or {@link Agent Agents}.
+ */
 public class AgentControllerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

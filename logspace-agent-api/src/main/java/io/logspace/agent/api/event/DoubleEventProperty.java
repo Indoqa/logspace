@@ -7,6 +7,9 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * An {@link EventProperty} carrying a {@link Double} as value.
+ */
 public class DoubleEventProperty extends AbstractEventProperty<Double> {
 
     public DoubleEventProperty(String key, Double value) {

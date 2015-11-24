@@ -7,6 +7,11 @@
  */
 package io.logspace.agent.api.event;
 
+/**
+ * The interface defining a property of an {@link Event}.
+ *
+ * @param <T> The type of the value.
+ */
 public interface EventProperty<T> {
 
     String getKey();

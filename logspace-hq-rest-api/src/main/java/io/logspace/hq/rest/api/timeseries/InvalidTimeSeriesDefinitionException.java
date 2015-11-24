@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest.api.timeseries;
 
-import static io.logspace.agent.api.HttpStatusCode.BadRequest;
+import static io.logspace.hq.rest.api.HttpStatusCode.BadRequest;
 import static java.text.MessageFormat.format;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyType;

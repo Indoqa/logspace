@@ -28,11 +28,11 @@ public final class AgentControllerDescriptionJsonDeserializer extends AbstractJs
 
     public static AgentControllerDescription fromJson(byte[] data) throws IOException {
         AgentControllerDescriptionJsonDeserializer deserializer = new AgentControllerDescriptionJsonDeserializer();
-        return deserializer.fromJson(new ByteArrayInputStream(data));
+        return deserializer.read(new ByteArrayInputStream(data));
     }
 
     @Override
-    public AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
+    public AgentControllerDescription read(InputStream inputStream) throws IOException {
         this.setInputStream(inputStream);
         return this.deserialize();
     }

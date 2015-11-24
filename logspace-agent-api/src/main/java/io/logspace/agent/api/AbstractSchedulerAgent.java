@@ -7,10 +7,13 @@
  */
 package io.logspace.agent.api;
 
-import static io.logspace.agent.api.order.TriggerType.Off;
-import static io.logspace.agent.api.order.TriggerType.Scheduler;
+import static io.logspace.agent.api.order.TriggerType.*;
+
 import io.logspace.agent.api.order.TriggerType;
 
+/**
+ * Base class for {@link Agent Agents} that will be triggered by a scheduler.
+ */
 public abstract class AbstractSchedulerAgent extends AbstractAgent implements SchedulerAgent {
 
     private static final TriggerType[] TRIGGER_TYPES = new TriggerType[] {Off, Scheduler};

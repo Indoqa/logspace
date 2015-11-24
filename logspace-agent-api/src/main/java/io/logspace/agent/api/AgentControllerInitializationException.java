@@ -7,6 +7,10 @@
  */
 package io.logspace.agent.api;
 
+/**
+ * A {@link RuntimeException} that will be thrown by the {@link AgentControllerProvider} when initializing an {@link AgentController}
+ * failed.
+ */
 public class AgentControllerInitializationException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

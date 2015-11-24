@@ -10,15 +10,18 @@ package io.logspace.agent.api;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Interface defining a deserializer for {@link AgentControllerDescription AgentControllerDescriptions}.
+ */
 public interface AgentControllerDescriptionDeserializer {
 
     /**
-     * @param inputStream - The inputStream to deserialize from.
+     * @param inputStream - The inputStream to read from.
      *
-     * @throws IOException If an error occurs on deserilaziation.
+     * @throws IOException If an error occurs.
      *
      * @return The {@link AgentControllerDescription}
      */
-    AgentControllerDescription fromJson(InputStream inputStream) throws IOException;
+    AgentControllerDescription read(InputStream inputStream) throws IOException;
 
 }

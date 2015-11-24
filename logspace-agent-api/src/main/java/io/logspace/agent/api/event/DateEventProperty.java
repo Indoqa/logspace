@@ -9,6 +9,9 @@ package io.logspace.agent.api.event;
 
 import java.util.Date;
 
+/**
+ * An {@link EventProperty} carrying a {@link Date} as value.
+ */
 public class DateEventProperty extends AbstractEventProperty<Date> {
 
     public DateEventProperty(String key, Date value) {
