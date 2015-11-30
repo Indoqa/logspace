@@ -7,6 +7,26 @@
  */
 package io.logspace.agent.api.order;
 
+import io.logspace.agent.api.event.EventProperty;
+
+/**
+ * Defines the types of aggregation that can be applied to the values of an {@link EventProperty}.
+ */
 public enum Aggregate {
-    max, min, avg, count, sum;
+    /**
+     * Select the maximum of the values, according to their natural order.
+     */
+    max, /**
+          * Select the minimum of the values, according to their natural order.
+          */
+    min, /**
+          * Calculate the arithmetic mean of the values, i.e. the <code>sum</code> / <code>count</code>.
+          */
+    avg, /**
+          * Select the number of values.
+          */
+    count, /**
+            * Calculate the sum of the values.
+            */
+    sum;
 }

@@ -8,18 +8,14 @@
 package io.logspace.agent.api.json;
 
 import static com.fasterxml.jackson.core.JsonEncoding.UTF8;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_AGENT_ORDERS;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_COUNT;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_COMMIT_MAX_SECONDS;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_ID;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_PARAMETER;
-import static io.logspace.agent.api.order.AgentControllerOrder.FIELD_TRIGGER_TYPE;
-import io.logspace.agent.api.order.AgentControllerOrder;
-import io.logspace.agent.api.order.AgentOrder;
+import static io.logspace.agent.api.order.AgentControllerOrder.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import io.logspace.agent.api.order.AgentControllerOrder;
+import io.logspace.agent.api.order.AgentOrder;
 
 public final class AgentControllerOrdersJsonSerializer extends AbstractJsonSerializer {
 
@@ -70,7 +66,6 @@ public final class AgentControllerOrdersJsonSerializer extends AbstractJsonSeria
     }
 
     private void writeCommitSettings(AgentControllerOrder value) throws IOException {
-        this.writeOptionalIntField(FIELD_COMMIT_MAX_COUNT, value.getCommitMaxCount());
         this.writeOptionalIntField(FIELD_COMMIT_MAX_SECONDS, value.getCommitMaxSeconds());
     }
 }

@@ -7,12 +7,34 @@
  */
 package io.logspace.agent.api.order;
 
+import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.event.EventProperty;
+
+/**
+ * A description of an {@link EventProperty}.
+ *
+ * This class can be used by an {@link Agent} to provide additional information about his EventProperties.
+ */
 public class PropertyDescription implements Comparable<PropertyDescription> {
 
+    /**
+     * The ID of the {@link EventProperty}.
+     */
     private String id;
+
+    /**
+     * The name of the {@link EventProperty} that is suitable for displaying in a user interface.
+     */
     private String name;
 
+    /**
+     * The type of the value of the {@link EventProperty}.
+     */
     private PropertyType propertyType;
+
+    /**
+     * {@link PropertyUnit PropertyUnits} suitable for the {@link EventProperty}.
+     */
     private PropertyUnit[] units;
 
     @Override
@@ -42,6 +64,9 @@ public class PropertyDescription implements Comparable<PropertyDescription> {
         return this.units;
     }
 
+    /**
+     * @return <code>true</code> if this {@link PropertyDescription} contains at least one {@link PropertyUnit}.
+     */
     public boolean hasUnits() {
         return this.units != null && this.units.length > 0;
     }

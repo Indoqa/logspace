@@ -7,14 +7,32 @@
  */
 package io.logspace.agent.api.order;
 
+import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.event.EventProperty;
+
+/**
+ * This class describes the capabilities of an {@link Agent}.
+ */
 public class AgentCapabilities {
 
+    /**
+     * The ID of the {@link Agent}.
+     */
     private String id;
 
+    /**
+     * The type of the {@link Agent}.
+     */
     private String type;
 
+    /**
+     * The {@link TriggerType TriggerTypes} the {@link Agent} supports.
+     */
     private TriggerType[] supportedTriggerTypes;
 
+    /**
+     * The descriptions of the {@link Agent Agent's} {@link EventProperty EventProperties}.
+     */
     private PropertyDescription[] propertyDescriptions;
 
     public String getId() {
@@ -33,6 +51,9 @@ public class AgentCapabilities {
         return this.type;
     }
 
+    /**
+     * @return <code>true</code> if this {@link AgentCapabilities} contains at least one {@link PropertyDescription}.
+     */
     public boolean hasPropertyDescriptions() {
         return this.propertyDescriptions != null && this.propertyDescriptions.length > 0;
     }

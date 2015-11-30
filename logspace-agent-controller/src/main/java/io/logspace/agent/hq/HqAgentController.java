@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -222,6 +223,11 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     public void update(Date nextFireTime) {
         try {
             this.uploadCapabilities();
+        } catch (UnknownHostException uhex) {
+            this.logger.error("Could not upload capabilities because the HQ was not available: {} - Will retry at {}",
+                uhex.getMessage(), nextFireTime);
+            // no need to try downloading as well
+            return;
         } catch (NoRouteToHostException nrthex) {
             this.logger.error("Could not upload capabilities because the HQ was not available: {} - Will retry at {}",
                 nrthex.getMessage(), nextFireTime);

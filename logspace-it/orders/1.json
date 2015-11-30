@@ -4,6 +4,5 @@
     "trigger-type" : "scheduler",
     "trigger-parameter" : "0/1 * * * * ? *"
   } ],
-  "commit-max-count" : 1000,
   "commit-max-seconds" : 60
 }

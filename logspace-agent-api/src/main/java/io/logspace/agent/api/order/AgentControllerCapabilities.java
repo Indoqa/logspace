@@ -10,6 +10,14 @@ package io.logspace.agent.api.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.logspace.agent.api.Agent;
+import io.logspace.agent.api.AgentController;
+
+/**
+ * This class describes the capabilities of an {@link AgentController} and its currently registered {@link Agent Agents}.
+ *
+ * @see AgentCapabilities
+ */
 public class AgentControllerCapabilities {
 
     public static final String FIELD_ID = "id";
@@ -25,11 +33,20 @@ public class AgentControllerCapabilities {
     public static final String FIELD_PROPERTY_UNITS = "units";
     public static final String FIELD_PROPERTY_FACTORS = "factors";
 
+    /**
+     * The ID of the {@link AgentController}
+     */
     private String id;
 
-    private String system;
-
+    /**
+     * The space of the {@link AgentController}
+     */
     private String space;
+
+    /**
+     * The system of the {@link AgentController}
+     */
+    private String system;
 
     private List<AgentCapabilities> agentCapabilities = new ArrayList<AgentCapabilities>();
 
@@ -57,6 +74,9 @@ public class AgentControllerCapabilities {
         return this.system;
     }
 
+    /**
+     * @return <code>true</code> if this {@link AgentControllerCapabilities} contains at least one {@link AgentCapabilities}.
+     */
     public boolean hasAgentCapabilities() {
         return this.agentCapabilities != null && !this.agentCapabilities.isEmpty();
     }

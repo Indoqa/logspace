@@ -30,7 +30,6 @@ public class AgentControllerOrderTest {
     public void test() throws IOException {
         for (int i = 0; i < 100; i++) {
             AgentControllerOrder expected = new AgentControllerOrder();
-            expected.setCommitMaxCount(RANDOM.nextInt(Integer.MAX_VALUE));
             expected.setCommitMaxSeconds(RANDOM.nextInt(Integer.MAX_VALUE));
             expected.setAgentOrders(this.getRandomAgentOrders());
 
@@ -43,7 +42,6 @@ public class AgentControllerOrderTest {
     }
 
     private void compare(AgentControllerOrder expected, AgentControllerOrder actual) {
-        assertEquals(expected.getCommitMaxCount(), actual.getCommitMaxCount());
         assertEquals(expected.getCommitMaxSeconds(), actual.getCommitMaxSeconds());
 
         for (int i = 0; i < expected.getAgentOrdersCount(); i++) {

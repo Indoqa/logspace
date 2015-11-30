@@ -7,17 +7,18 @@
  */
 package io.logspace.agent.api.order;
 
-import static io.logspace.agent.api.order.Aggregate.avg;
-import static io.logspace.agent.api.order.Aggregate.count;
-import static io.logspace.agent.api.order.Aggregate.max;
-import static io.logspace.agent.api.order.Aggregate.min;
-import static io.logspace.agent.api.order.Aggregate.sum;
+import static io.logspace.agent.api.order.Aggregate.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import io.logspace.agent.api.event.EventProperty;
+
+/**
+ * Defines the types of the values an {@link EventProperty} can carry and which aggregations are possible for those values.
+ */
 public enum PropertyType {
 
     BOOLEAN(count), DATE(count, min, max, avg), INTEGER(count, min, max, avg, sum), LONG(count, min, max, avg, sum),
@@ -25,13 +26,13 @@ public enum PropertyType {
 
     private static final Map<String, PropertyType> PROPERTY_TYPES = new HashMap<String, PropertyType>();
 
-    private final Set<Aggregate> allowedAggregates = new HashSet<Aggregate>();
-
     static {
         for (PropertyType eachValue : PropertyType.values()) {
             PROPERTY_TYPES.put(eachValue.name().toLowerCase(), eachValue);
         }
     }
+
+    private final Set<Aggregate> allowedAggregates = new HashSet<Aggregate>();
 
     private PropertyType(Aggregate... allowedAggregate) {
         for (Aggregate eachAllowedAggregate : allowedAggregate) {

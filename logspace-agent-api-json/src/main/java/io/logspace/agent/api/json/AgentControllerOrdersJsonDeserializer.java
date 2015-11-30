@@ -70,7 +70,6 @@ public final class AgentControllerOrdersJsonDeserializer extends AbstractJsonDes
             }
         }
 
-        result.setCommitMaxCount(this.readOptionalIntField(FIELD_COMMIT_MAX_COUNT));
         result.setCommitMaxSeconds(this.readOptionalIntField(FIELD_COMMIT_MAX_SECONDS));
 
         this.prepareToken();
