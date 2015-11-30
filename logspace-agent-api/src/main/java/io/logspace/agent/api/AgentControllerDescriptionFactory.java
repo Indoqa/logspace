@@ -21,7 +21,7 @@ import java.io.InputStream;
  */
 public final class AgentControllerDescriptionFactory {
 
-    private static final String IMPLEMENTATION_PROPERTY_NAME = "logspace.configuration-deserializer";
+    private static final String IMPLEMENTATION_PROPERTY_NAME = "logspace.config-deserializer";
 
     private static final String DEFAULT_IMPLEMENTATION = "io.logspace.agent.api.json.AgentControllerDescriptionJsonDeserializer";
 

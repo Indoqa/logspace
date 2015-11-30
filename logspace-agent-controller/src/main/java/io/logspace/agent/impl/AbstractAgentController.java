@@ -13,10 +13,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.AgentController;
 import io.logspace.agent.api.AgentControllerDescription;
+import io.logspace.agent.api.AgentControllerInitializationException;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.util.ConsoleWriter;
@@ -41,6 +44,28 @@ public abstract class AbstractAgentController implements AgentController {
         this.marker = agentControllerDescription.getParameterValue(MARKER_PARAMETER);
 
         this.initalizeSystem();
+    }
+
+    protected static String resolveProperties(String value) {
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
+        Matcher matcher = pattern.matcher(value);
+    
+        StringBuffer stringBuffer = new StringBuffer();
+        while (matcher.find()) {
+            String propertyName = matcher.group(1);
+    
+            String propertyValue = System.getProperty(propertyName);
+            if (propertyValue == null) {
+                throw new AgentControllerInitializationException(
+                    "Could not resolve property '" + propertyName + "' in '" + value + "'.");
+            }
+    
+            matcher.appendReplacement(stringBuffer, propertyValue.replace('\\', '/'));
+        }
+    
+        matcher.appendTail(stringBuffer);
+    
+        return stringBuffer.toString();
     }
 
     /**

@@ -3,7 +3,7 @@
   "class-name" : "io.logspace.agent.hq.HqAgentController",
   "parameters" : {
     "space-token" : "development",
-    "base-url" : "http://localhost:4567",
+    "hq-url" : "http://localhost:4567",
     "queue-directory" : "${java.io.tmpdir}/logspace-monitor-event-queue"
   }
 }

@@ -7,13 +7,7 @@
  */
 package io.logspace.agent.cxf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import io.logspace.agent.api.AgentControllerProvider;
-import io.logspace.agent.api.event.Event;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.cxf.resource.TestCxfResource;
-import io.logspace.agent.test.TestAgentController;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +21,12 @@ import org.apache.cxf.transport.local.LocalConduit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import io.logspace.agent.api.AgentControllerProvider;
+import io.logspace.agent.api.event.Event;
+import io.logspace.agent.api.event.EventProperty;
+import io.logspace.agent.cxf.resource.TestCxfResource;
+import io.logspace.agent.test.TestAgentController;
 
 public class CxfAgentTest {
 
@@ -104,13 +104,11 @@ public class CxfAgentTest {
 
     @Test
     public void test() {
-        TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
-
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(0, TestAgentController.getCollectedEvents().size());
 
         this.executeCxfGetMethod();
 
-        List<Event> collectedEvents = agentController.getCollectedEvents();
+        List<Event> collectedEvents = TestAgentController.getCollectedEvents();
         assertEquals(1, collectedEvents.size());
         Event event = collectedEvents.get(0);
         assertEquals("GET", getProperty(event.getStringProperties(), "http_method"));
@@ -118,7 +116,7 @@ public class CxfAgentTest {
 
         this.executeCxfCrudMethods();
 
-        collectedEvents = agentController.getCollectedEvents();
+        collectedEvents = TestAgentController.getCollectedEvents();
         assertEquals(8, collectedEvents.size());
 
         event = collectedEvents.get(1);

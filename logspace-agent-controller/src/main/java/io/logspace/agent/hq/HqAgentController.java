@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
@@ -48,7 +46,7 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     private static final int DEFAULT_COMMIT_DELAY = 300;
     private static final int RETRY_DELAY = 60;
 
-    private static final String BASE_URL_PARAMETER = "base-url";
+    private static final String HQ_URL_PARAMETER = "hq-url";
     private static final String SPACE_TOKEN_PARAMETER = "space-token";
     private static final String QUEUE_DIRECTORY_PARAMETER = "queue-directory";
     private static final String HQ_COMMUNICATION_INTERVAL_PARAMETER = "hq-communication-interval";
@@ -77,12 +75,12 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         this.initializeAgentScheduler(agentControllerDescription);
     }
 
-    public static void install(String id, String baseUrl, String queueDirectory, String spaceToken, String marker) {
+    public static void install(String id, String hqUrl, String queueDirectory, String spaceToken, String marker) {
         AgentControllerDescription description = new AgentControllerDescription();
 
         description.setClassName(HqAgentController.class.getName());
         description.setId(id);
-        description.addParameter(Parameter.create(BASE_URL_PARAMETER, baseUrl));
+        description.addParameter(Parameter.create(HQ_URL_PARAMETER, hqUrl));
         description.addParameter(Parameter.create(QUEUE_DIRECTORY_PARAMETER, queueDirectory));
         description.addParameter(Parameter.create(SPACE_TOKEN_PARAMETER, spaceToken));
         description.addParameter(Parameter.create(MARKER_PARAMETER, marker));
@@ -106,28 +104,6 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         }
 
         return new File(file.getAbsoluteFile(), createQueueFileName(agentControllerId));
-    }
-
-    private static String resolveProperties(String value) {
-        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
-        Matcher matcher = pattern.matcher(value);
-
-        StringBuffer stringBuffer = new StringBuffer();
-        while (matcher.find()) {
-            String propertyName = matcher.group(1);
-
-            String propertyValue = System.getProperty(propertyName);
-            if (propertyValue == null) {
-                throw new AgentControllerInitializationException(
-                    "Could not resolve property '" + propertyName + "' in '" + value + "'.");
-            }
-
-            matcher.appendReplacement(stringBuffer, propertyValue.replace('\\', '/'));
-        }
-
-        matcher.appendTail(stringBuffer);
-
-        return stringBuffer.toString();
     }
 
     @Override
@@ -358,9 +334,9 @@ public class HqAgentController extends AbstractAgentController implements AgentE
     }
 
     private void initializeHqClient(AgentControllerDescription agentControllerDescription) {
-        String baseUrl = agentControllerDescription.getParameterValue(BASE_URL_PARAMETER);
+        String hqUrl = agentControllerDescription.getParameterValue(HQ_URL_PARAMETER);
         String spaceToken = agentControllerDescription.getParameterValue(SPACE_TOKEN_PARAMETER);
-        this.hqClient = new HqClient(baseUrl, this.getId(), spaceToken);
+        this.hqClient = new HqClient(hqUrl, this.getId(), spaceToken);
     }
 
     private void initializePersistentQueue(AgentControllerDescription agentControllerDescription) {
