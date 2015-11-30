@@ -10,7 +10,7 @@ The *Logspace Demo* is a prepared setup that allows you to test-drive Logspace o
 >All files will be stored in your temp directory.<br/>
 See "Behind the Curtain" for details.
 
-## Prerequsites
+## Prerequisites
 The only requirement for running the *Logspace Demo* is that you have installed a Java Runtime Environment 8 (JRE8).
 We encourage you to use the latest version and stay up-to-date with security and bug fix releases.
 
