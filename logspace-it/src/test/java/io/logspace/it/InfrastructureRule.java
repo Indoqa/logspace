@@ -72,7 +72,8 @@ public class InfrastructureRule extends ExternalResource {
         File solrDataDirectory = getCanonicalFile(new File("./target/solr"));
         FileUtils.deleteDirectory(solrDataDirectory);
 
-        File capabilitiesDirectory = new File("./target/capabilities");
+        File capabilitiesDirectory = new File("./capabilities");
+        FileUtils.deleteDirectory(capabilitiesDirectory);
         capabilitiesDirectory.mkdirs();
 
         System.setProperty("port", String.valueOf(TEST_PORT));

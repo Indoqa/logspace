@@ -7,11 +7,7 @@
  */
 package io.logspace.hq.webapp.mode;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.apache.commons.io.IOUtils;
 
@@ -42,13 +38,9 @@ public class DemoHqMode implements HqMode {
         this.initializeDemoSolr();
 
         this.initializeDemoCapabilities();
-        this.initializeDemoConfigs();
-        this.initializeDemoSpace();
     }
 
     private void createFile(String resourceDirectory, File outputDirectory, String fileName) {
-        outputDirectory.mkdirs();
-
         InputStream resourceStream = null;
         OutputStream outputStream = null;
 
@@ -71,19 +63,20 @@ public class DemoHqMode implements HqMode {
     }
 
     private void initializeDemoCapabilities() {
+        System.setProperty("logspace.hq-webapp.data-directory", this.getBaseDir().getAbsolutePath());
+
         File capabilitiesDir = new File(this.getBaseDir(), "capabilities");
-        System.setProperty("logspace.hq-webapp.capabilities-directory", capabilitiesDir.getAbsolutePath());
-
         capabilitiesDir.mkdirs();
-    }
 
-    private void initializeDemoConfigs() {
         File ordersDir = new File(this.getBaseDir(), "orders");
-        System.setProperty("logspace.hq-webapp.orders-directory", ordersDir.getAbsolutePath());
-
         ordersDir.mkdirs();
         this.createFile("/demo/orders/", ordersDir, "logspace-demo.json");
         this.createFile("/demo/orders/", ordersDir, "logspace-sample.json");
+
+        File spacesDir = new File(this.getBaseDir(), "space");
+        spacesDir.mkdirs();
+        this.createFile("/demo/spaces/", spacesDir, "demo.space");
+        this.createFile("/demo/spaces/", spacesDir, "logspace-sample.space");
     }
 
     private void initializeDemoLogging() {
@@ -109,13 +102,5 @@ public class DemoHqMode implements HqMode {
         this.createFile("/demo/conf/", solrConfDir, "elevate.xml");
         this.createFile("/demo/conf/", solrConfDir, "schema.xml");
         this.createFile("/demo/conf/", solrConfDir, "solrconfig.xml");
-    }
-
-    private void initializeDemoSpace() {
-        File spaceTokensDir = new File(this.getBaseDir(), "space-tokens");
-        System.setProperty("logspace.hq-webapp.space-tokens-directory", spaceTokensDir.getAbsolutePath());
-
-        this.createFile("/demo/space-tokens/", spaceTokensDir, "demo.space-tokens");
-        this.createFile("/demo/space-tokens/", spaceTokensDir, "logspace-sample.space-tokens");
     }
 }

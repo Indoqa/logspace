@@ -9,37 +9,36 @@ package io.logspace.hq.core.impl;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.indoqa.commons.lang.util.FileUtils;
 
 import io.logspace.hq.core.api.model.Spaces;
 
 @Configuration
 public class SpacesConfiguration {
 
-    @Value("${logspace.hq-webapp.space-tokens-directory}")
-    private String spaceTokensDirectory;
+    @Value("${logspace.hq-webapp.data-directory}")
+    private String dataDirectory;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Bean
     public Spaces createSpaces() throws IOException {
-        File file = FileUtils.getCanonicalFile(new File(this.spaceTokensDirectory));
+        Path path = Paths.get(this.dataDirectory, "spaces");
+        this.logger.info("Using '{}' as spaces directory.", path.toAbsolutePath());
 
         SpaceTokensFileVisitor visitor = new SpaceTokensFileVisitor();
-        Files.walkFileTree(file.toPath(), visitor);
+        Files.walkFileTree(path, visitor);
 
         SpacesImpl spaces = new SpacesImpl();
         spaces.setSpaceTokens(visitor.getSpaceTokens());
@@ -48,7 +47,7 @@ public class SpacesConfiguration {
 
     private static class SpaceTokensFileVisitor extends SimpleFileVisitor<Path> {
 
-        private static final String SPACE_CONFIGURATION_FILE_EXTENSION = ".space-tokens";
+        private static final String SPACE_CONFIGURATION_FILE_EXTENSION = ".space";
 
         private final Map<String, String> spaceTokens = new ConcurrentHashMap<String, String>();
 

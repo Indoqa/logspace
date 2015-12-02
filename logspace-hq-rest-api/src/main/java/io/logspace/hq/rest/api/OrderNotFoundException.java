@@ -13,7 +13,13 @@ public class OrderNotFoundException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    public OrderNotFoundException(String message) {
+    private OrderNotFoundException(String message) {
         super(message, NotFound, "ORDER_NOT_FOUND");
+    }
+
+    public static OrderNotFoundException forController(String controllerId) {
+        OrderNotFoundException result = new OrderNotFoundException("There is no order for controller with ID '" + controllerId + "'.");
+        result.setParameter("controller-id", controllerId);
+        return result;
     }
 }

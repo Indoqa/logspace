@@ -9,8 +9,6 @@ package io.logspace.hq.core.impl;
 
 import static java.nio.file.FileVisitResult.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
@@ -41,12 +39,14 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${logspace.hq-webapp.capabilities-directory}")
-    private String capabilitiesDirectory;
+    @Value("${logspace.hq-webapp.data-directory}")
+    private String dataDirectory;
 
     private final Map<String, AgentControllerCapabilities> agentControllerCapabilities = new ConcurrentHashMap<>();
 
     private final Map<String, AgentDescription> agentDescriptions = new ConcurrentHashMap<>();
+
+    private Path capabilitiesPath;
 
     @Override
     public AgentDescription getAgentDescription(String globalAgentId) {
@@ -69,15 +69,16 @@ public class CapabilitiesServiceImpl implements CapabilitiesService {
 
     @PostConstruct
     public void initialize() throws IOException {
-        Path capabilitiesDir = Paths.get(this.capabilitiesDirectory);
-        this.logger.info("Loading capabilities files from '{}'.", capabilitiesDir.toAbsolutePath().toString());
-        Files.walkFileTree(capabilitiesDir, new LoadCapabilitiesFileVisitor());
+        this.capabilitiesPath = Paths.get(this.dataDirectory, "capabilities");
+        this.logger.info("Using '{}' as capabilities directory.", this.capabilitiesPath.toAbsolutePath());
+
+        Files.walkFileTree(this.capabilitiesPath, new LoadCapabilitiesFileVisitor());
     }
 
     @Override
     public void save(AgentControllerCapabilities capabilities) throws IOException {
-        File capabilitiesFile = new File(this.capabilitiesDirectory, capabilities.getId() + CAPABILITIES_FILE_EXTENSION);
-        try (OutputStream outputStream = new FileOutputStream(capabilitiesFile)) {
+        Path targetPath = this.capabilitiesPath.resolve(capabilities.getId() + CAPABILITIES_FILE_EXTENSION);
+        try (OutputStream outputStream = Files.newOutputStream(targetPath)) {
             AgentControllerCapabilitiesJsonSerializer.toJson(capabilities, outputStream);
         }
 
