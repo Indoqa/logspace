@@ -8,12 +8,14 @@
 import App from './app/app.react'
 import TimeSeries from './pages/time-series.react'
 import NotFound from './pages/notfound.react'
+import AgentActivity from './pages/agent-activity.react'
 import React from 'react'
 import {DefaultRoute, NotFoundRoute, Route} from 'react-router'
 
 export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={TimeSeries} name="home" />
+    <Route handler={AgentActivity} name="agent-activity" />
     <NotFoundRoute handler={NotFound} name="not-found" />
-  </Route>  
+  </Route>
 )

@@ -23,13 +23,14 @@ export const editedTimeSeriesCursor = state.cursor(['editedTimeSeries'])
 export const resultCursor = state.cursor(['result'])
 export const suggestionCursor = state.cursor(['suggestions'])
 export const viewCursor = state.cursor(['view'])
+export const agentActivityCursor = state.cursor(['agentActivity'])
 
 var lastHash;
 
 export function onApplicationInitialized() {
 	if(typeof(Storage) === "undefined") {
 	    return
-	} 
+	}
 
 	loadState(window.location.href)
 
@@ -68,7 +69,7 @@ function getExportState_(timeWindow, timeSeries) {
 function onSaveStateChange(state, previousState, path) {
 	if(typeof(Storage) === "undefined") {
 	    return
-	} 
+	}
 
 	// TODO: find a better place to store this information
 	if (!path || (path[0] != 'timeWindow' && path[0] != 'timeSeries') ) {
@@ -82,7 +83,7 @@ function saveStateChange(state) {
 	const stateToExport = state.toJS()
 	const exportedStateAsString = getExportState_(stateToExport.timeWindow, stateToExport.timeSeries)
 	const key = hash.hashCode(exportedStateAsString);
-	
+
 	sessionStorage.setItem("logspaceHistory_" + key, exportedStateAsString)
 	lastHash = key
 	location.hash = '/?h=' + key
@@ -104,14 +105,14 @@ function loadState(url) {
 	}
 
 	lastHash = hash
-	
+
 	console.log('loading state from url',url)
   const savedState = sessionStorage.getItem("logspaceHistory_" + hash)
 
 	if (!savedState) {
 		resetState()
 		return
-	} 
+	}
 
 	importState(savedState)
 	refreshResult()
@@ -128,7 +129,7 @@ function resetState() {
 	refreshResult()
 }
 
-function serializeTimeWindowRange(timeWindow) {	
+function serializeTimeWindowRange(timeWindow) {
 	switch (timeWindow.selection.type) {
 		case 'dynamic':
 			return {
@@ -142,19 +143,19 @@ function serializeTimeWindowRange(timeWindow) {
 				type: 'shortcut',
 				shortcutId: timeWindow.selection.shortcutId
 			}
-			
+
 		case 'custom':
 			return {
 				type: 'custom',
 				start: timeWindow.selection.start().toISOString(),
 				end: timeWindow.selection.end().toISOString()
-			} 
+			}
 	}
 
   return {}
 }
 
-function deserializeTimeWindowRange(importedState) {	
+function deserializeTimeWindowRange(importedState) {
 	const serializedTimeWindowRange = importedState.serializedTimeWindowRange
 
 	if (!importedState.serializedTimeWindowRange) {
@@ -169,7 +170,7 @@ function deserializeTimeWindowRange(importedState) {
 
 		case 'shortcut':
 			const shortcut = shortcutById(serializedTimeWindowRange.shortcutId)
-			
+
 			if (!shortcut) {
 				return
 			}
@@ -178,11 +179,10 @@ function deserializeTimeWindowRange(importedState) {
       importedState.timeWindow.selection.end = () => shortcut.end()
 
 			break
-			
+
 		case 'custom':
 		  importedState.timeWindow.selection.start =  () => moment(serializedTimeWindowRange.start)
       importedState.timeWindow.selection.end = () => moment(serializedTimeWindowRange.end)
 			break
 	}
 }
-

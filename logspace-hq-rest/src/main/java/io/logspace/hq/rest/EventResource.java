@@ -39,6 +39,7 @@ public class EventResource extends AbstractSpaceResource {
     private static final int DEFAULT_COUNT = 10;
     private static final int MIN_COUNT = 0;
     private static final int MAX_RETRIEVAL_COUNT = 1000;
+
     @Inject
     private EventService eventService;
 

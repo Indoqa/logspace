@@ -10,7 +10,7 @@ package io.logspace.hq.solr;
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
 import static java.util.Calendar.*;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
@@ -56,6 +56,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.commons.lang.util.TimeTracker;
 import com.indoqa.commons.lang.util.TimeUtils;
+import com.indoqa.solr.facet.api.*;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -68,6 +69,8 @@ import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.StoredEvent;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
+import io.logspace.hq.rest.api.agentactivity.AgentActivities;
+import io.logspace.hq.rest.api.agentactivity.AgentActivity;
 import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
@@ -144,11 +147,72 @@ public class SolrEventService implements EventService {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort) {
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setRows(0);
+
+        Date endDate = new Date();
+        Date startDate = new Date(endDate.getTime() - SECONDS.toMillis(durationSeconds));
+
+        solrQuery.addFilterQuery(this.getTimestampRangeQuery(startDate, endDate));
+
+        TermsFacet agentFacet = new TermsFacet(FIELD_GLOBAL_AGENT_ID, FIELD_GLOBAL_AGENT_ID);
+        agentFacet.setOffset(start);
+        agentFacet.setLimit(count);
+        agentFacet.setMincount(0);
+        agentFacet.setNumBuckets(true);
+        agentFacet.setSort(sort);
+        agentFacet.addSubFacet(
+            new RangeFacet(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, durationSeconds / steps));
+
+        solrQuery.set("json.facet", FacetList.toJsonString(agentFacet));
+
+        try {
+            AgentActivities result = new AgentActivities();
+
+            QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
+
+            Buckets agentBuckets = Buckets.fromResponse(response, FIELD_GLOBAL_AGENT_ID);
+            result.setOffset(start);
+            result.setTotalCount(agentBuckets.getNumBuckets());
+
+            int maxHistoryValue = 0;
+
+            for (NamedList<Object> eachAgentBucket : agentBuckets) {
+                AgentActivity agentActivity = new AgentActivity();
+
+                agentActivity.setGlobalAgentId((String) eachAgentBucket.get("val"));
+                agentActivity.setEventCount(Buckets.getInt(eachAgentBucket, "count"));
+
+                int[] history = new int[steps];
+
+                Buckets historyBuckets = Buckets.fromFacet((NamedList<Object>) eachAgentBucket.get(FIELD_TIMESTAMP));
+                for (int i = 0; i < Math.min(historyBuckets.getBucketCount(), history.length); i++) {
+                    NamedList<Object> historyBucket = historyBuckets.getBucket(i);
+
+                    int historyValue = Buckets.getInt(historyBucket, "count");
+                    history[i] = historyValue;
+                    maxHistoryValue = Math.max(maxHistoryValue, historyValue);
+                }
+                agentActivity.setHistory(history);
+
+                result.add(agentActivity);
+            }
+
+            result.setMaxHistoryValue(maxHistoryValue);
+
+            return result;
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Could not retrieve Agent activities.", e);
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public Object[] getData(TimeSeriesDefinition dataDefinition) {
         SolrQuery solrQuery = new SolrQuery("*:*");
-
         solrQuery.setRows(0);
 
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
@@ -568,7 +632,8 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient
+                .getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }

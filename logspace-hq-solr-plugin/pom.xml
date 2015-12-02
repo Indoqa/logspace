@@ -49,10 +49,14 @@
       <artifactId>javax.inject</artifactId>
     </dependency>
 
-    <!-- Solr -->
+    <!-- Solr/Lucene -->
     <dependency>
       <groupId>com.indoqa.solr</groupId>
       <artifactId>solr-spring-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.indoqa</groupId>
+      <artifactId>indoqa-solr-facet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.solr</groupId>

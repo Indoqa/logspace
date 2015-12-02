@@ -20,6 +20,7 @@ import '../result/store'
 import '../suggestions/store'
 import '../drawer/store'
 import '../editable/store'
+import '../agent-activity/store'
 
 require('./app.styl');
 
@@ -45,7 +46,8 @@ export default class App extends Component {
       chartTitleEditable: appState.viewCursor().get('editables').get('result'),
       chartType: appState.resultCursor().get('chartType'),
       suggestions: appState.suggestionCursor(),
-      view: appState.viewCursor()
+      view: appState.viewCursor(),
+      agentActivity: appState.agentActivityCursor()
     };
   }
 
