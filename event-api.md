@@ -6,7 +6,7 @@ title: Event API
 
 ## Store Events
 
-Stores multiple events in Logspace.
+Stores multiple events in the *Logspace HQ*.
 
 <table>
   <tbody>
@@ -31,32 +31,31 @@ Stores multiple events in Logspace.
     <tr>
       <td style="white-space: nowrap">logspace.space-token=[space-token]</td>
       <td>This header serves as an authentication token for the caller to use this API.
-The supplied space-token must be configured in the Logspace HQ to be accepted.</td>
+The supplied <a href="/configuration-hq-spaces">Space-Token</a> must be valid.</td>
     </tr>
   </tbody>
 </table>
-
 
 ### Body
 
 ```json
 [
   {
-    "id" : "Unique ID for this event (e.g. UUID)",
-    "type" : "Specific type of this event (e.g. os/cpu)",
-    "system" : "System identifier (e.g. hostname)",
-    "agent-id" : "Agent ID (e.g. hostname/cpu)",
-    "timestamp" : "Timestamp of the creation of this event (e.g. 2015-05-21T11:30:00Z)",
-    "pid" : "Optional Parent Event ID",
-    "gid" : "Optional Global Event ID",
+    "id" : "Unique ID for this Event",
+    "type" : "Specific type of this Event",
+    "system" : "System identifier",
+    "agent-id" : "The ID of the Agent that produced this Event",
+    "timestamp" : "Timestamp of the creation of this event",
+    "pid" : "The optional parent Event ID",
+    "gid" : "The optional global Event ID",
 
-    "boolean-properties" : { "property_name" : "boolean-value [true|false]" },
-    "date-properties"    : { "property_name" : "date-value [YYYY-MM-ddTHH:mm:ssZ]" },
-    "double-properties"  : { "property_name" : "double-value [json number]" },
-    "float-properties"   : { "property_name" : "float-value [json number]" },
-    "integer-properties" : { "property_name" : "integer-value [json number]" },
-    "long-properties"    : { "property_name" : "long-value [json number]" },
-    "string-properties"  : { "property_name" : "string-value [json string]" }
+    "boolean-properties" : { "property_name" : "boolean-value" },
+    "date-properties"    : { "property_name" : "date-value" },
+    "double-properties"  : { "property_name" : "double-value" },
+    "float-properties"   : { "property_name" : "float-value" },
+    "integer-properties" : { "property_name" : "integer-value" },
+    "long-properties"    : { "property_name" : "long-value" },
+    "string-properties"  : { "property_name" : "string-value" }
   }
 ]
 ```
@@ -64,7 +63,16 @@ The supplied space-token must be configured in the Logspace HQ to be accepted.</
 ## Success Response
 
 ### Header
-Response code: `202 Accepted`
+<table>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap">Response Code:</td>
+      <td>202 Accepted</td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ### Body
 `none`
@@ -72,10 +80,17 @@ Response code: `202 Accepted`
 ## Error Response
 
 ### Header
-Response code: `403 Forbidden`
+<table>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap">Response Code:</td>
+      <td>403 Forbidden</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Body
-If the request did not contain the space-token header
+If the request did not contain the *Space-Token* header
 
 ```json
 {
@@ -83,7 +98,8 @@ If the request did not contain the space-token header
   "message" : "Missing header 'logspace.space-token'."
 }
 ```
-If the supplied space-token is not configured:
+
+If the supplied *Space-Token* is invalid:
 
 ```json
 {
@@ -117,16 +133,14 @@ Example content of request.json
     "system" : "localhost",
     "agent-id" : "os/cpu",
     "timestamp" : "2015-05-18T14:07:00Z",
-
     "double-properties" :
-      {
-        "system_cpu_load" : 0.44324237001029815
-      },
-
+    {
+      "system_cpu_load" : 0.44324237001029815
+    },
     "integer-properties" :
-      {  
-        "processor_count" : 4
-      }
+    {  
+      "processor_count" : 4
+    }
   },
   {  
     "id" : "a00f812e-ea08-4d38-9ce0-fa5973f0d411",
@@ -134,14 +148,13 @@ Example content of request.json
     "system" : "localhost",
     "agent-id" : "os/memory",
     "timestamp" : "2015-05-18T14:07:00Z",
-
     "long-properties" :
-      {  
-        "total_memory" : 16490561536,
-        "free_memory" : 2074169344,
-        "used_memory" : 14416392192,
-        "committed_virtual_memory" : 5659140096
-      }
+    {  
+      "total_memory" : 16490561536,
+      "free_memory" : 2074169344,
+      "used_memory" : 14416392192,
+      "committed_virtual_memory" : 5659140096
+    }
   }
 ]
 ```

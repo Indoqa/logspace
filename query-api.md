@@ -47,7 +47,14 @@ title: Query API
 ## Success Response
 
 ### Header
-Response code: `200 OK`
+<table>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap">Response Code:</td>
+      <td>200 OK</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Body
 
