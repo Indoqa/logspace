@@ -56,6 +56,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.commons.lang.util.TimeTracker;
 import com.indoqa.commons.lang.util.TimeUtils;
+import com.indoqa.solr.facet.api.Facet;
+import com.indoqa.solr.facet.api.FacetList;
+import com.indoqa.solr.facet.api.QueryFacet;
+import com.indoqa.solr.facet.api.StatisticFacet;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -462,11 +466,11 @@ public class SolrEventService implements EventService {
                 dataDefinition.getAggregate());
         }
 
-        FacetBuilder facetBuilder = new FacetBuilder();
+        FacetList facetList = new FacetList();
 
         Facet valueFacet = null;
         if (dataDefinition.getAggregate() != Aggregate.count) {
-            valueFacet = StatisticFacet.with(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
+            valueFacet = new StatisticFacet(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
         }
 
         Date startDate = dataDefinition.getDateRange().getStart();
@@ -477,17 +481,20 @@ public class SolrEventService implements EventService {
         calendar.setTime(startDate);
 
         while (calendar.getTime().before(endDate)) {
-            String name = String.valueOf(facetBuilder.getFacetCount());
+            String name = String.valueOf(facetList.getSubFacetCount());
 
             Date start = calendar.getTime();
             calendar.add(Calendar.SECOND, gap);
             Date end = calendar.getTime();
             String query = this.getTimestampRangeQuery(start, end);
 
-            facetBuilder.addFacet(QueryFacet.with(name, query, valueFacet));
+            QueryFacet queryFacet = new QueryFacet(name, query);
+            queryFacet.addSubFacet(valueFacet);
+
+            facetList.addSubFacet(queryFacet);
         }
 
-        return facetBuilder.toJson();
+        return facetList.toJsonString();
     }
 
     private PropertyDescription createPropertyDescription(String propertyId) {
@@ -568,7 +575,8 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient
+                .getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
