@@ -23,11 +23,11 @@ export default {
     dynamic: {
       range: {
         amount: 60,
-        unit: units.get('minute')  
+        unit: units.get('minute')
       },
       gap: {
         amount: 1,
-        unit: units.get('minute')  
+        unit: units.get('minute')
       }
     }
   },
@@ -82,5 +82,13 @@ export default {
         }
       }
     }
+  },
+  'agentActivity': {
+    'duration': 300,
+    'sort': 'count desc',
+    'result': {
+      'agentActivities': {}
+    },
+    'autoPlay': false
   }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventPage;
+import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.event.EventFilter;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
@@ -38,6 +39,8 @@ public interface EventService {
      * @return An {@link InputStream} with the unprocessed response.
      */
     InputStream executeDirectQuery(Map<String, String[]> parameters);
+
+    AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort);
 
     /**
      * Retrieve stored data for the given {@link TimeSeriesDefinition}
