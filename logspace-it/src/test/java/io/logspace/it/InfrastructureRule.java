@@ -32,7 +32,7 @@ public class InfrastructureRule extends ExternalResource {
 
     private SolrClient solrClient;
 
-    private static void deleteJsonFile(Path path) {
+    private static void deleteFile(Path path) {
         try {
             Files.delete(path);
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class InfrastructureRule extends ExternalResource {
 
         Path capabilitiesDirectory = Paths.get("./capabilities");
         Files.createDirectories(capabilitiesDirectory);
-        Files.newDirectoryStream(capabilitiesDirectory, "*.json").forEach(InfrastructureRule::deleteJsonFile);
+        Files.newDirectoryStream(capabilitiesDirectory, "*.json").forEach(InfrastructureRule::deleteFile);
 
         System.setProperty("port", String.valueOf(TEST_PORT));
         System.setProperty("log-path", "./target");
