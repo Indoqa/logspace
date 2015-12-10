@@ -11,6 +11,9 @@ import static com.indoqa.commons.lang.util.FileUtils.getCanonicalFile;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
@@ -28,6 +31,14 @@ public class InfrastructureRule extends ExternalResource {
     private LogspaceHq logspaceHq;
 
     private SolrClient solrClient;
+
+    private static void deleteJsonFile(Path path) {
+        try {
+            Files.delete(path);
+        } catch (Exception e) {
+            throw new LogspaceTestException("Error while deleting file '" + path + "'.", e);
+        }
+    }
 
     private static Field getField(Class<?> type, String fieldName) {
         Class<?> currentType = type;
@@ -72,9 +83,9 @@ public class InfrastructureRule extends ExternalResource {
         File solrDataDirectory = getCanonicalFile(new File("./target/solr"));
         FileUtils.deleteDirectory(solrDataDirectory);
 
-        File capabilitiesDirectory = new File("./capabilities");
-        FileUtils.deleteDirectory(capabilitiesDirectory);
-        capabilitiesDirectory.mkdirs();
+        Path capabilitiesDirectory = Paths.get("./capabilities");
+        Files.createDirectories(capabilitiesDirectory);
+        Files.newDirectoryStream(capabilitiesDirectory, "*.json").forEach(InfrastructureRule::deleteJsonFile);
 
         System.setProperty("port", String.valueOf(TEST_PORT));
         System.setProperty("log-path", "./target");
