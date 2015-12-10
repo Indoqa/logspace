@@ -1,6 +1,6 @@
 # Indoqa logspace.io
 
-The user and integrator documentation can be found at http://lospace.io
+The user and integrator documentation can be found at http://logspace.io
 
 ## How to setup your development environment
 
