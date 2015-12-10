@@ -15,7 +15,7 @@
   </formats>
   
   <includeBaseDirectory>false</includeBaseDirectory>
-
+  
   <dependencySets>
     <dependencySet>
       <unpack>false</unpack>
@@ -24,11 +24,12 @@
         <include>io.logspace:logspace-monitor:jar:runnable:*</include>
         <include>io.logspace:logspace-jvm-agent:jar:*</include>
       </includes>
+      <outputDirectory>${project.artifactId}-${project.version}</outputDirectory>
     </dependencySet>
   </dependencySets>
   <fileSets>
     <fileSet>
-      <outputDirectory>solr-schema</outputDirectory>
+      <outputDirectory>${project.artifactId}-${project.version}/solr-schema</outputDirectory>
       <directory>../logspace-hq-solr-plugin/src/main/resources/META-INF/solr/logspace/conf</directory>
     </fileSet>
   </fileSets>    
