@@ -21,7 +21,14 @@ Most of the Logspace Java sources require Java 8. Since there are modules that s
     <JAVA_7_HOME>/path/to/jdk-7</JAVA_7_HOME>
   </properties>
 </profile>
+
 ```
+
+Build your project with Maven:
+``` shell
+mvn clean install
+```
+
 ### Prepare the Javascript (frontend) development environment
 
 #### Mac
