@@ -1,4 +1,4 @@
-# Indoqa logspace.io
+# Indoqa Logspace
 
 The user and integrator documentation can be found at http://logspace.io
 
