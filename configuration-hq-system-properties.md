@@ -39,6 +39,8 @@ The URL to the Apache Solr installation can be configured with the system proper
 
 This setting is required.
 
+The Solr configuration files are part of the *Logspace HQ* [distribution](/download) or can be found [here](https://github.com/Indoqa/logspace/tree/logspace-{{site.data.logspace.version}}/logspace-hq-solr-plugin/src/main/resources/META-INF/solr/logspace/conf/).
+
 ## Data Directory
 The *Logspace HQ* uses a single directory to store all data required during its operation.<br/>It contains the *capabilities* and *[orders](/configuration-hq-orders)* of *AgentControllers* and the configuration of the *[Spaces](/configuration-hq-spaces)*, each in its own sub-directory:
 
