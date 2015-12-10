@@ -26,4 +26,10 @@
       </includes>
     </dependencySet>
   </dependencySets>
+  <fileSets>
+    <fileSet>
+      <outputDirectory>solr-schema</outputDirectory>
+      <directory>../logspace-hq-solr-plugin/src/main/resources/META-INF/solr/logspace/conf</directory>
+    </fileSet>
+  </fileSets>    
 </assembly>
