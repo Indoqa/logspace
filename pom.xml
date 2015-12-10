@@ -248,7 +248,7 @@
       </dependency>
       <dependency>
         <groupId>com.indoqa.solr</groupId>
-        <artifactId>indoqa-solr-facet-api</artifactId>
+        <artifactId>solr-facet-api</artifactId>
         <version>${solr-facet-api-version}</version>
       </dependency>
       <dependency>
