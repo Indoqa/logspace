@@ -53,7 +53,7 @@
     <!-- Solr/Lucene -->
     <dependency>
       <groupId>com.indoqa.solr</groupId>
-      <artifactId>indoqa-solr-facet-api</artifactId>
+      <artifactId>solr-facet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.indoqa.solr</groupId>
