@@ -6,7 +6,7 @@ The user and integrator documentation can be found at http://logspace.io
 
 ### Prepare the Java development environment
 
-The build system is based on Apache Maven (version 3.0.4 or higher).
+The build system is based on (Apache Maven)[https://maven.apache.org/] (version 3.0.4 or higher).
 
 Most of the Logspace Java sources require Java 8. Since there are modules that should run with Java 7 or Java 6, you also need the respective JDKs installed. For that purpose the Maven build requires properties that point to them. Here is an XML snippet that can be added to your Maven settings.xml (of course the paths need to be adjusted):
 
