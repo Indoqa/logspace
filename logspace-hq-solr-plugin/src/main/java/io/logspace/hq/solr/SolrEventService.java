@@ -549,7 +549,9 @@ public class SolrEventService implements EventService {
             String query = this.getTimestampRangeQuery(start, end);
 
             QueryFacet queryFacet = new QueryFacet(name, query);
-            queryFacet.addSubFacet(valueFacet);
+            if (valueFacet != null) {
+                queryFacet.addSubFacet(valueFacet);
+            }
 
             facetList.addSubFacet(queryFacet);
         }
