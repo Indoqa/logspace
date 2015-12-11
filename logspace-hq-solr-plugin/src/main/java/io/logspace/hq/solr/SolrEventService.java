@@ -9,20 +9,13 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.Calendar.*;
+import static java.util.concurrent.TimeUnit.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -78,11 +71,7 @@ import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.agentactivity.AgentActivity;
-import io.logspace.hq.rest.api.event.EqualsEventFilterElement;
-import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.event.EventFilterElement;
-import io.logspace.hq.rest.api.event.MultiValueEventFilterElement;
-import io.logspace.hq.rest.api.event.RangeEventFilterElement;
+import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
@@ -93,6 +82,7 @@ import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 @Named
 public class SolrEventService implements EventService {
 
+    private static final String ALL_DOCS_QUERY = "*:*";
     private static final String SORT_CRON_ASC = "timestamp ASC, id ASC";
     private static final String SORT_CRON_DESC = "timestamp DESC, id ASC";
 
@@ -161,7 +151,7 @@ public class SolrEventService implements EventService {
     @SuppressWarnings("unchecked")
     @Override
     public AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort) {
-        SolrQuery solrQuery = new SolrQuery("*:*");
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setRows(0);
 
         Date endDate = new Date();
@@ -223,7 +213,7 @@ public class SolrEventService implements EventService {
     @Override
     @SuppressWarnings("unchecked")
     public Object[] getData(TimeSeriesDefinition dataDefinition) {
-        SolrQuery solrQuery = new SolrQuery("*:*");
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setRows(0);
 
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
@@ -262,7 +252,7 @@ public class SolrEventService implements EventService {
     public Suggestion getSuggestion(SuggestionInput input) {
         TimeTracker timeTracker = new TimeTracker();
 
-        SolrQuery solrQuery = new SolrQuery("*:*");
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setRows(0);
 
         if (!StringUtils.isBlank(input.getText())) {
@@ -340,7 +330,7 @@ public class SolrEventService implements EventService {
 
     @Override
     public void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer) {
-        SolrQuery solrQuery = new SolrQuery("*:*");
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setStart(offset);
         solrQuery.setRows(count);
         solrQuery.set(SORT, SORT_CRON_ASC);
@@ -606,7 +596,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-                || agentDescription.getPropertyDescriptions().isEmpty()) {
+            || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -650,7 +640,8 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient
+                .getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
@@ -684,7 +675,7 @@ public class SolrEventService implements EventService {
     }
 
     private AgentDescription loadAgentDescription(String globalAgentId) throws SolrServerException, IOException {
-        SolrQuery query = new SolrQuery("*:*");
+        SolrQuery query = new SolrQuery(ALL_DOCS_QUERY);
         query.setRows(0);
 
         query.setFilterQueries(FIELD_GLOBAL_AGENT_ID + ":\"" + globalAgentId + "\"");
@@ -712,7 +703,7 @@ public class SolrEventService implements EventService {
     }
 
     private EventPage retrieve(EventFilter eventFilter, int count, String cursorMark, String sort) {
-        SolrQuery solrQuery = new SolrQuery("*:*");
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setRows(count);
         solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
         solrQuery.set(SORT, sort);

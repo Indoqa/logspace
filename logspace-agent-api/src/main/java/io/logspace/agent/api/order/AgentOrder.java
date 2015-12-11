@@ -7,17 +7,14 @@
  */
 package io.logspace.agent.api.order;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.ApplicationAgent;
-import io.logspace.agent.api.SchedulerAgent;
-
 /**
- * The {@link AgentOrder} describes execution parameters for a single {@link Agent} and determines, if and when an Agent is to be
- * executed.<br>
+ * The {@link AgentOrder} describes execution parameters for a single {@link io.logspace.agent.api.Agent Agent} and determines, if and
+ * when an Agent is to be executed.<br>
  * <br>
- * For {@link SchedulerAgent SchedulerAgents} an AgentOrder is required in order to be executed by the scheduler.<br>
+ * For {@link io.logspace.agent.api.SchedulerAgent SchedulerAgents} an AgentOrder is required in order to be executed by the scheduler.
+ * <br>
  *
- * For {@link ApplicationAgent ApplicationAgents} honoring the AgentOrder is up to the actual implementation of
+ * For {@link io.logspace.agent.api.ApplicationAgent ApplicationAgents} honoring the AgentOrder is up to the actual implementation of
  * {@link AgentControllerOrder} in use and the Agent itself. Certain implementations may allow the execution of ApplicationAgents
  * without orders or even when an order with {@link TriggerType#Off} is present.
  *
@@ -26,12 +23,12 @@ import io.logspace.agent.api.SchedulerAgent;
 public class AgentOrder {
 
     /**
-     * The ID of this order. This is also the ID of the {@link Agent} this order is to be applied to.
+     * The ID of this order. This is also the ID of the {@link io.logspace.agent.api.Agent Agent} this order is to be applied to.
      */
     private String id;
 
     /**
-     * The type of {@link TriggerType} to be used for the {@link Agent}.
+     * The type of {@link TriggerType} to be used for the {@link io.logspace.agent.api.Agent Agent}.
      */
     private TriggerType triggerType;
 

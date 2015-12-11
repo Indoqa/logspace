@@ -7,6 +7,8 @@
  */
 package io.logspace.hq.core.impl;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -58,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
         private final Path path;
 
-        private PathStoredOrder(Path path) {
+        public PathStoredOrder(Path path) {
             this.path = path;
         }
 
@@ -78,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
                 return false;
             }
 
-            return date.getTime() / 1000 == this.getLastModified() / 1000;
+            return MILLISECONDS.toSeconds(date.getTime()) == MILLISECONDS.toSeconds(this.getLastModified());
         }
     }
 }

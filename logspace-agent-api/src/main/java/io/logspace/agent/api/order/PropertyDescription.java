@@ -7,28 +7,28 @@
  */
 package io.logspace.agent.api.order;
 
-import io.logspace.agent.api.Agent;
 import io.logspace.agent.api.event.EventProperty;
 
 /**
- * A description of an {@link EventProperty}.
+ * A description of an {@link io.logspace.agent.api.event.EventProperty EventProperty}.
  *
- * This class can be used by an {@link Agent} to provide additional information about his EventProperties.
+ * This class can be used by an {@link io.logspace.agent.api.Agent Agent} to provide additional information about his EventProperties.
  */
 public class PropertyDescription implements Comparable<PropertyDescription> {
 
     /**
-     * The ID of the {@link EventProperty}.
+     * The ID of the {@link io.logspace.agent.api.event.EventProperty EventProperty}.
      */
     private String id;
 
     /**
-     * The name of the {@link EventProperty} that is suitable for displaying in a user interface.
+     * The name of the {@link io.logspace.agent.api.event.EventProperty EventProperty} that is suitable for displaying in a user
+     * interface.
      */
     private String name;
 
     /**
-     * The type of the value of the {@link EventProperty}.
+     * The type of the value of the {@link io.logspace.agent.api.event.EventProperty EventProperty}.
      */
     private PropertyType propertyType;
 
