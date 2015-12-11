@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class EventPageJsonSerializer extends AbstractJsonSerializer {
+public final class EventPageJsonSerializer extends AbstractJsonSerializer {
 
     private EventPageJsonSerializer(OutputStream outputStream) throws IOException {
         super(outputStream);

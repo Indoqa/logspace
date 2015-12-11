@@ -30,7 +30,7 @@ public abstract class AbstractLogspaceResourcesBase extends AbstractJsonResource
         try {
             result = Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw ParameterValueException.unparsableValue(name, value);
+            throw ParameterValueException.unparsableValue(name, value, e);
         }
 
         if (result < minValue) {

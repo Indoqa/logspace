@@ -7,20 +7,18 @@
  */
 package io.logspace.agent.api.event;
 
-import io.logspace.agent.api.Agent;
-
 /**
  * Contains the basic information required for creating a new {@link AbstractEventBuilder Event Builder}.
  */
 public class EventBuilderData {
 
     /**
-     * The ID of the {@link Agent} the Event Builder belongs to.
+     * The ID of the {@link io.logspace.agent.api.Agent Agent} the Event Builder belongs to.
      */
     private final String agentId;
 
     /**
-     * The system of the {@link Agent} the Event Builder belongs to.
+     * The system of the {@link io.logspace.agent.api.Agent Agent} the Event Builder belongs to.
      */
     private final String system;
 

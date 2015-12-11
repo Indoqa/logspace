@@ -10,11 +10,9 @@ package io.logspace.agent.api.order;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentController;
-
 /**
- * This class describes the capabilities of an {@link AgentController} and its currently registered {@link Agent Agents}.
+ * This class describes the capabilities of an {@link io.logspace.agent.api.AgentController AgentController} and its currently
+ * registered {@link io.logspace.agent.api.Agent Agents}.
  *
  * @see AgentCapabilities
  */
@@ -34,17 +32,17 @@ public class AgentControllerCapabilities {
     public static final String FIELD_PROPERTY_FACTORS = "factors";
 
     /**
-     * The ID of the {@link AgentController}
+     * The ID of the {@link io.logspace.agent.api.AgentController AgentController}
      */
     private String id;
 
     /**
-     * The space of the {@link AgentController}
+     * The space of the {@link io.logspace.agent.api.AgentController AgentController}
      */
     private String space;
 
     /**
-     * The system of the {@link AgentController}
+     * The system of the {@link io.logspace.agent.api.AgentController AgentController}
      */
     private String system;
 

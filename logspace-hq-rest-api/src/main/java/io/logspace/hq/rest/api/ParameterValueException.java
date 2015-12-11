@@ -9,12 +9,16 @@ package io.logspace.hq.rest.api;
 
 import java.text.MessageFormat;
 
-public class ParameterValueException extends AbstractLogspaceResourceException {
+public final class ParameterValueException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
-    private ParameterValueException(String message, String TYPE) {
-        super(message, HttpStatusCode.BadRequest, TYPE);
+    private ParameterValueException(String message, String type) {
+        super(message, HttpStatusCode.BadRequest, type);
+    }
+
+    private ParameterValueException(String message, String type, Throwable cause) {
+        super(message, HttpStatusCode.BadRequest, type, cause);
     }
 
     public static ParameterValueException missingQueryParameter(String parameterName) {
@@ -22,10 +26,10 @@ public class ParameterValueException extends AbstractLogspaceResourceException {
             "MISSING_QUERY_PARAMETER_VALUE");
     }
 
-    public static ParameterValueException unparsableValue(String parameterName, String value) {
+    public static ParameterValueException unparsableValue(String parameterName, String value, Throwable cause) {
         return new ParameterValueException(
             MessageFormat.format("Could not parse ''{0}'' as value for parameter ''{1}''.", value, parameterName),
-            "UNPARSABLE_PARAMETER_VALUE");
+            "UNPARSABLE_PARAMETER_VALUE", cause);
     }
 
     public static ParameterValueException valueTooLarge(String parameterName, Object value, Object max) {

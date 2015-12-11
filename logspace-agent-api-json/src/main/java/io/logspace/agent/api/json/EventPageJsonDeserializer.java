@@ -12,10 +12,9 @@ import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 
-public class EventPageJsonDeserializer extends AbstractJsonDeserializer {
+public final class EventPageJsonDeserializer extends AbstractJsonDeserializer {
 
     private EventPageJsonDeserializer(byte[] data) throws IOException {
         super();
@@ -39,7 +38,7 @@ public class EventPageJsonDeserializer extends AbstractJsonDeserializer {
         return deserializer.deserialize();
     }
 
-    public EventPage deserialize() throws IOException, JsonProcessingException {
+    public EventPage deserialize() throws IOException {
         this.prepareToken();
         this.validateTokenType(JsonToken.START_OBJECT);
         this.consumeToken();

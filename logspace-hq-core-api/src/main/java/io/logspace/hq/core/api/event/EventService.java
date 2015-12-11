@@ -16,7 +16,6 @@ import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventPage;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
@@ -52,7 +51,7 @@ public interface EventService {
 
     /**
      * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>
-     * This includes spaces, systems, {@link AgentDescription}s, propertyNames.
+     * This includes spaces, systems, {@link io.logspace.hq.rest.api.suggestion.AgentDescription AgentDescriptions}, propertyNames.
      *
      * @param input - The {@link SuggestionInput} to calculate suggestions for.
      * @return The calculated {@link Suggestion}.

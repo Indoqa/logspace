@@ -86,7 +86,7 @@ public class EventResource extends AbstractSpaceResource {
         return this.eventService.retrieve(eventFilter, count, cursor);
     }
 
-    private class EventPageResponseTransformer implements ResponseTransformer {
+    private static class EventPageResponseTransformer implements ResponseTransformer {
 
         @Override
         public String render(Object model) throws Exception {

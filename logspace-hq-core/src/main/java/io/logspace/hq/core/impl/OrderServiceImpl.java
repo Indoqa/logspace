@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         return this.ordersPath.resolve(controllerId + ".json");
     }
 
-    private class PathStoredOrder implements StoredOrder {
+    private static class PathStoredOrder implements StoredOrder {
 
         private final Path path;
 

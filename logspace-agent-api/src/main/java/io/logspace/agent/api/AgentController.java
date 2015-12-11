@@ -10,10 +10,10 @@ package io.logspace.agent.api;
 import java.util.Collection;
 
 import io.logspace.agent.api.event.Event;
-import sun.management.resources.agent;
 
 /**
- * The AgentController is responsible for un-/registering {@link Agent Agents} and handling of {@link Event Events}.
+ * The AgentController is responsible for un-/registering {@link io.logspace.agent.api.AgentAgent Agents} and handling of {@link Event
+ * Events}.
  */
 public interface AgentController {
 
@@ -38,7 +38,7 @@ public interface AgentController {
     String getSystem();
 
     /**
-     * Determines whether the {@link Agent} with the given <code>agentId</code> is enabled or not.<br>
+     * Determines whether the {@link io.logspace.agent.api.Agent Agent} with the given <code>agentId</code> is enabled or not.<br>
      * If no Agent is currently registered with AgentController this method should return <code>false</code>.
      *
      * @param agentId The ID of the Agent to check.
@@ -48,7 +48,7 @@ public interface AgentController {
     boolean isAgentEnabled(String agentId);
 
     /**
-     * Registers an {@link Agent} with this AgentController.<br>
+     * Registers an {@link io.logspace.agent.api.Agent Agent} with this AgentController.<br>
      * Registering an Agent more than once has no effect.
      *
      * @param agent - The Agent to be registered.
@@ -75,7 +75,7 @@ public interface AgentController {
     void shutdown();
 
     /**
-     * Unregisters an {@link agent} with this AgentController.
+     * Unregisters an {@link io.logspace.agent.api.Agent Agent} with this AgentController.
      *
      * @param agent - The Agent to be unregistered.
      */

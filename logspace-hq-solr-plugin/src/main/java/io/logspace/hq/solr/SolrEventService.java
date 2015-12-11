@@ -728,7 +728,7 @@ public class SolrEventService implements EventService {
         }
     }
 
-    private InputStream serializeResponse(SolrParams params, QueryResponse response) throws UnsupportedEncodingException, IOException {
+    private InputStream serializeResponse(SolrParams params, QueryResponse response) throws IOException {
         LocalSolrQueryRequest solrQueryRequest = new LocalSolrQueryRequest(null, params);
         SolrQueryResponse solrQueryResponse = new SolrQueryResponse();
         solrQueryResponse.setAllValues(response.getResponse());

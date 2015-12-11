@@ -7,31 +7,29 @@
  */
 package io.logspace.agent.api.order;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.event.EventProperty;
-
 /**
- * This class describes the capabilities of an {@link Agent}.
+ * This class describes the capabilities of an {@link io.logspace.agent.api.Agent Agent}.
  */
 public class AgentCapabilities {
 
     /**
-     * The ID of the {@link Agent}.
+     * The ID of the {@link io.logspace.agent.api.Agent Agent}.
      */
     private String id;
 
     /**
-     * The type of the {@link Agent}.
+     * The type of the {@link io.logspace.agent.api.Agent Agent}.
      */
     private String type;
 
     /**
-     * The {@link TriggerType TriggerTypes} the {@link Agent} supports.
+     * The {@link TriggerType TriggerTypes} the {@link io.logspace.agent.api.Agent Agent} supports.
      */
     private TriggerType[] supportedTriggerTypes;
 
     /**
-     * The descriptions of the {@link Agent Agent's} {@link EventProperty EventProperties}.
+     * The descriptions of the {@link io.logspace.agent.api.Agent Agent's} {@link io.logspace.agent.api.event.EventProperty
+     * EventProperties}.
      */
     private PropertyDescription[] propertyDescriptions;
 

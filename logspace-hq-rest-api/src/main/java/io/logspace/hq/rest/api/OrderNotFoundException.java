@@ -9,7 +9,7 @@ package io.logspace.hq.rest.api;
 
 import static io.logspace.hq.rest.api.HttpStatusCode.NotFound;
 
-public class OrderNotFoundException extends AbstractLogspaceResourceException {
+public final class OrderNotFoundException extends AbstractLogspaceResourceException {
 
     private static final long serialVersionUID = 1L;
 
