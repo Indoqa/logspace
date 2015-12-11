@@ -7,17 +7,24 @@
  */
 package io.logspace.hq.rest.api.event;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import io.logspace.hq.rest.api.event.MultiValueEventFilterElement.Operator;
 
 public class EventFilterElementBuilder {
 
+    private Operator operator;
     private String property;
     private String value;
     private Object to;
     private Object from;
     private List<String> values;
 
-    public EventFilterElement build() {
+    public EventFilterElement build() throws JsonProcessingException {
         if (this.value != null) {
             return EqualsEventFilterElement.create(this.property, this.value);
         }
@@ -27,7 +34,12 @@ public class EventFilterElementBuilder {
         }
 
         if (this.values != null) {
-            return MultiValueEventFilterElement.create(this.property, this.values);
+            if (this.operator == null) {
+                throw new JsonMappingException(
+                    "No operator was supplied for MultiValueEventFilterElement. The following operators are supported: "
+                            + Arrays.asList(Operator.values()));
+            }
+            return MultiValueEventFilterElement.create(this.property, this.operator, this.values);
         }
 
         return null;
@@ -35,6 +47,10 @@ public class EventFilterElementBuilder {
 
     public void withFrom(Object fromParameter) {
         this.from = fromParameter;
+    }
+
+    public void withOperator(Operator operatorParameter) {
+        this.operator = operatorParameter;
     }
 
     public void withProperty(String propertyParameter) {
