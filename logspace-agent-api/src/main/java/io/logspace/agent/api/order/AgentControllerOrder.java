@@ -10,13 +10,10 @@ package io.logspace.agent.api.order;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.logspace.agent.api.Agent;
-import io.logspace.agent.api.AgentController;
-import io.logspace.agent.api.event.Event;
-
 /**
- * The {@link AgentControllerOrder} contains configuration parameters for controlling the commit behavior of an {@link AgentController}
- * as well as the {@link AgentOrder orders} for the individual {@link Agent Agents} registered with the controller.
+ * The {@link AgentControllerOrder} contains configuration parameters for controlling the commit behavior of an
+ * {@link io.logspace.agent.api.AgentController AgentController} as well as the {@link AgentOrder orders} for the individual
+ * {@link io.logspace.agent.api.Agent Agents} registered with the controller.
  */
 public class AgentControllerOrder {
 
@@ -33,14 +30,14 @@ public class AgentControllerOrder {
     private List<AgentOrder> agentOrders = new ArrayList<AgentOrder>();
 
     /**
-     * The maximum amount of time after which collected {@link Event Events} should be committed.
+     * The maximum amount of time after which collected {@link io.logspace.agent.api.event.Event Events} should be committed.
      */
     private Integer commitMaxSeconds;
 
     /**
      * Adds the given <code>agentOrder</code> to this {@link AgentControllerOrder}.<br>
      * <br>
-     * This method will not remove an already existing order for the same {@link Agent}.
+     * This method will not remove an already existing order for the same {@link io.logspace.agent.api.Agent Agent}.
      *
      * @param agentOrder The {@link AgentOrder} to add.
      */

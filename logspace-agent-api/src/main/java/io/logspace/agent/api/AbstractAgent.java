@@ -7,7 +7,6 @@
  */
 package io.logspace.agent.api;
 
-import io.logspace.agent.api.event.AbstractEventBuilder;
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventBuilderData;
 import io.logspace.agent.api.order.AgentCapabilities;
@@ -92,7 +91,7 @@ abstract class AbstractAgent implements Agent {
     }
 
     /**
-     * @return The base data necessary for creating a new {@link AbstractEventBuilder}.
+     * @return The data necessary for creating a new {@link io.logspace.agent.api.event.AbstractEventBuilder AbstractEventBuilder} .
      */
     protected EventBuilderData getEventBuilderData() {
         return new EventBuilderData(this.getId(), this.agentController.getSystem(), this.agentController.getMarker());

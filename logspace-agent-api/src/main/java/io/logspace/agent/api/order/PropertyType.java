@@ -14,10 +14,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import io.logspace.agent.api.event.EventProperty;
-
 /**
- * Defines the types of the values an {@link EventProperty} can carry and which aggregations are possible for those values.
+ * Defines the types of the values an {@link io.logspace.agent.api.event.EventProperty EventProperty} can carry and which aggregations
+ * are possible for those values.
  */
 public enum PropertyType {
 
