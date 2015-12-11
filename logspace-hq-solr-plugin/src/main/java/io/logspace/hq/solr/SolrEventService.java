@@ -9,13 +9,20 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.*;
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -71,7 +78,11 @@ import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.agentactivity.AgentActivity;
-import io.logspace.hq.rest.api.event.*;
+import io.logspace.hq.rest.api.event.EqualsEventFilterElement;
+import io.logspace.hq.rest.api.event.EventFilter;
+import io.logspace.hq.rest.api.event.EventFilterElement;
+import io.logspace.hq.rest.api.event.MultiValueEventFilterElement;
+import io.logspace.hq.rest.api.event.RangeEventFilterElement;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
@@ -469,7 +480,9 @@ public class SolrEventService implements EventService {
                 this.appendSolrValue(stringBuilder, iterator.next());
 
                 if (iterator.hasNext()) {
-                    stringBuilder.append(" OR ");
+                    stringBuilder.append(' ');
+                    stringBuilder.append(multiValueEventFilterElement.getOperator());
+                    stringBuilder.append(' ');
                 }
             }
             stringBuilder.append(')');
@@ -593,7 +606,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-            || agentDescription.getPropertyDescriptions().isEmpty()) {
+                || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -637,8 +650,7 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient
-                .getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }

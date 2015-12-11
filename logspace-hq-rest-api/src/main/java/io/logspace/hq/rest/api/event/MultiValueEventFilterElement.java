@@ -13,22 +13,35 @@ import java.util.List;
 public class MultiValueEventFilterElement extends AbstractEventFilterElement {
 
     private List<String> values = new ArrayList<>();
+    private Operator operator;
 
-    public static MultiValueEventFilterElement create(String property, List<String> values) {
+    public static MultiValueEventFilterElement create(String property, Operator operator, List<String> values) {
         MultiValueEventFilterElement result = new MultiValueEventFilterElement();
 
         result.setProperty(property);
+        result.setOperator(operator);
         result.setValues(values);
 
         return result;
+    }
+
+    public Operator getOperator() {
+        return this.operator;
     }
 
     public List<String> getValues() {
         return this.values;
     }
 
+    public void setOperator(Operator operator) {
+        this.operator = operator;
+    }
+
     public void setValues(List<String> values) {
         this.values = values;
     }
 
+    public enum Operator {
+        OR, AND;
+    }
 }
