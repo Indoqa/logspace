@@ -49,20 +49,18 @@ With the *Monitor* and *HQ* running, you are collecting *Events* about the compu
 In demo mode you should see *Events* after about 20 seconds.<br/>
 In production mode you can configure the upload process, which has an effect on both upload delay and network overhead.
 
-The interactive frontend works with *TimeSeries*.<br/>
-A *TimeSeries* defines a single *EventProperty* from a specific *Agent* and an *Aggregation* for the values of that *EventProperty* for a certain window of time. It also contains settings for how to render it in a chart.
+The interactive frontend works with *Time-Series*.<br/>
+A *Time-Series* defines a single *EventProperty* from a specific *Agent* and an *Aggregation* for the values of that *EventProperty* for a certain window of time. It also contains settings for how to render it in a chart.
 
-1. Begin by selecting the time window and gap: This applies to all *TimeSeries*
-2. Define a *TimeSeries*:
+1. Begin by selecting the *Time Window*: This applies to all *Time-Series*
+2. Define a *Time-Series*:
 	1. Select an *Agent*
 	2. Select the *EventProperty*
 	3. Select an *Aggregation*
 	4. Select a color
 	5. Select a scale or simply use the default scaling
 
-You can always edit a *TimeSeries* and select a different *EventProperty* from the same *Agent* or change the *Aggregation*, color or scale.
-
-*TimeSeries* can also be exported and re-imported again, allowing you to restore frequently required charts quickly or share it with someone else.
+The section [frontend](/frontend) contains a more detailed description of the available features.
 
 ## Behind the Curtain
 
