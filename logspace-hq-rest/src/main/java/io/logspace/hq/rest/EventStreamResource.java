@@ -51,7 +51,7 @@ public class EventStreamResource extends AbstractSpaceResource {
         int offset = getQueryParam(req, PARAMETER_OFFSET, DEFAULT_STREAM_OFFSET, MIN_OFFSET, MAX_OFFSET);
         int count = getQueryParam(req, PARAMETER_COUNT, DEFAULT_COUNT, MIN_COUNT, MAX_STREAM_COUNT);
 
-        res.raw().setContentType("application/json");
+        res.raw().setContentType("application/json;charset=UTF-8");
 
         ServletOutputStream outputStream = res.raw().getOutputStream();
         outputStream.print('[');
