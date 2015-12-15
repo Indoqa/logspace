@@ -90,7 +90,7 @@ export default class TimeWindowDynamic extends Component {
           <div className='dynamic'>
             <span className='intro'>last </span>
             <GapSelection value={this.state.localState.get('range')} onChange={this.onRangeChange.bind(this)}/>
-            <span className='intro'>UNIT</span>
+            <span className='intro'>Gap</span>
             <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
           </div>         
         </div>

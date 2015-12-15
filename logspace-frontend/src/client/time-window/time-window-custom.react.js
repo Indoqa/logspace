@@ -107,7 +107,7 @@ export default class TimeWindowCustom extends Component {
       <div className='current'>
         <div className='selection'>
           <div className='submit' >
-            <span className='intro'>UNIT</span>
+            <span className='intro'>GAP</span>
             <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
             <button className='waves-effect waves-light btn btn-small' onClick={this.submitCustom.bind(this)}>
               Apply
