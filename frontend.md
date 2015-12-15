@@ -31,7 +31,7 @@ Scale the Y-axis so that all values fit inside the visible range.
 3. Custom Range:<br/>
 Use custom values as the minimum and maximum of the visible range.
 
-*Time-Series* that share the scale of another *Time-Series* will be displayed slightly indented underneath it.
+*Time-Series* that use the scale of another *Time-Series* will be displayed slightly indented underneath it.
 [![Frontend Scales](/assets/images/frontend-scales.png)](/assets/images/frontend-scales.png)
 
 Up to two different scales will be displayed as Y-axes.<br/>
@@ -41,13 +41,13 @@ Adding more scales will still result in correct visualization, but not show addi
 ## Selecting the Time Window
 
 All *Time-Series* are using the same *Time Window*.<br/>
-It consists of a period of time and a unit in which this period is to be subdivided.<br/>
-The period defines which *Events* are considered from each *Time-Series*. The unit defines the number of individual data points for each *Time-Series*, using the *Aggregation* to combine the values from the existing *Events*.
+It consists of a period of time and a gap dividing this period.<br/>
+The period defines which *Events* are considered from each *Time-Series*. The gap defines the number of individual data points for each *Time-Series*, using the *Aggregation* to combine the values from the existing *Events*.
 
 [![Frontend Time Window](/assets/images/frontend-time-window.png)](/assets/images/frontend-time-window.png)
 
-``Shortcuts`` are for common use cases and select both the period and the unit.<br/>
-``Dynamic`` represents *Time Windows* relative to the current time and allow to select the period and unit independently.<br/>
+``Shortcuts`` are for common use cases and select both the period and the gap.<br/>
+``Dynamic`` represents *Time Windows* relative to the current time and allow to select the period and gap independently.<br/>
 ``Custom`` allows fine grained control of every aspect of the *Time Window*.
 
 
