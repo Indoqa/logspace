@@ -132,11 +132,12 @@ export default class Chart extends Component {
 
     const headerheight = 40
     const sidebarWidth = 250
-    const chartPadding = 30 * 2
+    const horizontalPadding = 20
+    const verticalPadding = 50
     const heightWidthRatio = 0.45
 
-    const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - chartPadding
-    const height = windowHeight - chartPadding - headerheight
+    const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - horizontalPadding
+    const height = windowHeight - headerheight - verticalPadding
 
     return {
       width : width,
@@ -272,7 +273,7 @@ export default class Chart extends Component {
           type: 'category',
            padding: {
             left: 0,
-            right: 0,
+            right: 3,
           },
           tick: {
             count: this.getMaxTicks(chartData),
@@ -286,7 +287,7 @@ export default class Chart extends Component {
           show: true,
           padding: {
             top: 5,
-            bottom: 10
+            bottom: 5
           },
           tick: {
             format: formatYTick
