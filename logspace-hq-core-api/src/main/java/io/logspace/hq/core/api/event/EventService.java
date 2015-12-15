@@ -8,7 +8,6 @@
 package io.logspace.hq.core.api.event;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
@@ -35,9 +34,9 @@ public interface EventService {
      *
      * @param parameters The parameters to be used for the query.
      *
-     * @return An {@link InputStream} with the unprocessed response.
+     * @return A {@link NativeQueryResult} with the result.
      */
-    InputStream executeDirectQuery(Map<String, String[]> parameters);
+    NativeQueryResult executeNativeQuery(Map<String, String[]> parameters);
 
     AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort);
 

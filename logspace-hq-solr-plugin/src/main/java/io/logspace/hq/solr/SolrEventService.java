@@ -27,6 +27,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.AutoCloseInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -66,6 +68,7 @@ import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.event.StoredEvent;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
@@ -129,7 +132,7 @@ public class SolrEventService implements EventService {
     private final JSONResponseWriter jsonResponseWriter = new JSONResponseWriter();
 
     @Override
-    public InputStream executeDirectQuery(Map<String, String[]> parameters) {
+    public NativeQueryResult executeNativeQuery(Map<String, String[]> parameters) {
         SolrParams params = this.createSolrParams(parameters);
 
         try {
@@ -139,10 +142,10 @@ public class SolrEventService implements EventService {
 
             InputStream inputStream = (InputStream) response.getResponse().get("stream");
             if (inputStream != null) {
-                return inputStream;
+                return new SolrNativeQueryResult(inputStream);
             }
 
-            return this.serializeResponse(params, response);
+            return new SolrNativeQueryResult(this.serializeResponse(params, response));
         } catch (SolrException | SolrServerException | IOException e) {
             throw new DataRetrievalException("Could not execute direct query with parameters " + parameters.toString() + ".", e);
         }
@@ -772,6 +775,26 @@ public class SolrEventService implements EventService {
             } catch (IOException e) {
                 throw EventStoreException.retrieveFailed("Failed to stream events.", e);
             }
+        }
+    }
+
+    private static class SolrNativeQueryResult implements NativeQueryResult {
+
+        private final InputStream inputStream;
+
+        public SolrNativeQueryResult(InputStream inputStream) {
+            super();
+            this.inputStream = new AutoCloseInputStream(inputStream);
+        }
+
+        @Override
+        public String getContentType() {
+            return "application/json;charset=UTF-8";
+        }
+
+        @Override
+        public void writeTo(OutputStream outputStream) throws IOException {
+            IOUtils.copy(this.inputStream, outputStream);
         }
     }
 }

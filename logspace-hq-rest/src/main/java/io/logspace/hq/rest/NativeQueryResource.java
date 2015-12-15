@@ -8,16 +8,14 @@
 package io.logspace.hq.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
-
 import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.rest.api.nativequery.NativeQueryParameters;
 import spark.Request;
 import spark.Response;
@@ -36,11 +34,10 @@ public class NativeQueryResource extends AbstractLogspaceResourcesBase {
     }
 
     private void executeNativeQuery(Response res, Map<String, String[]> parameters) throws IOException {
-        res.type("application/json");
+        NativeQueryResult result = this.eventService.executeNativeQuery(parameters);
 
-        InputStream inputStream = this.eventService.executeDirectQuery(parameters);
-        IOUtils.copy(inputStream, res.raw().getOutputStream());
-        inputStream.close();
+        res.type(result.getContentType());
+        result.writeTo(res.raw().getOutputStream());
     }
 
     private Object getNativeQuery(Request req, Response res) throws IOException {
