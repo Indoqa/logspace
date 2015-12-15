@@ -4,6 +4,9 @@ title: Event API
 ---
 # Event API
 
+[Store Events](#store-events)<br/>
+[Retrieve Events](#retrieve-events)
+
 ## Store Events
 
 Stores multiple events in the *Logspace HQ*.
@@ -72,8 +75,6 @@ The supplied <a href="/configuration-hq-spaces">Space-Token</a> must be valid.</
   </tbody>
 </table>
 
-
-
 ### Body
 `none`
 
@@ -116,14 +117,14 @@ If the supplied *Space-Token* is invalid:
 ## Sample Call
 
   ```
-  curl 'http://<logspace-hq.server>:4567/events' \
+  curl 'http://localhost:4567/events' \
     -X PUT \
     -d @request.json \
     --header "Content-Type:application/json" \
     --header "logspace.space-token:development"
   ```
 
-Example content of request.json
+``request.json``
 
 ```json
 [
@@ -157,4 +158,89 @@ Example content of request.json
     }
   }
 ]
+```
+
+## Retrieve Events
+
+Retrieve *Events* from the *Event Store*.
+
+<table>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>/events</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td><code>POST</code></td>
+    </tr>
+    <tr>
+      <td>URL Parameters</td>
+      <td><code>count</code>: The maximum number of Events to retrieve; Default is 10<br/><code>cursor</code>: The position from which to retrieve Events; Default is *</td>
+    </tr>
+  </tbody>
+</table>
+
+Paging is done using a cursor.<br/>
+To retrieve the next page of *Events* the "nextCursorMark" from the last result must be provided as the "cursor" for the next request.
+If the "cursor" is missing or "*", retrieval will start from the beginning.
+
+### Header Parameters
+`None`
+ 
+### Body
+The Event Filter
+
+```json
+{
+  "elements" : [{
+      "property" : "Property ID",
+      "value" : "Property value"
+    },
+    {
+      "property" : "Property ID",
+      "values" : ["Property value", "Property value", "Property value"],
+      "operator" : "OR"
+    },
+    {
+      "property" : "Property ID",
+      "from" : "Property value",
+      "to" : "Property value"
+    }
+  ]
+}
+```
+
+## Success Response
+
+### Header
+<table>
+  <tbody>
+    <tr>
+      <td style="white-space: nowrap">Response Code:</td>
+      <td>200 OK</td>
+    </tr>
+  </tbody>
+</table>
+
+### Body
+
+```json
+{
+  "totalCount" : 225337,
+  "nextCursorMark" : "AoJxrKnjitECPwU2NGM0ZDQ5OC1jMTQ3LTQ0MDctYjU4Mi1mNDIyMGQ3NDRjN2I=",
+  "events" : [ {
+    "id" : "028cf85f-b38b-40c7-a038-781025cf0502",
+    "type" : "os/memory",
+    "system" : "S430",
+    "agent-id" : "os/memory",
+    "timestamp" : "2015-11-17T13:05:55.001Z",
+    "long-properties" : {
+      "total_memory" : 16754085888,
+      "free_memory" : 9407488000,
+      "used_memory" : 7346597888,
+      "committed_virtual_memory" : 133668864
+    }
+  }]
+}
 ```
