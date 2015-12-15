@@ -15,6 +15,14 @@ public class TimeSeriesDefinitions implements Iterable<TimeSeriesDefinition> {
 
     private List<TimeSeriesDefinition> definitions = new ArrayList<TimeSeriesDefinition>();
 
+    public TimeSeriesDefinition getDefinition(int index) {
+        return this.definitions.get(index);
+    }
+
+    public int getDefinitionCount() {
+        return this.definitions.size();
+    }
+
     public List<TimeSeriesDefinition> getDefinitions() {
         return this.definitions;
     }

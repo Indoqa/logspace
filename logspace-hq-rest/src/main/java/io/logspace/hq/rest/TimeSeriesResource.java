@@ -7,8 +7,6 @@
  */
 package io.logspace.hq.rest;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,20 +31,19 @@ public class TimeSeriesResource extends AbstractLogspaceResourcesBase {
     private TimeSeries postTimeSeries(Request req) {
         TimeSeries result = new TimeSeries();
 
-        TimeSeriesDefinitions dataQuery = this.getTransformer().toObject(req.body(), TimeSeriesDefinitions.class);
-        this.validateDateRanges(dataQuery);
+        TimeSeriesDefinitions definitions = this.getTransformer().toObject(req.body(), TimeSeriesDefinitions.class);
+        this.validateDateRanges(definitions);
 
         DateRange dateRange = null;
-        List<TimeSeriesDefinition> dataDefinitions = dataQuery.getDefinitions();
-        Object[][] data = new Object[dataDefinitions.size()][];
-        for (int i = 0; i < dataDefinitions.size(); i++) {
-            TimeSeriesDefinition dataDefinition = dataDefinitions.get(i);
-            data[i] = this.eventService.getData(dataDefinition);
-            dateRange = dataDefinition.getDateRange();
+        Object[][] data = new Object[definitions.getDefinitionCount()][];
+        for (int i = 0; i < data.length; i++) {
+            TimeSeriesDefinition definition = definitions.getDefinition(i);
+            data[i] = this.eventService.getData(definition);
+            dateRange = definition.getDateRange();
         }
 
-        result.setData(data);
         result.setDateRange(dateRange);
+        result.setData(data);
 
         return result;
     }
@@ -62,9 +59,9 @@ public class TimeSeriesResource extends AbstractLogspaceResourcesBase {
         }
     }
 
-    private void validateDateRanges(TimeSeriesDefinitions dataQuery) {
-        for (TimeSeriesDefinition eachDataDefinition : dataQuery) {
-            this.validateDateRange(eachDataDefinition.getDateRange());
+    private void validateDateRanges(TimeSeriesDefinitions definitions) {
+        for (TimeSeriesDefinition eachDefinition : definitions) {
+            this.validateDateRange(eachDefinition.getDateRange());
         }
     }
 }
