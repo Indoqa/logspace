@@ -117,9 +117,9 @@ function createScaleMap(items, responseJson) {
 function createXAxisLabals(responseJson) {
   let labels = []
 
-  const start = new Date(responseJson.dateRange.start).getTime()
-  const end = new Date(responseJson.dateRange.end).getTime()
-  const gap = responseJson.dateRange.gap
+  const start = new Date(responseJson.timeWindow.start).getTime()
+  const end = new Date(responseJson.timeWindow.end).getTime()
+  const gap = responseJson.timeWindow.gap
 
   for (let i = start; i < end; i = i + (gap * 1000)) {
     labels.push(moment(new Date(i)))

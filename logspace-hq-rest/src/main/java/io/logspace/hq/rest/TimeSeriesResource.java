@@ -32,36 +32,36 @@ public class TimeSeriesResource extends AbstractLogspaceResourcesBase {
         TimeSeries result = new TimeSeries();
 
         TimeSeriesDefinitions definitions = this.getTransformer().toObject(req.body(), TimeSeriesDefinitions.class);
-        this.validateDateRanges(definitions);
+        this.validateTimeWindows(definitions);
 
-        DateRange dateRange = null;
+        TimeWindow timeWindow = null;
         Object[][] data = new Object[definitions.getDefinitionCount()][];
         for (int i = 0; i < data.length; i++) {
             TimeSeriesDefinition definition = definitions.getDefinition(i);
             data[i] = this.eventService.getData(definition);
-            dateRange = definition.getDateRange();
+            timeWindow = definition.getTimeWindow();
         }
 
-        result.setDateRange(dateRange);
+        result.setTimeWindow(timeWindow);
         result.setData(data);
 
         return result;
     }
 
-    private void validateDateRange(DateRange dateRange) {
-        int requestedSteps = dateRange.getSteps();
+    private void validateTimeWindow(TimeWindow timeWindow) {
+        int requestedSteps = timeWindow.getSteps();
         if (requestedSteps > MAX_STEPS) {
             throw InvalidTimeSeriesDefinitionException.tooManyValues(requestedSteps, MAX_STEPS);
         }
 
-        if (!dateRange.getEnd().after(dateRange.getStart())) {
-            throw InvalidTimeSeriesDefinitionException.invalidRange(dateRange.getStart(), dateRange.getEnd());
+        if (!timeWindow.getEnd().after(timeWindow.getStart())) {
+            throw InvalidTimeSeriesDefinitionException.invalidRange(timeWindow.getStart(), timeWindow.getEnd());
         }
     }
 
-    private void validateDateRanges(TimeSeriesDefinitions definitions) {
+    private void validateTimeWindows(TimeSeriesDefinitions definitions) {
         for (TimeSeriesDefinition eachDefinition : definitions) {
-            this.validateDateRange(eachDefinition.getDateRange());
+            this.validateTimeWindow(eachDefinition.getTimeWindow());
         }
     }
 }

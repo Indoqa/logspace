@@ -75,9 +75,9 @@ import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
-import io.logspace.hq.rest.api.timeseries.DateRange;
 import io.logspace.hq.rest.api.timeseries.InvalidTimeSeriesDefinitionException;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
+import io.logspace.hq.rest.api.timeseries.TimeWindow;
 
 @Named
 public class SolrEventService implements EventService {
@@ -217,7 +217,7 @@ public class SolrEventService implements EventService {
         solrQuery.setRows(0);
 
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
-        solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getDateRange()));
+        solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getTimeWindow()));
         solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
         solrQuery.set("json.facet", this.createJsonFacets(dataDefinition));
 
@@ -536,9 +536,9 @@ public class SolrEventService implements EventService {
             valueFacet = new StatisticFacet(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
         }
 
-        Date startDate = dataDefinition.getDateRange().getStart();
-        Date endDate = dataDefinition.getDateRange().getEnd();
-        int gap = dataDefinition.getDateRange().getGap();
+        Date startDate = dataDefinition.getTimeWindow().getStart();
+        Date endDate = dataDefinition.getTimeWindow().getEnd();
+        int gap = dataDefinition.getTimeWindow().getGap();
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -670,8 +670,8 @@ public class SolrEventService implements EventService {
         return stringBuilder.toString();
     }
 
-    private String getTimestampRangeQuery(DateRange dateRange) {
-        return this.getTimestampRangeQuery(dateRange.getStart(), dateRange.getEnd());
+    private String getTimestampRangeQuery(TimeWindow timeWindow) {
+        return this.getTimestampRangeQuery(timeWindow.getStart(), timeWindow.getEnd());
     }
 
     private AgentDescription loadAgentDescription(String globalAgentId) throws SolrServerException, IOException {

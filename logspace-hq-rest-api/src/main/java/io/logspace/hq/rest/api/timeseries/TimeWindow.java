@@ -11,7 +11,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.util.Date;
 
-public class DateRange {
+public class TimeWindow {
 
     private Date start;
     private Date end;

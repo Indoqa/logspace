@@ -11,7 +11,7 @@ import io.logspace.agent.api.order.Aggregate;
 
 public class TimeSeriesDefinition {
 
-    private DateRange dateRange;
+    private TimeWindow timeWindow;
 
     private String globalAgentId;
     private String propertyId;
@@ -20,10 +20,6 @@ public class TimeSeriesDefinition {
 
     public Aggregate getAggregate() {
         return this.aggregate;
-    }
-
-    public DateRange getDateRange() {
-        return this.dateRange;
     }
 
     public String getFacetFunction() {
@@ -45,12 +41,12 @@ public class TimeSeriesDefinition {
         return this.propertyId;
     }
 
-    public void setAggregate(Aggregate aggregate) {
-        this.aggregate = aggregate;
+    public TimeWindow getTimeWindow() {
+        return this.timeWindow;
     }
 
-    public void setDateRange(DateRange dateRange) {
-        this.dateRange = dateRange;
+    public void setAggregate(Aggregate aggregate) {
+        this.aggregate = aggregate;
     }
 
     public void setGlobalAgentId(String globalAgentId) {
@@ -59,5 +55,9 @@ public class TimeSeriesDefinition {
 
     public void setPropertyId(String propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public void setTimeWindow(TimeWindow timeWindow) {
+        this.timeWindow = timeWindow;
     }
 }

@@ -9,7 +9,7 @@ package io.logspace.hq.rest.api.timeseries;
 
 public class TimeSeries {
 
-    private DateRange dateRange;
+    private TimeWindow timeWindow;
 
     private Object[][] data;
 
@@ -17,15 +17,15 @@ public class TimeSeries {
         return this.data;
     }
 
-    public DateRange getDateRange() {
-        return this.dateRange;
+    public TimeWindow getTimeWindow() {
+        return this.timeWindow;
     }
 
     public void setData(Object[][] data) {
         this.data = data != null ? data.clone() : null;
     }
 
-    public void setDateRange(DateRange dateRange) {
-        this.dateRange = dateRange;
+    public void setTimeWindow(TimeWindow timeWindow) {
+        this.timeWindow = timeWindow;
     }
 }

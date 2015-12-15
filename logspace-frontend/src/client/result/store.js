@@ -123,7 +123,7 @@ function createRestRequest(timeSeries, timeWindow) {
 
   timeSeries.forEach(function(item) {
     request.definitions.push({
-      'dateRange': {
+      'timeWindow': {
         'start': selection.start().seconds(0).milliseconds(0),
         'end': selection.end().seconds(59).milliseconds(999).add(1,'milliseconds'),
         'gap': selection.gap.amount * selection.gap.unit.factor
