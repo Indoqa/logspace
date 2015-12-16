@@ -70,7 +70,6 @@
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
     <solr-spring-client-version>5.1.0</solr-spring-client-version>
     <solr-facet-api-version>0.1</solr-facet-api-version>
-    <indoqa-commons-jar-in-jar-version>1.2.1</indoqa-commons-jar-in-jar-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
     <commons-lang3-version>3.3.2</commons-lang3-version>
@@ -350,7 +349,7 @@
       <dependency>
         <groupId>com.indoqa.thirdparty</groupId>
         <artifactId>tape</artifactId>
-        <version>1.2.4-20150324</version>
+        <version>1.2.4</version>
       </dependency>
 
       <!-- Logging -->
