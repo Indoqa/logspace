@@ -89,27 +89,24 @@ public class SolrEventService implements EventService {
     private static final String SORT_CRON_ASC = "timestamp ASC, id ASC";
     private static final String SORT_CRON_DESC = "timestamp DESC, id ASC";
 
-    private static final String FIELD_ID = "id";
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
 
-    private static final String FACETS_NAME = "facets";
-
-    private static final String VALUE_FACET_NAME = "value";
+    private static final String VALUE_FACET_NAME = "val";
     private static final String COUNT_FACET_NAME = "count";
-    private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
 
+    private static final String FIELD_ID = "id";
     private static final String FIELD_SPACE = "space";
     private static final String FIELD_SYSTEM = "system";
     private static final String FIELD_AGENT_ID = "agent_id";
     private static final String FIELD_GLOBAL_AGENT_ID = "global_agent_id";
     private static final String FIELD_TYPE = "type";
     private static final String FIELD_MARKER = "marker";
-
     private static final String FIELD_GLOBAL_ID = "global_id";
     private static final String FIELD_PARENT_ID = "parent_id";
     private static final String FIELD_TIMESTAMP = "timestamp";
     private static final String FIELD_PROPERTY_ID = "property_id";
+    private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -187,8 +184,8 @@ public class SolrEventService implements EventService {
             for (NamedList<Object> eachAgentBucket : agentBuckets) {
                 AgentActivity agentActivity = new AgentActivity();
 
-                agentActivity.setGlobalAgentId((String) eachAgentBucket.get("val"));
-                agentActivity.setEventCount(Buckets.getInt(eachAgentBucket, "count"));
+                agentActivity.setGlobalAgentId((String) eachAgentBucket.get(VALUE_FACET_NAME));
+                agentActivity.setEventCount(Buckets.getInt(eachAgentBucket, COUNT_FACET_NAME));
 
                 int[] history = new int[steps];
 
@@ -196,7 +193,7 @@ public class SolrEventService implements EventService {
                 for (int i = 0; i < Math.min(historyBuckets.getBucketCount(), history.length); i++) {
                     NamedList<Object> historyBucket = historyBuckets.getBucket(i);
 
-                    int historyValue = Buckets.getInt(historyBucket, "count");
+                    int historyValue = Buckets.getInt(historyBucket, COUNT_FACET_NAME);
                     history[i] = historyValue;
                     maxHistoryValue = Math.max(maxHistoryValue, historyValue);
                 }
@@ -214,7 +211,6 @@ public class SolrEventService implements EventService {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Object[] getData(TimeSeriesDefinition dataDefinition) {
         SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
         solrQuery.setRows(0);
@@ -222,30 +218,23 @@ public class SolrEventService implements EventService {
         solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
         solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getTimeWindow()));
         solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
-        solrQuery.set("json.facet", this.createJsonFacets(dataDefinition));
-
-        this.logger.debug("Executing query {}", solrQuery);
+        solrQuery.set("json.facet", this.createTimeSeriesFacets(dataDefinition));
 
         try {
             QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
 
-            NamedList<Object> facets = (NamedList<Object>) response.getResponse().get(FACETS_NAME);
-            Object[] result = new Object[facets.size() - 1];
+            List<Object> values = new ArrayList<Object>();
 
-            for (int i = 1; i < facets.size(); i++) {
-                int index = Integer.parseInt(facets.getName(i));
-
-                Object value;
+            Buckets buckets = Buckets.fromResponse(response, FIELD_TIMESTAMP);
+            for (NamedList<Object> eachBucket : buckets) {
                 if (dataDefinition.getAggregate() == Aggregate.count) {
-                    value = ((NamedList<?>) facets.getVal(i)).get(COUNT_FACET_NAME);
+                    values.add(eachBucket.get(COUNT_FACET_NAME));
                 } else {
-                    value = ((NamedList<?>) facets.getVal(i)).get(VALUE_FACET_NAME);
+                    values.add(eachBucket.get(VALUE_FACET_NAME));
                 }
-
-                result[index] = value;
             }
 
-            return result;
+            return values.toArray();
         } catch (SolrException | SolrServerException | IOException e) {
             throw new DataRetrievalException("Could not retrieve data.", e);
         }
@@ -525,46 +514,6 @@ public class SolrEventService implements EventService {
         return result;
     }
 
-    private String createJsonFacets(TimeSeriesDefinition dataDefinition) {
-        PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
-        if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
-                dataDefinition.getAggregate());
-        }
-
-        FacetList facetList = new FacetList();
-
-        Facet valueFacet = null;
-        if (dataDefinition.getAggregate() != Aggregate.count) {
-            valueFacet = new StatisticFacet(VALUE_FACET_NAME, dataDefinition.getFacetFunction());
-        }
-
-        Date startDate = dataDefinition.getTimeWindow().getStart();
-        Date endDate = dataDefinition.getTimeWindow().getEnd();
-        int gap = dataDefinition.getTimeWindow().getGap();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-
-        while (calendar.getTime().before(endDate)) {
-            String name = String.valueOf(facetList.getSubFacetCount());
-
-            Date start = calendar.getTime();
-            calendar.add(Calendar.SECOND, gap);
-            Date end = calendar.getTime();
-            String query = this.getTimestampRangeQuery(start, end);
-
-            QueryFacet queryFacet = new QueryFacet(name, query);
-            if (valueFacet != null) {
-                queryFacet.addSubFacet(valueFacet);
-            }
-
-            facetList.addSubFacet(queryFacet);
-        }
-
-        return facetList.toJsonString();
-    }
-
     private PropertyDescription createPropertyDescription(String propertyId) {
         if (propertyId == null) {
             return null;
@@ -593,6 +542,25 @@ public class SolrEventService implements EventService {
         }
 
         return result;
+    }
+
+    private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
+        PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
+        if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
+            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+                dataDefinition.getAggregate());
+        }
+
+        Date startDate = dataDefinition.getTimeWindow().getStart();
+        Date endDate = dataDefinition.getTimeWindow().getEnd();
+        int gap = dataDefinition.getTimeWindow().getGap();
+
+        RangeFacet rangeFacet = new RangeFacet(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, gap);
+        if (dataDefinition.getAggregate() != Aggregate.count) {
+            rangeFacet.addSubFacet(new StatisticFacet(VALUE_FACET_NAME, dataDefinition.getFacetFunction()));
+        }
+
+        return FacetList.toJsonString(rangeFacet);
     }
 
     private AgentDescription getAgentDescription(String globalAgentId) throws SolrServerException, IOException {
