@@ -44,6 +44,8 @@ public class DemoHqMode implements HqMode {
         InputStream resourceStream = null;
         OutputStream outputStream = null;
 
+        outputDirectory.mkdirs();
+
         try {
             resourceStream = this.getClass().getResourceAsStream(resourceDirectory + fileName);
             outputStream = new FileOutputStream(new File(outputDirectory, fileName));
@@ -69,12 +71,10 @@ public class DemoHqMode implements HqMode {
         capabilitiesDir.mkdirs();
 
         File ordersDir = new File(this.getBaseDir(), "orders");
-        ordersDir.mkdirs();
         this.createFile("/demo/orders/", ordersDir, "logspace-demo.json");
         this.createFile("/demo/orders/", ordersDir, "logspace-sample.json");
 
-        File spacesDir = new File(this.getBaseDir(), "space");
-        spacesDir.mkdirs();
+        File spacesDir = new File(this.getBaseDir(), "spaces");
         this.createFile("/demo/spaces/", spacesDir, "demo.space");
         this.createFile("/demo/spaces/", spacesDir, "logspace-sample.space");
     }
@@ -82,8 +82,8 @@ public class DemoHqMode implements HqMode {
     private void initializeDemoLogging() {
         File logDir = new File(this.getBaseDir(), "logs");
         logDir.mkdirs();
-        System.setProperty("log-path", logDir.getAbsolutePath());
 
+        System.setProperty("log-path", logDir.getAbsolutePath());
         System.setProperty("log4j.configurationFile", "log4j2-demo.xml");
     }
 
@@ -99,8 +99,7 @@ public class DemoHqMode implements HqMode {
         System.setProperty("logspace.solr.embedded-configuration-dir", solrDir.getAbsolutePath());
 
         File solrConfDir = new File(solrDir, "conf");
-        this.createFile("/demo/conf/", solrConfDir, "elevate.xml");
-        this.createFile("/demo/conf/", solrConfDir, "schema.xml");
-        this.createFile("/demo/conf/", solrConfDir, "solrconfig.xml");
+        this.createFile("/META-INF/solr/logspace/conf/", solrConfDir, "schema.xml");
+        this.createFile("/META-INF/solr/logspace/conf/", solrConfDir, "solrconfig.xml");
     }
 }
