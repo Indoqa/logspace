@@ -7,8 +7,8 @@
  */
 package io.logspace.hq.solr;
 
-import static com.indoqa.commons.lang.util.StringUtils.escapeSolr;
-import static com.indoqa.commons.lang.util.TimeUtils.formatSolrDate;
+import static com.indoqa.lang.util.StringUtils.escapeSolr;
+import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
 import static java.util.Calendar.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
@@ -56,8 +56,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.indoqa.commons.lang.util.TimeTracker;
-import com.indoqa.commons.lang.util.TimeUtils;
+import com.indoqa.lang.util.TimeTracker;
+import com.indoqa.lang.util.TimeUtils;
 import com.indoqa.solr.facet.api.*;
 
 import io.logspace.agent.api.event.Event;
