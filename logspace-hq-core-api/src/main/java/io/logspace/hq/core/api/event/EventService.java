@@ -46,7 +46,7 @@ public interface EventService {
      * @param dataDefinition - The {@link TimeSeriesDefinition} defining the query.
      * @return The matching {@link Event} properties for the {@link TimeSeriesDefinition}
      */
-    Object[] getData(TimeSeriesDefinition dataDefinition);
+    Object[] getTimeSeries(TimeSeriesDefinition dataDefinition);
 
     /**
      * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>

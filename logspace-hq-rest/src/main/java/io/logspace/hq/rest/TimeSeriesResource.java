@@ -38,7 +38,7 @@ public class TimeSeriesResource extends AbstractLogspaceResourcesBase {
         Object[][] data = new Object[definitions.getDefinitionCount()][];
         for (int i = 0; i < data.length; i++) {
             TimeSeriesDefinition definition = definitions.getDefinition(i);
-            data[i] = this.eventService.getData(definition);
+            data[i] = this.eventService.getTimeSeries(definition);
             timeWindow = definition.getTimeWindow();
         }
 

@@ -93,6 +93,7 @@ public class SolrEventService implements EventService {
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
 
     private static final String VALUE_FACET_NAME = "val";
+    private static final String AGGREGATION_FACET_NAME = "agg";
     private static final String COUNT_FACET_NAME = "count";
 
     private static final String FIELD_ID = "id";
@@ -211,36 +212,6 @@ public class SolrEventService implements EventService {
     }
 
     @Override
-    public Object[] getData(TimeSeriesDefinition dataDefinition) {
-        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
-        solrQuery.setRows(0);
-
-        solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
-        solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getTimeWindow()));
-        solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
-        solrQuery.set("json.facet", this.createTimeSeriesFacets(dataDefinition));
-
-        try {
-            QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
-
-            List<Object> values = new ArrayList<Object>();
-
-            Buckets buckets = Buckets.fromResponse(response, FIELD_TIMESTAMP);
-            for (NamedList<Object> eachBucket : buckets) {
-                if (dataDefinition.getAggregate() == Aggregate.count) {
-                    values.add(eachBucket.get(COUNT_FACET_NAME));
-                } else {
-                    values.add(eachBucket.get(VALUE_FACET_NAME));
-                }
-            }
-
-            return values.toArray();
-        } catch (SolrException | SolrServerException | IOException e) {
-            throw new DataRetrievalException("Could not retrieve data.", e);
-        }
-    }
-
-    @Override
     public Suggestion getSuggestion(SuggestionInput input) {
         TimeTracker timeTracker = new TimeTracker();
 
@@ -274,6 +245,36 @@ public class SolrEventService implements EventService {
             return result;
         } catch (SolrException | SolrServerException | IOException e) {
             throw new DataRetrievalException("Failed to create suggestions", e);
+        }
+    }
+
+    @Override
+    public Object[] getTimeSeries(TimeSeriesDefinition dataDefinition) {
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
+        solrQuery.setRows(0);
+
+        solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(dataDefinition.getGlobalAgentId()));
+        solrQuery.addFilterQuery(this.getTimestampRangeQuery(dataDefinition.getTimeWindow()));
+        solrQuery.addFilterQuery(dataDefinition.getPropertyId() + ":*");
+        solrQuery.set("json.facet", this.createTimeSeriesFacets(dataDefinition));
+
+        try {
+            QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
+
+            List<Object> values = new ArrayList<Object>();
+
+            Buckets buckets = Buckets.fromResponse(response, FIELD_TIMESTAMP);
+            for (NamedList<Object> eachBucket : buckets) {
+                if (dataDefinition.getAggregate() == Aggregate.count) {
+                    values.add(eachBucket.get(COUNT_FACET_NAME));
+                } else {
+                    values.add(eachBucket.get(AGGREGATION_FACET_NAME));
+                }
+            }
+
+            return values.toArray();
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Could not retrieve data.", e);
         }
     }
 
@@ -557,7 +558,7 @@ public class SolrEventService implements EventService {
 
         RangeFacet rangeFacet = new RangeFacet(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, gap);
         if (dataDefinition.getAggregate() != Aggregate.count) {
-            rangeFacet.addSubFacet(new StatisticFacet(VALUE_FACET_NAME, dataDefinition.getFacetFunction()));
+            rangeFacet.addSubFacet(new StatisticFacet(AGGREGATION_FACET_NAME, dataDefinition.getFacetFunction()));
         }
 
         return FacetList.toJsonString(rangeFacet);
