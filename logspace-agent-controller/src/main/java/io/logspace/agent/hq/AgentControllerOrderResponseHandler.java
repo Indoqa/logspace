@@ -7,9 +7,6 @@
  */
 package io.logspace.agent.hq;
 
-import io.logspace.agent.api.json.AgentControllerOrdersJsonDeserializer;
-import io.logspace.agent.api.order.AgentControllerOrder;
-
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
@@ -17,6 +14,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+
+import io.logspace.agent.api.json.AgentControllerOrdersJsonDeserializer;
+import io.logspace.agent.api.order.AgentControllerOrder;
 
 public class AgentControllerOrderResponseHandler implements ResponseHandler<AgentControllerOrder> {
 
@@ -43,6 +43,21 @@ public class AgentControllerOrderResponseHandler implements ResponseHandler<Agen
         }
 
         this.lastModified = response.getFirstHeader("Last-Modified").getValue();
-        return AgentControllerOrdersJsonDeserializer.fromJson(entity.getContent());
+
+        try {
+            return AgentControllerOrdersJsonDeserializer.fromJson(entity.getContent());
+        } catch (Exception e) {
+            throw new AgentControllerOrderDeserializationException(
+                "Error while parsing the agent order controller JSON provided by the Logspace headquarters.", e);
+        }
+    }
+
+    public static class AgentControllerOrderDeserializationException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public AgentControllerOrderDeserializationException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 }
