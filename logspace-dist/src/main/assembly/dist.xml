@@ -38,9 +38,11 @@
 
   <files>
     <file>
+      <outputDirectory>${project.artifactId}-${project.version}</outputDirectory>    
       <source>../LICENSE</source>
     </file>
     <file>
+      <outputDirectory>${project.artifactId}-${project.version}</outputDirectory>    
       <source>../NOTICE</source>
     </file>
   </files>
