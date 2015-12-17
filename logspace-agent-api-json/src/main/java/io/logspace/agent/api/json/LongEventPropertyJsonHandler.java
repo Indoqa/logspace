@@ -7,16 +7,15 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.EventProperties;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.LongEventProperty;
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
-public class LongEventPropertyJsonHandler implements EventPropertyJsonHandler<Long> {
+import io.logspace.agent.api.event.EventProperties;
+import io.logspace.agent.api.event.LongEventProperty;
+
+public class LongEventPropertyJsonHandler extends AbstractEventPropertyJsonHandler<Long> {
 
     public static final String FIELD_NAME = "long-properties";
 
@@ -26,17 +25,13 @@ public class LongEventPropertyJsonHandler implements EventPropertyJsonHandler<Lo
     }
 
     @Override
-    public void readEventProperty(EventProperties eventProperties, JsonParser jsonParser) throws IOException {
-        String propertyKey = jsonParser.getCurrentName();
-
-        jsonParser.nextToken();
+    protected void readPropertyValue(EventProperties eventProperties, String propertyName, JsonParser jsonParser) throws IOException {
         long propertyValue = jsonParser.getLongValue();
-
-        eventProperties.add(new LongEventProperty(propertyKey, propertyValue));
+        eventProperties.add(new LongEventProperty(propertyName, propertyValue));
     }
 
     @Override
-    public void writeEventProperty(EventProperty<Long> eventProperty, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(eventProperty.getKey(), eventProperty.getValue());
+    protected void writePropertyValue(JsonGenerator jsonGenerator, Long propertyValue) throws IOException {
+        jsonGenerator.writeNumber(propertyValue);
     }
 }

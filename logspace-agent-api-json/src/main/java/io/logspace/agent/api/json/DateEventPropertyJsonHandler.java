@@ -7,17 +7,16 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.DateEventProperty;
-import io.logspace.agent.api.event.EventProperties;
-import io.logspace.agent.api.event.EventProperty;
-
 import java.io.IOException;
 import java.util.Date;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
-public class DateEventPropertyJsonHandler implements EventPropertyJsonHandler<Date> {
+import io.logspace.agent.api.event.DateEventProperty;
+import io.logspace.agent.api.event.EventProperties;
+
+public class DateEventPropertyJsonHandler extends AbstractEventPropertyJsonHandler<Date> {
 
     public static final String FIELD_NAME = "date-properties";
 
@@ -27,17 +26,13 @@ public class DateEventPropertyJsonHandler implements EventPropertyJsonHandler<Da
     }
 
     @Override
-    public void readEventProperty(EventProperties eventProperties, JsonParser jsonParser) throws IOException {
-        String propertyKey = jsonParser.getCurrentName();
-
-        jsonParser.nextToken();
+    protected void readPropertyValue(EventProperties eventProperties, String propertyName, JsonParser jsonParser) throws IOException {
         String propertyValue = jsonParser.getText();
-
-        eventProperties.add(new DateEventProperty(propertyKey, JacksonUtils.parseDateValue(propertyValue)));
+        eventProperties.add(new DateEventProperty(propertyName, JacksonUtils.parseDateValue(propertyValue)));
     }
 
     @Override
-    public void writeEventProperty(EventProperty<Date> eventProperty, JsonGenerator jsonGenerator) throws IOException {
-        JacksonUtils.writeMandatoryDateField(jsonGenerator, eventProperty.getKey(), eventProperty.getValue());
+    protected void writePropertyValue(JsonGenerator jsonGenerator, Date propertyValue) throws IOException {
+        jsonGenerator.writeString(JacksonUtils.formatDate(propertyValue));
     }
 }

@@ -39,6 +39,16 @@ public final class JacksonUtils {
         parser.clearCurrentToken();
     }
 
+    public static String formatDate(Date value) {
+        String formattedValue;
+        if (value == null) {
+            formattedValue = null;
+        } else {
+            formattedValue = getTimeFormat().format(value);
+        }
+        return formattedValue;
+    }
+
     public static String getFieldValue(JsonParser parser, String fieldName) throws IOException {
         validateTokenType(parser.nextToken(), FIELD_NAME);
         validateFieldName(parser.getCurrentName(), fieldName);
@@ -152,12 +162,7 @@ public final class JacksonUtils {
     }
 
     public static void writeMandatoryDateField(JsonGenerator generator, String fieldName, Date value) throws IOException {
-        String formattedValue;
-        if (value == null) {
-            formattedValue = null;
-        } else {
-            formattedValue = getTimeFormat().format(value);
-        }
+        String formattedValue = formatDate(value);
 
         writeMandatoryStringField(generator, fieldName, formattedValue);
     }

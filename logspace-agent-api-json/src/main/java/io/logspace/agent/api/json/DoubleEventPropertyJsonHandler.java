@@ -7,16 +7,15 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.DoubleEventProperty;
-import io.logspace.agent.api.event.EventProperties;
-import io.logspace.agent.api.event.EventProperty;
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
-public class DoubleEventPropertyJsonHandler implements EventPropertyJsonHandler<Double> {
+import io.logspace.agent.api.event.DoubleEventProperty;
+import io.logspace.agent.api.event.EventProperties;
+
+public class DoubleEventPropertyJsonHandler extends AbstractEventPropertyJsonHandler<Double> {
 
     public static final String FIELD_NAME = "double-properties";
 
@@ -26,17 +25,13 @@ public class DoubleEventPropertyJsonHandler implements EventPropertyJsonHandler<
     }
 
     @Override
-    public void readEventProperty(EventProperties eventProperties, JsonParser jsonParser) throws IOException {
-        String propertyKey = jsonParser.getCurrentName();
-
-        jsonParser.nextToken();
+    protected void readPropertyValue(EventProperties eventProperties, String propertyName, JsonParser jsonParser) throws IOException {
         double propertyValue = jsonParser.getDoubleValue();
-
-        eventProperties.add(new DoubleEventProperty(propertyKey, propertyValue));
+        eventProperties.add(new DoubleEventProperty(propertyName, propertyValue));
     }
 
     @Override
-    public void writeEventProperty(EventProperty<Double> eventProperty, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(eventProperty.getKey(), eventProperty.getValue());
+    protected void writePropertyValue(JsonGenerator jsonGenerator, Double propertyValue) throws IOException {
+        jsonGenerator.writeNumber(propertyValue);
     }
 }

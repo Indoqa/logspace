@@ -104,36 +104,42 @@ public class EventTest {
     private EventProperties createRandomProperties() {
         EventProperties result = new EventProperties();
 
-        int count = RandomHelper.getRandomCount(5);
-        for (int i = 0; i < count; i++) {
-            switch (RandomHelper.getRandomCount(7)) {
-                case 0:
-                    result.add(new BooleanEventProperty(getRandomString(), getRandomBoolean()));
-                    break;
+        int propertyCount = getRandomCount(5);
+        for (int i = 0; i < propertyCount; i++) {
+            int propertyType = RandomHelper.getRandomCount(7);
+            String propertyKey = getRandomString();
+            int valueCount = getRandomCount(3) + 1;
 
-                case 1:
-                    result.add(new DateEventProperty(getRandomString(), getRandomDate()));
-                    break;
+            for (int j = 0; j < valueCount; j++) {
+                switch (propertyType) {
+                    case 0:
+                        result.add(new BooleanEventProperty(propertyKey, getRandomBoolean()));
+                        break;
 
-                case 2:
-                    result.add(new DoubleEventProperty(getRandomString(), getRandomDouble()));
-                    break;
+                    case 1:
+                        result.add(new DateEventProperty(propertyKey, getRandomDate()));
+                        break;
 
-                case 3:
-                    result.add(new FloatEventProperty(getRandomString(), getRandomFloat()));
-                    break;
+                    case 2:
+                        result.add(new DoubleEventProperty(propertyKey, getRandomDouble()));
+                        break;
 
-                case 4:
-                    result.add(new IntegerEventProperty(getRandomString(), getRandomInt()));
-                    break;
+                    case 3:
+                        result.add(new FloatEventProperty(propertyKey, getRandomFloat()));
+                        break;
 
-                case 5:
-                    result.add(new LongEventProperty(getRandomString(), getRandomLong()));
-                    break;
+                    case 4:
+                        result.add(new IntegerEventProperty(propertyKey, getRandomInt()));
+                        break;
 
-                case 6:
-                    result.add(new StringEventProperty(getRandomString(), getRandomString()));
-                    break;
+                    case 5:
+                        result.add(new LongEventProperty(propertyKey, getRandomLong()));
+                        break;
+
+                    case 6:
+                        result.add(new StringEventProperty(propertyKey, propertyKey));
+                        break;
+                }
             }
         }
 

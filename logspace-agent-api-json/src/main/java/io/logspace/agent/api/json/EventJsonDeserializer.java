@@ -143,8 +143,16 @@ public final class EventJsonDeserializer extends AbstractJsonDeserializer {
                 }
 
                 this.validateTokenType(FIELD_NAME);
+                String propertyName = this.getCurrentName();
+                this.getJsonParser().nextToken();
 
-                eventPropertyJsonHandler.readEventProperty(result, this.getJsonParser());
+                this.validateTokenType(START_ARRAY);
+                this.consumeToken();
+
+                eventPropertyJsonHandler.readEventProperties(result, propertyName, this.getJsonParser());
+
+                this.prepareToken();
+                this.validateTokenType(END_ARRAY);
                 this.consumeToken();
             }
         }

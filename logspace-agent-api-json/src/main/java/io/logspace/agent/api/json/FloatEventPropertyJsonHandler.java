@@ -7,16 +7,15 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.EventProperties;
-import io.logspace.agent.api.event.EventProperty;
-import io.logspace.agent.api.event.FloatEventProperty;
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 
-public class FloatEventPropertyJsonHandler implements EventPropertyJsonHandler<Float> {
+import io.logspace.agent.api.event.EventProperties;
+import io.logspace.agent.api.event.FloatEventProperty;
+
+public class FloatEventPropertyJsonHandler extends AbstractEventPropertyJsonHandler<Float> {
 
     public static final String FIELD_NAME = "float-properties";
 
@@ -26,17 +25,13 @@ public class FloatEventPropertyJsonHandler implements EventPropertyJsonHandler<F
     }
 
     @Override
-    public void readEventProperty(EventProperties eventProperties, JsonParser jsonParser) throws IOException {
-        String propertyKey = jsonParser.getCurrentName();
-
-        jsonParser.nextToken();
+    protected void readPropertyValue(EventProperties eventProperties, String propertyName, JsonParser jsonParser) throws IOException {
         float propertyValue = jsonParser.getFloatValue();
-
-        eventProperties.add(new FloatEventProperty(propertyKey, propertyValue));
+        eventProperties.add(new FloatEventProperty(propertyName, propertyValue));
     }
 
     @Override
-    public void writeEventProperty(EventProperty<Float> eventProperty, JsonGenerator jsonGenerator) throws IOException {
-        jsonGenerator.writeNumberField(eventProperty.getKey(), eventProperty.getValue());
+    protected void writePropertyValue(JsonGenerator jsonGenerator, Float propertyValue) throws IOException {
+        jsonGenerator.writeNumber(propertyValue);
     }
 }

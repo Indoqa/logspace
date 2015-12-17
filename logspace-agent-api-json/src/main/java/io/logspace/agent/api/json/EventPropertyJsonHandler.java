@@ -7,20 +7,21 @@
  */
 package io.logspace.agent.api.json;
 
-import io.logspace.agent.api.event.EventProperties;
-import io.logspace.agent.api.event.EventProperty;
-
 import java.io.IOException;
+import java.util.Collection;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+
+import io.logspace.agent.api.event.EventProperties;
+import io.logspace.agent.api.event.EventProperty;
 
 public interface EventPropertyJsonHandler<T> {
 
     String getFieldName();
 
-    void readEventProperty(EventProperties eventProperties, JsonParser jsonParser) throws IOException;
+    void readEventProperties(EventProperties result, String propertyName, JsonParser jsonParser) throws IOException;
 
-    void writeEventProperty(EventProperty<T> eventProperty, JsonGenerator jsonGenerator) throws IOException;
+    void writeEventProperties(JsonGenerator jsonGenerator, Collection<? extends EventProperty<T>> properties) throws IOException;
 
 }
