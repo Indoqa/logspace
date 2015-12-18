@@ -39,19 +39,6 @@
     <tag>HEAD</tag>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>indoqa-nexus-releases</id>
-      <name>Indoqa Nexus Releases</name>
-      <url>http://nexus.dev.indoqa.com/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>indoqa-nexus-snapshots</id>
-      <name>Indoqa Nexus Snapshots</name>
-      <url>http://nexus.dev.indoqa.com/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <properties>
     <project.build.compiler.version>1.8</project.build.compiler.version>
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
@@ -481,13 +468,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-eclipse-plugin</artifactId>
