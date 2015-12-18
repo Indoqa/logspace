@@ -23,7 +23,7 @@
   <parent>
     <groupId>io.logspace</groupId>
     <artifactId>logspace</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.3.0</version>
   </parent>
 
   <artifactId>logspace-agent-cxf</artifactId>
