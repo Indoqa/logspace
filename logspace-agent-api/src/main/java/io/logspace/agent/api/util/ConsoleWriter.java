@@ -12,7 +12,7 @@ import java.io.PrintStream;
 /**
  * A utility class for writing message directly to the standard output stream.<br>
  * <br>
- * Writing <b>system<b> messages can be disabled by having a system-property with the name 'logspace.suppress-system-message'.
+ * Writing <b>system</b> messages can be disabled by having a system-property with the name 'logspace.suppress-system-message'.
  */
 public final class ConsoleWriter {
 

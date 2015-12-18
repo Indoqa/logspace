@@ -12,8 +12,8 @@ import java.util.Collection;
 import io.logspace.agent.api.event.Event;
 
 /**
- * The AgentController is responsible for un-/registering {@link io.logspace.agent.api.AgentAgent Agents} and handling of {@link Event
- * Events}.
+ * The AgentController is responsible for un-/registering {@link io.logspace.agent.api.Agent Agents} and handling of
+ * {@link io.logspace.agent.api.event.Event Events}.
  */
 public interface AgentController {
 

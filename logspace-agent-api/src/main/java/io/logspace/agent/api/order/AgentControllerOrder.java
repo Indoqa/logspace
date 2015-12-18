@@ -48,7 +48,7 @@ public class AgentControllerOrder {
     /**
      * Retrieves an {@link AgentOrder} for the given <code>agentId</code> if this {@link AgentControllerOrder} contains such an order.
      *
-     * @param agentId The ID of the {@link Agent} to find a matching AgentOrder for.
+     * @param agentId The ID of the {@link io.logspace.agent.api.Agent} to find a matching AgentOrder for.
      * @return The first AgentOrder that matches the given <code>id</code> or <code>null</code> if no such AgentOrder exists.
      */
     public AgentOrder getAgentOrder(String agentId) {

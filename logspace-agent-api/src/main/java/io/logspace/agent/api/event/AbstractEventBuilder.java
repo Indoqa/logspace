@@ -28,9 +28,7 @@ public abstract class AbstractEventBuilder {
     /**
      * Create an event builder with empty {@link #globalEventId} and empty {@link #parentEventId}.
      *
-     * @param agentId The id of the agent recording this event.
-     *
-     * @param system The system recording this event.
+     * @param eventBuilderData - basic information for creating a new Event Builder.
      */
     protected AbstractEventBuilder(EventBuilderData eventBuilderData) {
         this.eventBuilderData = eventBuilderData;
