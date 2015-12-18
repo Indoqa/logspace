@@ -56,7 +56,7 @@
     <project.build.compiler.version>1.8</project.build.compiler.version>
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
-    <indoqa-boot-version>0.4.1-SNAPSHOT</indoqa-boot-version>
+    <indoqa-boot-version>0.4.1</indoqa-boot-version>
     <spring-version>4.2.3.RELEASE</spring-version>
     <solr-version>5.2.1</solr-version>
     <jetty-version>9.0.2.v20130417</jetty-version>
