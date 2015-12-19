@@ -15,7 +15,7 @@ The only requirement for running the *Logspace Demo* is that you have installed 
 We encourage you to use the latest version and stay up-to-date with security and bug fix releases.
 
 ## Step 1: Download the Logspace Distribution
-First you need to download the **logspace-dist.zip** and extract it.
+First you need to [download](/download/) the **logspace-dist.zip** and extract it.
 
 ## Step 2: Start the Logspace HQ
 The next step is to open a terminal, change to the directory you extracted the **logspace-hq-webapp-runnable.jar** to and execute the following command:
