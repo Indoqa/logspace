@@ -50,7 +50,7 @@
     <!-- Reduce noise from infrastructure for tests -->
     <Logger name="org.apache.solr" level="WARN" />
     <Logger name="org.quartz" level="WARN" />
-    <Logger name="com.indoqa" level="WARN" />
+    <Logger name="com.indoqa" level="INFO" />
     
     <Root level="${sys:log-level}">
       <AppenderRef ref="ConsoleRouting" />
