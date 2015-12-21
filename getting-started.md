@@ -152,7 +152,7 @@ The content of the file should look like this:
   "id" : "logspace-sample",
   "class-name" : "io.logspace.agent.hq.HqAgentController",
   "parameters" : {
-    "space-token" : "sample",
+    "space-token" : "8kn3GGXvVVyeeE2m2eyu",
     "base-url" : "http://localhost:4567",
     "queue-directory" : "./target/"
   }
