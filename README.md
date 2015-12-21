@@ -1,5 +1,7 @@
 # Indoqa Logspace
 
+[![Join the chat at https://gitter.im/Indoqa/logspace](https://badges.gitter.im/Indoqa/logspace.svg)](https://gitter.im/Indoqa/logspace?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The user and integrator documentation can be found at http://logspace.io
 
 ## How to setup your development environment
