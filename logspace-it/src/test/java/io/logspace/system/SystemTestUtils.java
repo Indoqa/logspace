@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import io.logspace.it.LogspaceTestException;
-
 public class SystemTestUtils {
 
     public static void prepareDemoDirectory() {
@@ -17,7 +15,7 @@ public class SystemTestUtils {
             directory.mkdirs();
             FileUtils.cleanDirectory(directory);
         } catch (IOException e) {
-            throw new LogspaceTestException("Error while cleaning Logspace demo directory.", e);
+        	// do nothing (cleanDirectory may fail on Windows systems because the directory could be in use by an old process)
         }
     }
 
