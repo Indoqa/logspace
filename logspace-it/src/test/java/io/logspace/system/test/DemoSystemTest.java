@@ -49,6 +49,6 @@ public class DemoSystemTest {
     @Test
     public void test() {
         sleep(30);
-        SOLR_CLIENT.assertSolrNumFound("Expected at least 4 events.", BASE_URL, numFound -> numFound > 4);
+        SOLR_CLIENT.assertSolrNumFound("Expected at least 4 events.", BASE_URL, numFound -> numFound >= 4);
     }
 }
