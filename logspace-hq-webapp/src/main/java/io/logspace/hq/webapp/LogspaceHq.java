@@ -99,7 +99,7 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
             if (asciiLogo == null) {
                 return;
             }
-            this.getInitializationLogger().info(asciiLogo);
+            getInitializationLogger().info(asciiLogo);
         } catch (IOException e) {
             throw new ApplicationInitializationException("Error while reading ASCII logo.", e);
         }
