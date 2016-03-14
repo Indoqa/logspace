@@ -46,6 +46,12 @@
       <groupId>com.indoqa</groupId>
       <artifactId>system-test-tools</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-runner</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
