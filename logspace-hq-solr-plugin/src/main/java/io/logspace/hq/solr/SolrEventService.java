@@ -232,6 +232,40 @@ public class SolrEventService implements EventService {
     }
 
     @Override
+    public Set<String> getEventPropertyNames(String... globalAgentIds) {
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
+        solrQuery.setRows(0);
+
+        StringBuilder globalAgentIdFilterQuery = new StringBuilder();
+        globalAgentIdFilterQuery.append(FIELD_GLOBAL_AGENT_ID);
+        globalAgentIdFilterQuery.append(":(");
+        for (String eachGlobalAgentId : globalAgentIds) {
+            globalAgentIdFilterQuery.append(escapeSolr(eachGlobalAgentId));
+            globalAgentIdFilterQuery.append(" OR ");
+        }
+        globalAgentIdFilterQuery.setLength(globalAgentIdFilterQuery.length() - 4);
+        globalAgentIdFilterQuery.append(')');
+        solrQuery.addFilterQuery(globalAgentIdFilterQuery.toString());
+
+        solrQuery.setFacet(true);
+        solrQuery.setFacetMinCount(1);
+        solrQuery.addFacetField(FIELD_PROPERTY_ID);
+
+        try {
+            QueryResponse response = this.solrClient.query(solrQuery);
+
+            Set<String> result = new TreeSet<>();
+            for (Count eachCount : response.getFacetField(FIELD_PROPERTY_ID).getValues()) {
+                result.add(eachCount.getName());
+            }
+
+            return result;
+        } catch (SolrException | SolrServerException | IOException e) {
+            throw new DataRetrievalException("Failed to retrieve event property names", e);
+        }
+    }
+
+    @Override
     public Suggestion getSuggestion(SuggestionInput input) {
         TimeTracker timeTracker = new TimeTracker();
 
@@ -356,6 +390,22 @@ public class SolrEventService implements EventService {
         for (EventFilterElement eachElement : eventFilter) {
             solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
         }
+
+        try {
+            this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));
+        } catch (SolrServerException | IOException e) {
+            String message = "Failed to stream events.";
+            this.logger.error(message, e);
+            throw EventStoreException.retrieveFailed(message, e);
+        }
+    }
+
+    @Override
+    public void stream(TimeSeriesDefinition definition, EventStreamer eventStreamer) {
+        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
+
+        solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(definition.getGlobalAgentId()));
+        solrQuery.addFilterQuery(this.getTimestampRangeQuery(definition.getTimeWindow()));
 
         try {
             this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));

@@ -10,6 +10,7 @@ package io.logspace.hq.core.api.event;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventPage;
@@ -40,13 +41,7 @@ public interface EventService {
 
     AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort);
 
-    /**
-     * Retrieve stored data for the given {@link TimeSeriesDefinition}
-     *
-     * @param dataDefinition - The {@link TimeSeriesDefinition} defining the query.
-     * @return The matching {@link Event} properties for the {@link TimeSeriesDefinition}
-     */
-    Object[] getTimeSeries(TimeSeriesDefinition dataDefinition);
+    Set<String> getEventPropertyNames(String... globalAgentIds);
 
     /**
      * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>
@@ -56,6 +51,14 @@ public interface EventService {
      * @return The calculated {@link Suggestion}.
      */
     Suggestion getSuggestion(SuggestionInput input);
+
+    /**
+     * Retrieve stored data for the given {@link TimeSeriesDefinition}
+     *
+     * @param dataDefinition - The {@link TimeSeriesDefinition} defining the query.
+     * @return The matching {@link Event} properties for the {@link TimeSeriesDefinition}
+     */
+    Object[] getTimeSeries(TimeSeriesDefinition dataDefinition);
 
     /**
      * Retrieves stored {@link Event Events} matching the given filter.
@@ -94,6 +97,8 @@ public interface EventService {
     void store(Collection<? extends Event> events, String space);
 
     void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer);
+
+    void stream(TimeSeriesDefinition timeSeriesDefinition, EventStreamer eventStreamer);
 
     interface EventStreamer {
 
