@@ -86,6 +86,7 @@ import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.event.StoredEvent;
+import io.logspace.hq.rest.api.DataDeletionException;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
@@ -148,6 +149,15 @@ public class SolrEventService implements EventService {
     private final Map<String, AgentDescription> cachedAgentDescriptions = new ConcurrentHashMap<>();
 
     private final JSONResponseWriter jsonResponseWriter = new JSONResponseWriter();
+
+    @Override
+    public void delete(List<String> ids) {
+        try {
+            this.solrClient.deleteById(ids);
+        } catch (SolrServerException | IOException e) {
+            throw new DataDeletionException("Could not delete events.", e);
+        }
+    }
 
     @Override
     public NativeQueryResult executeNativeQuery(Map<String, String[]> parameters) {
@@ -345,8 +355,8 @@ public class SolrEventService implements EventService {
             ((CloudSolrClient) this.solrClient).connect();
         }
 
-        new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
-            AGENT_DESCRIPTION_REFRESH_INTERVAL);
+        new Timer(true)
+            .schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL, AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     @Override
@@ -570,8 +580,8 @@ public class SolrEventService implements EventService {
 
         result.addField(FIELD_ID, event.getId());
 
-        result.addField(FIELD_GLOBAL_AGENT_ID,
-            this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
+        result
+            .addField(FIELD_GLOBAL_AGENT_ID, this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
         result.addField(FIELD_SPACE, space);
         result.addField(FIELD_SYSTEM, event.getSystem());
         result.addField(FIELD_AGENT_ID, event.getAgentId());
@@ -639,8 +649,8 @@ public class SolrEventService implements EventService {
     private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
-                dataDefinition.getAggregate());
+            throw InvalidTimeSeriesDefinitionException
+                .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
         }
 
         Date startDate = dataDefinition.getTimeWindow().getStart();

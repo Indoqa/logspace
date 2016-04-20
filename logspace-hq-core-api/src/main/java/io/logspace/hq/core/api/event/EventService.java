@@ -9,6 +9,7 @@ package io.logspace.hq.core.api.event;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +30,13 @@ import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
  * </ul>
  */
 public interface EventService {
+
+    /**
+     * Delete stored {@link Event Events} with the given ids.
+     * 
+     * @param ids A list of the event ids.
+     */
+    void delete(List<String> ids);
 
     /**
      * Execute a query directly against the underlying Event Store using the given parameters.
