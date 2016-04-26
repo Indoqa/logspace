@@ -1,0 +1,97 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+ @require '../app/variables'
+
+.suggestions
+  height 100%
+  position relative
+  overflow hidden
+  padding 10px
+
+  ul
+    margin 0
+    padding 0
+    li
+      list-style none
+      margin-left 0
+      cursor pointer
+
+  .query
+    width: s("calc(100% - 30px)")
+    position: absolute
+    input
+      width 100%
+      padding-left 5px
+
+  .result
+    width: 250px
+    top: 50px
+    position absolute
+    height s("calc(100% - 120px)")
+    overflow-y auto
+    overflow-x hidden
+    margin-left 0px
+
+    a
+      display block
+      width 270px
+      margin-bottom 20px
+      height 80px
+
+      .color
+        float left
+        width 7px
+        height 80px
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 1px 3px 0 rgba(0, 0, 0, 0.14)
+        background-color  #D3D3D3
+
+      .inner
+        float left
+        font-size 1.4rem
+        width $navigation-drawer-width - 40px
+        overflow hidden
+        height 70px
+        padding 5px
+        width 210px
+        background-color $color5
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+
+        .properties
+          text-overflow ellipsis
+          width 100%
+          white-space nowrap
+          overflow hidden
+          span
+            font-size 1.1rem
+
+    a:hover
+      .inner
+        background-color: lighten($color5, 25%)
+        box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.18), 0 4px 5px 0 rgba(0, 0, 0, 0.15);
+      .color
+        background-color $color1
+
+  .facets
+    width: 220px
+    margin-left 10px
+    top: 50px
+    left: 260px
+    position: absolute
+    height s("calc(100% - 120px)")
+    overflow-y auto
+    overflow-x hidden
+
+    ul
+      padding-bottom 20px
+      li
+        padding-left 5px
+
+      li:hover
+        background-color $color1
+        color $color-text-inverted

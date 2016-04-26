@@ -1,0 +1,35 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+$app-min-width = 1024px
+$header-height = 40px
+$tools-height = 50px
+$navigation-drawer-width = 250px
+$navigation-drawer-width-expanded = 750px
+$navigation-drawer-width-expanded-only = $navigation-drawer-width-expanded - $navigation-drawer-width
+
+$color-primary = #006064
+$color-secondary = #dc1b67
+$color1 = #0097a7
+$color3 = #fff
+$color4 = #222
+$color5 = #f3f3f3
+$color6 =  #B2B2B2
+
+
+$color-text = $color4
+$color-text-inverted = $color3
+$font-main = "Yantramanav", sans-serif
+$font-title = "Yantramanav", sans-serif
+
+calc(prop, val, fallback) {
+  if (fallback) {
+   {prop}: fallback;
+  }
+  {prop}: s("calc(%s)", val);
+}
