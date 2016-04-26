@@ -1,0 +1,7 @@
+{
+  "linters": {
+    "eslint": {
+      "args": ["--stdin-filename", "@"]
+    }
+  }
+}

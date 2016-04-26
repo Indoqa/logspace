@@ -1,0 +1,97 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+@require '../app/variables'
+
+.chart-header
+   background-color $color1
+   text-align center
+   padding-right 100px
+   height $header-height
+
+   .chart-title
+     padding-top 4px
+     font-size 1.8rem
+     text-transform uppercase
+
+     label
+       color $color-text-inverted
+       font-family $font-title
+       line-height 3.4rem
+
+     input
+       color $color-text
+       width 300px
+
+  .chart-options
+    position absolute
+    right 0px
+    top 0px
+    width 180px
+    
+    .lite-dropdown 
+      width 100px
+      background-color transparent
+      float left
+      border none
+      .display
+        background url('../../../assets/img/icon-charttype.svg') no-repeat 5px 7px transparent
+        background-size 20px 20px  
+        height 40px
+        width 80px
+        border none
+        text-transform uppercase
+        color #FF
+        text-align left
+        padding-left 30px
+        padding-top 0px
+      .display:hover
+        background-color $color-primary
+      .triangle
+        display none  
+
+
+    .option
+      width 30px
+      height 30px
+      margin-top 4px
+      margin-right 5px
+      display block
+      cursor pointer
+      float left
+      background-color transparent
+    
+    .option:hover
+      background-color $color-primary  
+    
+    .option.play 
+      background url('../../../assets/img/icon-play.svg') no-repeat 5px 5px
+      background-size 20px 20px
+      
+    
+    .option.pause 
+      background url('../../../assets/img/icon-pause.svg') no-repeat 5px 5px
+      background-size 20px 20px 
+      
+    .option.refresh 
+      background url('../../../assets/img/icon-reload.svg') no-repeat 5px 5px
+      background-size 20px 20px 
+    
+    .option.charttype 
+      background url('../../../assets/img/icon-charttype.svg') no-repeat 5px 5px
+      background-size 20px 20px   
+    
+    .option.progress 
+      background url('../../../assets/img/icon-reload.svg') no-repeat 5px 5px
+      background-size 20px 20px 
+    
+      span
+        font-size 8px
+        display block
+        margin-top 6px
+        color white
+  

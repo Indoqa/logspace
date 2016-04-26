@@ -1,0 +1,64 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+@require '../app/variables'
+
+#app
+  .header
+    z-index 99
+    background none repeat scroll 0 0 $color-primary
+
+  .navigation-drawer
+    z-index 1
+    background-color $color3
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
+
+  .time-window-values
+    background-color $color1
+
+  .tools
+    background-color $color5
+    display none
+
+  .time-series-list-wrapper
+    position absolute
+    height s("calc(100% - 70px)")
+    overflow-y auto
+    overflow-x hidden
+    width $navigation-drawer-width
+    
+    .delete-all
+      color #e5e5e5
+      display inline-block
+      font-size 12px
+      margin-top 7px
+      position absolute
+      right 24px
+      cursor pointer
+
+  .time-series-list
+    position relative
+    width $navigation-drawer-width
+
+  .add-series-entry
+    position relative
+    float left
+    margin-top 30px
+    margin-bottom 15px
+    text-align center
+    width $navigation-drawer-width
+
+ .options-left
+    position fixed
+    bottom 0
+    z-index 2
+    width 250px
+    a 
+      width 210px
+   
+ 
