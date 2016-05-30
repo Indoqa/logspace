@@ -5,33 +5,27 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
 import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
-import moment from 'moment'
 import Intl from 'intl'
-import shallowEqual from 'react-pure-render/shallowEqual';
 
-import Component from '../components/component.react'
-import debounceFunc from '../../lib/debounce'
+import debounceFunc from '../../../app/utils/debounce'
+import {units} from '../../actions/time-window.constants'
+import {marginTop} from '../../../environment'
 
-import {units} from '../time-window/constants'
-import {marginTop} from '../environment'
-
-import {onResultRefreshed} from './actions'
-
-require ('./result-chart.styl')
+require('./result-chart.styl')
 
 const ComponentState = Immutable.fromJS({
   loadingCss: {
-    'loading' : true,
-    'active' : false
+    loading: true,
+    active: false
   }
 })
 
-export default class Chart extends Component {
+export default class Chart extends React.Component {
 
   constructor(props) {
     super(props)
@@ -46,7 +40,7 @@ export default class Chart extends Component {
   componentWillReceiveProps(nextProps) {
     this.rememberPreviousChartType(this.props.chartType)
 
-    if (nextProps.result.get("loading")) {
+    if (nextProps.result.get('loading')) {
       this.toggleLoading(true)
       return
     }
@@ -58,23 +52,23 @@ export default class Chart extends Component {
     const messageElement = document.getElementById('message')
     messageElement.innerHTML = ''
 
-    if (this.props.result.get("loading")) {
+    if (this.props.result.get('loading')) {
       return
     }
 
-    if (this.props.result.get("error")) {
+    if (this.props.result.get('error')) {
       this.clearChart()
-      messageElement.innerHTML = this.props.result.get("errorStatus") + '<br/><small>' + this.props.result.get("errorText") + '</small>'
+      messageElement.innerHTML = this.props.result.get('errorStatus') + '<br/><small>' + this.props.result.get('errorText') + '</small>'
       return
     }
 
-    if (this.props.result.get("empty")) {
+    if (this.props.result.get('empty')) {
       this.clearChart()
       messageElement.innerHTML = 'Empty Chart<br/><small>Add at least one time series</small>'
       return
     }
 
-    if (this.prevType != this.props.chartType) {
+    if (this.prevType !== this.props.chartType) {
       this.transform(this.props.chartType)
       this.prevType = this.props.chartType
       return
@@ -82,14 +76,14 @@ export default class Chart extends Component {
 
     this.clearChart()
 
-    const chartData = this.props.result.get("chartData").toJS()
+    const chartData = this.props.result.get('chartData').toJS()
 
     if (this.isEmpty(chartData)) {
       this.clearChart()
       messageElement.innerHTML = 'Empty Chart<br/><small>No data found in selected time window</small>'
       return
     }
-    
+
     this.chart = c3.generate(this.chartOptions(chartData))
     this.originalColumns = chartData.originalColumns
   }
@@ -98,17 +92,17 @@ export default class Chart extends Component {
     const originalColumns = chartData.originalColumns
     let count = 0
 
-    for(var key in originalColumns) {
-     var originalColumn = originalColumns[key];
+    for (let key in originalColumns) {
+      const originalColumn = originalColumns[key]
       count = count + originalColumn.length
     }
 
-    return count == 0
+    return count === 0
   }
 
   toggleLoading(show) {
     this.setState({
-      localState: this.state.localState.updateIn(['loadingCss', 'active'], () => { return show })
+      localState: this.state.localState.updateIn(['loadingCss', 'active'], () => show)
     })
   }
 
@@ -118,13 +112,13 @@ export default class Chart extends Component {
 
   clearChart() {
     if (this.chart) {
-      try { this.chart.destroy() } catch(e) {}
+      try { this.chart.destroy() } catch (e) {/**/}
     }
   }
 
   calculateChartSize() {
     const environmentMarginTop = marginTop()
-    
+
     const windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
     const windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - environmentMarginTop
 
@@ -134,14 +128,12 @@ export default class Chart extends Component {
     const sidebarWidth = 250
     const horizontalPadding = 20
     const verticalPadding = 50
-    const heightWidthRatio = 0.45
 
     const width = Math.max(windowWidth, minWindowWidth) - sidebarWidth - horizontalPadding
     const height = windowHeight - headerheight - verticalPadding
 
     return {
-      width : width,
-      height : height
+      width, height
     }
   }
 
@@ -157,7 +149,7 @@ export default class Chart extends Component {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
 
     if (!date) {
-      return
+      return null
     }
 
     const unit = this.props.result.get('gap').get('unit')
@@ -183,16 +175,17 @@ export default class Chart extends Component {
 
       case units.get('year').get('id'):
         return date.format('YYYY')
-    }
 
-    return unit
+      default:
+        return unit
+    }
   }
 
   formatXTooltip(index) {
     const date = this.props.result.get('chartData').get('xvalues').get(index)
 
     if (!date) {
-      return
+      return null
     }
 
     const unit = this.props.result.get('gap').get('unit')
@@ -218,9 +211,11 @@ export default class Chart extends Component {
 
       case units.get('year').get('id'):
         return date.format('YYYY')
+
+      default:
+        return unit
     }
 
-    return unit
   }
 
   formatYTooltip(value, ratio, id, index) {
@@ -232,18 +227,12 @@ export default class Chart extends Component {
     return new Intl.NumberFormat('en-US').format(value)
   }
 
-  render() {
-    return (
-      <div className={'resultChart'}>
-        <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
-          <span>
-            <Halogen.PulseLoader color={'#ddfcff'} size={'50px'} />
-          </span>
-        </div>
-        <div className={'message'} id="message" />
-        <div id="chart" />
-      </div>
-    )
+  getMaxTicks(chartData) {
+    if (chartData.xvalues.length < 10) {
+      return chartData.xvalues.length
+    }
+
+    return 10
   }
 
   chartOptions(chartData) {
@@ -261,17 +250,17 @@ export default class Chart extends Component {
 
     return {
       data: {
-          x: 'x',
-          type: defaultType,
-          colors: chartData.colors,
-          columns: chartData.columns,
-          names: chartData.names,
-          axes: chartData.axes
-        },
+        x: 'x',
+        type: defaultType,
+        colors: chartData.colors,
+        columns: chartData.columns,
+        names: chartData.names,
+        axes: chartData.axes
+      },
       axis: {
         x: {
           type: 'category',
-           padding: {
+          padding: {
             left: 0,
             right: 3,
           },
@@ -325,19 +314,25 @@ export default class Chart extends Component {
     }
   }
 
-  getMaxTicks(chartData) {
-    if (chartData.xvalues.length < 10) {
-      return chartData.xvalues.length
-    }
-
-    return 10
+  render() {
+    return (
+      <div className={'resultChart'}>
+        <div className={classnames(this.state.localState.get('loadingCss').toJS())}>
+          <span>
+            <Halogen.PulseLoader color={'#ddfcff'} size={'50px'} />
+          </span>
+        </div>
+        <div className={'message'} id="message" />
+        <div id="chart" />
+      </div>
+    )
   }
 
   getY2Options(chartData, formatYTick) {
-    if (chartData.axisRanges.min.y2 == 0 && chartData.axisRanges.max.y2 == 0) {
+    if (chartData.axisRanges.min.y2 === 0 && chartData.axisRanges.max.y2 === 0) {
       return {
         show: false
-      }  
+      }
     }
 
     return {
@@ -352,5 +347,10 @@ export default class Chart extends Component {
       min: chartData.axisRanges.min.y2,
       max: chartData.axisRanges.max.y2
     }
-  } 
+  }
+}
+
+Chart.propTypes = {
+  chartType: PropTypes.string.isRequired,
+  result: PropTypes.obj.isRequired
 }

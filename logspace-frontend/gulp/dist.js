@@ -13,7 +13,7 @@ var minifyHTML = require('gulp-minify-html');
 gulp.task('dist', ['build'], function(done) {
   gulp.src('site/index.html')
     .pipe(replace(
-      /\/\/localhost:8888\/build\/app.js/gim,
+      /\/\/localhost:8000\/build\/app.js/gim,
       'app.js'
     ))
     .pipe(replace(

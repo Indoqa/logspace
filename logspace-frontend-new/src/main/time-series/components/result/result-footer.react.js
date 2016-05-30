@@ -5,32 +5,33 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react'
-import classnames from 'classnames'
+import React, {PropTypes} from 'react'
 
-import Component from '../components/component.react'
+require('./result-footer.styl')
 
-require ('./result-footer.styl')
+export default class Footer extends React.Component {
 
-export default class Footer extends Component {
+  getLastUpdated() {
+    const lastUpdated = this.props.result.get('lastUpdated')
 
-    getLastUpdated() {
-      const lastUpdated = this.props.result.get('lastUpdated')
-      
-      if(!lastUpdated) {
-        return '-'
-      }
-
-      return lastUpdated.format('HH:mm:ss')
+    if (!lastUpdated) {
+      return '-'
     }
 
-    render() {
-      const lastUpdated = this.getLastUpdated()
-
-      return (
-        <div className='footer'>
-          Last updated: {lastUpdated}
-        </div>
-      )
+    return lastUpdated.format('HH:mm:ss')
   }
+
+  render() {
+    const lastUpdated = this.getLastUpdated()
+
+    return (
+      <div className="footer">
+        Last updated: {lastUpdated}
+      </div>
+    )
+  }
+}
+
+Footer.propTypes = {
+  result: PropTypes.obj.isRequired
 }
