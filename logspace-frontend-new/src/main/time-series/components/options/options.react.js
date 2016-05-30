@@ -88,7 +88,7 @@ export default class Options extends React.Component {
 
 Options.propTypes = {
   chartTitle: PropTypes.string.isRequired,
-  refreshResult: PropTypes.funx.isRequired,
+  refreshResult: PropTypes.func.isRequired,
   getExportState: PropTypes.func.isRequired,
   importState: PropTypes.func.isRequired
 }

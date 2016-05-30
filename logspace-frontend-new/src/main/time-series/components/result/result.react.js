@@ -5,33 +5,41 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import React from 'react'
+import React, {PropTypes} from 'react'
 
-import Component from '../components/component.react'
 import Chart from './result-chart.react'
 import Header from './result-header.react'
 import Footer from './result-footer.react'
 
-export default class Result extends Component {
+export default class Result extends React.Component {
 
   render() {
     return (
       <div>
-        <Header 
+        <Header
           autoPlay={this.props.autoPlay}
           autoPlaySchedule={this.props.autoPlaySchedule}
           chartTitle={this.props.chartTitle}
           chartTitleEditable={this.props.chartTitleEditable}
           chartType={this.props.chartType}
-        />  
-        <Chart 
-          series={this.props.timeSeries} 
-          result={this.props.result} 
+        />
+        <Chart
+          series={this.props.timeSeries}
+          result={this.props.result}
           chartType={this.props.chartType}
         />
-        <Footer result={this.props.result}  />
-
+        <Footer result={this.props.result} />
       </div>
     )
   }
+}
+
+Result.propTypes = {
+  autoPlay: PropTypes.bool.isRequired,
+  autoPlaySchedule: PropTypes.object.isRequired,
+  chartType: PropTypes.string.isRequired,
+  chartTitle: PropTypes.string.isRequired,
+  chartTitleEditable: PropTypes.bool.isRequired,
+  result: PropTypes.object.isRequired,
+  timeSeries: PropTypes.array.isRequired
 }

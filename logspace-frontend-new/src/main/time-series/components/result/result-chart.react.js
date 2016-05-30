@@ -352,5 +352,5 @@ export default class Chart extends React.Component {
 
 Chart.propTypes = {
   chartType: PropTypes.string.isRequired,
-  result: PropTypes.obj.isRequired
+  result: PropTypes.object.isRequired
 }

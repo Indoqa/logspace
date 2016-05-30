@@ -6,13 +6,11 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import {dispatch} from '../dispatcher';
-import setToString from '../../lib/settostring';
+export const UPDATE_EDITABLE_STATE = 'UPDATE_EDITABLE_STATE'
 
-export function onEditableState(id, name, state) {
-  dispatch(onEditableState, {id, name, state});
-}
-
-setToString('editable', {
-  onEditableState
-});  
+export const updateEditableState = (id, name, state) => ({
+  type: UPDATE_EDITABLE_STATE,
+  payload: {
+    id, name, state
+  }
+})

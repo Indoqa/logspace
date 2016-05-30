@@ -5,6 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+import moment from 'moment'
 
 export const REFRESH_RESULT = 'REFRESH_RESULT'
 export const SAVE_CHART_TITLE = 'SAVE_CHART_TITLE'
@@ -12,7 +13,10 @@ export const SET_CHART_TYPE = 'SET_CHART_TYPE'
 export const SET_AUTOPLAY = 'SET_AUTOPLAY'
 
 export const refreshResult = () => ({
-  type: REFRESH_RESULT
+  type: REFRESH_RESULT,
+  payload: {
+    promise: Promise.resolve({lastUpdated: moment()})
+  }
 })
 
 export const saveChartTitle = (title) => ({

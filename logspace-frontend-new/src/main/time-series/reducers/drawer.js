@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import {Record} from 'immutable'
+import {fromJS, Record} from 'immutable'
 
 import * as Panels from '../actions/drawer.constants'
 import * as timeWindowActions from '../actions/time-window'
@@ -17,14 +17,14 @@ import * as drawerActions from '../actions/drawer'
 
 const InitialState = Record({
   activePanel: null,
-  navDrawerCss: {
+  navDrawerCss: fromJS({
     'navigation-drawer': true,
     'navigation-drawer-expanded': false
-  },
-  mainCss: {
+  }),
+  mainCss: fromJS({
     main: true,
     'main-reduced': false
-  }
+  })
 })
 
 const setActivePanel = (state, panel, omitClose = false) => {
