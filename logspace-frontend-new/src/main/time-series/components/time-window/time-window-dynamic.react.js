@@ -6,34 +6,29 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
+import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
-import Component from '../components/component.react'
-import moment from 'moment-range'
 
 import GapSelection from './time-window-gapselection.react.js'
 
-import {selectDynamicDate} from './actions';
-import {units, selections} from './constants'
-
 require('./time-window.styl')
 
-export default class TimeWindowDynamic extends Component {
+export default class TimeWindowDynamic extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       localState: Immutable.fromJS({
-         range: props.dynamic.get("range"), 
-         gap: props.dynamic.get("gap")
-      }) 
+        range: props.dynamic.get('range'),
+        gap: props.dynamic.get('gap')
+      })
     }
   }
 
-   onRangeChange(value) {
+  onRangeChange(value) {
     const oldAmount = this.state.localState.get('range').get('amount')
-    const amountChanged = oldAmount != value.get('amount')
+    const amountChanged = oldAmount !== value.get('amount')
 
     if (amountChanged) {
       this.setState({
@@ -43,7 +38,7 @@ export default class TimeWindowDynamic extends Component {
             unit: value.get('unit')
           }
         })
-      })    
+      })
     } else {
       this.setState({
         localState: this.state.localState.merge({
@@ -56,7 +51,7 @@ export default class TimeWindowDynamic extends Component {
             unit: value.get('unit')
           }
         })
-      })    
+      }) 
     }
   }
 
@@ -67,56 +62,62 @@ export default class TimeWindowDynamic extends Component {
       })
     })
   }
-  
+
   submit() {
     const state = this.state.localState.toJS()
-    
+
     if (state.range.amount < 1 || state.gap.amount < 1) {
       return
     }
 
-    selectDynamicDate(state.range.amount, state.range.unit, state.gap)
+    this.props.selectDynamicDate(state.range.amount, state.range.unit, state.gap)
   }
 
   render() {
     return (
       <div>
-         <div className='selection'>
-          <div className='submit' >
-             <button className='waves-effect waves-light btn btn-small' onClick={() => this.submit()}>
+         <div className="selection">
+          <div className="submit">
+             <button className="waves-effect waves-light btn btn-small" onClick={() => this.submit()}>
               Apply
              </button>
           </div>
-          <div className='dynamic'>
-            <span className='intro'>last </span>
-            <GapSelection value={this.state.localState.get('range')} onChange={this.onRangeChange.bind(this)}/>
-            <span className='intro'>Gap</span>
-            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
-          </div>         
+          <div className="dynamic">
+            <span className="intro">last </span>
+            <GapSelection value={this.state.localState.get('range')} onChange={(event) => this.onRangeChange(event)} />
+            <span className="intro">Gap</span>
+            <GapSelection value={this.state.localState.get('gap')} onChange={(event) => this.onGapChange(event)} />
+          </div>
         </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     )
   }
 }
+
+TimeWindowDynamic.propTypes = {
+  dynamic: PropTypes.object.isRequired,
+  selectDynamicDate: PropTypes.func.isRequired
+}
+

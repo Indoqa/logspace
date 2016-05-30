@@ -8,13 +8,13 @@
 import React, {PropTypes} from 'react'
 import classnames from 'classnames'
 
+import Header from './header/Header.redux'
 import AddTimeSeries from './time-series/time-series-add.react'
 import ClearTimeSeries from './time-series/time-series-clear.react'
 import TimeSeriesList from './time-series/time-series-list.react'
 import TimeWindowValues from './time-window/time-window-values.react'
-import Result from './result/result.react'
+import Result from './result/Result.redux'
 import Drawer from './drawer/Drawer.react'
-import Header from './header/header.react'
 
 require('./Page.styl')
 
@@ -25,11 +25,11 @@ export default class TimeSeries extends React.Component {
   }
 
   render() {
-    const view = this.props
+    const {mainCss, navDrawerCss} = this.props
 
     return (
       <div className="time-series">
-        <div className={classnames(view.get('navDrawerCss').toJS())}>
+        <div className={classnames(navDrawerCss.toJS())}>
           <div className="left">
             <Header />
             <TimeWindowValues />
@@ -46,7 +46,7 @@ export default class TimeSeries extends React.Component {
 
         </div>
 
-        <div className={classnames(view.get('mainCss').toJS())}>
+        <div className={classnames(mainCss.toJS())}>
           <Result />
           />
         </div>
@@ -56,6 +56,7 @@ export default class TimeSeries extends React.Component {
 }
 
 TimeSeries.propTypes = {
-  view: PropTypes.object,
+  mainCss: PropTypes.object.isRequired,
+  navDrawerCss: PropTypes.object.isRequired,
   initialize: PropTypes.func.isRequired
 }

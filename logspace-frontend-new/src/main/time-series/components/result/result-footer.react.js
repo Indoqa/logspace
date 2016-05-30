@@ -33,5 +33,5 @@ export default class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-  result: PropTypes.obj.isRequired
+  result: PropTypes.object.isRequired
 }

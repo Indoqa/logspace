@@ -6,58 +6,13 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import classnames from 'classnames';
+import React, {PropTypes} from 'react'
+import classnames from 'classnames'
 
-import Component from '../components/component.react';
-
-import TimeSeriesLabel from './time-series-label.react';
-import {onTimeSeriesDeleted, onEditTimeSeries} from './actions';
-import {isSubitem} from './constants';
+import TimeSeriesLabel from './time-series-label.react'
+import {isSubitem} from '../../actions/time-series.constants'
 
 require('./time-series-item.styl')
-
-export default class TimeSeriesItem extends Component {
-
-  getAxisLabel(item) {
-    if (isSubitem(item.get('scaleType'))) {
-      return <span/>
-    }
-
-    const classNames = 'axis axis-' + this.props.axis
-    return  <div className={classNames} title={this.getAxisTooltip()}/>
-  }
-
-  getAxisTooltip() {
-    if (this.props.axis == 1) {
-      return 'Scale is shown on left y axis'
-    }
-
-    if (this.props.axis == 2) {
-      return 'Scale is shown on right y axis'
-    }
-  }
-
-  render() {
-    const bgStyle = {
-      backgroundColor: this.props.item.get('color')
-    }
-    const item = this.props.item
-
-    const axisLabel = this.getAxisLabel(item)
-
-    return (
-      <div className={createTimeSeriesClassName(item)} onClick={() => onEditTimeSeries(item)}>
-        <div className='color' style={bgStyle}></div>
-        <div className='inner'>
-          {axisLabel}
-          <TimeSeriesLabel timeSeries={item} />
-          <span className='property'>{item.get('aggregate')} of {cleanPropertyName(item.get('propertyId'))}</span>
-        </div>
-      </div>
-    )
-  }
-}
 
 function createTimeSeriesClassName(item) {
   return classnames('time-series-item', {
@@ -70,9 +25,61 @@ export function cleanPropertyName(name) {
   const pattern = /[\w]*?_[\w]*?_(.*)/
   const result = pattern.exec(name)
 
-  if(result != null) {
+  if (result !== null) {
     return result[1]
   }
 
   return name
+}
+
+export default class TimeSeriesItem extends React.Component {
+
+  getAxisLabel(item) {
+    if (isSubitem(item.get('scaleType'))) {
+      return <span />
+    }
+
+    const classNames = `axis axis-${this.props.axis}`
+    return <div className={classNames} title={this.getAxisTooltip()} />
+  }
+
+  getAxisTooltip() {
+    if (this.props.axis === 1) {
+      return 'Scale is shown on left y axis'
+    }
+
+    if (this.props.axis === 2) {
+      return 'Scale is shown on right y axis'
+    }
+
+    return ''
+  }
+
+  render() {
+    const bgStyle = {
+      backgroundColor: this.props.item.get('color')
+    }
+    const item = this.props.item
+
+    const axisLabel = this.getAxisLabel(item)
+
+    return (
+      <div className={createTimeSeriesClassName(item)} onClick={() => this.props.editTimeSeries(item)}>
+        <div className="color" style={bgStyle}></div>
+        <div className="inner">
+          {axisLabel}
+          <TimeSeriesLabel timeSeries={item} />
+          <span className="property">{item.get('aggregate')} of {cleanPropertyName(item.get('propertyId'))}</span>
+        </div>
+      </div>
+    )
+  }
+}
+
+TimeSeriesItem.propTypes = {
+  axis: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  editTimeSeries: PropTypes.func.isRequired,
+  cleanPropertyName: PropTypes.func.isRequired,
+  timeSeries: PropTypes.array.isRequired,
 }

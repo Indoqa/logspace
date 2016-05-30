@@ -6,22 +6,18 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
+import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
-import Component from '../components/component.react'
 import moment from 'moment'
-import DateRangePicker from 'react-daterange-picker'
 import GapSelection from './time-window-gapselection.react.js'
+import DateRangePicker from 'react-daterange-picker'
 import TimePicker from 'react-time-picker'
-
-import {selectCustomDate} from './actions';
-import {units,selections} from './constants'
 
 require('./time-window.styl')
 
-export default class TimeWindowCustom extends Component {
+export default class TimeWindowCustom extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     const selection = props.timeWindow.toJS()
 
@@ -29,8 +25,8 @@ export default class TimeWindowCustom extends Component {
       localState: Immutable.fromJS({
         dateRange: moment.range(selection.start(), selection.end()),
         time: {
-          start: selection.start().format("HH:mm"),
-          end: selection.end().format("HH:mm")
+          start: selection.start().format('HH:mm'),
+          end: selection.end().format('HH:mm')
         },
         gap: selection.gap
       })
@@ -38,9 +34,9 @@ export default class TimeWindowCustom extends Component {
   }
 
   onTimeChange(field, value) {
-    var newState = {
-      time:{}
-    };
+    const newState = {
+      time: {}
+    }
 
     newState.time[field] = value
 
@@ -50,19 +46,19 @@ export default class TimeWindowCustom extends Component {
   }
 
   onTimeReset() {
-    var newState = {
-      time:{
+    const newState = {
+      time: {
         start: '00:00',
         end: '23:59'
       }
-    };
+    }
 
     this.setState({
       localState: this.state.localState.mergeDeep(newState)
     })
   }
 
-  onDateRangeChange(range, states) {
+  onDateRangeChange(range) {
     this.setState({
       localState: this.state.localState.mergeDeep({
         dateRange: moment().range(range.start, range.end)
@@ -88,64 +84,73 @@ export default class TimeWindowCustom extends Component {
     const startDate = state.dateRange.start
     const endDate = state.dateRange.end
 
-    const startTime = moment(state.time.start, "HH:mm");
-    const endTime = moment(state.time.end, "HH:mm");
+    const startTime = moment(state.time.start, 'HH:mm')
+    const endTime = moment(state.time.end, 'HH:mm')
 
     startDate.hour(startTime.hour())
     startDate.minute(startTime.minute())
-    
+
     endDate.hour(endTime.hour())
     endDate.minute(endTime.minute())
-    
-    selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
+
+    this.props.selectCustomDate(startDate, endDate, Immutable.fromJS(state.gap))
   }
 
   render() {
     const state = this.state.localState.toJS()
 
     return (
-      <div className='current'>
-        <div className='selection'>
-          <div className='submit' >
-            <span className='intro'>GAP</span>
-            <GapSelection value={this.state.localState.get('gap')} onChange={this.onGapChange.bind(this)}/>
-            <button className='waves-effect waves-light btn btn-small' onClick={this.submitCustom.bind(this)}>
+      <div className="current">
+        <div className="selection">
+          <div className="submit">
+            <span className="intro">GAP</span>
+            <GapSelection value={this.state.localState.get('gap')} onChange={(event) => this.onGapChange(event)} />
+            <button className="waves-effect waves-light btn btn-small" onClick={(event) => this.submitCustom(event)}>
               Apply
             </button>
           </div>
-          <div className='date'>
-            <span className='day'>{state.dateRange.start.format('YYYY-MM-DD')}</span><br/>
-            <span className='time'>{state.time.start} </span>
+          <div className="date">
+            <span className="day">{state.dateRange.start.format('YYYY-MM-DD')}</span><br />
+            <span className="time">{state.time.start} </span>
           </div>
-          <div className='date'>
-            <span className='day'>{state.dateRange.end.format('YYYY-MM-DD')}</span><br/>
-            <span className='time'>{state.time.end} </span>
+          <div className="date">
+            <span className="day">{state.dateRange.end.format('YYYY-MM-DD')}</span><br />
+            <span className="time">{state.time.end} </span>
           </div>
         </div>
         <DateRangePicker
           numberOfCalendars={2}
           selectionType="range"
-          singleDateRange={true}
+          singleDateRange
           firstOfWeek={1}
           value={state.dateRange}
-          onSelect={this.onDateRangeChange.bind(this)} />
+          onSelect={(event) => this.onDateRangeChange(event)}
+        />
         <TimePicker
           value={state.time.start}
           style={{float: 'left', width: '150px', padding: 5, border: 'none', marginLeft: '45px'}}
-          format='HH:mm'
+          format="HH:mm"
           onChange={(value) => this.onTimeChange('start', value)}
         />
-        <a  
-          className='waves-effect waves-light btn inverted'
+        <a
+          className="waves-effect waves-light btn inverted"
           onClick={() => this.onTimeReset()}
-          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '22px'}}>reset</a>
+          style={{float: 'left', width: '50', padding: 5, marginLeft: '20px', marginTop: '22px'}}
+        >
+          reset
+        </a>
         <TimePicker
           value={state.time.end}
           style={{float: 'left', width: '150', padding: 5, border: 'none', marginLeft: '20px'}}
-          format='HH:mm'
+          format="HH:mm"
           onChange={(value) => this.onTimeChange('end', value)}
         />
       </div>
     )
   }
+}
+
+TimeWindowCustom.propTypes = {
+  timeWindow: PropTypes.object.isRequired,
+  selectCustomDate: PropTypes.func.isRequired
 }

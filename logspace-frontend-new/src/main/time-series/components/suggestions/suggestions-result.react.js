@@ -77,7 +77,7 @@ export default class SuggestionResult extends React.Component {
 }
 
 SuggestionResult.propTypes = {
-  request: PropTypes.obj.isRequired,
-  result: PropTypes.obj.isRequired,
+  request: PropTypes.object.isRequired,
+  result: PropTypes.object.isRequired,
   addTimeseries: PropTypes.func.isRequired
 }

@@ -6,81 +6,75 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import {Dispatcher} from 'flux'
-import {register} from '../dispatcher'
 import moment from 'moment'
-import Immutable from 'immutable'
+import Immutable, {Record} from 'immutable'
 
-import {timeWindowCursor} from '../state'
-import {viewCursor} from '../state'
-import * as actions from './actions'
+import * as actions from '../actions/time-window'
 
-import {TimeWindowSelection, selections} from './constants'
+import {TimeWindowSelection, selections} from '../actions/time-window.constants'
 
-export const TimeWindowStore_dispatchToken = register(({action, data}) => {
+const InitialState = Record({
+  dynamic: null,
+  selection: null,
+})
 
-  switch (action) {
-    case actions.selectPredefinedDate:
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('selection', data)
-      })
-      break
+export default (state = new InitialState, action) => {
+  switch (action.type) {
+    case actions.SELECT_CUSTOM_DATE: {
+      return state.set('selection', action.payload)
+    }
 
-    case actions.selectCustomDate:
-      const customLabel = moment(data.start).format("YY-MM-DD") 
-        + "<span class='small'> " + moment(data.start).format("HH:mm") + "</span>"
-        + " - " 
-        + moment(data.end).format("YY-MM-DD")
-        + "<span class='small'> " + moment(data.end).format("HH:mm") + "</span>"
+    case actions.SELECT_PREDEFINED_DATE: {
+      const customLabel = moment(action.payload.start).format("YY-MM-DD")
+        + '<span class="small"> ' + moment(action.payload.start).format('HH:mm') + '</span>'
+        + ' - '
+        + moment(action.payload.end).format("YY-MM-DD")
+        + "<span class='small'> " + moment(action.payload.end).format('HH:mm') + '</span>'
 
       const customSelection = new TimeWindowSelection({
         label: customLabel,
         type: 'custom',
-        start: () => moment(data.start), 
-        end: () => moment(data.end),
-        gap: Immutable.fromJS(data.gap)
+        start: () => moment(action.payload.start),
+        end: () => moment(action.payload.end),
+        gap: Immutable.fromJS(action.payload.gap)
       })
 
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('selection', customSelection)
-      })
-      break
+      return state.set('selection', customSelection)
+    }
 
-    case actions.selectDynamicDate:
+    case actions.SELECT_DYNAMIC_DATE: {
       const dynamicSelection = new TimeWindowSelection({
-        label: 'Last ' + data.duration + ' ' + data.unit.label.toLowerCase(),
+        label: 'Last ' + action.payload.duration + ' ' + action.payload.unit.label.toLowerCase(),
         type: 'dynamic',
-        start: () => moment().subtract(data.duration, data.unit.label), 
+        start: () => moment().subtract(action.payload.duration, action.payload.unit.label),
         end: () => moment(),
-        gap: Immutable.fromJS(data.gap)
+        gap: Immutable.fromJS(action.payload.gap)
       })
 
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('selection', dynamicSelection)
-      })
+      state = state.set('selection', dynamicSelection)
+      state = state.set('dynamic', Immutable.fromJS({
+        range: {
+          amount: action.payload.duration,
+          unit: action.payload.unit
+        },
+        gap: action.payload.gap
+      }))
 
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('dynamic', Immutable.fromJS({
-          range: {
-            amount: data.duration,
-            unit: data.unit
-          },
-          gap: data.gap
-        }))
-      })
+      return state
+    }
 
-      break
+    // ME TODO
+    case 'open tab': {
+      return state.set('activeTimeWindowTab', action.payload)
+    }
 
-    case actions.onTabOpen:
-      viewCursor(view => {
-        return view.set('activeTimeWindowTab', data)
-      })
-      break  
+    case actions.RESET_TIMEWINDOW: {
+      return state.set('selection', selections[0])
+    }
 
-    case actions.reset:
-      timeWindowCursor(timeWindow => {
-        return timeWindow.set('selection', selections[0])
-      })
-      break
+    default: {
+      return state
+    }
   }
-})
+}
+

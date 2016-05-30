@@ -53,6 +53,6 @@ export default class Suggestions extends React.Component {
 }
 
 Suggestions.propTypes = {
-  suggestions: PropTypes.obj.isRequired,
+  suggestions: PropTypes.object.isRequired,
   setSuggestionQuery: PropTypes.func.isRequired
 }

@@ -6,25 +6,23 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import Immutable, {Record} from 'immutable'
-import moment from 'moment'
 import * as resultActions from '../actions/result'
 
 const InitialState = Record({
-  result: {
-    translatedResult: {
-      error: false,
-      empty: true,
-      series: null,
-      xvalues: [],
-      warnings: []
-    },
-    chartTitle: 'New Chart',
-    chartType: 'spline',
-    autoPlay: false
-  }
+  translatedResult: {
+    error: false,
+    empty: true,
+    series: null,
+    xvalues: [],
+    warnings: []
+  },
+  chartTitle: 'New Chart',
+  chartType: 'spline',
+  autoPlay: false,
+  autoPlaySchedule: null
 })
 
-export default (state = InitialState, action) => {
+export default (state = new InitialState, action) => {
   switch (action.type) {
     case `${resultActions.REFRESH_RESULT}_START`: {
       state = state.set('translatedResult', Immutable.fromJS({
@@ -50,11 +48,10 @@ export default (state = InitialState, action) => {
     }
 
     case `${resultActions.REFRESH_RESULT}_ERROR`: {
-      return state.set('translatedResult', Immutable.fromJS({
+      return state.update('translatedResult', (result) => result.merge({
         empty: true,
         error: true,
         loading: false,
-        lastUpdated: moment(),
         errorStatus: action.payload.errorStatus,
         errorText: action.payload.errorText
       }))

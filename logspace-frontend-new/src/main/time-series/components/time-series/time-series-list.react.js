@@ -6,35 +6,33 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import immutable from 'immutable';
-import Component from '../components/component.react';
-import TimeSeriesItem  from '../time-series/time-series-item.react'
+import React from 'react'
+import immutable from 'immutable'
+import TimeSeriesItem from '../time-series/time-series-item.react'
+import {isSubitem, getReference} from '../../actions/time-series.constants'
 
-import {isSubitem, getReference} from './constants';
-
-export default class TimeSeriesList extends Component {
-  positionMap(items) {
-    const map = []
-
-    items.forEach(function(item, index) {
-      map[item.get('id')] = index
-    })
-
-    return map
-  }
-
+export default class TimeSeriesList extends React.Component {
   getSortValue(item, index, positionMap) {
-    const scaleType = item.get('scaleType') 
+    const scaleType = item.get('scaleType')
 
     if (!isSubitem(scaleType)) {
-      return index + '-0-master'
+      return `${index}-0-master`
     }
 
     const reference = getReference(scaleType)
     const indexOfReference = positionMap[reference]
 
-    return indexOfReference + '-' + index + '-subitem'
+    return `${indexOfReference} + '-' + index + '-subitem'$`
+  }
+
+  positionMap(items) {
+    const map = []
+
+    items.forEach((item, index) => {
+      map[item.get('id')] = index
+    })
+
+    return map
   }
 
   render() {
@@ -45,14 +43,14 @@ export default class TimeSeriesList extends Component {
     let masterCount = 0
 
     return (
-      <div className='time-series-list'>
-        {sortedItems.map(function(item) {
+      <div className="time-series-list">
+        {sortedItems.map((item) => {
           if (!isSubitem(item.get('scaleType')) && masterCount < 2) {
             masterCount++
-            return <TimeSeriesItem key={item.get("id")} item={item} axis={masterCount}/>;
+            return <TimeSeriesItem key={item.get('id')} item={item} axis={masterCount} />
           }
 
-          return <TimeSeriesItem key={item.get("id")} item={item} />;
+          return <TimeSeriesItem key={item.get('id')} item={item} />
         })}
       </div>
     )
@@ -61,4 +59,4 @@ export default class TimeSeriesList extends Component {
 
 TimeSeriesList.propTypes = {
   items: React.PropTypes.instanceOf(immutable.List)
-};
+}

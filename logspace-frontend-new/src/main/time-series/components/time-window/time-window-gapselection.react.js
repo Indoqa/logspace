@@ -6,21 +6,18 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react'
-import Component from '../components/component.react'
+import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
+import {units} from '../../actions/time-window.constants'
 
-
-import {units} from './constants'
-
-export default class GapSelection extends Component {
+export default class GapSelection extends React.Component {
   constructor(props) {
-    super(props);
-    
-    this.state = { 
+    super(props)
+
+    this.state = {
       localState: Immutable.fromJS({
         gap: props.value
-      }) 
+      })
     }
   }
 
@@ -38,58 +35,64 @@ export default class GapSelection extends Component {
   onAmountChange(amount) {
     if (isNaN(amount) || amount < 0) {
       return
-    } 
+    }
 
     const newState = Immutable.fromJS({
-        gap: {
-          amount: amount,
-          unit: this.state.localState.get('gap').get('unit')
-        }
-      }) 
+      gap: {
+        amount,
+        unit: this.state.localState.get('gap').get('unit')
+      }
+    })
 
     this.setState({
       localState: newState
     })
 
-    this.props.onChange(newState.get('gap'))
+    this.props.changeGap(newState.get('gap'))
   }
 
   onUnitChange(id) {
-    var selectedUnit = units.find(function(obj){return obj.get('id') == id })
-    
+    const selectedUnit = units.find((obj) => obj.get('id') === id)
+
     const newState = Immutable.fromJS({
-        gap: {
-          amount: this.state.localState.get('gap').get('amount'),
-          unit: selectedUnit
-        }
-      }) 
+      gap: {
+        amount: this.state.localState.get('gap').get('amount'),
+        unit: selectedUnit
+      }
+    })
 
     this.setState({
       localState: newState
     })
 
-    this.props.onChange(newState.get('gap'))
+    this.props.changeGap(newState.get('gap'))
   }
 
   render() {
     return (
-      <span className='gapselection'>
-        <input 
-          size='3'
+      <span className="gapselection">
+        <input
+          size="3"
           type="number"
-          pattern='[0-9]{1,3}'
-          value={this.state.localState.get('gap').get('amount')} 
-          onChange={(event) => this.onAmountChange(event.target.value)} 
+          pattern="[0-9]{1,3}"
+          value={this.state.localState.get('gap').get('amount')}
+          onChange={(event) => this.onAmountChange(event.target.value)}
         />
-        <select 
-          name="gap" 
-          value={this.state.localState.get('gap').get('unit').get('id')} 
-          onChange={(event) => this.onUnitChange(event.target.value)}>
-          {units.map(function(unit) {
+        <select
+          name="gap"
+          value={this.state.localState.get('gap').get('unit').get('id')}
+          onChange={(event) => this.onUnitChange(event.target.value)}
+        >
+          {units.map((unit) => {
             return <option value={unit.get('id')}>{unit.get('label')}</option>
           })}
         </select>
-      </span>    
+      </span>
     )
   }
+}
+
+GapSelection.propTypes = {
+  value: PropTypes.object.isRequired,
+  changeGap: PropTypes.func.isRequired,
 }

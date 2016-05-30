@@ -6,110 +6,115 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import Component from '../components/component.react';
+import React, {PropTypes} from 'react'
 
-import TimeSeriesLabel from './time-series-label.react';
-import EditTimeSeriesScale from './time-series-edit-scale.react';
+import TimeSeriesLabel from './time-series-label.react'
+import EditTimeSeriesScale from './time-series-edit-scale.react'
 
-import shallowEqual from 'react/lib/shallowEqual';
-import {COLORS, TYPES, SCALES} from './constants';
-import {onTimeSeriesSaved, onTimeSeriesPropertyChanged, onTimeSeriesDeleted} from './actions';
+import {COLORS} from '../../actions/time-series.constants'
 
 require('./time-series-edit.styl')
 
-export default class EditTimeSeries extends Component {
+export default class EditTimeSeries extends React.Component {
 
   handleChange(event) {
-    onTimeSeriesPropertyChanged(event.target.name, event.target.value)
+    this.props.changeTimeseriesProperty(event.target.name, event.target.value)
   }
 
- 
   render() {
-    const agentDescription = this.props.editedTimeSeries.get("newItem");
-    const me = this;
+    const agentDescription = this.props.editedTimeSeries.get('newItem')
 
-    const usedColors = this.props.timeSeries.map(function(item) {
-      if (item.get("id") === agentDescription.get("id")) {
-        return ""
+    const usedColors = this.props.timeSeries.map((item) => {
+      if (item.get('id') === agentDescription.get('id')) {
+        return ''
       }
 
-      return item.get("color")
-    });
+      return item.get('color')
+    })
 
     return (
-      <div className='time-series-edit'>
-        <div className='time-series-label-wrapper'>
+      <div className="time-series-edit">
+        <div className="time-series-label-wrapper">
           <TimeSeriesLabel timeSeries={agentDescription} />
         </div>
 
-        <div className='details'>
+        <div className="details">
           <b>Select property</b>
-          <br/>
-          {agentDescription.get("propertyDescriptions").map((property) => {
-            const propertyId = property.get("id")
+          <br />
+          {agentDescription.get('propertyDescriptions').map((property) => {
+            const propertyId = property.get('id')
             return (
               <div key={propertyId}>
                 <input
                   type="radio"
                   name="propertyId"
                   value={propertyId}
-                  checked={propertyId === agentDescription.get("propertyId")}
-                  onChange={me.handleChange.bind(me)}>
-                </input>
-                <nbsp/>
-                <span> {property.get("name")} </span>
-                <br/>
+                  checked={propertyId === agentDescription.get('propertyId')}
+                  onChange={(event) => this.handleChange(event)}
+                />
+                <nbsp />
+                <span> {property.get('name')} </span>
+                <br />
               </div>
             )
           })}
 
-          <br/>
+          <br />
           <b>Select aggregation </b>
-          <br/>
-          <select name="aggregate" value={agentDescription.get("aggregate")} onChange={this.handleChange.bind(this)}>
+          <br />
+          <select name="aggregate" value={agentDescription.get('aggregate')} onChange={(event => this.handleChange(event))}>
             <option value="count">count</option>
             <option value="max">max</option>
             <option value="min">min</option>
             <option value="avg">average</option>
             <option value="sum">sum</option>
           </select>
-          <br/>
-          <br/>
+          <br />
+          <br />
 
           <b>Select color </b>
-          <br/>
-          {COLORS.map(function(color) {
+          <br />
+          {COLORS.map((color) => {
             const colorSyle = {
               backgroundColor: color
             }
             return (
-              <div key={color} className='color-option' style={colorSyle} >
+              <div key={color} className="color-option" style={colorSyle} >
                 <input
                   type="radio"
                   name="color"
                   value={color}
-                  checked={color == agentDescription.get("color")}
-                  onChange={me.handleChange.bind(me)}
-                  disabled={color != agentDescription.get("color") && usedColors.indexOf(color) > -1}>
-                  </input>
+                  checked={color === agentDescription.get('color')}
+                  onChange={(event) => this.handleChange(event)}
+                  disabled={color !== agentDescription.get('color') && usedColors.indexOf(color) > -1}
+                />
               </div>
             )
           })}
-          <div className='clearer'/>
-          <br/>
-          <EditTimeSeriesScale {...this.props}/>
-          
-          <div className='buttons'>
-            <button className='waves-effect waves-light btn' onClick={() => onTimeSeriesSaved()}>Save time series</button>
+          <div className="clearer" />
+          <br />
+          <EditTimeSeriesScale {...this.props} />
+
+          <div className="buttons">
+            <button className="waves-effect waves-light btn" onClick={() => this.props.saveTimeSeries()}>Save time series</button>
             <button
-              className={(agentDescription.get("id") != null) ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
-              onClick={() => onTimeSeriesDeleted(agentDescription.get('id'))}>Delete time series
+              className={(agentDescription.get('id') !== null) ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
+              onClick={() => this.props.deleteTimeSeries(agentDescription.get('id'))}
+            >
+              Delete time series
             </button>
           </div>
         </div>
       </div>
-    );
+    )
   }
+}
 
+EditTimeSeries.propTypes = {
+  saveTimeSeries: PropTypes.func.isRequired,
+  deleteTimeSeries: PropTypes.func.isRequired,
+  editedTimeSeries: PropTypes.object.isRequired,
+  changeTimeseriesProperty: PropTypes.func.isRequired,
+  cleanPropertyName: PropTypes.func.isRequired,
+  timeSeries: PropTypes.array.isRequired,
 }

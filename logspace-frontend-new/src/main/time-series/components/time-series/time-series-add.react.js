@@ -6,26 +6,26 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import Component from '../components/component.react';
+import React, {PropTypes} from 'react'
 
-import {onShowSuggestions} from '../suggestions/actions'
-
-
-export default class AddTimeSeries extends Component {
+export default class AddTimeSeries extends React.Component {
 
   render() {
     if (this.props.count >= 8) {
-      return <div/>
+      return <div />
     }
 
     return (
-      <div className='add-series-entry'>
-        <button className='btn-floating btn-large waves-effect btn-highlight' onClick={() => onShowSuggestions()}>
+      <div className="add-series-entry">
+        <button className="btn-floating btn-large waves-effect btn-highlight" onClick={() => this.props.showSuggestions()}>
           <i>+</i>
         </button>
       </div>
     )
   }
+}
 
+AddTimeSeries.propTypes = {
+  count: PropTypes.number.isRequired,
+  showSuggestions: PropTypes.func.isRequired
 }

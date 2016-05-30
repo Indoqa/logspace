@@ -6,29 +6,30 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react';
-import Component from '../components/component.react';
+import React, {PropTypes} from 'react'
 
-import {reset} from '../time-series/actions'
-import {refreshResult} from '../result/actions'
-
-export default class ClearTimeSeries extends Component {
+export default class ClearTimeSeries extends React.Component {
 
   resetAll() {
-    reset()  
-    refreshResult()
+    this.props.resetTimeSeries()
+    this.props.refreshResult()
   }
 
   render() {
-    if (this.props.count == 0) {
-      return <div/>
+    if (this.props.count === 0) {
+      return <div />
     }
 
     return (
-      <span className='delete-all' onClick={() => this.resetAll()}>
+      <span className="delete-all" onClick={() => this.resetAll()}>
         Delete all
       </span>
     )
   }
+}
 
+ClearTimeSeries.propTypes = {
+  count: PropTypes.number.isRequired,
+  resetTimeSeries: PropTypes.func.isRequired,
+  refreshResult: PropTypes.func.isRequired
 }
