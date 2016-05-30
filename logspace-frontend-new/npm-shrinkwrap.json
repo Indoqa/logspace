@@ -756,9 +756,9 @@
       }
     },
     "classnames": {
-      "version": "2.2.3",
-      "from": "classnames@*",
-      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.3.tgz"
+      "version": "2.2.4",
+      "from": "classnames@>=2.2.3 <3.0.0",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.4.tgz"
     },
     "cli-cursor": {
       "version": "1.0.2",
@@ -2308,6 +2308,11 @@
       "from": "interpret@>=0.6.4 <0.7.0",
       "resolved": "https://registry.npmjs.org/interpret/-/interpret-0.6.6.tgz"
     },
+    "intl": {
+      "version": "1.1.0",
+      "from": "intl@*",
+      "resolved": "https://registry.npmjs.org/intl/-/intl-1.1.0.tgz"
+    },
     "invariant": {
       "version": "2.2.1",
       "from": "invariant@>=2.2.0 <3.0.0",
@@ -3373,6 +3378,11 @@
       "version": "3.4.0",
       "from": "react-dropzone@*",
       "resolved": "https://registry.npmjs.org/react-dropzone/-/react-dropzone-3.4.0.tgz"
+    },
+    "react-lite-dropdown": {
+      "version": "0.2.1",
+      "from": "react-lite-dropdown@*",
+      "resolved": "https://registry.npmjs.org/react-lite-dropdown/-/react-lite-dropdown-0.2.1.tgz"
     },
     "react-proxy": {
       "version": "1.1.8",
