@@ -13,8 +13,6 @@ import moment from 'moment'
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
 
-import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from '../../actions/result'
-
 require('./result-header.styl')
 
 export default class Header extends React.Component {
@@ -46,7 +44,7 @@ export default class Header extends React.Component {
   }
 
   onChartTitleSaved(title, hide) {
-    saveChartTitle(title)
+    this.props.saveChartTitle(title)
     hide()
   }
 
@@ -54,8 +52,8 @@ export default class Header extends React.Component {
     if (this.props.autoPlay) {
       return (
         <span>
-          <span className="option pause" onClick={() => setAutoPlay(false)} />
-          <span className="option progress" onClick={refreshResult}>
+          <span className="option pause" onClick={() => this.props.setAutoPlay(false)} />
+          <span className="option progress" onClick={this.props.refreshResult}>
             <span id="progress"> 15 </span>
           </span>
         </span>
@@ -64,8 +62,8 @@ export default class Header extends React.Component {
 
     return (
       <span>
-        <span className="option play" onClick={() => setAutoPlay(true)} />
-        <span className="option refresh" onClick={refreshResult} />
+        <span className="option play" onClick={() => this.props.setAutoPlay(true)} />
+        <span className="option refresh" onClick={this.props.refreshResult} />
       </span>
     )
   }
@@ -89,14 +87,14 @@ export default class Header extends React.Component {
             show={this.state.chartTypeDropdownShown}
             onToggle={() => this.toggleChartTypeDropdownShown()}
             name={'css-hook-demo'}>
-              <div className={'item'} onClick={() => setChartType('bar')}>Bar</div>
-              <div className={'item'} onClick={() => setChartType('line')}>Line</div>
-              <div className={'item'} onClick={() => setChartType('spline')}>Spline</div>
-              <div className={'item'} onClick={() => setChartType('step')}>Step</div>
-              <div className={'item'} onClick={() => setChartType('area')}>Area line</div>
-              <div className={'item'} onClick={() => setChartType('area-spline')}>Area spline</div>
-              <div className={'item'} onClick={() => setChartType('area-step')}>Area step</div>
-              <div className={'item'} onClick={() => setChartType('scatter')}>Scatter</div>
+              <div className={'item'} onClick={() => this.props.setChartType('bar')}>Bar</div>
+              <div className={'item'} onClick={() => this.props.setChartType('line')}>Line</div>
+              <div className={'item'} onClick={() => this.props.setChartType('spline')}>Spline</div>
+              <div className={'item'} onClick={() => this.props.setChartType('step')}>Step</div>
+              <div className={'item'} onClick={() => this.props.setChartType('area')}>Area line</div>
+              <div className={'item'} onClick={() => this.props.setChartType('area-spline')}>Area spline</div>
+              <div className={'item'} onClick={() => this.props.setChartType('area-step')}>Area step</div>
+              <div className={'item'} onClick={() => this.props.setChartType('scatter')}>Scatter</div>
           </LiteDropdown>
         </div>
         <div className="chart-title">
@@ -126,6 +124,10 @@ Header.propTypes = {
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
   chartTitleEditable: PropTypes.object,
-  updateEditableState: PropTypes.func.isRequired
+  updateEditableState: PropTypes.func.isRequired,
+  saveChartTitle: PropTypes.func.isRequired,
+  setChartType: PropTypes.func.isRequired,
+  refreshResult: PropTypes.func.isRequired,
+  setAutoPlay: PropTypes.func.isRequired
 }
 

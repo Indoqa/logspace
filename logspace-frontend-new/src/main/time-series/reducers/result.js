@@ -57,12 +57,12 @@ export default (state = new InitialState, action) => {
       }))
     }
 
-    case resultActions.saveChartTitle: {
-      return state.set('chartTitle', action.payload.chartTitle)
+    case resultActions.SAVE_CHART_TITLE: {
+      return state.set('chartTitle', action.payload.title)
     }
 
-    case resultActions.setChartType: {
-      return state.set('chartType', action.payload.chartType)
+    case resultActions.SET_CHART_TYPE: {
+      return state.set('chartType', action.payload.type)
     }
 
     default: {
