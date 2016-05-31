@@ -5,17 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import Immutable, {Record} from 'immutable'
+import Immutable, {Record, fromJS} from 'immutable'
 import * as resultActions from '../actions/result'
 
 const InitialState = Record({
-  translatedResult: {
+  translatedResult: fromJS({
     error: false,
     empty: true,
     series: null,
     xvalues: [],
     warnings: []
-  },
+  }),
   chartTitle: 'New Chart',
   chartType: 'spline',
   autoPlay: false,
@@ -38,7 +38,7 @@ export default (state = new InitialState, action) => {
 
     case `${resultActions.REFRESH_RESULT}_SUCCESS`: {
       return state.set('translatedResult', Immutable.fromJS({
-        empty: false,
+        empty: !action.payload.chartData,
         error: false,
         loading: false,
         chartData: action.payload.chartData,

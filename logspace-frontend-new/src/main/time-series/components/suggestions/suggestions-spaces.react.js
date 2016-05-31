@@ -12,7 +12,7 @@ export default class SuggestionSpaces extends React.Component {
   render() {
     const {selectedSpace, spaces, selectSpace, clearSpace} = this.props
 
-    if (selectedSpace !== null) {
+    if (selectedSpace) {
       return (
         <div>
           <ul>
@@ -35,8 +35,8 @@ export default class SuggestionSpaces extends React.Component {
 }
 
 SuggestionSpaces.propTypes = {
-  selectedSpace: PropTypes.bool.isRequired,
-  spaces: PropTypes.array.isRequired,
+  selectedSpace: PropTypes.object,
+  spaces: PropTypes.object.isRequired,
   selectSpace: PropTypes.func.isRequired,
   clearSpace: PropTypes.func.isRequired
 }

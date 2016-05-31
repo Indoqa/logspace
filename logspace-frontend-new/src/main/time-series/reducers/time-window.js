@@ -7,24 +7,33 @@
  */
 
 import moment from 'moment'
-import Immutable, {Record} from 'immutable'
+import Immutable, {Record, fromJS} from 'immutable'
 
 import * as actions from '../actions/time-window'
 
-import {TimeWindowSelection, selections} from '../actions/time-window.constants'
+import {TimeWindowSelection, selections, units} from '../actions/time-window.constants'
 
 const InitialState = Record({
-  dynamic: null,
-  selection: null,
+  selection: selections[0],
+  dynamic: fromJS({
+    range: {
+      amount: 60,
+      unit: units.get('minute')
+    },
+    gap: {
+      amount: 1,
+      unit: units.get('minute')
+    }
+  })
 })
 
 export default (state = new InitialState, action) => {
   switch (action.type) {
-    case actions.SELECT_CUSTOM_DATE: {
-      return state.set('selection', action.payload)
+    case actions.SELECT_PREDEFINED_DATE: {
+      return state.set('selection', fromJS(action.payload.selection))
     }
 
-    case actions.SELECT_PREDEFINED_DATE: {
+    case actions.SELECT_CUSTOM_DATE: {
       const customLabel = moment(action.payload.start).format("YY-MM-DD")
         + '<span class="small"> ' + moment(action.payload.start).format('HH:mm') + '</span>'
         + ' - '

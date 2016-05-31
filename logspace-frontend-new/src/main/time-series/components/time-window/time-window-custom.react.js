@@ -67,6 +67,8 @@ export default class TimeWindowCustom extends React.Component {
   }
 
   onGapChange(value) {
+    console.log('new gap!!', value.toJS())
+
     this.setState({
       localState: this.state.localState.merge({
         gap: value
@@ -104,7 +106,7 @@ export default class TimeWindowCustom extends React.Component {
         <div className="selection">
           <div className="submit">
             <span className="intro">GAP</span>
-            <GapSelection value={this.state.localState.get('gap')} onChange={(event) => this.onGapChange(event)} />
+            <GapSelection value={this.state.localState.get('gap')} onChange={(value) => this.onGapChange(value)} />
             <button className="waves-effect waves-light btn btn-small" onClick={(event) => this.submitCustom(event)}>
               Apply
             </button>

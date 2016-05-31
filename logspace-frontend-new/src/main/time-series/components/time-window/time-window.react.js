@@ -20,10 +20,10 @@ export default class TimeWindow extends React.Component {
       <div>
         <Tabs tabActive={this.props.activeTab} onAfterChange={this.props.openTab}>
           <Tabs.Panel title="Shortcuts">
-            <TimeWindowShortcuts {...this.props} />
+            <TimeWindowShortcuts selectPredefinedDate={this.props.selectPredefinedDate} />
           </Tabs.Panel>
           <Tabs.Panel title="Dynamic">
-             <TimeWindowDynamic {...this.props} />
+             <TimeWindowDynamic selectDynamicDate={this.props.selectDynamicDate} dynamic={this.props.dynamic} />
           </Tabs.Panel>
           <Tabs.Panel title="Custom">
              <TimeWindowCustom {...this.props} />
@@ -37,4 +37,7 @@ export default class TimeWindow extends React.Component {
 TimeWindow.propTypes = {
   activeTab: PropTypes.string.isRequired,
   openTab: PropTypes.func.isRequired,
+  dynamic: PropTypes.object.isRequired,
+  selectDynamicDate: PropTypes.func.isRequired,
+  selectPredefinedDate: PropTypes.func.isRequired
 }

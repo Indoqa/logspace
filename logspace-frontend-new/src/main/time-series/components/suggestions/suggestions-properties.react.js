@@ -12,11 +12,11 @@ export default class SuggestionProperties extends React.Component {
   render() {
     const {selectedProperty, properties, selectProperty, clearProperty} = this.props
 
-    if (selectedProperty !== null) {
+    if (selectedProperty) {
       return (
         <div>
           <ul>
-              <li onClick={() => clearProperty}> {selectedProperty.get('name')} (x) </li>
+              <li onClick={() => clearProperty()}> {selectedProperty.get('name')} (x) </li>
            </ul>
         </div>
       )
@@ -35,8 +35,8 @@ export default class SuggestionProperties extends React.Component {
 }
 
 SuggestionProperties.propTypes = {
-  selectedProperty: PropTypes.bool.isRequired,
-  properties: PropTypes.array.isRequired,
+  selectedProperty: PropTypes.object,
+  properties: PropTypes.object.isRequired,
   selectProperty: PropTypes.func.isRequired,
   clearProperty: PropTypes.func.isRequired
 }

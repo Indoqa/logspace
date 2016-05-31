@@ -38,7 +38,7 @@ export default class Suggestions extends React.Component {
       <div className={'suggestions'}>
         <div className={'query'}>
             <input
-              onChange={() => this.handleQueryChange()}
+              onChange={(event) => this.handleQueryChange(event)}
               value={this.state.input}
               placeholder="Filter by agent, space, system or property name"
             />
@@ -46,6 +46,13 @@ export default class Suggestions extends React.Component {
         <SuggestionResult
           result={this.props.suggestions.get('result')}
           request={this.props.suggestions.get('request')}
+          addTimeseries={this.props.addTimeseries}
+          selectSystem={this.props.selectSystem}
+          clearSystem={this.props.clearSystem}
+          selectProperty={this.props.selectProperty}
+          clearProperty={this.props.clearProperty}
+          selectSpace={this.props.selectSpace}
+          clearSpace={this.props.clearSpace}
         />
       </div>
     )
@@ -54,5 +61,12 @@ export default class Suggestions extends React.Component {
 
 Suggestions.propTypes = {
   suggestions: PropTypes.object.isRequired,
-  setSuggestionQuery: PropTypes.func.isRequired
+  addTimeseries: PropTypes.func.isRequired,
+  setSuggestionQuery: PropTypes.func.isRequired,
+  selectSystem: PropTypes.func.isRequired,
+  clearSystem: PropTypes.func.isRequired,
+  selectProperty: PropTypes.func.isRequired,
+  clearProperty: PropTypes.func.isRequired,
+  selectSpace: PropTypes.func.isRequired,
+  clearSpace: PropTypes.func.isRequired
 }

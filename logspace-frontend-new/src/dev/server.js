@@ -18,7 +18,7 @@ app.use(webpackDevMiddleware(compiler, {
 
 app.use(webpackHotMiddleware(compiler))
 
-app.use('/geonames', proxy('http://api.geonames.org', {
+app.use('/logspace', proxy('http://localhost:4567', {
   forwardPath: (req) => {
     // modify url path if needed
     return url.parse(req.url).path

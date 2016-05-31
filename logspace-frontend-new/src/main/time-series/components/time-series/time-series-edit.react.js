@@ -22,7 +22,7 @@ export default class EditTimeSeries extends React.Component {
   }
 
   render() {
-    const agentDescription = this.props.editedTimeSeries.get('newItem')
+    const agentDescription = this.props.editedTimeSeries
 
     const usedColors = this.props.timeSeries.map((item) => {
       if (item.get('id') === agentDescription.get('id')) {
@@ -115,6 +115,5 @@ EditTimeSeries.propTypes = {
   deleteTimeSeries: PropTypes.func.isRequired,
   editedTimeSeries: PropTypes.object.isRequired,
   changeTimeseriesProperty: PropTypes.func.isRequired,
-  cleanPropertyName: PropTypes.func.isRequired,
   timeSeries: PropTypes.array.isRequired,
 }

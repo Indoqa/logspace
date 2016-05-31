@@ -48,11 +48,11 @@ export default class GapSelection extends React.Component {
       localState: newState
     })
 
-    this.props.changeGap(newState.get('gap'))
+    this.props.onChange(newState.get('gap'))
   }
 
   onUnitChange(id) {
-    const selectedUnit = units.find((obj) => obj.get('id') === id)
+    const selectedUnit = units.find((obj) => `${obj.get('id')}` === `${id}`)
 
     const newState = Immutable.fromJS({
       gap: {
@@ -65,7 +65,7 @@ export default class GapSelection extends React.Component {
       localState: newState
     })
 
-    this.props.changeGap(newState.get('gap'))
+    this.props.onChange(newState.get('gap'))
   }
 
   render() {
@@ -94,5 +94,5 @@ export default class GapSelection extends React.Component {
 
 GapSelection.propTypes = {
   value: PropTypes.object.isRequired,
-  changeGap: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 }

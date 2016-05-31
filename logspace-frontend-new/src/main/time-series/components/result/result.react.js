@@ -22,6 +22,7 @@ export default class Result extends React.Component {
           chartTitle={this.props.chartTitle}
           chartTitleEditable={this.props.chartTitleEditable}
           chartType={this.props.chartType}
+          updateEditableState={this.props.updateEditableState}
         />
         <Chart
           series={this.props.timeSeries}
@@ -36,10 +37,11 @@ export default class Result extends React.Component {
 
 Result.propTypes = {
   autoPlay: PropTypes.bool.isRequired,
-  autoPlaySchedule: PropTypes.object.isRequired,
+  autoPlaySchedule: PropTypes.object,
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
-  chartTitleEditable: PropTypes.bool.isRequired,
+  chartTitleEditable: PropTypes.object.isRequired,
   result: PropTypes.object.isRequired,
-  timeSeries: PropTypes.array.isRequired
+  timeSeries: PropTypes.object.isRequired,
+  updateEditableState: PropTypes.func.isRequired
 }

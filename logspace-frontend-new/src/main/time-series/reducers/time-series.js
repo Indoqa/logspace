@@ -7,7 +7,7 @@
  */
 
 import Immutable from 'immutable'
-import {Record} from 'immutable'
+import {Record, List, fromJS} from 'immutable'
 import {getRandomString} from '../../app/utils/getRandomString'
 import {COLORS, isSubitem, getReference} from '../actions/time-series.constants'
 import * as actions from '../actions/time-series'
@@ -29,11 +29,11 @@ const TimeSeriesItem = Record({
 })
 
 const InitialState = Record({
-  timeSeries: [],
-  defaults: {
+  timeSeries: new List,
+  defaults: fromJS({
     propertyStack: [],
     aggregate: 'count'
-  },
+  }),
   editedTimeSeries: null
 })
 

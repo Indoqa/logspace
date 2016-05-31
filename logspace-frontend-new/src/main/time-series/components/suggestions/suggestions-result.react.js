@@ -63,13 +63,28 @@ export default class SuggestionResult extends React.Component {
 
         <div className={'facets'}>
           <b>Spaces</b>
-          <SuggestionSpaces spaces={spaces} selected={request.get('space')} />
+          <SuggestionSpaces
+            spaces={spaces}
+            selectedSpace={request.get('space')}
+            selectSpace={this.props.selectSpace}
+            clearSpace={this.props.clearSpace}
+          />
           <br />
           <b>Systems</b>
-          <SuggestionSystems systems={systems} selected={request.get('system')} />
+          <SuggestionSystems
+            systems={systems}
+            selectedSystem={request.get('system')}
+            selectSystem={this.props.selectSystem}
+            clearSystem={this.props.clearSystem}
+          />
           <br />
           <b>Properties</b>
-          <SuggestionProperties properties={properties} selected={request.get('property')} />
+          <SuggestionProperties
+            properties={properties}
+            selectedProperty={request.get('property')}
+            selectProperty={this.props.selectProperty}
+            clearProperty={this.props.clearProperty}
+          />
         </div>
       </div>
     )
@@ -79,5 +94,11 @@ export default class SuggestionResult extends React.Component {
 SuggestionResult.propTypes = {
   request: PropTypes.object.isRequired,
   result: PropTypes.object.isRequired,
-  addTimeseries: PropTypes.func.isRequired
+  addTimeseries: PropTypes.func.isRequired,
+  selectSystem: PropTypes.func.isRequired,
+  clearSystem: PropTypes.func.isRequired,
+  selectProperty: PropTypes.func.isRequired,
+  clearProperty: PropTypes.func.isRequired,
+  selectSpace: PropTypes.func.isRequired,
+  clearSpace: PropTypes.func.isRequired
 }

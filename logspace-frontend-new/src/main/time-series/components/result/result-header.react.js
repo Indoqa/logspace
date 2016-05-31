@@ -13,7 +13,6 @@ import moment from 'moment'
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
 
-import {onEditableState} from '../../../app/actions/editable'
 import {saveChartTitle, setChartType, refreshResult, setAutoPlay} from '../../actions/result'
 
 require('./result-header.styl')
@@ -107,9 +106,10 @@ export default class Header extends React.Component {
             id={'result'}
             isRequired
             maxLength={200}
+            msg={(key) => key}
             name={'chartTitle'}
             onSave={(title, hide) => (this.onChartTitleSaved(title, hide))}
-            onState={onEditableState}
+            onState={this.props.updateEditableState}
             state={this.props.chartTitleEditable}
           >
             <label>{this.props.chartTitle}</label>
@@ -122,9 +122,10 @@ export default class Header extends React.Component {
 
 Header.propTypes = {
   autoPlay: PropTypes.bool.isRequired,
-  autoPlaySchedule: PropTypes.object.isRequired,
+  autoPlaySchedule: PropTypes.object,
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
-  chartTitleEditable: PropTypes.bool.isRequired,
+  chartTitleEditable: PropTypes.object,
+  updateEditableState: PropTypes.func.isRequired
 }
 
