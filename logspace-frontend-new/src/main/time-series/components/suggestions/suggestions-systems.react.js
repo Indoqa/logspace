@@ -12,7 +12,7 @@ export default class SuggestionSystems extends React.Component {
   render() {
     const {selectedSystem, systems, selectSystem, clearSystem} = this.props
 
-    if (selectedSystem !== null) {
+    if (selectedSystem) {
       return (
         <div>
           <ul>
@@ -35,8 +35,8 @@ export default class SuggestionSystems extends React.Component {
 }
 
 SuggestionSystems.propTypes = {
-  selectedSystem: PropTypes.bool.isRequired,
-  systems: PropTypes.array.isRequired,
+  selectedSystem: PropTypes.object,
+  systems: PropTypes.object.isRequired,
   selectSystem: PropTypes.func.isRequired,
   clearSystem: PropTypes.func.isRequired
 }

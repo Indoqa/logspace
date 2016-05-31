@@ -18,6 +18,8 @@ export default class TimeWindowDynamic extends React.Component {
   constructor(props) {
     super(props)
 
+    console.log(props)
+
     this.state = {
       localState: Immutable.fromJS({
         range: props.dynamic.get('range'),

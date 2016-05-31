@@ -6,7 +6,6 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React, {PropTypes} from 'react'
-import {Link} from 'react-router'
 import './App.styl'
 
 class App extends React.Component {
@@ -15,7 +14,7 @@ class App extends React.Component {
     const {children} = this.props
 
     return (
-      <div className="app">
+      <div id="app">
         {children}
       </div>
     )

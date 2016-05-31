@@ -158,7 +158,7 @@ class Editable extends React.Component {
 }
 
 Editable.propTypes = {
-  msg: React.PropTypes.object.isRequired,
+  msg: React.PropTypes.func.isRequired,
   children: React.PropTypes.node.isRequired,
   defaultValue: React.PropTypes.string.isRequired,
   disabled: React.PropTypes.bool,

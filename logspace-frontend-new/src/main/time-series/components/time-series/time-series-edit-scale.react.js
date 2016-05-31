@@ -53,7 +53,7 @@ export default class EditTimeSeriesScale extends React.Component {
     }
 
     if (scaleType === 'property') {
-      const propertyScale = SCALES[this.props.editedTimeSeries.get('newItem').get('propertyId')]
+      const propertyScale = SCALES[this.props.editedTimeSeries.get('propertyId')]
       return <div className="manual"> {propertyScale.label} </div>
     }
 
@@ -90,7 +90,7 @@ export default class EditTimeSeriesScale extends React.Component {
   getPropertyScaleInput(agentDescription) {
     const propertyScale = SCALES[agentDescription.get('propertyId')]
 
-    if (propertyScale === null) {
+    if (!propertyScale) {
       return <div />
     }
 
@@ -125,7 +125,7 @@ export default class EditTimeSeriesScale extends React.Component {
     let found = false
 
     const items = this.props.timeSeries.map((item) => {
-      if (item.get('id') === this.props.editedTimeSeries.get('newItem').get('id')) {
+      if (item.get('id') === this.props.editedTimeSeries.get('id')) {
         return null
       }
 
@@ -162,7 +162,7 @@ export default class EditTimeSeriesScale extends React.Component {
   }
 
   render() {
-    const agentDescription = this.props.editedTimeSeries.get('newItem')
+    const agentDescription = this.props.editedTimeSeries
 
     const existingScaleInput = this.getExistingScaleInput()
     const propertyScaleInput = this.getPropertyScaleInput(agentDescription)

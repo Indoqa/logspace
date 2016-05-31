@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import React from 'react'
+import React, {PropTypes} from 'react'
 import immutable from 'immutable'
 import TimeSeriesItem from '../time-series/time-series-item.react'
 import {isSubitem, getReference} from '../../actions/time-series.constants'
@@ -47,10 +47,25 @@ export default class TimeSeriesList extends React.Component {
         {sortedItems.map((item) => {
           if (!isSubitem(item.get('scaleType')) && masterCount < 2) {
             masterCount++
-            return <TimeSeriesItem key={item.get('id')} item={item} axis={masterCount} />
+            return (
+              <TimeSeriesItem
+                key={item.get('id')}
+                item={item}
+                axis={masterCount}
+                editTimeSeries={this.props.editTimeSeries}
+                cleanPropertyName={this.props.cleanPropertyName}
+              />
+            )
           }
 
-          return <TimeSeriesItem key={item.get('id')} item={item} />
+          return (
+            <TimeSeriesItem key={item.get('id')} item={item}
+              key={item.get('id')}
+              item={item}
+              editTimeSeries={this.props.editTimeSeries}
+              cleanPropertyName={this.props.cleanPropertyName}
+            />
+          )
         })}
       </div>
     )
@@ -58,5 +73,7 @@ export default class TimeSeriesList extends React.Component {
 }
 
 TimeSeriesList.propTypes = {
-  items: React.PropTypes.instanceOf(immutable.List)
+  items: PropTypes.instanceOf(immutable.List),
+  editTimeSeries: PropTypes.func.isRequired,
+  cleanPropertyName: PropTypes.func.isRequired
 }

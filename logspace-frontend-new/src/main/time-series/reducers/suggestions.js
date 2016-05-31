@@ -5,24 +5,24 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import Immutable, {Record} from 'immutable'
+import Immutable, {Record, fromJS} from 'immutable'
 
 import * as actions from '../actions/suggestions'
 
 const InitialState = Record({
-  request: {
+  request: fromJS({
     text: null,
     system: null,
     space: null,
     propertyId: null
-  },
-  result: {
+  }),
+  result: fromJS({
     spaces: [],
     systems: [],
     propertyNames: [],
     agentDescriptions: [],
     loading: false
-  }
+  })
 })
 
 export default (state = new InitialState, action) => {

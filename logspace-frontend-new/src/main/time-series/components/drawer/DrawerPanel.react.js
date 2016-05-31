@@ -8,9 +8,9 @@
 import React, {PropTypes} from 'react'
 
 import Options from '../options/options.react'
-import Suggestions from '../suggestions/suggestions.react'
-import TimeWindow from '../time-window/time-window.react'
-import EditTimeSeries from '../time-series/time-series-edit.react'
+import Suggestions from '../suggestions/Suggestions.redux'
+import TimeWindow from '../time-window/TimeWindow.redux'
+import EditTimeSeries from '../time-series/TimeSeriesEdit.redux'
 
 import * as Panels from '../../actions/drawer.constants'
 

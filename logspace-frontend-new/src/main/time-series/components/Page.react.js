@@ -9,12 +9,12 @@ import React, {PropTypes} from 'react'
 import classnames from 'classnames'
 
 import Header from './header/Header.redux'
-import AddTimeSeries from './time-series/time-series-add.react'
-import ClearTimeSeries from './time-series/time-series-clear.react'
-import TimeSeriesList from './time-series/time-series-list.react'
-import TimeWindowValues from './time-window/time-window-values.react'
+import Drawer from './drawer/Drawer.redux'
+import AddTimeSeries from './time-series/TimeSeriesAdd.redux'
+import ClearTimeSeries from './time-series/TimeSeriesClear.redux'
+import TimeSeriesList from './time-series/TimeSeriesList.redux'
+import TimeWindowValues from './time-window/TimeWindowValues.redux'
 import Result from './result/Result.redux'
-import Drawer from './drawer/Drawer.react'
 
 require('./Page.styl')
 
@@ -48,7 +48,6 @@ export default class TimeSeries extends React.Component {
 
         <div className={classnames(mainCss.toJS())}>
           <Result />
-          />
         </div>
       </div>
     )

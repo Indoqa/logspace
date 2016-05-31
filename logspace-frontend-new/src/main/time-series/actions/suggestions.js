@@ -17,8 +17,8 @@ export const CLEAR_SPACE = 'CLEAR_SPACE'
 export const SELECT_PROPERTY = 'SELECT_PROPERTY'
 export const CLEAR_PROPERTY = 'CLEAR_PROPERTY'
 
-export const refreshSuggestions = (store) => () => {
-  const request = store.suggestions.get('request')
+export const refreshSuggestions = () => ({store}) => {
+  const request = store.getState().suggestions.get('request').toJS()
 
   return {
     type: REFRESH_SUGGESTIONS,
@@ -40,35 +40,38 @@ export const showSuggestions = () => ({
   type: SHOW_SUGGESTIONS
 })
 
-export const setSuggestionQuery = (query) => ({
-  type: SET_SUGGESTION_QUERY,
-  payload: {query}
-})
+export const setSuggestionQuery = (query) => [
+  {type: SET_SUGGESTION_QUERY, payload: {query}},
+  refreshSuggestions()
+]
 
-export const selectSystem = (system) => ({
-  type: SELECT_SYSTEM,
-  payload: {system}
-})
+export const selectSystem = (system) => [
+  {type: SELECT_SYSTEM, payload: {system}},
+  refreshSuggestions()
+]
 
-export const clearSystem = () => ({
-  type: CLEAR_SYSTEM
-})
+export const clearSystem = () => [
+  {type: CLEAR_SYSTEM},
+  refreshSuggestions()
+]
 
-export const selectSpace = (space) => ({
-  type: SELECT_SPACE,
-  payload: {space}
-})
+export const selectSpace = (space) => [
+  {type: SELECT_SPACE, payload: {space}},
+  refreshSuggestions()
+]
 
-export const clearSpace = () => ({
-  type: CLEAR_SPACE
-})
+export const clearSpace = () => [
+  {type: CLEAR_SPACE},
+  refreshSuggestions()
+]
 
-export const selectProperty = (property) => ({
-  type: SELECT_PROPERTY,
-  payload: {property}
-})
+export const selectProperty = (property) => [
+  {type: SELECT_PROPERTY, payload: {property}},
+  refreshSuggestions()
+]
 
-export const clearProperty = () => ({
-  type: CLEAR_PROPERTY
-})
+export const clearProperty = () => [
+  {type: CLEAR_PROPERTY},
+  refreshSuggestions()
+]
 

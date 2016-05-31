@@ -77,9 +77,8 @@ export default class TimeSeriesItem extends React.Component {
 }
 
 TimeSeriesItem.propTypes = {
-  axis: PropTypes.string.isRequired,
+  axis: PropTypes.string,
   item: PropTypes.object.isRequired,
   editTimeSeries: PropTypes.func.isRequired,
-  cleanPropertyName: PropTypes.func.isRequired,
-  timeSeries: PropTypes.array.isRequired,
+  cleanPropertyName: PropTypes.func.isRequired
 }
