@@ -16,6 +16,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   deleteTimeSeries: (id) => {
     dispatch(actions.deleteTimeseries(id))
+    dispatch(refreshResult())
   },
   changeTimeseriesProperty: (key, value) => {
     dispatch(actions.changeTimeseriesProperty(key, value))
