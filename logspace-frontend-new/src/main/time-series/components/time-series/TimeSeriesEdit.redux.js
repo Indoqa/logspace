@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 import TimeSeriesEdit from './time-series-edit.react'
 import * as actions from '../../actions/time-series'
+import {refreshResult} from '../../actions/result'
 import {cleanPropertyName} from './time-series-item.react'
 
 const mapStateToProps = (state) => ({
@@ -11,6 +12,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   saveTimeSeries: () => {
     dispatch(actions.saveTimeseries())
+    dispatch(refreshResult())
   },
   deleteTimeSeries: (id) => {
     dispatch(actions.deleteTimeseries(id))

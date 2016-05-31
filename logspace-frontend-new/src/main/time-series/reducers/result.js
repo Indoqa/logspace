@@ -52,8 +52,8 @@ export default (state = new InitialState, action) => {
         empty: true,
         error: true,
         loading: false,
-        errorStatus: action.payload.errorStatus,
-        errorText: action.payload.errorText
+        errorStatus: 'ERROR',
+        errorText: action.payload
       }))
     }
 
