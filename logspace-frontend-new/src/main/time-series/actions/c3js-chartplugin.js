@@ -75,11 +75,11 @@ function getAppliedScale(item, scaleMap) {
 
 function getDataColumn(array, id, normalizer) {
   const values = array.map((item) => {
-    if (item !== null && normalizer !== null) {
+    if (item && normalizer) {
       return normalizer(item)
     }
 
-    if (item !== null) {
+    if (item) {
       return item
     }
 
@@ -94,6 +94,8 @@ function getDataColumn(array, id, normalizer) {
 
 
 export function transformLogspaceResult(timeSeries, responseJson) {
+  console.log(timeSeries, responseJson)
+
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
   const chartData = {
     colors: {},
@@ -113,6 +115,7 @@ export function transformLogspaceResult(timeSeries, responseJson) {
   const scaleMap = createScaleMap(timeSeries, responseJson)
 
   timeSeries.forEach((item, index) => {
+    console.log(item.toJS())
     // meta data
     chartData.columnKeys.push(item.get('id'))
     chartData.colors[item.get('id')] = item.get('color')
@@ -120,7 +123,7 @@ export function transformLogspaceResult(timeSeries, responseJson) {
 
     // type
     const typeArray = chartData.types[item.get('type')]
-    if (typeArray === null) {
+    if (!typeArray) {
       chartData.types[item.get('type')] = []
     }
 

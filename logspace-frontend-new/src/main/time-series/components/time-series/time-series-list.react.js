@@ -15,6 +15,7 @@ export default class TimeSeriesList extends React.Component {
   getSortValue(item, index, positionMap) {
     const scaleType = item.get('scaleType')
 
+
     if (!isSubitem(scaleType)) {
       return `${index}-0-master`
     }
@@ -22,7 +23,7 @@ export default class TimeSeriesList extends React.Component {
     const reference = getReference(scaleType)
     const indexOfReference = positionMap[reference]
 
-    return `${indexOfReference} + '-' + index + '-subitem'$`
+    return `${indexOfReference}-${index}-subitem`
   }
 
   positionMap(items) {
@@ -38,7 +39,12 @@ export default class TimeSeriesList extends React.Component {
   render() {
     const items = this.props.items
     const positionMap = this.positionMap(items)
-    const sortedItems = items.sortBy((item, index) => this.getSortValue(item, index, positionMap))
+
+    const sortedItems = items.sortBy((item, index) => {
+      const sortValue = this.getSortValue(item, index, positionMap)
+      console.log(sortValue)
+      return sortValue
+    })
 
     let masterCount = 0
 

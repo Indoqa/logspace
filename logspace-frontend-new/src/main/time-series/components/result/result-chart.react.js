@@ -10,7 +10,6 @@ import Immutable from 'immutable'
 import c3 from 'c3'
 import classnames from 'classnames'
 import Halogen from 'halogen'
-import Intl from 'intl'
 
 import debounceFunc from '../../../app/utils/debounce'
 import {units} from '../../actions/time-window.constants'
@@ -220,11 +219,11 @@ export default class Chart extends React.Component {
 
   formatYTooltip(value, ratio, id, index) {
     const yValue = this.originalColumns[id][index]
-    return new Intl.NumberFormat('en-US', {minimumFractionDigits: 3}).format(yValue)
+    return yValue
   }
 
   formatYTick(value) {
-    return new Intl.NumberFormat('en-US').format(value)
+    return value
   }
 
   getMaxTicks(chartData) {
