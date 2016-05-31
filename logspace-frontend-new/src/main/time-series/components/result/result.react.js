@@ -23,6 +23,10 @@ export default class Result extends React.Component {
           chartTitleEditable={this.props.chartTitleEditable}
           chartType={this.props.chartType}
           updateEditableState={this.props.updateEditableState}
+          saveChartTitle={this.props.saveChartTitle}
+          setChartType={this.props.setChartType}
+          refreshResult={this.props.refreshResult}
+          setAutoPlay={this.props.setAutoPlay}
         />
         <Chart
           series={this.props.timeSeries}
@@ -43,5 +47,9 @@ Result.propTypes = {
   chartTitleEditable: PropTypes.object.isRequired,
   result: PropTypes.object.isRequired,
   timeSeries: PropTypes.object.isRequired,
-  updateEditableState: PropTypes.func.isRequired
+  updateEditableState: PropTypes.func.isRequired,
+  saveChartTitle: PropTypes.func.isRequired,
+  setChartType: PropTypes.func.isRequired,
+  refreshResult: PropTypes.func.isRequired,
+  setAutoPlay: PropTypes.func.isRequired
 }
