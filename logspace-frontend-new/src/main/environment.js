@@ -6,26 +6,18 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-export function restUrl(url): string {
-  if (typeof window.logspaceRestUrl === "function") { 
-    return window.logspaceRestUrl(url);
-  }  
-
-  return url;
-}
-
-export function title(defaultTitle): string {
+export function title(defaultTitle) {
   if (window.logspaceTitle) {
     return window.logspaceTitle
-  }  
+  }
 
   return defaultTitle
 }
 
-export function marginTop(): integer {
+export function marginTop() {
   if (window.logspaceMarginTop) {
     return window.logspaceMarginTop
-  }  
+  }
 
   return 0
 }

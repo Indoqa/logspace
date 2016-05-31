@@ -7,7 +7,7 @@
  */
 import React, {PropTypes} from 'react'
 
-import Options from '../options/options.react'
+import Options from '../options/Options.redux'
 import Suggestions from '../suggestions/Suggestions.redux'
 import TimeWindow from '../time-window/TimeWindow.redux'
 import EditTimeSeries from '../time-series/TimeSeriesEdit.redux'
