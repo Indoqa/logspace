@@ -80,8 +80,9 @@ class Editable extends React.Component {
       return
     }
     const value = this.getState().toJS().value.trim()
-    if (!value && this.props.isRequired)
+    if (!value && this.props.isRequired) {
       return
+    }
     this.props.onSave(value, () => {
       this.setDefaultState()
     })
@@ -92,13 +93,15 @@ class Editable extends React.Component {
   }
 
   cancelEdit() {
-    if (this.valueHasChanged())
-      if (!confirm(this.props.msg('confirmations.cancelEdit'))) // eslint-disable-line no-alert
+    if (this.valueHasChanged()) {
+      if (!confirm(this.props.msg('confirmations.cancelEdit'))) { // eslint-disable-line no-alert
         return
+      }
+    }
     this.setDefaultState()
   }
 
-  onInputFocus(e) {
+  onInputFocus(e) {  // eslint-disable-line react/sort-comp
     e.target.select()
   }
 

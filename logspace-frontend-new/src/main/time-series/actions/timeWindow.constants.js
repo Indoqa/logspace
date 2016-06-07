@@ -120,15 +120,3 @@ export const selections = [
     })
   })
 ]
-
-export function shortcutById(id) {
-  for (let shortcutIndex in selections) {
-    const shortcut = selections[shortcutIndex]
-
-    if (shortcut.shortcutId === id) {
-      return shortcut
-    }
-  }
-
-  return null
-}

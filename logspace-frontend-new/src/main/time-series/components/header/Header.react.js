@@ -21,7 +21,7 @@ export default class Header extends React.Component {
         <div className="options-button">
           <span
             onClick={() => showOptions()}
-            dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}}
+            dangerouslySetInnerHTML={{__html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/></svg>'}} // eslint-disable-line max-len
           />
         </div>
         <div className="logo">{title('Logspace')}</div>
