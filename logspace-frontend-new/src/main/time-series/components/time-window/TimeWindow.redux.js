@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import TimeWindow from './time-window.react'
+import TimeWindow from './TimeWindow.react'
 
-import {showTimewindowForm, selectPredefinedDate, selectDynamicDate, selectCustomDate} from '../../actions/time-window'
+import {showTimeWindowForm, selectPredefinedDate, selectDynamicDate, selectCustomDate} from '../../actions/timeWindow'
 import {refreshResult} from '../../actions/result'
 
 const mapStateToProps = (state) => ({
@@ -11,7 +11,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   showTimeWindowForm: () => {
-    dispatch(showTimewindowForm())
+    dispatch(showTimeWindowForm())
   },
   selectPredefinedDate: (shortcut) => {
     dispatch(selectPredefinedDate(shortcut))

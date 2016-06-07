@@ -12,10 +12,10 @@ import classnames from 'classnames'
 import Halogen from 'halogen'
 
 import debounceFunc from '../../../app/utils/debounce'
-import {units} from '../../actions/time-window.constants'
+import {units} from '../../actions/timeWindow.constants'
 import {marginTop} from '../../../environment'
 
-require('./result-chart.styl')
+require('./ResultChart.styl')
 
 const ComponentState = Immutable.fromJS({
   loadingCss: {

@@ -9,9 +9,9 @@
 import moment from 'moment'
 import Immutable, {Record, fromJS} from 'immutable'
 
-import * as actions from '../actions/time-window'
+import * as actions from '../actions/timeWindow'
 
-import {TimeWindowSelection, selections, units} from '../actions/time-window.constants'
+import {TimeWindowSelection, selections, units} from '../actions/timeWindow.constants'
 
 const InitialState = Record({
   selection: selections[0],
@@ -86,4 +86,3 @@ export default (state = new InitialState, action) => {
     }
   }
 }
-

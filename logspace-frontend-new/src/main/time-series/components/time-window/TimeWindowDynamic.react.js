@@ -9,9 +9,9 @@
 import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
 
-import GapSelection from './time-window-gapselection.react.js'
+import TimeWindowGapSelection from './TimeWindowGapSelection.react.js'
 
-require('./time-window.styl')
+require('./TimeWindow.styl')
 
 export default class TimeWindowDynamic extends React.Component {
 
@@ -53,7 +53,7 @@ export default class TimeWindowDynamic extends React.Component {
             unit: value.get('unit')
           }
         })
-      }) 
+      })
     }
   }
 
@@ -86,9 +86,9 @@ export default class TimeWindowDynamic extends React.Component {
           </div>
           <div className="dynamic">
             <span className="intro">last </span>
-            <GapSelection value={this.state.localState.get('range')} onChange={(event) => this.onRangeChange(event)} />
+            <TimeWindowGapSelection value={this.state.localState.get('range')} onChange={(event) => this.onRangeChange(event)} />
             <span className="intro">Gap</span>
-            <GapSelection value={this.state.localState.get('gap')} onChange={(event) => this.onGapChange(event)} />
+            <TimeWindowGapSelection value={this.state.localState.get('gap')} onChange={(event) => this.onGapChange(event)} />
           </div>
         </div>
         <br />
@@ -122,4 +122,3 @@ TimeWindowDynamic.propTypes = {
   dynamic: PropTypes.object.isRequired,
   selectDynamicDate: PropTypes.func.isRequired
 }
-

@@ -1,8 +1,8 @@
 import {connect} from 'react-redux'
-import Suggestions from './suggestions.react'
+import Suggestions from './Suggestions.react'
 
 import * as actions from '../../actions/suggestions'
-import {addTimeseries} from '../../actions/time-series'
+import {addTimeSeries} from '../../actions/timeSeries'
 
 const mapStateToProps = (state) => ({
   suggestions: state.suggestions
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.clearSpace())
   },
   addTimeseries: (agentDescriptions) => {
-    dispatch(addTimeseries(agentDescriptions))
+    dispatch(addTimeSeries(agentDescriptions))
   }
 })
 

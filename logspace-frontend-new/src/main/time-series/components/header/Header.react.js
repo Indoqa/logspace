@@ -9,7 +9,7 @@
 import React, {PropTypes} from 'react'
 import {title} from '../../../environment'
 
-import './header.styl'
+import './Header.styl'
 
 export default class Header extends React.Component {
 

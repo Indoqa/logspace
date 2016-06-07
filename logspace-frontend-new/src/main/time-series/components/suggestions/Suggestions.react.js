@@ -6,11 +6,11 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React, {PropTypes} from 'react'
-import SuggestionResult from './suggestions-result.react'
+import SuggestionResult from './SuggestionsResult.react'
 
 import debounceFunc from '../../../app/utils/debounce'
 
-require('./suggestions.styl')
+require('./Suggestions.styl')
 
 export default class Suggestions extends React.Component {
 

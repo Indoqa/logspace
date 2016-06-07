@@ -8,8 +8,8 @@
 
 import React, {PropTypes} from 'react'
 import immutable from 'immutable'
-import TimeSeriesItem from '../time-series/time-series-item.react'
-import {isSubitem, getReference} from '../../actions/time-series.constants'
+import TimeSeriesItem from '../time-series/TimeSeriesItem.react'
+import {isSubitem, getReference} from '../../actions/timeSeries.constants'
 
 export default class TimeSeriesList extends React.Component {
   getSortValue(item, index, positionMap) {

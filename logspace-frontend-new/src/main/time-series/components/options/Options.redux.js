@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import Options from './options.react'
+import Options from './Options.react'
 
 import {refreshResult} from '../../actions/result'
 

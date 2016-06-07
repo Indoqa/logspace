@@ -8,28 +8,24 @@
 
 import React, {PropTypes} from 'react'
 
-export default class ClearTimeSeries extends React.Component {
-
-  resetAll() {
-    this.props.resetTimeSeries()
-    this.props.refreshResult()
-  }
+export default class TimeSeriesAdd extends React.Component {
 
   render() {
-    if (this.props.count === 0) {
+    if (this.props.count >= 8) {
       return <div />
     }
 
     return (
-      <span className="delete-all" onClick={() => this.resetAll()}>
-        Delete all
-      </span>
+      <div className="add-series-entry">
+        <button className="btn-floating btn-large waves-effect btn-highlight" onClick={() => this.props.showSuggestions()}>
+          <i>+</i>
+        </button>
+      </div>
     )
   }
 }
 
-ClearTimeSeries.propTypes = {
+TimeSeriesAdd.propTypes = {
   count: PropTypes.number.isRequired,
-  resetTimeSeries: PropTypes.func.isRequired,
-  refreshResult: PropTypes.func.isRequired
+  showSuggestions: PropTypes.func.isRequired
 }

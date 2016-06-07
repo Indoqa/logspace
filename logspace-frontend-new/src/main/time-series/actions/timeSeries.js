@@ -14,35 +14,35 @@ export const DELETE_TIMESERIES = 'DELETE_TIMESERIES'
 export const REMEMBER_SELECTED_TIMESERIES_PROPERTY = 'REMEMBER_SELECTED_TIMESERIES_PROPERTY'
 export const RESET_TIMESERIES = 'RESET_TIMESERIES'
 
-export const changeTimeseriesProperty = (key, value) => ({
+export const changeTimeSeriesProperty = (key, value) => ({
   type: CHANGE_TIMESERIES_PROPERTY,
   payload: {key, value}
 })
 
-export const saveTimeseries = () => ({
+export const saveTimeSeries = () => ({
   type: SAVE_TIMESERIES
 })
 
-export const addTimeseries = (agentDescriptions) => ({
+export const addTimeSeries = (agentDescriptions) => ({
   type: ADD_TIMESERIES,
   payload: {agentDescriptions}
 })
 
-export const editTimeseries = (timeSeries) => ({
+export const editTimeSeries = (timeSeries) => ({
   type: EDIT_TIMESERIES,
   payload: {timeSeries}
 })
 
-export const deleteTimeseries = (id) => ({
+export const deleteTimeSeries = (id) => ({
   type: DELETE_TIMESERIES,
   payload: {id}
 })
 
-export const rememberSelectedTimeseriesProperty = (value) => ({
+export const rememberSelectedTimeSeriesProperty = (value) => ({
   type: REMEMBER_SELECTED_TIMESERIES_PROPERTY,
   payload: {value}
 })
 
-export const resetTimeseries = () => ({
+export const resetTimeSeries = () => ({
   type: RESET_TIMESERIES
 })

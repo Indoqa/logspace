@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import Header from './header.react'
+import Header from './Header.react'
 
 import {showOptions} from '../../actions/options'
 

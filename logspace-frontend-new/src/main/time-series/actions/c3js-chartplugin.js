@@ -8,8 +8,8 @@
 
 import moment from 'moment'
 
-import {cleanPropertyName} from '../components/time-series/time-series-item.react'
-import {isSubitem, getReference} from './time-series.constants'
+import {cleanPropertyName} from '../components/time-series/TimeSeriesItem.react'
+import {isSubitem, getReference} from './timeSeries.constants'
 
 function createXAxisLabals(responseJson) {
   const labels = []
@@ -186,4 +186,3 @@ export function transformLogspaceResult(timeSeries, responseJson) {
 
   return chartData
 }
-

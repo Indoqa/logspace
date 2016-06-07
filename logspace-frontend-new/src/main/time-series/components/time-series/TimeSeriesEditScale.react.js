@@ -11,11 +11,11 @@ import React, {PropTypes} from 'react'
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
 
-import {SCALES, isSubitem, getReference} from '../../actions/time-series.constants'
+import {SCALES, isSubitem, getReference} from '../../actions/timeSeries.constants'
 
-require('./time-series-edit-scale.styl')
+require('./TimeSeriesEditScale.styl')
 
-export default class EditTimeSeriesScale extends React.Component {
+export default class TimeSeriesEditScale extends React.Component {
 
   constructor(props) {
     super(props)
@@ -195,7 +195,7 @@ export default class EditTimeSeriesScale extends React.Component {
   }
 }
 
-EditTimeSeriesScale.propTypes = {
+TimeSeriesEditScale.propTypes = {
   editedTimeSeries: PropTypes.object.isRequired,
   changeTimeseriesProperty: PropTypes.func.isRequired,
   cleanPropertyName: PropTypes.func.isRequired,

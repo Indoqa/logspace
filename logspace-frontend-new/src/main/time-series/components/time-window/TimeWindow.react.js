@@ -8,11 +8,11 @@
 import React, {PropTypes} from 'react'
 import Tabs from 'react-simpletabs'
 
-import TimeWindowCustom from './time-window-custom.react'
-import TimeWindowDynamic from './time-window-dynamic.react'
-import TimeWindowShortcuts from './time-window-shortcuts.react'
+import TimeWindowCustom from './TimeWindowCustom.react'
+import TimeWindowDynamic from './TimeWindowDynamic.react'
+import TimeWindowShortcuts from './TimeWindowShortcuts.react'
 
-import './time-window.styl'
+import './TimeWindow.styl'
 
 export default class TimeWindow extends React.Component {
   render() {

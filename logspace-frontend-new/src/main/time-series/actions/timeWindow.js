@@ -13,11 +13,11 @@ export const SELECT_CUSTOM_DATE = 'SELECT_CUSTOM_DATE'
 export const SELECT_DYNAMIC_DATE = 'SELECT_DYNAMIC_DATE'
 export const SELECT_PREDEFINED_DATE = 'SELECT_PREDEFINED_DATE'
 
-export const resetTimewindow = () => ({
+export const resetTimeWindow = () => ({
   type: RESET_TIMEWINDOW
 })
 
-export const showTimewindowForm = () => ({
+export const showTimeWindowForm = () => ({
   type: SHOW_TIMEWINDOW_FORM
 })
 
@@ -37,7 +37,7 @@ export const selectPredefinedDate = (selection) => ({
   payload: {selection}
 })
 
-export const showTimewindowTab = (index) => ({
+export const showTimeWindowTab = (index) => ({
   type: SHOW_TIMEWINDOW_TAB,
   payload: {index}
 })

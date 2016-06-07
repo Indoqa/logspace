@@ -8,7 +8,7 @@
 
 import React, {PropTypes} from 'react'
 
-import './time-series-label.styl'
+import './TimeSeriesLabel.styl'
 
 export default class TimeSeriesLabel extends React.Component {
 

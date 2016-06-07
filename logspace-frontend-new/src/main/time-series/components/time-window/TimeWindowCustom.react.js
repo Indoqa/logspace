@@ -9,11 +9,11 @@
 import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
 import moment from 'moment'
-import GapSelection from './time-window-gapselection.react.js'
 import DateRangePicker from 'react-daterange-picker'
 import TimePicker from 'react-time-picker'
+import TimeWindowGapSelection from './TimeWindowGapSelection.react.js'
 
-require('./time-window.styl')
+require('./TimeWindow.styl')
 
 export default class TimeWindowCustom extends React.Component {
   constructor(props) {
@@ -106,7 +106,7 @@ export default class TimeWindowCustom extends React.Component {
         <div className="selection">
           <div className="submit">
             <span className="intro">GAP</span>
-            <GapSelection value={this.state.localState.get('gap')} onChange={(value) => this.onGapChange(value)} />
+            <TimeWindowGapSelection value={this.state.localState.get('gap')} onChange={(value) => this.onGapChange(value)} />
             <button className="waves-effect waves-light btn btn-small" onClick={(event) => this.submitCustom(event)}>
               Apply
             </button>

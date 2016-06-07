@@ -9,8 +9,8 @@
 import Immutable from 'immutable'
 import {Record, List, fromJS} from 'immutable'
 import {getRandomString} from '../../app/utils/getRandomString'
-import {COLORS, isSubitem, getReference} from '../actions/time-series.constants'
-import * as actions from '../actions/time-series'
+import {COLORS, isSubitem, getReference} from '../actions/timeSeries.constants'
+import * as actions from '../actions/timeSeries'
 
 const TimeSeriesItem = Record({
   id: '',

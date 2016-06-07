@@ -7,9 +7,9 @@
  */
 import React, {PropTypes} from 'react'
 
-import Chart from './result-chart.react'
-import Header from './result-header.react'
-import Footer from './result-footer.react'
+import Chart from './ResultChart.react'
+import Header from './ResultHeader.react'
+import Footer from './ResultFooter.react'
 
 export default class Result extends React.Component {
 

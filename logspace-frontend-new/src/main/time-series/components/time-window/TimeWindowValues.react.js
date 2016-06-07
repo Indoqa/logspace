@@ -8,7 +8,7 @@
 
 import React, {PropTypes} from 'react'
 
-require('./time-window-values.styl')
+require('./TimeWindowValues.styl')
 
 export default class TimeWindowValues extends React.Component {
 
