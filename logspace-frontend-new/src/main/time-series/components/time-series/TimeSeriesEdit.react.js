@@ -8,14 +8,14 @@
 
 import React, {PropTypes} from 'react'
 
-import TimeSeriesLabel from './time-series-label.react'
-import EditTimeSeriesScale from './time-series-edit-scale.react'
+import TimeSeriesLabel from './TimeSeriesLabel.react'
+import TimeSeriesEditScale from './TimeSeriesEditScale.react'
 
-import {COLORS} from '../../actions/time-series.constants'
+import {COLORS} from '../../actions/timeSeries.constants'
 
-require('./time-series-edit.styl')
+require('./TimeSeriesEdit.styl')
 
-export default class EditTimeSeries extends React.Component {
+export default class TimeSeriesEdit extends React.Component {
 
   handleChange(event) {
     this.props.changeTimeseriesProperty(event.target.name, event.target.value)
@@ -93,7 +93,7 @@ export default class EditTimeSeries extends React.Component {
           })}
           <div className="clearer" />
           <br />
-          <EditTimeSeriesScale {...this.props} />
+          <TimeSeriesEditScale {...this.props} />
 
           <div className="buttons">
             <button className="waves-effect waves-light btn" onClick={() => this.props.saveTimeSeries()}>Save time series</button>
@@ -110,7 +110,7 @@ export default class EditTimeSeries extends React.Component {
   }
 }
 
-EditTimeSeries.propTypes = {
+TimeSeriesEdit.propTypes = {
   saveTimeSeries: PropTypes.func.isRequired,
   deleteTimeSeries: PropTypes.func.isRequired,
   editedTimeSeries: PropTypes.object.isRequired,

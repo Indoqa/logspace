@@ -7,7 +7,7 @@
  */
 import React, {PropTypes} from 'react'
 
-require('./result-footer.styl')
+require('./ResultFooter.styl')
 
 export default class Footer extends React.Component {
 

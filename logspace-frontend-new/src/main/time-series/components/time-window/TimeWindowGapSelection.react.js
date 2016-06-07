@@ -8,9 +8,9 @@
 
 import React, {PropTypes} from 'react'
 import Immutable from 'immutable'
-import {units} from '../../actions/time-window.constants'
+import {units} from '../../actions/timeWindow.constants'
 
-export default class GapSelection extends React.Component {
+export default class TimeWindowGapSelection extends React.Component {
   constructor(props) {
     super(props)
 
@@ -92,7 +92,7 @@ export default class GapSelection extends React.Component {
   }
 }
 
-GapSelection.propTypes = {
+TimeWindowGapSelection.propTypes = {
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 }

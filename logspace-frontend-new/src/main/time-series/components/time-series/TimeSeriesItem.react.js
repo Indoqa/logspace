@@ -9,10 +9,10 @@
 import React, {PropTypes} from 'react'
 import classnames from 'classnames'
 
-import TimeSeriesLabel from './time-series-label.react'
-import {isSubitem} from '../../actions/time-series.constants'
+import TimeSeriesLabel from './TimeSeriesLabel.react'
+import {isSubitem} from '../../actions/timeSeries.constants'
 
-require('./time-series-item.styl')
+require('./TimeSeriesItem.styl')
 
 function createTimeSeriesClassName(item) {
   return classnames('time-series-item', {

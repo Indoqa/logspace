@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-import './editable.styl'
+import './Editable.styl'
 import React from 'react'
 import classnames from 'classnames'
 import immutable from 'immutable'
@@ -97,7 +97,7 @@ class Editable extends React.Component {
         return
     this.setDefaultState()
   }
-  
+
   onInputFocus(e) {
     e.target.select()
   }

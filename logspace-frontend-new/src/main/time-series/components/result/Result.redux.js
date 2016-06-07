@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import Result from './result.react'
+import Result from './Result.react'
 
 import * as actions from '../../actions/result'
 import {updateEditableState} from '../../../app/actions/editable'
@@ -36,4 +36,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Result)
-

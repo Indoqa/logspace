@@ -7,13 +7,13 @@
  */
 import React, {PropTypes} from 'react'
 
-import Editable from '../../../app/components/editable/editable.react'
+import Editable from '../../../app/components/editable/Editable.react'
 import moment from 'moment'
 
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
 
-require('./result-header.styl')
+require('./ResultHeader.styl')
 
 export default class Header extends React.Component {
 
@@ -130,4 +130,3 @@ Header.propTypes = {
   refreshResult: PropTypes.func.isRequired,
   setAutoPlay: PropTypes.func.isRequired
 }
-

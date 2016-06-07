@@ -8,8 +8,8 @@
 import {fromJS, Record} from 'immutable'
 
 import * as Panels from '../actions/drawer.constants'
-import * as timeWindowActions from '../actions/time-window'
-import * as timeSeriesActions from '../actions/time-series'
+import * as timeWindowActions from '../actions/timeWindow'
+import * as timeSeriesActions from '../actions/timeSeries'
 import * as suggestionsActions from '../actions/suggestions'
 import * as optionsActions from '../actions/options'
 import * as resultActions from '../actions/result'

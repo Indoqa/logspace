@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import TimeSeriesAdd from './time-series-add.react'
+import TimeSeriesAdd from './TimeSeriesAdd.react'
 
 import {showSuggestions} from '../../actions/suggestions'
 

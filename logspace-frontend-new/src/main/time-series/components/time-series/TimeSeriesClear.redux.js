@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import TimeSeriesClear from './time-series-clear.react'
+import TimeSeriesClear from './TimeSeriesClear.react'
 
-import {resetTimeseries} from '../../actions/time-series'
+import {resetTimeSeries} from '../../actions/timeSeries'
 import {refreshResult} from '../../actions/result'
 
 const mapStateToProps = (state) => ({
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   resetTimeSeries: () => {
-    dispatch(resetTimeseries())
+    dispatch(resetTimeSeries())
   },
   refreshResult: () => {
     dispatch(refreshResult())

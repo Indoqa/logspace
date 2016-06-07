@@ -8,10 +8,10 @@
 import React, {PropTypes} from 'react'
 import Halogen from 'halogen'
 
-import SuggestionSystems from './suggestions-systems.react'
-import SuggestionSpaces from './suggestions-spaces.react'
-import SuggestionProperties from './suggestions-properties.react'
-import TimeSeriesLabel from '../time-series/time-series-label.react'
+import SuggestionSystems from './SuggestionsSystems.react'
+import SuggestionSpaces from './SuggestionsSpaces.react'
+import SuggestionProperties from './SuggestionsProperties.react'
+import TimeSeriesLabel from '../time-series/TimeSeriesLabel.react'
 
 export default class SuggestionResult extends React.Component {
 

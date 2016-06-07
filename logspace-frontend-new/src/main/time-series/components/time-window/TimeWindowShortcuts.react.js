@@ -7,9 +7,9 @@
  */
 import React, {PropTypes} from 'react'
 
-import {selections} from '../../actions/time-window.constants'
+import {selections} from '../../actions/timeWindow.constants'
 
-require('./time-window.styl')
+require('./TimeWindow.styl')
 
 export default class TimeWindowShortcuts extends React.Component {
   render() {

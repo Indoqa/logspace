@@ -10,7 +10,7 @@ import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import Tabs from 'react-simpletabs'
 
-require('./options.styl')
+require('./Options.styl')
 
 
 export default class Options extends React.Component {

@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
-import TimeSeriesList from './time-series-list.react'
-import {editTimeseries} from '../../actions/time-series'
-import {cleanPropertyName} from './time-series-item.react'
+import TimeSeriesList from './TimeSeriesList.react'
+import {editTimeSeries} from '../../actions/timeSeries'
+import {cleanPropertyName} from './TimeSeriesItem.react'
 
 const mapStateToProps = (state) => ({
   items: state.timeSeries.get('timeSeries')
@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   editTimeSeries: (timeSeries) => {
-    dispatch(editTimeseries(timeSeries))
+    dispatch(editTimeSeries(timeSeries))
   },
   cleanPropertyName: (name) => {
     cleanPropertyName(name)
