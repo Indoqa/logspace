@@ -98,7 +98,7 @@ export default class TimeSeriesEdit extends React.Component {
           <div className="buttons">
             <button className="waves-effect waves-light btn" onClick={() => this.props.saveTimeSeries()}>Save time series</button>
             <button
-              className={(agentDescription.get('id') !== null) ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
+              className={agentDescription.get('id') ? 'delete-visible waves-effect waves-light btn btn-highlight' : 'delete-hidden'}
               onClick={() => this.props.deleteTimeSeries(agentDescription.get('id'))}
             >
               Delete time series

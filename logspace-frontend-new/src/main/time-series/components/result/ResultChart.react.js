@@ -57,7 +57,7 @@ export default class Chart extends React.Component {
 
     if (this.props.result.get('error')) {
       this.clearChart()
-      messageElement.innerHTML = this.props.result.get('errorStatus') + '<br/><small>' + this.props.result.get('errorText') + '</small>'
+      messageElement.innerHTML = `${this.props.result.get('errorStatus')}<br/><small>${this.props.result.get('errorText')}</small>`
       return
     }
 
@@ -91,9 +91,11 @@ export default class Chart extends React.Component {
     const originalColumns = chartData.originalColumns
     let count = 0
 
-    for (let key in originalColumns) {
-      const originalColumn = originalColumns[key]
-      count = count + originalColumn.length
+    for (const key in originalColumns) {
+      if ({}.hasOwnProperty(originalColumns, key)) {
+        const originalColumn = originalColumns[key]
+        count = count + originalColumn.length
+      }
     }
 
     return count === 0
@@ -226,7 +228,7 @@ export default class Chart extends React.Component {
     return value
   }
 
-  getMaxTicks(chartData) {
+  getMaxTicks(chartData) { // eslint-disable-line react/sort-comp
     if (chartData.xvalues.length < 10) {
       return chartData.xvalues.length
     }

@@ -67,8 +67,6 @@ export default class TimeWindowCustom extends React.Component {
   }
 
   onGapChange(value) {
-    console.log('new gap!!', value.toJS())
-
     this.setState({
       localState: this.state.localState.merge({
         gap: value

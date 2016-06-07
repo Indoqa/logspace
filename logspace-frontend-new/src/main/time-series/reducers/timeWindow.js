@@ -34,11 +34,12 @@ export default (state = new InitialState, action) => {
     }
 
     case actions.SELECT_CUSTOM_DATE: {
-      const customLabel = moment(action.payload.start).format("YY-MM-DD")
-        + '<span class="small"> ' + moment(action.payload.start).format('HH:mm') + '</span>'
-        + ' - '
-        + moment(action.payload.end).format("YY-MM-DD")
-        + "<span class='small'> " + moment(action.payload.end).format('HH:mm') + '</span>'
+      const customLabel =
+      `${moment(action.payload.start).format('YY-MM-DD')}
+      <span class="small"> ${moment(action.payload.start).format('HH:mm')}</span>
+      -
+      ${moment(action.payload.end).format('YY-MM-DD')}
+      <span class="small"> ${moment(action.payload.end).format('HH:mm')}</span>`
 
       const customSelection = new TimeWindowSelection({
         label: customLabel,
@@ -53,7 +54,7 @@ export default (state = new InitialState, action) => {
 
     case actions.SELECT_DYNAMIC_DATE: {
       const dynamicSelection = new TimeWindowSelection({
-        label: 'Last ' + action.payload.duration + ' ' + action.payload.unit.label.toLowerCase(),
+        label: `Last ${action.payload.duration} ${action.payload.unit.label.toLowerCase()}`,
         type: 'dynamic',
         start: () => moment().subtract(action.payload.duration, action.payload.unit.label),
         end: () => moment(),

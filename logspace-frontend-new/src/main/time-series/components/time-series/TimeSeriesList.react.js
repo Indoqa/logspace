@@ -41,9 +41,7 @@ export default class TimeSeriesList extends React.Component {
     const positionMap = this.positionMap(items)
 
     const sortedItems = items.sortBy((item, index) => {
-      const sortValue = this.getSortValue(item, index, positionMap)
-      console.log(sortValue)
-      return sortValue
+      return this.getSortValue(item, index, positionMap)
     })
 
     let masterCount = 0

@@ -25,7 +25,7 @@ const createRestRequest = (timeSeries, timeWindow) => {
     request.definitions.push({
       timeWindow: {
         start: selection.start().seconds(0).milliseconds(0),
-        end: selection.end().seconds(59).milliseconds(999).add(1,'milliseconds'),
+        end: selection.end().seconds(59).milliseconds(999).add(1, 'milliseconds'),
         gap: selection.gap.amount * selection.gap.unit.factor
       },
       globalAgentId: item.get('agentId'),

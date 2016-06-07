@@ -24,7 +24,7 @@ export default class Options extends React.Component {
         importState(reader.result)
         refreshResult()
       } catch (e) {
-        alert(`Error importing file: ${e}`)
+        alert(`Error importing file: ${e}`) // eslint-disable-line no-alert
       }
     }
 

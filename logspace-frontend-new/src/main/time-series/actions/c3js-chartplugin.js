@@ -94,8 +94,6 @@ function getDataColumn(array, id, normalizer) {
 
 
 export function transformLogspaceResult(timeSeries, responseJson) {
-  console.log(timeSeries, responseJson)
-
   // data is stored in c3js ready format, see http://c3js.org/reference.html#api-load
   const chartData = {
     colors: {},
@@ -115,11 +113,10 @@ export function transformLogspaceResult(timeSeries, responseJson) {
   const scaleMap = createScaleMap(timeSeries, responseJson)
 
   timeSeries.forEach((item, index) => {
-    console.log(item.toJS())
     // meta data
     chartData.columnKeys.push(item.get('id'))
     chartData.colors[item.get('id')] = item.get('color')
-    chartData.names[item.get('id')] = item.get('name') + ': ' + item.get('aggregate') + ' of ' + cleanPropertyName(item.get('propertyId'))
+    chartData.names[item.get('id')] = `${item.get('name')}: ${item.get('aggregate')} of ${cleanPropertyName(item.get('propertyId'))}`
 
     // type
     const typeArray = chartData.types[item.get('type')]
@@ -133,21 +130,21 @@ export function transformLogspaceResult(timeSeries, responseJson) {
     const scale = getAppliedScale(item, scaleMap)
 
     let normalizer
-
-    if (chartData.axisRanges.max.y === 0) {
+    const axisRanges = chartData.axisRanges
+    if (axisRanges.max.y === 0) {
       chartData.axisRanges.min.y = scale.min
       chartData.axisRanges.max.y = scale.max
       chartData.axes[item.get('id')] = 'y'
 
-    } else if (isSubitem(item.get('scaleType')) && chartData.axisRanges.min.y === scale.min && chartData.axisRanges.max.y === scale.max) {
+    } else if (isSubitem(item.get('scaleType')) && axisRanges.min.y === scale.min && axisRanges.max.y === scale.max) {
       chartData.axes[item.get('id')] = 'y'
 
-    } else if (chartData.axisRanges.max.y2 === 0) {
+    } else if (axisRanges.max.y2 === 0) {
       chartData.axisRanges.min.y2 = scale.min
       chartData.axisRanges.max.y2 = scale.max
       chartData.axes[item.get('id')] = 'y2'
 
-    } else if (chartData.axisRanges.min.y2 === scale.min && chartData.axisRanges.max.y2 === scale.max) {
+    } else if (axisRanges.min.y2 === scale.min && axisRanges.max.y2 === scale.max) {
       chartData.axes[item.get('id')] = 'y2'
 
     } else {
