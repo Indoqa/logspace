@@ -92,7 +92,7 @@ export default class Chart extends React.Component {
     let count = 0
 
     for (const key in originalColumns) {
-      if ({}.hasOwnProperty(originalColumns, key)) {
+      if (originalColumns.hasOwnProperty(key)) {
         const originalColumn = originalColumns[key]
         count = count + originalColumn.length
       }

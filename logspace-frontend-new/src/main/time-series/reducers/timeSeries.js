@@ -11,6 +11,7 @@ import {Record, List, fromJS} from 'immutable'
 import {getRandomString} from '../../app/utils/getRandomString'
 import {COLORS, isSubitem, getReference} from '../actions/timeSeries.constants'
 import * as actions from '../actions/timeSeries'
+import {IMPORT_STATE} from '../../app/actions/exchange'
 
 const TimeSeriesItem = Record({
   id: '',
@@ -184,6 +185,10 @@ export default (state = new InitialState, action) => {
 
     case actions.RESET_TIMESERIES: {
       return state.update('timeSeries', timeSeries => timeSeries.clear())
+    }
+
+    case IMPORT_STATE: {
+      return state.set('timeSeries', state.get('timeSeries').merge(action.payload.importedState.timeSeries))
     }
 
     default: {

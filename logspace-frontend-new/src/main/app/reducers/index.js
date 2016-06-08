@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 
 import editable from './editable'
+import exchange from './exchange'
 import drawer from '../../time-series/reducers/drawer'
 import result from '../../time-series/reducers/result'
 import suggestions from '../../time-series/reducers/suggestions'
@@ -9,6 +10,7 @@ import timeWindow from '../../time-series/reducers/timeWindow'
 
 const reducers = {
   editable,
+  exchange,
   drawer,
   result,
   suggestions,
