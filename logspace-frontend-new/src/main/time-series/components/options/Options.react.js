@@ -15,6 +15,11 @@ require('./Options.styl')
 
 export default class Options extends React.Component {
 
+  componentDidMount() {
+    const {getExportState} = this.props
+    getExportState()
+  }
+
   onDrop(files) {
     const {importState, refreshResult} = this.props
     const reader = new FileReader()
@@ -35,19 +40,17 @@ export default class Options extends React.Component {
     const {chartTitle} = this.props
     const datePart = moment().format('YYYYDDMM-HHmmss')
 
-    return `${chartTitle}-${datePart} + '.json'`.replace(/\s/g, '_').toLowerCase()
+    return `${chartTitle}-${datePart}.json`.replace(/\s/g, '_').toLowerCase()
   }
 
   render() {
-    const {getExportState} = this.props
-
-    const exportedState = getExportState()
+    const {exportedState, ...other} = this.props
 
     return (
       <Tabs>
         <Tabs.Panel title="Import">
           <div className="options">
-            <Dropzone onDrop={this.onDrop} size={225} >
+            <Dropzone {...other} onDrop={this.onDrop} size={225} >
               <div className="dropzone">
                 <div className="text">
                   Drop a Logspace configuration file or
@@ -90,5 +93,6 @@ Options.propTypes = {
   chartTitle: PropTypes.string.isRequired,
   refreshResult: PropTypes.func.isRequired,
   getExportState: PropTypes.func.isRequired,
-  importState: PropTypes.func.isRequired
+  importState: PropTypes.func.isRequired,
+  exportedState: PropTypes.string.isRequired
 }

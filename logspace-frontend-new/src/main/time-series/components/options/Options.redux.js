@@ -2,17 +2,19 @@ import {connect} from 'react-redux'
 import Options from './Options.react'
 
 import {refreshResult} from '../../actions/result'
+import {exportState, importState} from '../../../app/actions/exchange'
 
 const mapStateToProps = (state) => ({
-  chartTitle: state.result.get('chartTitle')
+  chartTitle: state.result.get('chartTitle'),
+  exportedState: state.exchange.get('serializedState')
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getExportState: () => {
-    console.log('getExportState() not moved to new redux yet!')
+    dispatch(exportState())
   },
-  importState: () => {
-    console.log('importState() not moved to new redux yet!')
+  importState: (serializedState) => {
+    dispatch(importState(serializedState))
   },
   refreshResult: () => {
     dispatch(refreshResult())

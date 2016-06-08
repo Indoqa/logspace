@@ -7,10 +7,9 @@
  */
 
 import moment from 'moment'
-import {Record} from 'immutable'
-import Immutable from 'immutable'
+import {Record, fromJS} from 'immutable'
 
-export const units = Immutable.fromJS({
+export const units = fromJS({
   second: {
     id: 1,
     label: 'seconds',
@@ -62,7 +61,7 @@ export const TimeWindowSelection = Record({
   type: 'shortcut',
   dynamic: {},
   shortcutId: null,
-  gap: Immutable.fromJS({
+  gap: fromJS({
     amount: 1,
     unit: units.get('hour')
   })
@@ -74,7 +73,7 @@ export const selections = [
     label: 'Today',
     start: () => moment().startOf('day'),
     end: () => moment().endOf('day'),
-    gap: Immutable.fromJS({
+    gap: fromJS({
       amount: 1,
       unit: units.get('hour')
     })
@@ -84,7 +83,7 @@ export const selections = [
     label: 'Yesterday',
     start: () => moment().subtract(1, 'days').startOf('day'),
     end: () => moment().subtract(1, 'days').endOf('day'),
-    gap: Immutable.fromJS({
+    gap: fromJS({
       amount: 1,
       unit: units.get('hour')
     })
@@ -94,7 +93,7 @@ export const selections = [
     label: 'Current hour',
     start: () => moment().startOf('hour'),
     end: () => moment().endOf('hour'),
-    gap: Immutable.fromJS({
+    gap: fromJS({
       amount: 1,
       unit: units.get('minute')
     })
@@ -104,7 +103,7 @@ export const selections = [
     label: 'Previous hour',
     start: () => moment().subtract(1, 'hours').startOf('hour'),
     end: () => moment().subtract(1, 'hours').endOf('hour'),
-    gap: Immutable.fromJS({
+    gap: fromJS({
       amount: 1,
       unit: units.get('minute')
     })
@@ -114,9 +113,19 @@ export const selections = [
     label: 'Last 60 minutes',
     start: () => moment().subtract(60, 'minutes'),
     end: () => moment(),
-    gap: Immutable.fromJS({
+    gap: fromJS({
       amount: 1,
       unit: units.get('minute')
     })
   })
 ]
+
+export function shortcutById(id) {
+  let shortcut = null
+  selections.forEach((selection) => {
+    if (selection.shortcutId === id) {
+      shortcut = selection
+    }
+  })
+  return shortcut
+}
