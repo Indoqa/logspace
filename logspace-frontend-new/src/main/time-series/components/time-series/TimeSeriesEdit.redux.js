@@ -4,6 +4,9 @@ import * as actions from '../../actions/timeSeries'
 import {refreshResult} from '../../actions/result'
 import {cleanPropertyName} from './TimeSeriesItem.react'
 
+import {exportState} from '../../../app/actions/exchange'
+import {saveStateChange} from '../../../app/actions/history'
+
 const mapStateToProps = (state) => ({
   timeSeries: state.timeSeries.get('timeSeries'),
   editedTimeSeries: state.timeSeries.get('editedTimeSeries')
@@ -12,6 +15,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   saveTimeSeries: () => {
     dispatch(actions.saveTimeSeries())
+    // TODO FIXME
+    dispatch(exportState())
+    dispatch(saveStateChange())
     dispatch(refreshResult())
   },
   deleteTimeSeries: (id) => {

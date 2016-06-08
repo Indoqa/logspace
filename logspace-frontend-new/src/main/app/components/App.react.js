@@ -10,6 +10,10 @@ import './App.styl'
 
 class App extends React.Component {
 
+  componentDidMount() {
+    this.props.onApplicationInitialized()
+  }
+
   render() {
     const {children} = this.props
 
@@ -23,11 +27,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  onApplicationInitialized: PropTypes.func.isRequired
 }
 
 export default App
 
 // Note: top level route components NEED to be react classes and can't be written as functional components!
 // Otherwise hot reloading won't work: https://github.com/gaearon/react-hot-loader/issues/212
-

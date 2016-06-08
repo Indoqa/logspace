@@ -12,6 +12,7 @@ import {shortcutById} from '../../time-series/actions/timeWindow.constants.js'
 const VERSION = 2
 export const EXPORT_STATE = 'EXPORT_STATE'
 export const IMPORT_STATE = 'IMPORT_STATE'
+export const RESET_STATE = 'RESET_STATE'
 
 const deserializeTimeWindowRange = (importedState) => {
   const timeWindow = importedState.serializedTimeWindowRange
@@ -83,6 +84,10 @@ const serializeState = (timeWindow, timeSeries) => {
      serializedTimeWindowRange: serializeTimeWindowRange(timeWindow)
    })
 }
+
+export const resetState = () => ({
+  type: RESET_STATE
+})
 
 export const importState = (serializedState) => {
   const importedState = JSON.parse(serializedState)
