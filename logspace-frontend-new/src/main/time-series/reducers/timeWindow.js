@@ -10,7 +10,7 @@ import moment from 'moment'
 import Immutable, {Record, fromJS} from 'immutable'
 
 import * as actions from '../actions/timeWindow'
-import {IMPORT_STATE} from '../../app/actions/exchange'
+import * as exchangeActions from '../../app/actions/exchange'
 
 import {TimeWindowSelection, selections, units} from '../actions/timeWindow.constants'
 
@@ -83,7 +83,11 @@ export default (state = new InitialState, action) => {
       return state.set('selection', selections[0])
     }
 
-    case IMPORT_STATE: {
+    case exchangeActions.RESET_STATE: {
+      return state.merge(new InitialState)
+    }
+
+    case exchangeActions.IMPORT_STATE: {
       return state.merge(action.payload.importedState.timeWindow)
     }
 
