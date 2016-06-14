@@ -6,10 +6,21 @@ import reducers from './app/reducers'
 
 const createInjectMiddleware = () => store => next => action => {
   const injectedDependencies = {
-    store
+    store,
+    dispatch: store.dispatch,
+    getState: store.getState,
   }
 
-  return next(typeof action === 'function' ? action(injectedDependencies) : action)
+  if (typeof action !== 'function') {
+    return next(action)
+  }
+
+  const result = action(injectedDependencies)
+  if (typeof result !== 'undefined') {
+    return next(result)
+  }
+
+  return result
 }
 
 const createReduxStore = () => {
@@ -21,7 +32,7 @@ const createReduxStore = () => {
   const store = createStore(
     reducers,
     compose(
-      applyMiddleware(multiMiddleware, injectMiddleware, promiseMiddleware, loggerMiddleware),
+      applyMiddleware(injectMiddleware, promiseMiddleware, loggerMiddleware, multiMiddleware),
       devToolsEnhancer
     )
   )

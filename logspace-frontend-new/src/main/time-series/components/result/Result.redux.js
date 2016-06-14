@@ -6,7 +6,6 @@ import {updateEditableState} from '../../../app/actions/editable'
 
 const mapStateToProps = (state) => ({
   autoPlay: state.result.get('autoPlay'),
-  autoPlaySchedule: state.result.get('autoPlaySchedule'),
   chartType: state.result.get('chartType'),
   chartTitle: state.result.get('chartTitle'),
   chartTitleEditable: state.editable.get('result'),
@@ -27,8 +26,8 @@ const mapDispatchToProps = (dispatch) => ({
   refreshResult: () => {
     dispatch(actions.refreshResult())
   },
-  setAutoPlay: (enabled) => {
-    dispatch(actions.setAutoPlay(enabled))
+  toggleAutoPlay: () => {
+    dispatch(actions.toggleAutoPlay())
   }
 })
 
