@@ -10,6 +10,7 @@ import React, {PropTypes} from 'react'
 
 import TimeSeriesLabel from './TimeSeriesLabel.react'
 import TimeSeriesEditScale from './TimeSeriesEditScale.react'
+import TimeSeriesFilter from './TimeSeriesFilter.redux'
 
 import {COLORS} from '../../actions/timeSeries.constants'
 
@@ -94,6 +95,9 @@ export default class TimeSeriesEdit extends React.Component {
           <div className="clearer" />
           <br />
           <TimeSeriesEditScale {...this.props} />
+
+          <b>Filter </b>
+          <TimeSeriesFilter />
 
           <div className="buttons">
             <button className="waves-effect waves-light btn" onClick={() => this.props.saveTimeSeries()}>Save time series</button>
