@@ -30,7 +30,10 @@ const createRestRequest = (timeSeries, timeWindow) => {
       },
       globalAgentId: item.get('agentId'),
       propertyId: item.get('propertyId'),
-      aggregate: item.get('aggregate')
+      aggregate: item.get('aggregate'),
+      filter: {
+        elements: item.get('filter').toJS().map((filter) => ({property: filter.id, value: filter.input}))
+      }
     })
   })
 

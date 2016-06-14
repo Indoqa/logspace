@@ -8,6 +8,7 @@
 package io.logspace.hq.rest.api.timeseries;
 
 import io.logspace.agent.api.order.Aggregate;
+import io.logspace.hq.rest.api.event.EventFilter;
 
 public class TimeSeriesDefinition {
 
@@ -17,6 +18,8 @@ public class TimeSeriesDefinition {
     private String propertyId;
 
     private Aggregate aggregate;
+
+    private EventFilter filter;
 
     public Aggregate getAggregate() {
         return this.aggregate;
@@ -33,6 +36,10 @@ public class TimeSeriesDefinition {
         return stringBuilder.toString();
     }
 
+    public EventFilter getFilter() {
+        return this.filter;
+    }
+
     public String getGlobalAgentId() {
         return this.globalAgentId;
     }
@@ -47,6 +54,10 @@ public class TimeSeriesDefinition {
 
     public void setAggregate(Aggregate aggregate) {
         this.aggregate = aggregate;
+    }
+
+    public void setFilter(EventFilter filter) {
+        this.filter = filter;
     }
 
     public void setGlobalAgentId(String globalAgentId) {

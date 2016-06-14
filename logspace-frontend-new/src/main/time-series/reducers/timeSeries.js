@@ -26,7 +26,8 @@ const TimeSeriesItem = Record({
   type: 'spline',
   space: '',
   system: '',
-  propertyDescriptions: []
+  propertyDescriptions: List(),
+  filter: List()
 })
 
 const InitialState = Record({
@@ -35,7 +36,10 @@ const InitialState = Record({
     propertyStack: [],
     aggregate: 'count'
   }),
-  editedTimeSeries: null
+  editedTimeSeries: null,
+  filterValue: '',
+  filterOptions: List(),
+  selectedFilters: List()
 })
 
 function rememberSelectedProperty(state, value) {
@@ -104,6 +108,7 @@ function getDefaultScaleType(state) {
 export default (state = new InitialState, action) => {
   switch (action.type) {
     case actions.SAVE_TIMESERIES: {
+      state = state.setIn(['editedTimeSeries', 'filter'], state.get('selectedFilters'))
       const item = state.get('editedTimeSeries').toJS()
 
       if (item.id === null) {
@@ -155,7 +160,7 @@ export default (state = new InitialState, action) => {
         propertyDescriptions: Immutable.fromJS(data.propertyDescriptions),
         aggregate: getDefaultAggregation(state, data.propertyDescriptions),
         color: getNextColor(state),
-        scaleType: getDefaultScaleType(state)
+        scaleType: getDefaultScaleType(state),
       })
 
       return state.set('editedTimeSeries', item)
@@ -177,6 +182,14 @@ export default (state = new InitialState, action) => {
       }
 
       return state
+    }
+
+    case actions.CHANGE_TIMESERIES_FILTER: {
+      return state.set('selectedFilters', fromJS(action.payload.filters)).set('filterOptions', List())
+    }
+
+    case actions.CHANGE_TIMESERIES_FILTER_VALUE: {
+      return state.set('filterValue', action.payload.input).set('filterOptions', action.payload.options)
     }
 
     case actions.REMEMBER_SELECTED_TIMESERIES_PROPERTY: {
