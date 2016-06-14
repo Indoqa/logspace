@@ -18,8 +18,10 @@ const InitialState = Record({
   }),
   chartTitle: 'New Chart',
   chartType: 'spline',
-  autoPlay: false,
-  autoPlaySchedule: null
+  autoPlay: fromJS({
+    running: false,
+    countdown: 0
+  })
 })
 
 export default (state = new InitialState, action) => {
@@ -31,12 +33,11 @@ export default (state = new InitialState, action) => {
         error: false
       }))
 
-      state = state.set('autoPlaySchedule', null)
-
       return state
     }
 
     case `${resultActions.REFRESH_RESULT}_SUCCESS`: {
+      state = state.setIn(['autoPlay', 'countdown'], 15)
       return state.set('translatedResult', Immutable.fromJS({
         empty: !action.payload.chartData,
         error: false,
@@ -63,6 +64,25 @@ export default (state = new InitialState, action) => {
 
     case resultActions.SET_CHART_TYPE: {
       return state.set('chartType', action.payload.type)
+    }
+
+    case resultActions.START_AUTOPLAY: {
+      state = state.setIn(['autoPlay', 'running'], true)
+      state = state.setIn(['autoPlay', 'countdown'], 15)
+      return state
+    }
+
+    case resultActions.STOP_AUTOPLAY: {
+      return state.setIn(['autoPlay', 'running'], false)
+    }
+
+    case resultActions.RESET_AUTOPLAY_COUNTDOWN: {
+      return state.setIn(['autoPlay', 'countdown'], 15)
+    }
+
+    case resultActions.DECREMENT_AUTOPLAY_COUNTDOWN: {
+      const currentValue = state.getIn(['autoPlay', 'countdown'])
+      return state.setIn(['autoPlay', 'countdown'], currentValue - 1)
     }
 
     default: {

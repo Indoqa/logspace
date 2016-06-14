@@ -18,7 +18,6 @@ export default class Result extends React.Component {
       <div>
         <Header
           autoPlay={this.props.autoPlay}
-          autoPlaySchedule={this.props.autoPlaySchedule}
           chartTitle={this.props.chartTitle}
           chartTitleEditable={this.props.chartTitleEditable}
           chartType={this.props.chartType}
@@ -26,7 +25,7 @@ export default class Result extends React.Component {
           saveChartTitle={this.props.saveChartTitle}
           setChartType={this.props.setChartType}
           refreshResult={this.props.refreshResult}
-          setAutoPlay={this.props.setAutoPlay}
+          toggleAutoPlay={this.props.toggleAutoPlay}
         />
         <Chart
           series={this.props.timeSeries}
@@ -40,8 +39,7 @@ export default class Result extends React.Component {
 }
 
 Result.propTypes = {
-  autoPlay: PropTypes.bool.isRequired,
-  autoPlaySchedule: PropTypes.object,
+  autoPlay: PropTypes.object.isRequired,
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
   chartTitleEditable: PropTypes.object.isRequired,
@@ -51,5 +49,5 @@ Result.propTypes = {
   saveChartTitle: PropTypes.func.isRequired,
   setChartType: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,
-  setAutoPlay: PropTypes.func.isRequired
+  toggleAutoPlay: PropTypes.func.isRequired
 }

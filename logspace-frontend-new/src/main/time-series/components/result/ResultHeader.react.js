@@ -8,7 +8,6 @@
 import React, {PropTypes} from 'react'
 
 import Editable from '../../../app/components/editable/Editable.react'
-import moment from 'moment'
 
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
@@ -20,27 +19,9 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props)
 
-    setInterval(() => this.onProgress(), 500)
-
     this.state = {
       chartTypeDropdownShown: false
     }
-  }
-
-  onProgress() {
-    const label = document.getElementById('progress')
-
-    if (!label) {
-      return
-    }
-
-    if (!this.props.autoPlaySchedule) {
-      label.innerHTML = 15
-      return
-    }
-
-    const difference = moment().diff(this.props.autoPlaySchedule, 'seconds')
-    label.innerHTML = (15 - difference)
   }
 
   onChartTitleSaved(title, hide) {
@@ -49,12 +30,12 @@ export default class Header extends React.Component {
   }
 
   getPlayControls() {
-    if (this.props.autoPlay) {
+    if (this.props.autoPlay.get('running')) {
       return (
         <span>
-          <span className="option pause" onClick={() => this.props.setAutoPlay(false)} />
+          <span className="option pause" onClick={() => this.props.toggleAutoPlay()} />
           <span className="option progress" onClick={this.props.refreshResult}>
-            <span id="progress"> 15 </span>
+            <span id="progress"> {this.props.autoPlay.get('countdown')} </span>
           </span>
         </span>
       )
@@ -62,7 +43,7 @@ export default class Header extends React.Component {
 
     return (
       <span>
-        <span className="option play" onClick={() => this.props.setAutoPlay(true)} />
+        <span className="option play" onClick={() => this.props.toggleAutoPlay()} />
         <span className="option refresh" onClick={this.props.refreshResult} />
       </span>
     )
@@ -119,8 +100,7 @@ export default class Header extends React.Component {
 }
 
 Header.propTypes = {
-  autoPlay: PropTypes.bool.isRequired,
-  autoPlaySchedule: PropTypes.object,
+  autoPlay: PropTypes.object.isRequired,
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
   chartTitleEditable: PropTypes.object,
@@ -128,5 +108,5 @@ Header.propTypes = {
   saveChartTitle: PropTypes.func.isRequired,
   setChartType: PropTypes.func.isRequired,
   refreshResult: PropTypes.func.isRequired,
-  setAutoPlay: PropTypes.func.isRequired
+  toggleAutoPlay: PropTypes.func.isRequired
 }

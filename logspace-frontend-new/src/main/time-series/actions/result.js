@@ -12,7 +12,10 @@ import {transformLogspaceResult} from './c3js-chartplugin'
 export const REFRESH_RESULT = 'REFRESH_RESULT'
 export const SAVE_CHART_TITLE = 'SAVE_CHART_TITLE'
 export const SET_CHART_TYPE = 'SET_CHART_TYPE'
-export const SET_AUTOPLAY = 'SET_AUTOPLAY'
+export const START_AUTOPLAY = 'START_AUTOPLAY'
+export const STOP_AUTOPLAY = 'STOP_AUTOPLAY'
+export const RESET_AUTOPLAY_COUNTDOWN = 'RESET_AUTOPLAY_COUNTDOWN'
+export const DECREMENT_AUTOPLAY_COUNTDOWN = 'DECREMENT_AUTOPLAY_COUNTDOWN'
 
 const createRestRequest = (timeSeries, timeWindow) => {
   const request = {
@@ -78,7 +81,43 @@ export const setChartType = (type) => ({
   payload: {type}
 })
 
-export const setAutoPlay = (enabled) => ({
-  type: SET_AUTOPLAY,
-  payload: {enabled}
-})
+const decrementAutoPlayCountdown = () => ({store, dispatch}) => {
+  dispatch({type: DECREMENT_AUTOPLAY_COUNTDOWN})
+
+  const countdown = store.getState().result.getIn(['autoPlay', 'countdown'])
+
+  if (countdown === 0) {
+    dispatch(refreshResult())
+    dispatch({type: RESET_AUTOPLAY_COUNTDOWN})
+  }
+}
+
+const startAutoPlay = () => ({store, dispatch}) => {
+  dispatch({type: START_AUTOPLAY})
+
+  const intervalId = setInterval(() => {
+    const isRunning = store.getState().result.getIn(['autoPlay', 'running'])
+
+    if (isRunning) {
+      dispatch(decrementAutoPlayCountdown())
+    } else {
+      clearInterval(intervalId)
+    }
+
+
+  }, 1000)
+}
+
+const stopAutoPlay = () => ({dispatch}) => {
+  dispatch({type: STOP_AUTOPLAY})
+}
+
+export const toggleAutoPlay = () => ({store, dispatch}) => {
+  const isRunning = store.getState().result.getIn(['autoPlay', 'running'])
+
+  if (!isRunning) {
+    dispatch(startAutoPlay())
+  } else {
+    dispatch(stopAutoPlay())
+  }
+}
