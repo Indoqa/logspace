@@ -199,5 +199,5 @@ TimeSeriesEditScale.propTypes = {
   editedTimeSeries: PropTypes.object.isRequired,
   changeTimeseriesProperty: PropTypes.func.isRequired,
   cleanPropertyName: PropTypes.func.isRequired,
-  timeSeries: PropTypes.array.isRequired,
+  timeSeries: PropTypes.object.isRequired,
 }

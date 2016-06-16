@@ -17,8 +17,9 @@ export default class TimeWindowShortcuts extends React.Component {
       <div className="shortcuts">
         <ul>
           {selections.map((selection) => {
+            const id = selection.get('shortcutId')
             return (
-              <li>
+              <li key={id}>
                 <a onClick={() => this.props.selectPredefinedDate(selection)}>{selection.label}</a>
               </li>
             )

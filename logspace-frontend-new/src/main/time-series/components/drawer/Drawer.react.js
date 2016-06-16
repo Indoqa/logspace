@@ -37,6 +37,6 @@ export default class Drawer extends React.Component {
 
 Drawer.propTypes = {
   msg: PropTypes.func.isRequired,
-  activePanel: PropTypes.object,
+  activePanel: PropTypes.string,
   close: PropTypes.func.isRequired
 }

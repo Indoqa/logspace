@@ -119,5 +119,5 @@ TimeSeriesEdit.propTypes = {
   deleteTimeSeries: PropTypes.func.isRequired,
   editedTimeSeries: PropTypes.object.isRequired,
   changeTimeseriesProperty: PropTypes.func.isRequired,
-  timeSeries: PropTypes.array.isRequired,
+  timeSeries: PropTypes.object.isRequired,
 }

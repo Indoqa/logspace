@@ -15,10 +15,13 @@ import TimeWindowShortcuts from './TimeWindowShortcuts.react'
 import './TimeWindow.styl'
 
 export default class TimeWindow extends React.Component {
+
   render() {
+    const {activeTab} = this.props
+
     return (
       <div>
-        <Tabs tabActive={this.props.activeTab} onAfterChange={this.props.openTab}>
+        <Tabs tabActive={activeTab} onAfterChange={this.props.openTab}>
           <Tabs.Panel title="Shortcuts">
             <TimeWindowShortcuts selectPredefinedDate={this.props.selectPredefinedDate} />
           </Tabs.Panel>
@@ -35,7 +38,7 @@ export default class TimeWindow extends React.Component {
 }
 
 TimeWindow.propTypes = {
-  activeTab: PropTypes.string.isRequired,
+  activeTab: PropTypes.number.isRequired,
   openTab: PropTypes.func.isRequired,
   dynamic: PropTypes.object.isRequired,
   selectDynamicDate: PropTypes.func.isRequired,

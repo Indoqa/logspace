@@ -1,12 +1,14 @@
 import {connect} from 'react-redux'
 import TimeWindow from './TimeWindow.react'
 
-import {showTimeWindowForm, selectPredefinedDate, selectDynamicDate, selectCustomDate} from '../../actions/timeWindow'
+import {showTimeWindowForm, selectPredefinedDate} from '../../actions/timeWindow'
+import {selectDynamicDate, selectCustomDate, showTimeWindowTab} from '../../actions/timeWindow'
 import {refreshResult} from '../../actions/result'
 
 const mapStateToProps = (state) => ({
   timeWindow: state.timeWindow.get('selection'),
-  dynamic: state.timeWindow.get('dynamic')
+  dynamic: state.timeWindow.get('dynamic'),
+  activeTab: state.timeWindow.get('activeTab')
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -24,6 +26,9 @@ const mapDispatchToProps = (dispatch) => ({
   selectCustomDate: (start, end, gap) => {
     dispatch(selectCustomDate(start, end, gap))
     dispatch(refreshResult())
+  },
+  openTab: (index) => {
+    dispatch(showTimeWindowTab(index))
   }
 })
 

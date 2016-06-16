@@ -25,7 +25,8 @@ const InitialState = Record({
       amount: 1,
       unit: units.get('minute')
     }
-  })
+  }),
+  activeTab: 1
 })
 
 export default (state = new InitialState, action) => {
@@ -74,9 +75,8 @@ export default (state = new InitialState, action) => {
       return state
     }
 
-    // ME TODO
-    case 'open tab': {
-      return state.set('activeTimeWindowTab', action.payload)
+    case actions.SHOW_TIMEWINDOW_TAB: {
+      return state.set('activeTab', action.payload.index)
     }
 
     case actions.RESET_TIMEWINDOW: {

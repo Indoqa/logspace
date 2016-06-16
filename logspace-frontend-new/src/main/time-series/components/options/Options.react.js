@@ -131,6 +131,4 @@ Options.propTypes = {
   requestExport: PropTypes.func.isRequired,
   importState: PropTypes.func.isRequired,
   requestDownload: PropTypes.func.isRequired,
-  downloadBlob: PropTypes.object.isRequired,
-  exportedBlob: PropTypes.object.isRequired
 }

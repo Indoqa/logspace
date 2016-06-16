@@ -29,7 +29,7 @@ export default class DrawerPanel extends React.Component {
         return <Suggestions />
 
       case Panels.TIME_WINDOW:
-        return <TimeWindow />
+        return <TimeWindow {...this.props} />
 
       case Panels.ADD_TIMESERIES:
         // fall through
@@ -47,5 +47,5 @@ export default class DrawerPanel extends React.Component {
 }
 
 DrawerPanel.propTypes = {
-  activePanel: PropTypes.object
+  activePanel: PropTypes.string
 }

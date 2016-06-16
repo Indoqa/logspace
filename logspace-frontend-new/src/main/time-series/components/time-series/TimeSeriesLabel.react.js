@@ -28,5 +28,5 @@ export default class TimeSeriesLabel extends React.Component {
 }
 
 TimeSeriesLabel.propTypes = {
-  timeSeries: PropTypes.array.isRequired,
+  timeSeries: PropTypes.object.isRequired,
 }
