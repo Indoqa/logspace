@@ -17,7 +17,7 @@ export const STOP_AUTOPLAY = 'STOP_AUTOPLAY'
 export const RESET_AUTOPLAY_COUNTDOWN = 'RESET_AUTOPLAY_COUNTDOWN'
 export const DECREMENT_AUTOPLAY_COUNTDOWN = 'DECREMENT_AUTOPLAY_COUNTDOWN'
 
-const createRestRequest = (timeSeries, timeWindow) => {
+export const createRestRequest = (timeSeries, timeWindow) => {
   const request = {
     definitions: []
   }

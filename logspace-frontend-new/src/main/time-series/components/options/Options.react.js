@@ -15,9 +15,16 @@ require('./Options.styl')
 
 export default class Options extends React.Component {
 
-  componentDidMount() {
-    const {getExportState} = this.props
-    getExportState()
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.downloadBlob) {
+      this.downloadBlob(nextProps.downloadBlob, 'csv')
+      this.props.clearDownload()
+    }
+
+    if (nextProps.exportedBlob) {
+      this.downloadBlob(nextProps.exportedBlob, 'json')
+      this.props.clearExport()
+    }
   }
 
   onDrop(files) {
@@ -36,15 +43,39 @@ export default class Options extends React.Component {
     reader.readAsText(files[0])
   }
 
-  getDownloadName() {
+  getDownloadName(extension) {
     const {chartTitle} = this.props
     const datePart = moment().format('YYYYDDMM-HHmmss')
 
-    return `${chartTitle}-${datePart}.json`.replace(/\s/g, '_').toLowerCase()
+    return `${chartTitle}-${datePart}.${extension}`.replace(/\s/g, '_').toLowerCase()
+  }
+
+  downloadBlob(blob, extension) {
+    const downloadLink = document.createElement('a')
+    document.body.appendChild(downloadLink) // Firefox requires the link to be in the body
+    downloadLink.href = window.URL.createObjectURL(blob)
+    downloadLink.setAttribute('download', this.getDownloadName(extension))
+    downloadLink.click()
+    document.body.removeChild(downloadLink)
+  }
+
+  renderButton(hasTimeSeries, downloadFunction) {
+    if (hasTimeSeries) {
+      return (
+        <a
+          className="exportButton waves-effect waves-light btn"
+          onClick={() => downloadFunction()}
+        >Download file</a>)
+    }
+
+    return (<span>No time series selected</span>)
   }
 
   render() {
-    const {exportedState, ...other} = this.props
+    const {requestExport, hasTimeSeries, requestDownload, ...other} = this.props
+
+    const exportButton = this.renderButton(hasTimeSeries, requestExport)
+    const downloadButton = this.renderButton(hasTimeSeries, requestDownload)
 
     return (
       <Tabs>
@@ -67,13 +98,7 @@ export default class Options extends React.Component {
             <b>Export current configuration (selected time window and time series) to a json file:</b>
             <br />
             <br />
-            <a
-              className="exportButton waves-effect waves-light btn"
-              href={`data:text/json;charset=utf-8,${encodeURIComponent(exportedState)}`}
-              download={this.getDownloadName()}
-            >
-              Download file
-            </a>
+            {exportButton}
             <br />
             <br />
             <br />
@@ -84,6 +109,14 @@ export default class Options extends React.Component {
             <br />
           </div>
         </Tabs.Panel>
+        <Tabs.Panel title="Download">
+          <div className="options">
+            <b>Download events for the current configuration (selected time window and time series) as a csv file:</b>
+            <br />
+            <br />
+            {downloadButton}
+          </div>
+        </Tabs.Panel>
       </Tabs>
     )
   }
@@ -91,8 +124,13 @@ export default class Options extends React.Component {
 
 Options.propTypes = {
   chartTitle: PropTypes.string.isRequired,
+  clearExport: PropTypes.func.isRequired,
+  clearDownload: PropTypes.func.isRequired,
+  hasTimeSeries: PropTypes.bool.isRequired,
   refreshResult: PropTypes.func.isRequired,
-  getExportState: PropTypes.func.isRequired,
+  requestExport: PropTypes.func.isRequired,
   importState: PropTypes.func.isRequired,
-  exportedState: PropTypes.string.isRequired
+  requestDownload: PropTypes.func.isRequired,
+  downloadBlob: PropTypes.object.isRequired,
+  exportedBlob: PropTypes.object.isRequired
 }

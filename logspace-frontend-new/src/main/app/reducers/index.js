@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux'
 
+import download from './download'
 import editable from './editable'
 import exchange from './exchange'
 import history from './history'
@@ -10,6 +11,7 @@ import timeSeries from '../../time-series/reducers/timeSeries'
 import timeWindow from '../../time-series/reducers/timeWindow'
 
 const reducers = {
+  download,
   editable,
   exchange,
   drawer,

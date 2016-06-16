@@ -14,6 +14,9 @@ export const EXPORT_STATE = 'EXPORT_STATE'
 export const IMPORT_STATE = 'IMPORT_STATE'
 export const RESET_STATE = 'RESET_STATE'
 
+export const EXPORT_BLOB = 'EXPORT_BLOB'
+export const CLEAR_EXPORT_BLOB = 'CLEAR_EXPORT_BLOB'
+
 const deserializeTimeWindowRange = (importedState) => {
   const timeWindow = importedState.serializedTimeWindowRange
 
@@ -114,6 +117,22 @@ export const exportState = () => ({store}) => {
     type: EXPORT_STATE,
     payload: {
       serializedState: serializeState(timeWindow, timeSeries)
+    }
+  }
+}
+
+export const clearExport = () => {
+  return {
+    type: CLEAR_EXPORT_BLOB
+  }
+}
+
+export const requestExport = () => ({store}) => {
+  const serializedState = store.getState().exchange.get('serializedState')
+  return {
+    type: EXPORT_BLOB,
+    payload: {
+      exportBlob: new Blob([serializedState], {type: 'application/json;charset=utf-8'})
     }
   }
 }

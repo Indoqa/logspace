@@ -7,21 +7,18 @@
  */
 import {fromJS} from 'immutable'
 
-import {CLEAR_EXPORT_BLOB, EXPORT_STATE, EXPORT_BLOB} from '../actions/exchange'
+import {CLEAR_DOWNLOAD, REQUEST_DOWNLOAD} from '../actions/download'
 
 const InitialState = fromJS({
-  serializedState: '',
-  exportBlob: null
+  downloadBlob: null
 })
 
 export default (state = InitialState, action) => {
   switch (action.type) {
-    case CLEAR_EXPORT_BLOB:
-      return state.set('exportBlob', null)
-    case EXPORT_STATE:
-      return state.set('serializedState', action.payload.serializedState)
-    case EXPORT_BLOB:
-      return state.set('exportBlob', action.payload.exportBlob)
+    case `${REQUEST_DOWNLOAD}_SUCCESS`:
+      return state.set('downloadBlob', action.payload)
+    case CLEAR_DOWNLOAD:
+      return state.set('downloadBlob', null)
     default: {
       return state
     }
