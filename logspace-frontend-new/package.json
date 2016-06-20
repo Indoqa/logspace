@@ -8,7 +8,8 @@
     "test": "cross-env NODE_ENV=test mocha ./src/test --recursive --compilers js:babel-register --require ./src/test/setup.js",
     "test:watch": "npm test -- --watch",
     "package": "npm run test && npm run compile",
-    "lint": "eslint ./src/**"
+    "lint": "eslint ./src/**",
+    "postinstall": "npm run package"
   },
   "dependencies": {
     "babel-polyfill": "^6.3.14",
@@ -48,8 +49,9 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-register": "^6.3.13",
-    "css-loader": "^0.23.1",
+    "copy-webpack-plugin": "^3.0.1",
     "cross-env": "^1.0.7",
+    "css-loader": "^0.23.1",
     "eslint": "^2.6.0",
     "eslint-config-indoqa": "^1.0.10",
     "expect": "^1.8.0",

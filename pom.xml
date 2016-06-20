@@ -59,7 +59,7 @@
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
     <system-test-tools-version>0.1.0-SNAPSHOT</system-test-tools-version>
-    
+
     <commons-lang3-version>3.3.2</commons-lang3-version>
     <commons-io-version>2.4</commons-io-version>
     <commons-codec-version>1.10</commons-codec-version>
@@ -81,6 +81,7 @@
     <module>logspace-agent-solr</module>
     <module>logspace-dist</module>
     <module>logspace-frontend</module>
+    <module>logspace-frontend-new</module>
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
     <module>logspace-hq-rest</module>
@@ -384,7 +385,7 @@
         <artifactId>system-test-tools</artifactId>
         <version>${system-test-tools-version}</version>
         <scope>test</scope>
-      </dependency>      
+      </dependency>
 
       <!-- Internal -->
       <dependency>
@@ -485,7 +486,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-eclipse-plugin</artifactId>
           <version>2.9</version><!-- 2.10 restricts usage of com.sun packages -->
-        </plugin>        
+        </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <configuration>
@@ -519,8 +520,10 @@
               <exclude>**/node/**/*</exclude>
               <exclude>**/node_modules/**/*.*</exclude>
               <exclude>**/node_modules/**/*</exclude>
-              <exclude>**/.eslintrc</exclude>
               <exclude>**/build/**</exclude>
+              <exclude>**/.babelrc</exclude>
+              <exclude>**/.eslintrc</exclude>
+              <exclude>**/.sublimelinterrc</exclude>
             </excludes>
             <mapping>
               <txt>SCRIPT_STYLE</txt>
@@ -563,8 +566,10 @@
             <exclude>**/node/**/*</exclude>
             <exclude>**/node_modules/**/*.*</exclude>
             <exclude>**/node_modules/**/*</exclude>
-            <exclude>**/.eslintrc</exclude>
             <exclude>**/build/**</exclude>
+            <exclude>**/.babelrc</exclude>
+            <exclude>**/.eslintrc</exclude>
+            <exclude>**/.sublimelinterrc</exclude>
           </excludes>
           <licenses>
             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -589,7 +594,7 @@
       <plugin>
         <groupId>de.jutzig</groupId>
         <artifactId>github-release-plugin</artifactId>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
 

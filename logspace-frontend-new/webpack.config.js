@@ -1,9 +1,17 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 const DEV_PORT = 3000
 const HOT_RELOAD_PORT = 3001
 
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   devPort: DEV_PORT,
@@ -21,7 +29,10 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css')
+    new ExtractTextPlugin('app.css'),
+    new CopyWebpackPlugin([
+      {from: './src/main/index.html'},
+    ]),
   ],
   module: {
     loaders: [
