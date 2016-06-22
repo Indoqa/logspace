@@ -93,13 +93,6 @@ public class DemoHqMode implements HqMode {
 
     private void initializeDemoSolr() {
         File solrDir = new File(this.getBaseDir(), "solr");
-
-        File solrDataDir = new File(solrDir, "data");
-        System.setProperty("logspace.solr.base-url", solrDataDir.toURI().toString());
-        System.setProperty("logspace.solr.embedded-configuration-dir", solrDir.getAbsolutePath());
-
-        File solrConfDir = new File(solrDir, "conf");
-        this.createFile("/META-INF/solr/logspace/conf/", solrConfDir, "schema.xml");
-        this.createFile("/META-INF/solr/logspace/conf/", solrConfDir, "solrconfig.xml");
+        System.setProperty("logspace.solr.base-url", solrDir.toURI().toString());
     }
 }

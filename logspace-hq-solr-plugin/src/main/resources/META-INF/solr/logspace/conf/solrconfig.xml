@@ -64,17 +64,17 @@
        The examples below can be used to load some solr-contribs along 
        with their external dependencies.
     -->
-  <lib dir="../../../contrib/extraction/lib" regex=".*\.jar" />
-  <lib dir="../../../dist/" regex="solr-cell-\d.*\.jar" />
+<!--   <lib dir="../../../contrib/extraction/lib" regex=".*\.jar" /> -->
+<!--   <lib dir="../../../dist/" regex="solr-cell-\d.*\.jar" /> -->
 
-  <lib dir="../../../contrib/clustering/lib/" regex=".*\.jar" />
-  <lib dir="../../../dist/" regex="solr-clustering-\d.*\.jar" />
+<!--   <lib dir="../../../contrib/clustering/lib/" regex=".*\.jar" /> -->
+<!--   <lib dir="../../../dist/" regex="solr-clustering-\d.*\.jar" /> -->
 
-  <lib dir="../../../contrib/langid/lib/" regex=".*\.jar" />
-  <lib dir="../../../dist/" regex="solr-langid-\d.*\.jar" />
+<!--   <lib dir="../../../contrib/langid/lib/" regex=".*\.jar" /> -->
+<!--   <lib dir="../../../dist/" regex="solr-langid-\d.*\.jar" /> -->
 
-  <lib dir="../../../contrib/velocity/lib" regex=".*\.jar" />
-  <lib dir="../../../dist/" regex="solr-velocity-\d.*\.jar" />
+<!--   <lib dir="../../../contrib/velocity/lib" regex=".*\.jar" /> -->
+<!--   <lib dir="../../../dist/" regex="solr-velocity-\d.*\.jar" /> -->
 
   <!-- an exact 'path' can be used instead of a 'dir' to specify a 
        specific jar file.  This will cause a serious error to be logged 
@@ -110,21 +110,6 @@
     -->
   <directoryFactory name="DirectoryFactory" 
                     class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
-    
-         
-    <!-- These will be used if you are using the solr.HdfsDirectoryFactory,
-         otherwise they will be ignored. If you don't plan on using hdfs,
-         you can safely remove this section. -->      
-    <!-- The root directory that collection data should be written to. -->     
-    <str name="solr.hdfs.home">${solr.hdfs.home:}</str>
-    <!-- The hadoop configuration files to use for the hdfs client. -->    
-    <str name="solr.hdfs.confdir">${solr.hdfs.confdir:}</str>
-    <!-- Enable/Disable the hdfs cache. -->    
-    <str name="solr.hdfs.blockcache.enabled">${solr.hdfs.blockcache.enabled:true}</str>
-    <!-- Enable/Disable using one global cache for all SolrCores. 
-         The settings used will be from the first HdfsDirectoryFactory created. -->    
-    <str name="solr.hdfs.blockcache.global">${solr.hdfs.blockcache.global:true}</str>
-    
   </directoryFactory> 
 
   <!-- The CodecFactory for defining the format of the inverted index.

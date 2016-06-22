@@ -21,6 +21,5 @@
       "trigger-parameter" : "0/5 * * * * ? *"
     }
   ],
-  "commit-max-count" : 1000,
   "commit-max-seconds" : 60
 }

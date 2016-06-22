@@ -35,12 +35,14 @@ public class DemoSystemTest {
         .preInitialization(SystemTestUtils::prepareDemoDirectory)
         .setCheckAdress(BASE_URL + "/system-info")
         .addArguments("--demo")
+        .setWaitForStartupInSeconds(30)
         .build();
 
     @ClassRule
     public static final JarRunner MONITOR_RUNNER = new JarRunnerBuilder(MONITOR_RUNNABLE)
         .setAlwaysWait(1000)
         .addArgument("--demo")
+        .setWaitForStartupInSeconds(30)
         .build();
 
     @ClassRule
