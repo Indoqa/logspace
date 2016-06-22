@@ -16,8 +16,10 @@ import result from '../../time-series/reducers/result'
 import suggestions from '../../time-series/reducers/suggestions'
 import timeSeries from '../../time-series/reducers/timeSeries'
 import timeWindow from '../../time-series/reducers/timeWindow'
+import agentActivity from '../../agent-activity/reducers/agentActivity'
 
 const reducers = {
+  agentActivity,
   download,
   editable,
   exchange,
@@ -26,7 +28,7 @@ const reducers = {
   result,
   suggestions,
   timeSeries,
-  timeWindow
+  timeWindow,
 }
 
 export default combineReducers(reducers)

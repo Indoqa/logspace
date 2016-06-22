@@ -11,7 +11,6 @@ const HOT_RELOAD_PORT = 3001
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   devPort: DEV_PORT,
@@ -29,10 +28,7 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('app.css'),
-    new CopyWebpackPlugin([
-      {from: './src/main/index.html'},
-    ]),
+    new ExtractTextPlugin('app.css')
   ],
   module: {
     loaders: [

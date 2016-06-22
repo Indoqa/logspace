@@ -16,6 +16,7 @@ import * as resultActions from '../actions/result'
 import * as drawerActions from '../actions/drawer'
 
 const InitialState = Record({
+  duration: 300,
   activePanel: null,
   navDrawerCss: fromJS({
     'navigation-drawer': true,
