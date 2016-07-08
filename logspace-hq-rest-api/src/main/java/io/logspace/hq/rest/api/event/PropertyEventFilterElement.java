@@ -7,16 +7,7 @@
  */
 package io.logspace.hq.rest.api.event;
 
-public abstract class AbstractEventFilterElement implements PropertyEventFilterElement {
+public interface PropertyEventFilterElement extends EventFilterElement {
 
-    private String property;
-
-    @Override
-    public String getProperty() {
-        return this.property;
-    }
-
-    public void setProperty(String property) {
-        this.property = property;
-    }
+    String getProperty();
 }

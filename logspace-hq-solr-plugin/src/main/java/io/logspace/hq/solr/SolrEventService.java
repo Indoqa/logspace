@@ -9,22 +9,14 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
+import static java.util.Calendar.*;
+import static java.util.concurrent.TimeUnit.*;
+import static java.util.stream.Collectors.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -68,13 +60,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.lang.util.TimeTracker;
-import com.indoqa.lang.util.TimeUtils;
-import com.indoqa.solr.facet.api.Buckets;
-import com.indoqa.solr.facet.api.FacetList;
-import com.indoqa.solr.facet.api.GapUnit;
-import com.indoqa.solr.facet.api.RangeFacet;
-import com.indoqa.solr.facet.api.StatisticFacet;
-import com.indoqa.solr.facet.api.TermsFacet;
+import com.indoqa.solr.facet.api.*;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -90,11 +76,8 @@ import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.agentactivity.AgentActivity;
-import io.logspace.hq.rest.api.event.EqualsEventFilterElement;
 import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.event.EventFilterElement;
-import io.logspace.hq.rest.api.event.MultiValueEventFilterElement;
-import io.logspace.hq.rest.api.event.RangeEventFilterElement;
+import io.logspace.hq.rest.api.event.PropertyEventFilterElement;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
@@ -345,8 +328,8 @@ public class SolrEventService implements EventService {
             ((CloudSolrClient) this.solrClient).connect();
         }
 
-        new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
-            AGENT_DESCRIPTION_REFRESH_INTERVAL);
+        new Timer(true)
+            .schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL, AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     @Override
@@ -386,10 +369,7 @@ public class SolrEventService implements EventService {
         solrQuery.setStart(offset);
         solrQuery.setRows(count);
         solrQuery.set(SORT, SORT_CRON_ASC);
-
-        for (EventFilterElement eachElement : eventFilter) {
-            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
-        }
+        solrQuery.addFilterQuery(SolrEventFilterTransformer.transform(eventFilter));
 
         try {
             this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));
@@ -441,27 +421,6 @@ public class SolrEventService implements EventService {
             document.addField(propertyId, eachProperty.getValue());
             document.addField(FIELD_PROPERTY_ID, propertyId);
         }
-    }
-
-    private void appendSolrValue(StringBuilder stringBuilder, Object value) {
-        if (value == null) {
-            stringBuilder.append('*');
-            return;
-        }
-
-        if (value instanceof Date) {
-            stringBuilder.append(TimeUtils.formatSolrDate((Date) value));
-        }
-
-        String result = String.valueOf(value);
-        if (StringUtils.isBlank(result)) {
-            stringBuilder.append('*');
-            return;
-        }
-
-        stringBuilder.append('"');
-        stringBuilder.append(result);
-        stringBuilder.append('"');
     }
 
     private Event createEvent(SolrDocument solrDocument) {
@@ -516,53 +475,20 @@ public class SolrEventService implements EventService {
             return Collections.emptyList();
         }
 
-        Stream<EventFilterElement> filterStream = StreamSupport.stream(filter.spliterator(), false);
-        Collection<List<EventFilterElement>> groupedFilters = filterStream.collect(groupingBy(EventFilterElement::getProperty))
+        Stream<PropertyEventFilterElement> filterStream = StreamSupport
+            .stream(filter.spliterator(), false)
+            .filter(eachFilter -> eachFilter instanceof PropertyEventFilterElement)
+            .map(eachFilter -> (PropertyEventFilterElement) eachFilter);
+
+        Collection<List<PropertyEventFilterElement>> groupedFilters = filterStream
+            .collect(groupingBy(PropertyEventFilterElement::getProperty))
             .values();
 
         List<String> result = new ArrayList<>(groupedFilters.size());
-        for (List<EventFilterElement> eachPropertyFilters : groupedFilters) {
-            result.add(eachPropertyFilters.stream().map(this::createFilterQuery).collect(joining(" OR ")));
+        for (List<PropertyEventFilterElement> eachPropertyFilters : groupedFilters) {
+            result.add(eachPropertyFilters.stream().map(SolrEventFilterTransformer::transform).collect(joining(" OR ")));
         }
         return result;
-    }
-
-    private String createFilterQuery(EventFilterElement eventFilterElement) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(eventFilterElement.getProperty());
-        stringBuilder.append(':');
-
-        if (eventFilterElement instanceof EqualsEventFilterElement) {
-            EqualsEventFilterElement equalsEventFilterElement = (EqualsEventFilterElement) eventFilterElement;
-            this.appendSolrValue(stringBuilder, equalsEventFilterElement.getValue());
-        }
-
-        if (eventFilterElement instanceof RangeEventFilterElement) {
-            RangeEventFilterElement rangeEventFilterElement = (RangeEventFilterElement) eventFilterElement;
-            stringBuilder.append('[');
-            this.appendSolrValue(stringBuilder, rangeEventFilterElement.getFrom());
-            stringBuilder.append(" TO ");
-            this.appendSolrValue(stringBuilder, rangeEventFilterElement.getTo());
-            stringBuilder.append(']');
-        }
-
-        if (eventFilterElement instanceof MultiValueEventFilterElement) {
-            MultiValueEventFilterElement multiValueEventFilterElement = (MultiValueEventFilterElement) eventFilterElement;
-            stringBuilder.append('(');
-            for (Iterator<String> iterator = multiValueEventFilterElement.getValues().iterator(); iterator.hasNext();) {
-                this.appendSolrValue(stringBuilder, iterator.next());
-
-                if (iterator.hasNext()) {
-                    stringBuilder.append(' ');
-                    stringBuilder.append(multiValueEventFilterElement.getOperator());
-                    stringBuilder.append(' ');
-                }
-            }
-            stringBuilder.append(')');
-        }
-
-        return stringBuilder.toString();
     }
 
     private SolrInputDocument createInputDocument(Event event, String space) {
@@ -570,8 +496,8 @@ public class SolrEventService implements EventService {
 
         result.addField(FIELD_ID, event.getId());
 
-        result.addField(FIELD_GLOBAL_AGENT_ID,
-            this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
+        result
+            .addField(FIELD_GLOBAL_AGENT_ID, this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId()));
         result.addField(FIELD_SPACE, space);
         result.addField(FIELD_SYSTEM, event.getSystem());
         result.addField(FIELD_AGENT_ID, event.getAgentId());
@@ -639,8 +565,8 @@ public class SolrEventService implements EventService {
     private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = this.createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
-                dataDefinition.getAggregate());
+            throw InvalidTimeSeriesDefinitionException
+                .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
         }
 
         Date startDate = dataDefinition.getTimeWindow().getStart();
@@ -659,7 +585,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-                || agentDescription.getPropertyDescriptions().isEmpty()) {
+            || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -703,7 +629,8 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient
+                .getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
@@ -769,10 +696,7 @@ public class SolrEventService implements EventService {
         solrQuery.setRows(count);
         solrQuery.set(CURSOR_MARK_PARAM, cursorMark);
         solrQuery.set(SORT, sort);
-
-        for (EventFilterElement eachElement : eventFilter) {
-            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
-        }
+        solrQuery.addFilterQuery(SolrEventFilterTransformer.transform(eventFilter));
 
         try {
             EventPage result = new EventPage();
