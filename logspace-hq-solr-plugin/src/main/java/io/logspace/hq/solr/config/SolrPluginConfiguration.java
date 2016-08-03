@@ -31,7 +31,7 @@ public class SolrPluginConfiguration {
     public SolrClientFactory getSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
         solrClientFactory.setUrl(this.solrBaseUrl);
-        solrClientFactory.setEmbeddedSolrConfigurationDir(this.getSolrInstanceDir());
+        solrClientFactory.setEmbeddedSolrConfigurationPath(this.getSolrInstanceDir());
         return solrClientFactory;
     }
 

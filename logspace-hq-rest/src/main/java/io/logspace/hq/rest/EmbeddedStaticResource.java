@@ -18,6 +18,6 @@ public class EmbeddedStaticResource {
 
     @PostConstruct
     public void mount() {
-        staticFileLocation("logspace-frontend");
+        staticFileLocation("/logspace-frontend");
     }
 }

@@ -43,9 +43,9 @@
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
     <indoqa-boot-version>0.4.2-SNAPSHOT</indoqa-boot-version>
-    <spring-version>4.2.3.RELEASE</spring-version>
-    <solr-version>5.2.1</solr-version>
-    <jetty-version>9.0.2.v20130417</jetty-version>
+    <spring-version>4.3.2.RELEASE</spring-version>
+    <solr-version>6.1.0</solr-version>
+    <jetty-version>9.3.11.v20160721</jetty-version>
 
     <jackson-version>2.6.2</jackson-version>
     <httpclient-version>4.3.6</httpclient-version>
@@ -54,17 +54,17 @@
     <!--<tape-version>1.2.3</tape-version> -->
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
-    <solr-spring-client-version>5.1.0</solr-spring-client-version>
+    <solr-spring-client-version>6.1.0-SNAPSHOT</solr-spring-client-version>
     <solr-facet-api-version>0.1</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
     <system-test-tools-version>0.1.0-SNAPSHOT</system-test-tools-version>
     
-    <commons-lang3-version>3.3.2</commons-lang3-version>
-    <commons-io-version>2.4</commons-io-version>
+    <commons-lang3-version>3.4</commons-lang3-version>
+    <commons-io-version>2.5</commons-io-version>
     <commons-codec-version>1.10</commons-codec-version>
 
-    <slf4j-version>1.7.13</slf4j-version>
+    <slf4j-version>1.7.21</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
     <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
 
