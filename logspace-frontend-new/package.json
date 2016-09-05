@@ -1,7 +1,7 @@
 {
-  "name": "indoqa-react-redux-archetype",
-  "version": "0.0.0",
-  "description": "Indoqa React/Redux Archetype",
+  "name": "logspace",
+  "version": "0.4.0",
+  "description": "Logspace",
   "scripts": {
     "compile": "webpack",
     "dev": "node ./src/dev/server.js",
