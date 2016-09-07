@@ -22,5 +22,6 @@ const prefixUrl = (url, property, defaultPrefix) => {
 }
 
 export const fetchLogspace = (url, options) => {
-  return fetch(prefixUrl(url, 'logspaceBaseUrl', '/logspace'), options).then(handleApiResponse)
+  const defaultPrefix = process.env.NODE_ENV !== 'production' ? '/logspace' : ''
+  return fetch(prefixUrl(url, 'logspaceBaseUrl', defaultPrefix), options).then(handleApiResponse)
 }

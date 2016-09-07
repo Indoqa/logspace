@@ -49,29 +49,6 @@
             </executions>
           </plugin>
           <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-resources</id>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>copy-resources</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${basedir}/target/app</outputDirectory>
-                  <resources>
-                    <resource>
-                      <directory>src/main</directory>
-                      <includes>
-                        <include>index.html</include>
-                      </includes>
-                    </resource>
-                  </resources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
               <descriptors>

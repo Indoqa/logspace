@@ -97,7 +97,7 @@ export default class Header extends React.Component {
           </Editable>
         </div>
         <div className="chart-link">
-          <Link to={ROUTE_AGENT_ACTIVITY}><span>Agent Activity</span></Link>
+          <Link to="/agent-activity"><span>Agent Activity</span></Link>
         </div>
       </div>
     )

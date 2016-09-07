@@ -7,17 +7,24 @@
  */
 package io.logspace.hq.rest;
 
+import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssets;
 import static spark.Spark.staticFileLocation;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.context.annotation.Profile;
 
+import com.indoqa.boot.jsapp.AbstractJsAppResourcesBase;
+
 @Profile("prod")
-public class EmbeddedStaticResource {
+public class EmbeddedStaticResource extends AbstractJsAppResourcesBase {
+
+    private static final String FRONTEND_MODULE = "/logspace-frontend-new";
 
     @PostConstruct
     public void mount() {
-        staticFileLocation("logspace-frontend");
+        staticFileLocation(FRONTEND_MODULE);
+
+        this.jsApp("/", findWebpackAssets(FRONTEND_MODULE));
     }
 }

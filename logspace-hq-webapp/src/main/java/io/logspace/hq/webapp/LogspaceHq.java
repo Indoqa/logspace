@@ -7,24 +7,22 @@
  */
 package io.logspace.hq.webapp;
 
-import java.io.IOException;
+import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssets;
 
 import com.indoqa.boot.AbstractIndoqaBootApplication;
-import com.indoqa.boot.ApplicationInitializationException;
 
 import io.logspace.hq.rest.EmbeddedStaticResource;
 import io.logspace.hq.rest.ExternalStaticResource;
 import io.logspace.hq.webapp.mode.DefaultHqMode;
 import io.logspace.hq.webapp.mode.DemoHqMode;
 import io.logspace.hq.webapp.mode.HqMode;
-import spark.utils.IOUtils;
 
 public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     private static final String APPLICATION_NAME = "Logspace";
     private static final String BASE_PACKAGE = "io.logspace";
     private static final String LOGO_PATH = "/logspace.io.txt";
-    private static final String FRONTEND_INDEX_HTML_PATH = "/logspace-frontend/index.html";
+    private static final String FRONTEND_MODULE = "/logspace-frontend-new";
 
     private final HqMode hqMode;
 
@@ -36,6 +34,10 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
         super();
 
         this.hqMode = hqMode;
+    }
+
+    public static String getLogoPath() {
+        return LOGO_PATH;
     }
 
     public static void main(String[] args) {
@@ -67,8 +69,6 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected void beforeInitialization() {
-        this.printLogo();
-
         this.hqMode.beforeInitialization();
     }
 
@@ -90,18 +90,6 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected boolean isDevEnvironment() {
-        return LogspaceHq.class.getResourceAsStream(FRONTEND_INDEX_HTML_PATH) == null;
-    }
-
-    private void printLogo() {
-        try {
-            String asciiLogo = IOUtils.toString(LogspaceHq.class.getResourceAsStream(LOGO_PATH));
-            if (asciiLogo == null) {
-                return;
-            }
-            getInitializationLogger().info(asciiLogo);
-        } catch (IOException e) {
-            throw new ApplicationInitializationException("Error while reading ASCII logo.", e);
-        }
+        return findWebpackAssets(FRONTEND_MODULE).isEmpty();
     }
 }
