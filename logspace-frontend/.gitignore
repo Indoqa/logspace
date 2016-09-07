@@ -1,8 +1,0 @@
-.DS_Store
-bower_components
-build
-node_modules
-node
-npm-debug.log
-*.sublime-workspace
-.idea
