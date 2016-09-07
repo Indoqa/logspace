@@ -55,7 +55,7 @@
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
     <solr-spring-client-version>5.1.1-SNAPSHOT</solr-spring-client-version>
-    <solr-facet-api-version>0.1</solr-facet-api-version>
+    <solr-facet-api-version>0.2-SNAPSHOT</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
     <system-test-tools-version>0.1.0-SNAPSHOT</system-test-tools-version>
@@ -80,7 +80,6 @@
     <module>logspace-agent-os</module>
     <module>logspace-agent-solr</module>
     <module>logspace-dist</module>
-    <module>logspace-frontend</module>
     <module>logspace-frontend-new</module>
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
@@ -431,7 +430,7 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
-        <artifactId>logspace-frontend</artifactId>
+        <artifactId>logspace-frontend-new</artifactId>
         <classifier>dist</classifier>
         <type>zip</type>
         <version>${project.version}</version>

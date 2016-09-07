@@ -9,4 +9,5 @@ module.exports = {
   appName: 'Logspace',
   devPort: 3000,
   hotReloadPort: 13000,
+  outputPublicPath: '/assets/',
 }

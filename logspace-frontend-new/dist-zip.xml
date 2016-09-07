@@ -21,7 +21,7 @@
   <fileSets>
     <fileSet>
       <directory>target/webpack/</directory>
-      <outputDirectory>${project.artifactId}</outputDirectory>
+      <outputDirectory>${project.artifactId}/assets</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>../</directory>
