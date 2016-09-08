@@ -1,0 +1,43 @@
+/*
+ * Logspace
+ * Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License Version 1.0, which accompanies this distribution and
+ * is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+@font-face {
+  font-family: 'Yantramanav';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Yantramanav'),
+    local('Yantramanav-Regular'),
+    /* from http://fonts.gstatic.com/s/yantramanav/v1/E1Z7InSGFB89Npehsy0O7GfQcKutQXcIrRfyR5jdjY8.eot */
+    url('Yantramanav_400.eot?#iefix') format('embedded-opentype'),
+    /* from http://fonts.gstatic.com/s/yantramanav/v1/E1Z7InSGFB89Npehsy0O7IbN6UDyHWBl620a-IRfuBk.woff */
+    url('Yantramanav_400.woff') format('woff'),
+    /* from http://fonts.gstatic.com/s/yantramanav/v1/E1Z7InSGFB89Npehsy0O7I4P5ICox8Kq3LLUNMylGO4.woff2 */
+    url('Yantramanav_400.woff2') format('woff2'),
+    /* from http://fonts.gstatic.com/l/font?kit=E1Z7InSGFB89Npehsy0O7HNsigHlcrQGNV8nkUSFQfc&skey=d721e4e4fbd1e850&v=v1#Yantramanav */
+    url('Yantramanav_400.svg#Yantramanav') format('svg'),
+    /* from http://fonts.gstatic.com/s/yantramanav/v1/E1Z7InSGFB89Npehsy0O7J0EAVxt0G0biEntp43Qt6E.ttf */
+    url('Yantramanav_400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Varela Round';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Varela Round'),
+    local('VarelaRound-Regular'),
+    /* from http://fonts.gstatic.com/s/varelaround/v7/APH4jr0uSos5wiut5cpjrnZ2MAKAc2x4R1uOSeegc5U.eot */
+    url('Varela_Round_400.eot?#iefix') format('embedded-opentype'),
+    /* from http://fonts.gstatic.com/s/varelaround/v7/APH4jr0uSos5wiut5cpjrnhCUOGz7vYGh680lGh-uXM.woff */
+    url('Varela_Round_400.woff') format('woff'),
+    /* from http://fonts.gstatic.com/s/varelaround/v7/APH4jr0uSos5wiut5cpjrugdm0LZdjqr5-oayXSOefg.woff2 */
+    url('Varela_Round_400.woff2') format('woff2'),
+    /* from http://fonts.gstatic.com/l/font?kit=APH4jr0uSos5wiut5cpjrllIn5tFQcqMuf-jhyJP0ps&skey=f4466053e3923597&v=v7#VarelaRound */
+    url('Varela_Round_400.svg#VarelaRound') format('svg'),
+    /* from http://fonts.gstatic.com/s/varelaround/v7/APH4jr0uSos5wiut5cpjronF5uFdDttMLvmWuJdhhgs.ttf */
+    url('Varela_Round_400.ttf') format('truetype');
+}
