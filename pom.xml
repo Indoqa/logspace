@@ -44,7 +44,7 @@
 
     <indoqa-boot-version>0.4.2-SNAPSHOT</indoqa-boot-version>
     <spring-version>4.3.2.RELEASE</spring-version>
-    <solr-version>5.2.1</solr-version>
+    <solr-version>6.1.0</solr-version>
     <jetty-version>9.3.11.v20160721</jetty-version>
 
     <jackson-version>2.8.2</jackson-version>
@@ -54,7 +54,7 @@
     <!--<tape-version>1.2.3</tape-version> -->
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
-    <solr-spring-client-version>5.1.1-SNAPSHOT</solr-spring-client-version>
+    <solr-spring-client-version>6.1.0-SNAPSHOT</solr-spring-client-version>
     <solr-facet-api-version>0.2-SNAPSHOT</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
