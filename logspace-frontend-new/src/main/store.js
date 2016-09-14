@@ -46,7 +46,7 @@ const createReduxStore = () => {
 
   if (module.hot) {
     module.hot.accept('./app/reducers', () => {
-      const nextRootReducer = require('./app/reducers/index')
+      const nextRootReducer = require('./app/reducers/index').default
       store.replaceReducer(nextRootReducer)
     })
   }
