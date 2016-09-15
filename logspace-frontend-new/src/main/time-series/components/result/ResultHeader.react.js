@@ -9,7 +9,6 @@ import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 
 import Editable from '../../../app/components/editable/Editable.react'
-import {ROUTE_AGENT_ACTIVITY} from '../../../routes'
 
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
