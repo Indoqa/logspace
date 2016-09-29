@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.rest;
 
-import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssets;
+import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssetsInClasspath;
 import static spark.Spark.staticFileLocation;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +25,6 @@ public class EmbeddedStaticResource extends AbstractJsAppResourcesBase {
     public void mount() {
         staticFileLocation(FRONTEND_MODULE);
 
-        this.jsApp("/", findWebpackAssets(FRONTEND_MODULE));
+        this.jsApp("/", findWebpackAssetsInClasspath(FRONTEND_MODULE));
     }
 }
