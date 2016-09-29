@@ -7,7 +7,6 @@
  */
 package io.logspace.hq.core.api.event;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -96,21 +95,5 @@ public interface EventService {
      */
     EventPage retrieveReversed(EventFilter eventFilter, int count, String cursorMark);
 
-    /**
-     * Store the supplied events in the space.
-     *
-     * @param events - {@link Event}s to store.
-     * @param space - Space to store in.
-     */
     void store(Collection<? extends Event> events, String space);
-
-    void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer);
-
-    void stream(TimeSeriesDefinition timeSeriesDefinition, EventStreamer eventStreamer);
-
-    interface EventStreamer {
-
-        void streamEvent(Event event) throws IOException;
-
-    }
 }

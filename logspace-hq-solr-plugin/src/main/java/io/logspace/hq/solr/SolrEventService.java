@@ -9,22 +9,16 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
+import static io.logspace.hq.solr.EventFieldConstants.*;
+import static io.logspace.hq.solr.SolrQueryHelper.*;
+import static java.util.Calendar.*;
+import static java.util.concurrent.TimeUnit.*;
+import static java.util.stream.Collectors.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -45,7 +39,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.StreamingResponseCallback;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
 import org.apache.solr.client.solrj.request.QueryRequest;
@@ -69,12 +62,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.lang.util.TimeTracker;
 import com.indoqa.lang.util.TimeUtils;
-import com.indoqa.solr.facet.api.Buckets;
-import com.indoqa.solr.facet.api.FacetList;
-import com.indoqa.solr.facet.api.GapUnit;
-import com.indoqa.solr.facet.api.RangeFacet;
-import com.indoqa.solr.facet.api.StatisticFacet;
-import com.indoqa.solr.facet.api.TermsFacet;
+import com.indoqa.solr.facet.api.*;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.event.EventProperty;
@@ -91,11 +79,7 @@ import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.agentactivity.AgentActivity;
-import io.logspace.hq.rest.api.event.EqualsEventFilterElement;
-import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.event.EventFilterElement;
-import io.logspace.hq.rest.api.event.MultiValueEventFilterElement;
-import io.logspace.hq.rest.api.event.RangeEventFilterElement;
+import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
@@ -106,29 +90,8 @@ import io.logspace.hq.rest.api.timeseries.TimeWindow;
 @Named
 public class SolrEventService implements EventService {
 
-    private static final String ALL_DOCS_QUERY = "*:*";
-    private static final String SORT_CRON_ASC = "timestamp ASC, id ASC";
-    private static final String SORT_CRON_DESC = "timestamp DESC, id ASC";
-
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
-
-    private static final String VALUE_FACET_NAME = "val";
-    private static final String AGGREGATION_FACET_NAME = "agg";
-    private static final String COUNT_FACET_NAME = "count";
-
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_SPACE = "space";
-    private static final String FIELD_SYSTEM = "system";
-    private static final String FIELD_AGENT_ID = "agent_id";
-    private static final String FIELD_GLOBAL_AGENT_ID = "global_agent_id";
-    private static final String FIELD_TYPE = "type";
-    private static final String FIELD_MARKER = "marker";
-    private static final String FIELD_GLOBAL_ID = "global_id";
-    private static final String FIELD_PARENT_ID = "parent_id";
-    private static final String FIELD_TIMESTAMP = "timestamp";
-    private static final String FIELD_PROPERTY_ID = "property_id";
-    private static final String FIELD_TOKENIZED_SEARCH_FIELD = "tokenized_search_field";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -390,42 +353,6 @@ public class SolrEventService implements EventService {
         }
     }
 
-    @Override
-    public void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer) {
-        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
-        solrQuery.setStart(offset);
-        solrQuery.setRows(count);
-        solrQuery.set(SORT, SORT_CRON_ASC);
-
-        for (EventFilterElement eachElement : eventFilter) {
-            solrQuery.addFilterQuery(this.createFilterQuery(eachElement));
-        }
-
-        try {
-            this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));
-        } catch (SolrServerException | IOException e) {
-            String message = "Failed to stream events.";
-            this.logger.error(message, e);
-            throw EventStoreException.retrieveFailed(message, e);
-        }
-    }
-
-    @Override
-    public void stream(TimeSeriesDefinition definition, EventStreamer eventStreamer) {
-        SolrQuery solrQuery = new SolrQuery(ALL_DOCS_QUERY);
-
-        solrQuery.addFilterQuery(FIELD_GLOBAL_AGENT_ID + ":" + escapeSolr(definition.getGlobalAgentId()));
-        solrQuery.addFilterQuery(this.getTimestampRangeQuery(definition.getTimeWindow()));
-
-        try {
-            this.solrClient.queryAndStreamResponse(solrQuery, new EventStreamCallback(eventStreamer));
-        } catch (SolrServerException | IOException e) {
-            String message = "Failed to stream events.";
-            this.logger.error(message, e);
-            throw EventStoreException.retrieveFailed(message, e);
-        }
-    }
-
     protected void refreshAgentDescriptionCache() {
         for (String eachGlobalAgentId : this.cachedAgentDescriptions.keySet()) {
             try {
@@ -527,7 +454,8 @@ public class SolrEventService implements EventService {
         }
 
         Stream<EventFilterElement> filterStream = StreamSupport.stream(filter.spliterator(), false);
-        Collection<List<EventFilterElement>> groupedFilters = filterStream.collect(groupingBy(EventFilterElement::getProperty))
+        Collection<List<EventFilterElement>> groupedFilters = filterStream
+            .collect(groupingBy(EventFilterElement::getProperty))
             .values();
 
         List<String> result = new ArrayList<>(groupedFilters.size());
@@ -669,7 +597,7 @@ public class SolrEventService implements EventService {
         AgentDescription agentDescription = this.capabilitiesService.getAgentDescription(globalAgentId);
 
         if (agentDescription == null || agentDescription.getPropertyDescriptions() == null
-                || agentDescription.getPropertyDescriptions().isEmpty()) {
+            || agentDescription.getPropertyDescriptions().isEmpty()) {
             agentDescription = this.cachedAgentDescriptions.get(globalAgentId);
         }
 
@@ -713,7 +641,8 @@ public class SolrEventService implements EventService {
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient.getZkStateReader()
+            this.activeSlicesMap = cloudSolrClient
+                .getZkStateReader()
                 .getClusterState()
                 .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
         }
@@ -821,29 +750,6 @@ public class SolrEventService implements EventService {
         @Override
         public void run() {
             SolrEventService.this.refreshAgentDescriptionCache();
-        }
-    }
-
-    private final class EventStreamCallback extends StreamingResponseCallback {
-
-        private final EventStreamer eventStreamer;
-
-        public EventStreamCallback(EventStreamer eventStreamer) {
-            this.eventStreamer = eventStreamer;
-        }
-
-        @Override
-        public void streamDocListInfo(long numFound, long start, Float maxScore) {
-            // do nothing
-        }
-
-        @Override
-        public void streamSolrDocument(SolrDocument solrDocument) {
-            try {
-                this.eventStreamer.streamEvent(SolrEventService.this.createEvent(solrDocument));
-            } catch (IOException e) {
-                throw EventStoreException.retrieveFailed("Failed to stream events.", e);
-            }
         }
     }
 

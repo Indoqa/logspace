@@ -19,8 +19,7 @@ import org.apache.commons.lang.StringUtils;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventJsonSerializer;
-import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.event.EventService.EventStreamer;
+import io.logspace.hq.core.api.event.EventStreamService;
 import io.logspace.hq.rest.api.event.EventFilter;
 import spark.Request;
 import spark.Response;
@@ -39,7 +38,7 @@ public class EventStreamResource extends AbstractSpaceResource {
     private static final int MAX_OFFSET = MAX_STREAM_COUNT;
 
     @Inject
-    private EventService eventService;
+    private EventStreamService eventStreamService;
 
     @PostConstruct
     public void mount() {
@@ -55,7 +54,7 @@ public class EventStreamResource extends AbstractSpaceResource {
 
         ServletOutputStream outputStream = res.raw().getOutputStream();
         outputStream.print('[');
-        this.eventService.stream(eventFilter, count, offset, new JsonEventStreamer(outputStream));
+        this.eventStreamService.stream(eventFilter, count, offset, new JsonEventStreamer(outputStream));
         outputStream.print(']');
         outputStream.close();
 
@@ -70,7 +69,7 @@ public class EventStreamResource extends AbstractSpaceResource {
         return new EventFilter();
     }
 
-    private static final class JsonEventStreamer implements EventStreamer {
+    private static final class JsonEventStreamer implements EventStreamService.EventStreamer {
 
         private final OutputStream outputStream;
 

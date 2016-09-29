@@ -18,7 +18,7 @@ import javax.servlet.ServletOutputStream;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.event.EventService.EventStreamer;
+import io.logspace.hq.core.api.event.EventStreamService;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinitions;
 import spark.Request;
@@ -27,18 +27,11 @@ import spark.Response;
 @Named
 public class DownloadResource extends AbstractSpaceResource {
 
-    private static final String PARAMETER_COUNT = "count";
-    private static final int DEFAULT_COUNT = 10;
-    private static final int MIN_COUNT = 0;
-    private static final int MAX_STREAM_COUNT = Integer.MAX_VALUE;
-
-    private static final String PARAMETER_OFFSET = "offset";
-    private static final int DEFAULT_STREAM_OFFSET = 0;
-    private static final int MIN_OFFSET = 0;
-    private static final int MAX_OFFSET = MAX_STREAM_COUNT;
-
     @Inject
     private EventService eventService;
+
+    @Inject
+    private EventStreamService eventStreamService;
 
     @PostConstruct
     public void mount() {
@@ -63,7 +56,7 @@ public class DownloadResource extends AbstractSpaceResource {
         this.writeHeader(eventPropertyNames, outputStream);
 
         for (TimeSeriesDefinition eachTimeSeries : definitions.getDefinitions()) {
-            this.eventService.stream(eachTimeSeries, new CsvEventStreamer(outputStream, eventPropertyNames));
+            this.eventStreamService.stream(eachTimeSeries, new CsvEventStreamer(outputStream, eventPropertyNames));
         }
 
         outputStream.close();
@@ -74,7 +67,7 @@ public class DownloadResource extends AbstractSpaceResource {
         outputStream.write(EventCsvSerializer.generateHeader(eventPropertyNames));
     }
 
-    private static final class CsvEventStreamer implements EventStreamer {
+    private static final class CsvEventStreamer implements EventStreamService.EventStreamer {
 
         private final OutputStream outputStream;
         private final Set<String> eventPropertyNames;
