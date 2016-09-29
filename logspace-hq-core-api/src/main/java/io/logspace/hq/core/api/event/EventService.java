@@ -9,7 +9,6 @@ package io.logspace.hq.core.api.event;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventPage;
@@ -32,15 +31,6 @@ public interface EventService {
      * @param ids A list of the event ids.
      */
     void delete(List<String> ids);
-
-    /**
-     * Execute a query directly against the underlying Event Store using the given parameters.
-     *
-     * @param parameters The parameters to be used for the query.
-     *
-     * @return A {@link NativeQueryResult} with the result.
-     */
-    NativeQueryResult executeNativeQuery(Map<String, String[]> parameters);
 
     /**
      * Retrieve stored data for the given {@link TimeSeriesDefinition}

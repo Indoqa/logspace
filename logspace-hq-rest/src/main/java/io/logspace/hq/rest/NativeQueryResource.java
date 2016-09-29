@@ -14,8 +14,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.NativeQueryResult;
+import io.logspace.hq.core.api.nativequery.NativeQueryService;
 import io.logspace.hq.rest.api.nativequery.NativeQueryParameters;
 import spark.Request;
 import spark.Response;
@@ -25,7 +25,7 @@ import spark.Spark;
 public class NativeQueryResource extends AbstractLogspaceResourcesBase {
 
     @Inject
-    private EventService eventService;
+    private NativeQueryService nativeQueryService;
 
     @PostConstruct
     public void mount() {
@@ -34,23 +34,19 @@ public class NativeQueryResource extends AbstractLogspaceResourcesBase {
     }
 
     private void executeNativeQuery(Response res, Map<String, String[]> parameters) throws IOException {
-        NativeQueryResult result = this.eventService.executeNativeQuery(parameters);
-
+        NativeQueryResult result = this.nativeQueryService.executeNativeQuery(parameters);
         res.type(result.getContentType());
         result.writeTo(res.raw().getOutputStream());
     }
 
     private Object getNativeQuery(Request req, Response res) throws IOException {
         this.executeNativeQuery(res, req.raw().getParameterMap());
-
         return "";
     }
 
     private Object postNativeQuery(Request req, Response res) throws IOException {
         NativeQueryParameters parameters = this.getTransformer().toObject(req.body(), NativeQueryParameters.class);
-
         this.executeNativeQuery(res, parameters.getParameters());
-
         return "";
     }
 }

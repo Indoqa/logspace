@@ -16,7 +16,7 @@ import static org.apache.solr.common.params.CommonParams.SORT;
 import static org.apache.solr.common.params.CursorMarkParams.CURSOR_MARK_PARAM;
 import static org.apache.solr.common.params.ShardParams._ROUTE_;
 
-import java.io.*;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -26,26 +26,17 @@ import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.AutoCloseInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
-import org.apache.solr.client.solrj.impl.InputStreamResponseParser;
-import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.cloud.Slice;
-import org.apache.solr.common.params.ModifiableSolrParams;
-import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
-import org.apache.solr.request.LocalSolrQueryRequest;
-import org.apache.solr.response.JSONResponseWriter;
-import org.apache.solr.response.SolrQueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +51,6 @@ import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.core.api.event.EventService;
-import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.event.StoredEvent;
 import io.logspace.hq.rest.api.DataDeletionException;
 import io.logspace.hq.rest.api.DataRetrievalException;
@@ -75,14 +65,11 @@ public class SolrEventService extends AbstractSolrService implements EventServic
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${logspace.solr.fallback-shard}")
-    private String fallbackShard;
-
     private Map<String, Slice> activeSlicesMap;
     private long nextSliceUpdate;
 
-    private final JSONResponseWriter jsonResponseWriter = new JSONResponseWriter();
+    @Value("${logspace.solr.fallback-shard}")
+    private String fallbackShard;
 
     @Inject
     private CapabilitiesService capabilitiesService;
@@ -93,26 +80,6 @@ public class SolrEventService extends AbstractSolrService implements EventServic
             this.solrClient.deleteById(ids);
         } catch (SolrServerException | IOException e) {
             throw new DataDeletionException("Could not delete events.", e);
-        }
-    }
-
-    @Override
-    public NativeQueryResult executeNativeQuery(Map<String, String[]> parameters) {
-        SolrParams params = this.createSolrParams(parameters);
-
-        try {
-            QueryRequest request = new QueryRequest(params, METHOD.POST);
-            request.setResponseParser(new InputStreamResponseParser("json"));
-            QueryResponse response = request.process(this.solrClient);
-
-            InputStream inputStream = (InputStream) response.getResponse().get("stream");
-            if (inputStream != null) {
-                return new SolrNativeQueryResult(inputStream);
-            }
-
-            return new SolrNativeQueryResult(this.serializeResponse(params, response));
-        } catch (SolrException | SolrServerException | IOException e) {
-            throw new DataRetrievalException("Could not execute direct query with parameters " + parameters.toString() + ".", e);
         }
     }
 
@@ -355,16 +322,6 @@ public class SolrEventService extends AbstractSolrService implements EventServic
         return result;
     }
 
-    private SolrParams createSolrParams(Map<String, String[]> parameters) {
-        ModifiableSolrParams result = new ModifiableSolrParams();
-
-        for (Entry<String, String[]> eachEntry : parameters.entrySet()) {
-            result.add(eachEntry.getKey(), eachEntry.getValue());
-        }
-
-        return result;
-    }
-
     private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
@@ -444,39 +401,6 @@ public class SolrEventService extends AbstractSolrService implements EventServic
             String message = "Failed to retrieve events.";
             this.logger.error(message, e);
             throw EventStoreException.retrieveFailed(message, e);
-        }
-    }
-
-    private InputStream serializeResponse(SolrParams params, QueryResponse response) throws IOException {
-        LocalSolrQueryRequest solrQueryRequest = new LocalSolrQueryRequest(null, params);
-        SolrQueryResponse solrQueryResponse = new SolrQueryResponse();
-        solrQueryResponse.setAllValues(response.getResponse());
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        OutputStreamWriter writer = new OutputStreamWriter(baos, "UTF-8");
-        this.jsonResponseWriter.write(writer, solrQueryRequest, solrQueryResponse);
-        writer.flush();
-
-        return new ByteArrayInputStream(baos.toByteArray());
-    }
-
-    private static class SolrNativeQueryResult implements NativeQueryResult {
-
-        private final InputStream inputStream;
-
-        public SolrNativeQueryResult(InputStream inputStream) {
-            super();
-            this.inputStream = new AutoCloseInputStream(inputStream);
-        }
-
-        @Override
-        public String getContentType() {
-            return "application/json;charset=UTF-8";
-        }
-
-        @Override
-        public void writeTo(OutputStream outputStream) throws IOException {
-            IOUtils.copy(this.inputStream, outputStream);
         }
     }
 }
