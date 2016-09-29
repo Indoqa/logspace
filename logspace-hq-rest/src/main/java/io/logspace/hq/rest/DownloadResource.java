@@ -17,7 +17,7 @@ import javax.inject.Named;
 import javax.servlet.ServletOutputStream;
 
 import io.logspace.agent.api.event.Event;
-import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.agent.AgentService;
 import io.logspace.hq.core.api.event.EventStreamService;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinitions;
@@ -28,7 +28,7 @@ import spark.Response;
 public class DownloadResource extends AbstractSpaceResource {
 
     @Inject
-    private EventService eventService;
+    private AgentService agentService;
 
     @Inject
     private EventStreamService eventStreamService;
@@ -47,7 +47,7 @@ public class DownloadResource extends AbstractSpaceResource {
             globalAgentIds[index++] = timeSeriesDefinition.getGlobalAgentId();
         }
 
-        Set<String> eventPropertyNames = this.eventService.getEventPropertyNames(globalAgentIds);
+        Set<String> eventPropertyNames = this.agentService.getEventPropertyNames(globalAgentIds);
 
         res.raw().setHeader("Content-Disposition", "attachment; filename=Events.csv");
         res.raw().setContentType("text/csv;charset=UTF-8");

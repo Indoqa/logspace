@@ -10,14 +10,10 @@ package io.logspace.hq.core.api.event;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.agent.api.json.EventPage;
-import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.event.EventFilter;
-import io.logspace.hq.rest.api.suggestion.Suggestion;
-import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 
 /**
@@ -45,19 +41,6 @@ public interface EventService {
      * @return A {@link NativeQueryResult} with the result.
      */
     NativeQueryResult executeNativeQuery(Map<String, String[]> parameters);
-
-    AgentActivities getAgentActivities(int start, int count, int durationSeconds, int steps, String sort);
-
-    Set<String> getEventPropertyNames(String... globalAgentIds);
-
-    /**
-     * Calculates the {@link Suggestion} of stored information for the given {@link SuggestionInput}.<br>
-     * This includes spaces, systems, {@link io.logspace.hq.rest.api.suggestion.AgentDescription AgentDescriptions}, propertyNames.
-     *
-     * @param input - The {@link SuggestionInput} to calculate suggestions for.
-     * @return The calculated {@link Suggestion}.
-     */
-    Suggestion getSuggestion(SuggestionInput input);
 
     /**
      * Retrieve stored data for the given {@link TimeSeriesDefinition}
@@ -95,5 +78,11 @@ public interface EventService {
      */
     EventPage retrieveReversed(EventFilter eventFilter, int count, String cursorMark);
 
+    /**
+     * Persist a collection of events into a particular space.
+     * 
+     * @param events The {@link Event}s to be stored.
+     * @param space The target space.
+     */
     void store(Collection<? extends Event> events, String space);
 }

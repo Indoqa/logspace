@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.agent.AgentService;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import spark.Request;
 
@@ -39,7 +39,7 @@ public class AgentActivityResource extends AbstractLogspaceResourcesBase {
     private static final String DEFAULT_SORT = "count desc";
 
     @Inject
-    private EventService eventService;
+    private AgentService agentService;
 
     @PostConstruct
     public void mount() {
@@ -53,6 +53,6 @@ public class AgentActivityResource extends AbstractLogspaceResourcesBase {
         int steps = getQueryParam(req, "steps", DEFAULT_STEPS, MIN_STEPS, Math.min(duration, MAX_STEPS));
         String sort = getQueryParam(req, "sort", DEFAULT_SORT);
 
-        return this.eventService.getAgentActivities(start, count, duration, steps, sort);
+        return this.agentService.getAgentActivities(start, count, duration, steps, sort);
     }
 }

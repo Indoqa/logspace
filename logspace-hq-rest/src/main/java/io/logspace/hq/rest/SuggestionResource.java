@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.logspace.hq.core.api.event.EventService;
+import io.logspace.hq.core.api.agent.AgentService;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 import spark.Request;
@@ -20,7 +20,7 @@ import spark.Request;
 public class SuggestionResource extends AbstractLogspaceResourcesBase {
 
     @Inject
-    private EventService eventService;
+    private AgentService agentService;
 
     @PostConstruct
     public void mount() {
@@ -34,17 +34,15 @@ public class SuggestionResource extends AbstractLogspaceResourcesBase {
         input.setSpaceId(getQueryParam(req, "space", null));
         input.setSystemId(getQueryParam(req, "system", null));
         input.setText(getQueryParam(req, "input", null));
-
         return this.getSuggestion(input);
     }
 
     private Suggestion getSuggestion(SuggestionInput input) {
-        return this.eventService.getSuggestion(input);
+        return this.agentService.getSuggestion(input);
     }
 
     private Suggestion postSuggestion(Request req) {
         SuggestionInput input = this.getTransformer().toObject(req.body(), SuggestionInput.class);
-
         return this.getSuggestion(input);
     }
 }
