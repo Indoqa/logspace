@@ -46,7 +46,7 @@ import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 @Named
 public class SolrAgentService extends AbstractSolrService implements AgentService {
 
-    private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = 60000L;
+    private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = MINUTES.toMillis(1l);
 
     @Inject
     private CapabilitiesService capabilitiesService;
