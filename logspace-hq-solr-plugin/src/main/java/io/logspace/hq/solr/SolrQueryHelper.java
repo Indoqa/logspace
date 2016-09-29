@@ -32,6 +32,8 @@ import io.logspace.hq.rest.api.timeseries.TimeWindow;
     public static final String AGGREGATION_FACET_NAME = "agg";
     public static final String COUNT_FACET_NAME = "count";
 
+    private static final Pattern PATTERN_PROPERTY_ID = Pattern.compile("(\\w+)_property_(.*?)");
+
     private SolrQueryHelper() {
         // hide utility class constructor
     }
@@ -49,8 +51,7 @@ import io.logspace.hq.rest.api.timeseries.TimeWindow;
             return null;
         }
 
-        Pattern propertyIdPattern = Pattern.compile("(\\w+)_property_(.*?)");
-        Matcher matcher = propertyIdPattern.matcher(propertyId);
+        Matcher matcher = PATTERN_PROPERTY_ID.matcher(propertyId);
         if (!matcher.matches()) {
             return null;
         }
