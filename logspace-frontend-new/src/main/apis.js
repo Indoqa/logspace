@@ -8,10 +8,8 @@
 import fetchApi from 'indoqa-react-restclient'
 
 export const fetchLogspace = (url, options) => {
-  const defaultPrefix = process.env.NODE_ENV !== 'production' ? '/logspace' : ''
-
   const proxyOptions = {
-    defaultPrefix,
+    defaultPrefix: '/logspace',
     urlProperty: 'logspaceBaseUrl'
   }
 

@@ -11,8 +11,7 @@ import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssetsInClassp
 
 import com.indoqa.boot.AbstractIndoqaBootApplication;
 
-import io.logspace.hq.rest.EmbeddedStaticResource;
-import io.logspace.hq.rest.ExternalStaticResource;
+import io.logspace.hq.rest.FrontendResource;
 import io.logspace.hq.webapp.mode.DefaultHqMode;
 import io.logspace.hq.webapp.mode.DemoHqMode;
 import io.logspace.hq.webapp.mode.HqMode;
@@ -84,8 +83,7 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected void initializeSpringBeans() {
-        this.getApplicationContext().register(EmbeddedStaticResource.class);
-        this.getApplicationContext().register(ExternalStaticResource.class);
+        this.getApplicationContext().register(FrontendResource.class);
     }
 
     @Override

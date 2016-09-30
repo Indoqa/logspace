@@ -20,7 +20,7 @@
 
   <fileSets>
     <fileSet>
-      <directory>target/webpack/</directory>
+      <directory>target/assets/</directory>
       <outputDirectory>${project.artifactId}/assets</outputDirectory>
     </fileSet>
     <fileSet>
