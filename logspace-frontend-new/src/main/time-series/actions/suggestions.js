@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import {fetchLogspace} from '../../app/utils/fetchApis'
+import {fetchLogspace} from '../../apis'
 
 export const REFRESH_SUGGESTIONS = 'REFRESH_SUGGESTIONS'
 export const SHOW_SUGGESTIONS = 'SHOW_SUGGESTIONS'

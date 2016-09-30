@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import {fetchLogspace} from '../../app/utils/fetchApis'
+import {fetchLogspace} from '../../apis'
 import {createRestRequest} from '../../time-series/actions/result'
 
 export const CLEAR_DOWNLOAD = 'CLEAR_DOWNLOAD'

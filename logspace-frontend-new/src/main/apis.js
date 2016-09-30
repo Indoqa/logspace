@@ -5,19 +5,15 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-export default (response) => {
-  if (!response.ok) {
-    throw response
+import fetchApi from 'indoqa-react-restclient'
+
+export const fetchLogspace = (url, options) => {
+  const defaultPrefix = process.env.NODE_ENV !== 'production' ? '/logspace' : ''
+
+  const proxyOptions = {
+    defaultPrefix,
+    urlProperty: 'logspaceBaseUrl'
   }
 
-  if (response.status === 204) {
-    return null
-  }
-
-  const contentType = response.headers.get('content-type')
-  if (contentType && contentType.indexOf('application/json') !== -1) {
-    return response.json()
-  }
-
-  return response
+  return fetchApi(url, proxyOptions, options)
 }

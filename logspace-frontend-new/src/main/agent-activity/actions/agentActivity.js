@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-import {fetchLogspace} from '../../app/utils/fetchApis'
+import {fetchLogspace} from '../../apis'
 
 const ACTION_PREFIX = 'AGENT_ACTIVITY|'
 

@@ -7,35 +7,20 @@
  */
 import React from 'react'
 import {render} from 'react-dom'
-import {Provider} from 'react-redux'
-import {Router, hashHistory} from 'react-router'
-import store from './store'
+
+import IndoqaApplication from 'indoqa-react-app'
 import routes from './routes'
 
 if (process.env.NODE_ENV !== 'production') {
   window.Perf = require('react-addons-perf')
 }
 
-const enableHotReloading = () => {
-  if (module.hot) {
-    module.hot.accept()
-  }
+const reduxConfig = {
+  reducerFilePath: './reducers',
+  getReducers: () => require('./reducers').default
 }
 
-const renderAppWrappedInReduxAndRouter = () => {
-  render(
-    <Provider store={store}>
-      <Router history={hashHistory}>
-        {routes}
-      </Router>
-    </Provider>,
-    document.getElementById('app')
-  )
-}
-
-const main = () => {
-  enableHotReloading()
-  renderAppWrappedInReduxAndRouter()
-}
-
-main()
+render(
+  <IndoqaApplication reduxConfig={reduxConfig} routerConfig={{routes}} />,
+  document.getElementById('app')
+)

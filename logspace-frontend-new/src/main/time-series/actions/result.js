@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import moment from 'moment'
-import {fetchLogspace} from '../../app/utils/fetchApis'
+import {fetchLogspace} from '../../apis'
 import {transformLogspaceResult} from './c3js-chartplugin'
 
 export const REFRESH_RESULT = 'REFRESH_RESULT'
