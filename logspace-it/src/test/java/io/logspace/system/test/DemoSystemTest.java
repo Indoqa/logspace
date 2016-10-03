@@ -7,7 +7,8 @@
  */
 package io.logspace.system.test;
 
-import static com.indoqa.system.test.tools.JarRunnerUtils.*;
+import static com.indoqa.system.test.tools.JarRunnerUtils.endsWithRunnableJar;
+import static com.indoqa.system.test.tools.JarRunnerUtils.searchJavaRunnable;
 import static io.logspace.system.SystemTestUtils.sleep;
 
 import java.nio.file.Path;
@@ -36,11 +37,11 @@ public class DemoSystemTest {
         .setCheckAdress(BASE_URL + "/system-info")
         .addArguments("--demo")
         .setWaitForStartupInSeconds(30)
+        .setAlwaysWait(2000)
         .build();
 
     @ClassRule
-    public static final JarRunner MONITOR_RUNNER = new JarRunnerBuilder(MONITOR_RUNNABLE)
-        .setAlwaysWait(1000)
+    public static final JarRunner MONITOR_RUNNER = new JarRunnerBuilder(MONITOR_RUNNABLE).setAlwaysWait(1000)
         .addArgument("--demo")
         .setWaitForStartupInSeconds(30)
         .build();
