@@ -7,9 +7,12 @@
  */
 package io.logspace.system;
 
-import static org.junit.Assert.*;
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.function.IntFunction;
 
 import org.apache.http.HttpResponse;
@@ -19,6 +22,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.junit.rules.ExternalResource;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -53,15 +57,14 @@ public class SolrClientResource extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        this.httpClient = HttpClients
-            .custom()
+        this.httpClient = HttpClients.custom()
             .disableAutomaticRetries()
-            .setDefaultRequestConfig(RequestConfig
-                .custom()
+            .setDefaultRequestConfig(RequestConfig.custom()
                 .setConnectionRequestTimeout(TIMEOUT)
                 .setConnectTimeout(TIMEOUT)
                 .setSocketTimeout(TIMEOUT)
                 .build())
+            .setDefaultHeaders(Collections.singleton(new BasicHeader("Accept", APPLICATION_JSON.getMimeType())))
             .build();
     }
 
