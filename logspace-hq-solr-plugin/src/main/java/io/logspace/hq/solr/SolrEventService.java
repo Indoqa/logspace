@@ -9,7 +9,8 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static io.logspace.hq.solr.EventFieldConstants.*;
-import static io.logspace.hq.solr.SolrQueryHelper.*;
+import static io.logspace.hq.solr.utils.SolrDocumentHelper.*;
+import static io.logspace.hq.solr.utils.SolrQueryHelper.*;
 import static java.util.Calendar.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
@@ -23,7 +24,6 @@ import java.util.Map.Entry;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +49,7 @@ import io.logspace.agent.api.event.EventProperty;
 import io.logspace.agent.api.json.EventPage;
 import io.logspace.agent.api.order.Aggregate;
 import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.StoredEvent;
 import io.logspace.hq.rest.api.DataDeletionException;
@@ -70,9 +70,6 @@ public class SolrEventService extends AbstractSolrService implements EventServic
 
     @Value("${logspace.solr.fallback-shard}")
     private String fallbackShard;
-
-    @Inject
-    private CapabilitiesService capabilitiesService;
 
     @Override
     public void delete(List<String> ids) {
@@ -141,7 +138,7 @@ public class SolrEventService extends AbstractSolrService implements EventServic
             Collection<SolrInputDocument> inputDocuments = this.createInputDocuments(events, space);
             this.solrClient.add(inputDocuments);
 
-            this.logger.debug("Successfully stored {} event(s) for space '{}' from system {}", events.size(), space, system);
+            this.logger.info("Successfully stored {} event(s) for space '{}' from system {}", events.size(), space, system);
         } catch (SolrServerException | IOException e) {
             String message = "Failed to store " + events.size() + " events.";
             this.logger.error(message, e);
@@ -182,14 +179,14 @@ public class SolrEventService extends AbstractSolrService implements EventServic
     private Event createEvent(SolrDocument solrDocument) {
         StoredEvent result = new StoredEvent();
 
-        result.setId(this.getString(solrDocument, FIELD_ID));
-        result.setSystem(this.getString(solrDocument, FIELD_SYSTEM));
-        result.setAgentId(this.getString(solrDocument, FIELD_AGENT_ID));
-        result.setType(this.getString(solrDocument, FIELD_TYPE));
-        result.setMarker(this.getString(solrDocument, FIELD_MARKER));
-        result.setTimestamp(this.getDate(solrDocument, FIELD_TIMESTAMP));
-        result.setParentEventId(this.getString(solrDocument, FIELD_PARENT_ID));
-        result.setGlobalEventId(this.getString(solrDocument, FIELD_GLOBAL_ID));
+        result.setId(getString(solrDocument, FIELD_ID));
+        result.setSystem(getString(solrDocument, FIELD_SYSTEM));
+        result.setAgentId(getString(solrDocument, FIELD_AGENT_ID));
+        result.setType(getString(solrDocument, FIELD_TYPE));
+        result.setMarker(getString(solrDocument, FIELD_MARKER));
+        result.setTimestamp(getDate(solrDocument, FIELD_TIMESTAMP));
+        result.setParentEventId(getString(solrDocument, FIELD_PARENT_ID));
+        result.setGlobalEventId(getString(solrDocument, FIELD_GLOBAL_ID));
 
         for (Entry<String, Object> eachField : solrDocument) {
             String fieldName = eachField.getKey();
@@ -284,7 +281,7 @@ public class SolrEventService extends AbstractSolrService implements EventServic
     private SolrInputDocument createInputDocument(Event event, String space) {
         SolrInputDocument result = new SolrInputDocument();
 
-        String globalAgentId = this.capabilitiesService.getGlobalAgentId(space, event.getSystem(), event.getAgentId());
+        String globalAgentId = IdHelper.getGlobalAgentId(space, event.getSystem(), event.getAgentId());
 
         result.addField(FIELD_ID, event.getId());
         result.addField(FIELD_GLOBAL_AGENT_ID, globalAgentId);
@@ -325,8 +322,8 @@ public class SolrEventService extends AbstractSolrService implements EventServic
     private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidTimeSeriesDefinitionException
-                .illegalAggregate(propertyDescription.getPropertyType(), dataDefinition.getAggregate());
+            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+                dataDefinition.getAggregate());
         }
 
         Date startDate = dataDefinition.getTimeWindow().getStart();
@@ -341,14 +338,6 @@ public class SolrEventService extends AbstractSolrService implements EventServic
         return FacetList.toJsonString(rangeFacet);
     }
 
-    private Date getDate(SolrDocument solrDocument, String fieldName) {
-        return (Date) solrDocument.getFieldValue(fieldName);
-    }
-
-    private String getString(SolrDocument solrDocument, String fieldName) {
-        return (String) solrDocument.getFieldValue(fieldName);
-    }
-
     private String getTargetShard(Date timestamp) {
         if (!this.isCloud) {
             return null;
@@ -361,7 +350,8 @@ public class SolrEventService extends AbstractSolrService implements EventServic
             this.activeSlicesMap = cloudSolrClient
                 .getZkStateReader()
                 .getClusterState()
-                .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
+                .getCollection(cloudSolrClient.getDefaultCollection())
+                .getActiveSlicesMap();
         }
 
         Calendar calendar = Calendar.getInstance();

@@ -1,9 +1,0 @@
-{
-  "agent-orders" : [
-    {
-      "id" : "Dispatcher",
-      "trigger-type" : "APPLICATION"
-    }
-  ],
-  "commit-max-seconds" : 10
-}

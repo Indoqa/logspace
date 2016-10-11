@@ -5,14 +5,14 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api.model;
+package io.logspace.hq.core.api.spaces;
 
 /**
  * Spaces are used to distinguish events from different sources.<br>
  * To ensure some basic authentication for a space, authenticationTokens must be configured for a space, which consumers must supply as
  * an authenticationToken to store their events.
  */
-public interface Spaces {
+public interface SpacesService {
 
     /**
      * Retrieve the space for the supplied authenticationToken.
@@ -21,5 +21,7 @@ public interface Spaces {
      * @return The space for the authenticationToken or <code>null</code> if no space is configured for this token.
      */
     String getSpaceForAuthenticationToken(String authenticationToken);
+
+    void setAuthenticationTokens(String space, String... authenticationTokens);
 
 }

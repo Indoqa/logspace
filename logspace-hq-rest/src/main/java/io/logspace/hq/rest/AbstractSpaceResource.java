@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.logspace.hq.core.api.model.Spaces;
+import io.logspace.hq.core.api.spaces.SpacesService;
 import io.logspace.hq.rest.api.AbstractLogspaceResourceException;
 import io.logspace.hq.rest.api.InvalidSpaceTokenException;
 import io.logspace.hq.rest.api.MissingSpaceTokenException;
@@ -23,7 +23,7 @@ import spark.Response;
 import spark.Spark;
 
 /**
- * Base class for resources, which need protection via spaces. See {@link Spaces}.<br>
+ * Base class for resources, which need protection via spaces. See {@link SpacesService}.<br>
  * Consumers must supply the space token header in their request.
  */
 public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBase {
@@ -33,7 +33,7 @@ public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBas
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    protected Spaces spaces;
+    protected SpacesService spacesService;
 
     @PostConstruct
     public void mapExceptions() {
@@ -48,7 +48,6 @@ public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBas
      * @return Extracted spaceToken.
      * @throws MissingSpaceTokenException If the spaceToken Header is missing in the request.
      * @throws InvalidSpaceTokenException If no space is configured for the supplied spaceToken.
-     *
      */
     protected String getSpace(Request req) {
         String spaceToken = req.headers(SPACE_TOKEN_HEADER);
@@ -56,7 +55,7 @@ public abstract class AbstractSpaceResource extends AbstractLogspaceResourcesBas
             throw new MissingSpaceTokenException("Missing header '" + SPACE_TOKEN_HEADER + "'.");
         }
 
-        String space = this.spaces.getSpaceForAuthenticationToken(spaceToken);
+        String space = this.spacesService.getSpaceForAuthenticationToken(spaceToken);
         if (space == null) {
             throw new InvalidSpaceTokenException(spaceToken);
         }

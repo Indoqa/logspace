@@ -15,12 +15,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.junit.rules.ExternalResource;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import io.logspace.hq.core.api.orders.OrderService;
+import io.logspace.hq.core.api.spaces.SpacesService;
 import io.logspace.hq.webapp.LogspaceHq;
+import io.logspace.hq.webapp.mode.DemoHqMode;
 
 public class InfrastructureRule extends ExternalResource {
 
@@ -30,7 +36,15 @@ public class InfrastructureRule extends ExternalResource {
 
     private LogspaceHq logspaceHq;
 
+    @Inject
+    @Qualifier("event-solr-client")
     private SolrClient solrClient;
+
+    @Inject
+    private OrderService orderService;
+
+    @Inject
+    private SpacesService spacesService;
 
     private static void deleteFile(Path path) {
         try {
@@ -71,14 +85,6 @@ public class InfrastructureRule extends ExternalResource {
         this.initializeHQ();
     }
 
-    private <T> T getSpringBean(Class<T> beanType) throws IllegalAccessException {
-        Field field = getField(this.logspaceHq.getClass(), "context");
-        field.setAccessible(true);
-        ApplicationContext applicationContext = (ApplicationContext) field.get(this.logspaceHq);
-
-        return applicationContext.getBean(beanType);
-    }
-
     private void initializeHQ() throws Exception {
         File solrDataDirectory = getCanonicalFile(new File("./target/solr"));
         FileUtils.deleteDirectory(solrDataDirectory);
@@ -94,8 +100,23 @@ public class InfrastructureRule extends ExternalResource {
         this.logspaceHq = new LogspaceHq();
         this.logspaceHq.invoke();
 
-        this.solrClient = this.getSpringBean(SolrClient.class);
+        this.injectDependencies();
+
+        this.prepareConfig();
 
         this.initialized = true;
+    }
+
+    private void injectDependencies() throws IllegalAccessException {
+        Field field = getField(this.logspaceHq.getClass(), "context");
+        field.setAccessible(true);
+        AnnotationConfigApplicationContext applicationContext = (AnnotationConfigApplicationContext) field.get(this.logspaceHq);
+
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(this);
+    }
+
+    private void prepareConfig() {
+        this.orderService.storeOrder(DemoHqMode.loadOrder("/orders/", "1"));
+        this.spacesService.setAuthenticationTokens("test", "test");
     }
 }

@@ -64,7 +64,7 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected void afterInitialization() {
-        this.hqMode.afterInitialization();
+        this.hqMode.afterInitialization(this.getApplicationContext());
     }
 
     @Override

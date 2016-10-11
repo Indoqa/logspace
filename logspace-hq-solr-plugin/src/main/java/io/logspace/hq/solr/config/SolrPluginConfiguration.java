@@ -17,15 +17,31 @@ import com.indoqa.solr.spring.client.SolrClientFactory;
 @Configuration
 public class SolrPluginConfiguration {
 
-    @Value("${logspace.solr.base-url}")
-    private String solrBaseUrl;
+    @Value("${logspace.solr-events.base-url}")
+    private String eventsSolrBaseUrl;
+
+    @Value("${logspace.solr-config.base-url}")
+    private String configSolrBaseUrl;
 
     @Bean
-    @Qualifier("logspace-solr-client")
-    public SolrClientFactory getSolrClientFactory() {
+    @Qualifier("config-solr-client")
+    public SolrClientFactory getConfigSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
-        solrClientFactory.setUrl(this.solrBaseUrl);
-        solrClientFactory.setEmbeddedSolrConfigurationPath("META-INF/solr/logspace");
+
+        solrClientFactory.setUrl(this.configSolrBaseUrl);
+        solrClientFactory.setEmbeddedSolrConfigurationPath("META-INF/solr/config");
+
+        return solrClientFactory;
+    }
+
+    @Bean
+    @Qualifier("event-solr-client")
+    public SolrClientFactory getEventSolrClientFactory() {
+        SolrClientFactory solrClientFactory = new SolrClientFactory();
+
+        solrClientFactory.setUrl(this.eventsSolrBaseUrl);
+        solrClientFactory.setEmbeddedSolrConfigurationPath("META-INF/solr/events");
+
         return solrClientFactory;
     }
 }

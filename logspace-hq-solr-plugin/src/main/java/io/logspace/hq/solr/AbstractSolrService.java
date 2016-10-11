@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public abstract class AbstractSolrService {
 
     @Inject
-    @Qualifier("logspace-solr-client")
+    @Qualifier("event-solr-client")
     protected SolrClient solrClient;
 
     protected boolean isCloud;

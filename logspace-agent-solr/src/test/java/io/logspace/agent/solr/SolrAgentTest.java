@@ -42,9 +42,8 @@ public class SolrAgentTest {
     @Test
     public void test() throws SolrServerException, IOException {
         TestAgentController.installIfRequired("./target/test-events.json");
-        TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
 
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(0, TestAgentController.getCollectedEventCount());
 
         SolrServerFactory solrServerFactory = new SolrServerFactory();
         solrServerFactory.setUrl("file:./target/solr");
@@ -53,18 +52,18 @@ public class SolrAgentTest {
 
         SolrServer solrServer = solrServerFactory.getObject();
 
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(0, TestAgentController.getCollectedEventCount());
 
         SolrInputDocument solrInputDocument = new SolrInputDocument();
         solrInputDocument.setField("id", UUID.randomUUID().toString());
         solrInputDocument.setField("timestamp", new Date());
         solrServer.add(solrInputDocument);
 
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(0, TestAgentController.getCollectedEventCount());
 
         solrServer.commit(true, true);
 
-        List<Event> collectedEvents = agentController.getCollectedEvents();
+        List<Event> collectedEvents = TestAgentController.getCollectedEvents();
         assertEquals(2, collectedEvents.size());
         Event event = collectedEvents.get(0);
         assertEquals("Embedded Core", getProperty(event.getStringProperties(), "core_name"));

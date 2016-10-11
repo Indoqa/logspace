@@ -7,9 +7,11 @@
  */
 package io.logspace.hq.webapp.mode;
 
+import org.springframework.context.ApplicationContext;
+
 public interface HqMode {
 
-    void afterInitialization();
+    void afterInitialization(ApplicationContext applicationContext);
 
     void beforeInitialization();
 

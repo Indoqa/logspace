@@ -5,11 +5,11 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.solr.utils;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
-import static io.logspace.hq.solr.EventFieldConstants.FIELD_TIMESTAMP;
+import static io.logspace.agent.api.event.Event.FIELD_TIMESTAMP;
 
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -22,7 +22,7 @@ import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
 import io.logspace.hq.rest.api.timeseries.TimeWindow;
 
-/*default*/ final class SolrQueryHelper {
+public final class SolrQueryHelper {
 
     public static final String ALL_DOCS_QUERY = "*:*";
     public static final String SORT_CRON_ASC = "timestamp ASC, id ASC";
