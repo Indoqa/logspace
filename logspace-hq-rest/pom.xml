@@ -69,10 +69,6 @@
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-hq-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.logspace</groupId>
       <artifactId>logspace-frontend-new</artifactId>
       <classifier>dist</classifier>
       <type>zip</type>
