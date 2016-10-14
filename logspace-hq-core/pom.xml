@@ -18,54 +18,56 @@
     <version>0.4.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-agent-api-json</artifactId>
+  <artifactId>logspace-hq-core</artifactId>
 
-  <name>Logspace Agent JSON API</name>
-
-  <properties>
-    <!-- The agent should be usable in environments running on older JVMs. -->
-    <project.build.compiler.version>1.6</project.build.compiler.version>
-  </properties>
+  <name>Logspace HQ Core</name>
 
   <dependencies>
     <!-- Internal -->
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-agent-api</artifactId>
+      <artifactId>logspace-agent-api-json</artifactId>
     </dependency>
-
-    <!-- Json -->
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-core-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-rest-api</artifactId>
     </dependency>
 
-    <!-- Logging -->
+    <dependency>
+      <groupId>com.indoqa</groupId>
+      <artifactId>indoqa-lang</artifactId>
+    </dependency>
+
+    <!-- Dependency Injection -->
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>
+
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+
+    <!-- Commons dependencies -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <!-- Logging: slf4j -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-
-    <!-- Test -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
