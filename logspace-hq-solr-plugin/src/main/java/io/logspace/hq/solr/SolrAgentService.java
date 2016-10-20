@@ -9,7 +9,7 @@ package io.logspace.hq.solr;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static io.logspace.hq.solr.EventFieldConstants.*;
-import static io.logspace.hq.solr.SolrQueryHelper.*;
+import static io.logspace.hq.solr.utils.SolrQueryHelper.*;
 import static java.util.concurrent.TimeUnit.*;
 
 import java.io.IOException;
@@ -35,6 +35,7 @@ import com.indoqa.solr.facet.api.*;
 
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.AgentService;
+import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
@@ -189,8 +190,8 @@ public class SolrAgentService extends AbstractSolrService implements AgentServic
     @Override
     @PostConstruct
     public void initialize() {
-        new Timer(true)
-            .schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL, AGENT_DESCRIPTION_REFRESH_INTERVAL);
+        new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
+            AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
     protected void refreshAgentDescriptionCache() {
@@ -247,7 +248,7 @@ public class SolrAgentService extends AbstractSolrService implements AgentServic
 
         AgentDescription result = new AgentDescription();
         result.setGlobalId(globalAgentId);
-        result.setName(this.capabilitiesService.getAgentId(globalAgentId));
+        result.setName(IdHelper.getAgentId(globalAgentId));
         result.setSpace(this.getFirstFacetValue(response, FIELD_SPACE));
         result.setSystem(this.getFirstFacetValue(response, FIELD_SYSTEM));
 

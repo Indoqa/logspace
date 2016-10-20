@@ -61,28 +61,27 @@ public class OsAgentTest {
     @Test
     public void test() {
         TestAgentController.installIfRequired("./target/test-events.json");
-        TestAgentController agentController = (TestAgentController) AgentControllerProvider.getAgentController();
 
-        assertEquals(0, agentController.getCollectedEvents().size());
+        assertEquals(0, TestAgentController.getCollectedEventCount());
 
         CpuAgent.create().execute();
         DiskAgent.create().execute();
         MemoryAgent.create().execute();
         SwapAgent.create().execute();
 
-        Collection<Event> cpuEvents = removeEvents(agentController.getCollectedEvents(), CpuAgent.TYPE);
+        Collection<Event> cpuEvents = removeEvents(TestAgentController.getCollectedEvents(), CpuAgent.TYPE);
         assertEquals("Expected one CPU event.", 1, cpuEvents.size());
 
-        Collection<Event> diskEvents = removeEvents(agentController.getCollectedEvents(), DiskAgent.TYPE);
+        Collection<Event> diskEvents = removeEvents(TestAgentController.getCollectedEvents(), DiskAgent.TYPE);
         assertEquals("Expected one disk event per file-system root.", getRootDirectoryCount(), diskEvents.size());
 
-        Collection<Event> memoryEvents = removeEvents(agentController.getCollectedEvents(), MemoryAgent.TYPE);
+        Collection<Event> memoryEvents = removeEvents(TestAgentController.getCollectedEvents(), MemoryAgent.TYPE);
         assertEquals("Expected one memory event.", 1, memoryEvents.size());
 
-        Collection<Event> swapEvents = removeEvents(agentController.getCollectedEvents(), SwapAgent.TYPE);
+        Collection<Event> swapEvents = removeEvents(TestAgentController.getCollectedEvents(), SwapAgent.TYPE);
         assertEquals("Expected one swap event.", 1, swapEvents.size());
 
-        assertEquals("Found unexpected events.", 0, agentController.getCollectedEvents().size());
+        assertEquals("Found unexpected events.", 0, TestAgentController.getCollectedEventCount());
 
         AgentControllerProvider.shutdown();
     }

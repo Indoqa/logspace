@@ -10,7 +10,7 @@ package io.logspace.hq.solr;
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
 import static io.logspace.hq.solr.EventFieldConstants.*;
-import static io.logspace.hq.solr.SolrQueryHelper.*;
+import static io.logspace.hq.solr.utils.SolrQueryHelper.*;
 import static org.apache.solr.common.params.CommonParams.SORT;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class SolrEventStreamService implements EventStreamService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    @Qualifier("logspace-solr-client")
+    @Qualifier("event-solr-client")
     private SolrClient solrClient;
 
     @Value("${logspace.solr.fallback-shard}")

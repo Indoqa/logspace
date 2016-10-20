@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Logspace
-    Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
-    This program and the accompanying materials are made available under the terms of
-    the Eclipse Public License Version 1.0, which accompanies this distribution and
-    is available at http://www.eclipse.org/legal/epl-v10.html.
+  Logspace
+  Copyright (c) 2015 Indoqa Software Design und Beratung GmbH. All rights reserved.
+  This program and the accompanying materials are made available under the terms of
+  the Eclipse Public License Version 1.0, which accompanies this distribution and
+  is available at http://www.eclipse.org/legal/epl-v10.html.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
 
@@ -20,7 +21,7 @@
 
   <groupId>io.logspace</groupId>
   <artifactId>logspace</artifactId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
   <name>Logspace</name>
   <inceptionYear>2015</inceptionYear>
 
@@ -66,7 +67,8 @@
 
     <slf4j-version>1.7.21</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
+    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json 
+      has JDK1.6 support ) -->
 
     <junit-version>4.12</junit-version>
   </properties>
@@ -81,7 +83,6 @@
     <module>logspace-agent-solr</module>
     <module>logspace-dist</module>
     <module>logspace-frontend-new</module>
-    <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
     <module>logspace-hq-rest</module>
     <module>logspace-hq-rest-api</module>
@@ -277,7 +278,7 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jmx</artifactId>
           </exclusion>
-         <exclusion>
+          <exclusion>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
           </exclusion>
@@ -329,6 +330,12 @@
         <groupId>org.quartz-scheduler</groupId>
         <artifactId>quartz</artifactId>
         <version>${quartz-version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- Tape -->

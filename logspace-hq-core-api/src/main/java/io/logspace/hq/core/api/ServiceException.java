@@ -5,18 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.api.orders;
+package io.logspace.hq.core.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
+public class ServiceException extends RuntimeException {
 
-public interface StoredOrder {
+    private static final long serialVersionUID = 1L;
 
-    InputStream getInputStream() throws IOException;
+    public ServiceException(String message) {
+        super(message);
+    }
 
-    long getLastModified() throws IOException;
-
-    boolean isNotModifiedSince(Date date) throws IOException;
-
+    public ServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -7,10 +7,12 @@
  */
 package io.logspace.hq.webapp.mode;
 
+import org.springframework.context.ApplicationContext;
+
 public class DefaultHqMode implements HqMode {
 
     @Override
-    public void afterInitialization() {
+    public void afterInitialization(ApplicationContext applicationContext) {
         // default does nothing
     }
 

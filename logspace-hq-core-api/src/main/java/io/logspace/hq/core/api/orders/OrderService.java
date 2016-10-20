@@ -9,6 +9,10 @@ package io.logspace.hq.core.api.orders;
 
 public interface OrderService {
 
-    StoredOrder getStoredOrder(String controllerId);
+    void deleteOrder(String orderId);
+
+    Order getOrder(String controllerId);
+
+    void storeOrder(Order order);
 
 }

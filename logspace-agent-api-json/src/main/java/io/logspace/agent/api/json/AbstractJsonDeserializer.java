@@ -105,6 +105,10 @@ public abstract class AbstractJsonDeserializer {
         this.setJsonParser(JSON_FACTORY.createParser(data));
     }
 
+    protected void setData(String data) throws IOException {
+        this.setJsonParser(JSON_FACTORY.createParser(data));
+    }
+
     protected void setInputStream(InputStream inputStream) throws IOException {
         this.setJsonParser(JSON_FACTORY.createParser(inputStream));
     }

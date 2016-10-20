@@ -7,23 +7,16 @@
  */
 package io.logspace.agent.api.json;
 
-import static com.fasterxml.jackson.core.JsonToken.END_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.END_OBJECT;
-import static com.fasterxml.jackson.core.JsonToken.FIELD_NAME;
-import static com.fasterxml.jackson.core.JsonToken.START_ARRAY;
-import static com.fasterxml.jackson.core.JsonToken.START_OBJECT;
+import static com.fasterxml.jackson.core.JsonToken.*;
 import static io.logspace.agent.api.order.AgentControllerCapabilities.*;
-import io.logspace.agent.api.order.AgentCapabilities;
-import io.logspace.agent.api.order.AgentControllerCapabilities;
-import io.logspace.agent.api.order.PropertyDescription;
-import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
-import io.logspace.agent.api.order.PropertyType;
-import io.logspace.agent.api.order.TriggerType;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.logspace.agent.api.order.*;
+import io.logspace.agent.api.order.PropertyDescription.PropertyUnit;
 
 public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJsonDeserializer {
 
@@ -39,12 +32,22 @@ public final class AgentControllerCapabilitiesJsonDeserializer extends AbstractJ
         this.setInputStream(inputStream);
     }
 
+    private AgentControllerCapabilitiesJsonDeserializer(String data) throws IOException {
+        super();
+
+        this.setData(data);
+    }
+
     public static AgentControllerCapabilities fromJson(byte[] data) throws IOException {
         return new AgentControllerCapabilitiesJsonDeserializer(data).deserialize();
     }
 
     public static AgentControllerCapabilities fromJson(InputStream inputStream) throws IOException {
         return new AgentControllerCapabilitiesJsonDeserializer(inputStream).deserialize();
+    }
+
+    public static AgentControllerCapabilities fromJson(String data) throws IOException {
+        return new AgentControllerCapabilitiesJsonDeserializer(data).deserialize();
     }
 
     private AgentControllerCapabilities deserialize() throws IOException {

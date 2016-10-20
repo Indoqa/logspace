@@ -7,13 +7,19 @@
  */
 package io.logspace.hq.webapp.mode;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.context.ApplicationContext;
 
-import com.indoqa.boot.ApplicationInitializationException;
+import com.indoqa.lang.exception.InitializationFailedException;
 
 import io.logspace.agent.api.util.ConsoleWriter;
+import io.logspace.hq.core.api.orders.Order;
+import io.logspace.hq.core.api.orders.OrderService;
+import io.logspace.hq.core.api.spaces.SpacesService;
 
 public class DemoHqMode implements HqMode {
 
@@ -25,8 +31,28 @@ public class DemoHqMode implements HqMode {
         this.initializeDemoLogging();
     }
 
+    public static Order loadOrder(String path, String controllerId) {
+        try {
+            Order order = new Order();
+
+            order.setId("order_" + controllerId);
+            order.setLastModified(new Date());
+            order.setContent(IOUtils.toString(DemoHqMode.class.getResource(path + controllerId + ".json"), "UTF-8"));
+
+            return order;
+        } catch (IOException e) {
+            throw new InitializationFailedException("Could not store demo order.", e);
+        }
+    }
+
     @Override
-    public void afterInitialization() {
+    public void afterInitialization(ApplicationContext applicationContext) {
+        OrderService orderService = applicationContext.getBean(OrderService.class);
+        orderService.storeOrder(loadOrder("/demo/orders/", "logspace-demo"));
+
+        SpacesService spacesService = applicationContext.getBean(SpacesService.class);
+        spacesService.setAuthenticationTokens("demo", "demo");
+
         ConsoleWriter.write("Logspace HQ now running in demo mode");
         ConsoleWriter.write("Go to http://localhost:" + SPARK_DEFAULT_PORT);
         ConsoleWriter.write("");
@@ -36,47 +62,10 @@ public class DemoHqMode implements HqMode {
     public void beforeInitialization() {
         this.initializeDemoPort();
         this.initializeDemoSolr();
-
-        this.initializeDemoCapabilities();
-    }
-
-    private void createFile(String resourceDirectory, File outputDirectory, String fileName) {
-        InputStream resourceStream = null;
-        OutputStream outputStream = null;
-
-        outputDirectory.mkdirs();
-
-        try {
-            resourceStream = this.getClass().getResourceAsStream(resourceDirectory + fileName);
-            outputStream = new FileOutputStream(new File(outputDirectory, fileName));
-
-            IOUtils.copy(resourceStream, outputStream);
-        } catch (IOException e) {
-            throw new ApplicationInitializationException(
-                "Could not create file '" + fileName + "' in directory '" + outputDirectory + "'.", e);
-        } finally {
-            IOUtils.closeQuietly(outputStream);
-            IOUtils.closeQuietly(resourceStream);
-        }
     }
 
     private File getBaseDir() {
         return new File(System.getProperty("java.io.tmpdir"), "logspace-demo");
-    }
-
-    private void initializeDemoCapabilities() {
-        System.setProperty("logspace.hq-webapp.data-directory", this.getBaseDir().getAbsolutePath());
-
-        File capabilitiesDir = new File(this.getBaseDir(), "capabilities");
-        capabilitiesDir.mkdirs();
-
-        File ordersDir = new File(this.getBaseDir(), "orders");
-        this.createFile("/demo/orders/", ordersDir, "logspace-demo.json");
-        this.createFile("/demo/orders/", ordersDir, "logspace-sample.json");
-
-        File spacesDir = new File(this.getBaseDir(), "spaces");
-        this.createFile("/demo/spaces/", spacesDir, "demo.space");
-        this.createFile("/demo/spaces/", spacesDir, "logspace-sample.space");
     }
 
     private void initializeDemoLogging() {
@@ -92,7 +81,7 @@ public class DemoHqMode implements HqMode {
     }
 
     private void initializeDemoSolr() {
-        File solrDir = new File(this.getBaseDir(), "solr");
-        System.setProperty("logspace.solr.base-url", solrDir.toURI().toString());
+        System.setProperty("logspace.solr-events.base-url", new File(this.getBaseDir(), "solr-events").toURI().toString());
+        System.setProperty("logspace.solr-config.base-url", new File(this.getBaseDir(), "solr-config").toURI().toString());
     }
 }
