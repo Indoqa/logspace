@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.solr;
+package io.logspace.hq.core.solr.event;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static io.logspace.hq.core.solr.EventFieldConstants.*;
@@ -52,6 +52,7 @@ import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.StoredEvent;
+import io.logspace.hq.core.solr.AbstractSolrService;
 import io.logspace.hq.rest.api.DataDeletionException;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;

@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.solr;
+package io.logspace.hq.core.solr.spaces;
 
 import static io.logspace.hq.core.solr.ConfigFieldConstants.*;
 
@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import io.logspace.hq.core.api.spaces.SpacesService;
+import io.logspace.hq.core.solr.ConfigFieldConstants;
 import io.logspace.hq.core.solr.utils.SolrDocumentHelper;
 import io.logspace.hq.rest.api.DataStorageException;
 

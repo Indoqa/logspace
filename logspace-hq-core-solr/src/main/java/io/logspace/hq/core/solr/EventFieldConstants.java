@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.core.solr;
 
-/*default*/ final class EventFieldConstants {
+public final class EventFieldConstants {
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_SPACE = "space";

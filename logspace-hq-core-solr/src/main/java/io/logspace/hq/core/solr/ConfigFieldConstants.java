@@ -7,7 +7,7 @@
  */
 package io.logspace.hq.core.solr;
 
-/*default*/ final class ConfigFieldConstants {
+public final class ConfigFieldConstants {
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_TYPE = "type";

@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.solr;
+package io.logspace.hq.core.solr.event;
 
 import java.io.*;
 import java.util.Map;
@@ -29,6 +29,7 @@ import org.apache.solr.response.SolrQueryResponse;
 
 import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.nativequery.NativeQueryService;
+import io.logspace.hq.core.solr.AbstractSolrService;
 import io.logspace.hq.rest.api.DataRetrievalException;
 
 @Named

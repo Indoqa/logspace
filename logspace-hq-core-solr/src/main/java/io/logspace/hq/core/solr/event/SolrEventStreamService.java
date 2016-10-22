@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.core.solr;
+package io.logspace.hq.core.solr.event;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
 import static com.indoqa.lang.util.TimeUtils.formatSolrDate;
