@@ -18,41 +18,27 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.StreamingResponseCallback;
 import org.apache.solr.common.SolrDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.lang.util.TimeUtils;
 
 import io.logspace.agent.api.event.Event;
 import io.logspace.hq.core.api.event.EventStreamService;
 import io.logspace.hq.core.api.event.StoredEvent;
-import io.logspace.hq.core.solr.EventQualifier;
+import io.logspace.hq.core.solr.AbstractSolrEventService;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 import io.logspace.hq.rest.api.timeseries.TimeWindow;
 
 @Named
-public class SolrEventStreamService implements EventStreamService {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Inject
-    @EventQualifier
-    private SolrClient solrClient;
-
-    @Value("${logspace.solr.fallback-shard}")
-    private String fallbackShard;
+public class SolrEventStreamService extends AbstractSolrEventService implements EventStreamService {
 
     @Override
     public void stream(EventFilter eventFilter, int count, int offset, EventStreamer eventStreamer) {

@@ -37,7 +37,7 @@ import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.AgentService;
 import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
-import io.logspace.hq.core.solr.AbstractSolrService;
+import io.logspace.hq.core.solr.AbstractSolrEventService;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.agentactivity.AgentActivities;
 import io.logspace.hq.rest.api.agentactivity.AgentActivity;
@@ -46,7 +46,7 @@ import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 
 @Named
-public class SolrAgentService extends AbstractSolrService implements AgentService {
+public class SolrAgentService extends AbstractSolrEventService implements AgentService {
 
     private static final long AGENT_DESCRIPTION_REFRESH_INTERVAL = MINUTES.toMillis(1l);
 

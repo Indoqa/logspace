@@ -12,14 +12,18 @@ import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class AbstractSolrService {
+public abstract class AbstractSolrEventService {
 
     @Inject
     @EventQualifier
     protected SolrClient solrClient;
 
     protected boolean isCloud;
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct
     public void initialize() {

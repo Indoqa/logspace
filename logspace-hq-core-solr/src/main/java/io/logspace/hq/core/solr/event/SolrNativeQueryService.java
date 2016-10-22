@@ -29,11 +29,11 @@ import org.apache.solr.response.SolrQueryResponse;
 
 import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.nativequery.NativeQueryService;
-import io.logspace.hq.core.solr.AbstractSolrService;
+import io.logspace.hq.core.solr.AbstractSolrEventService;
 import io.logspace.hq.rest.api.DataRetrievalException;
 
 @Named
-public class SolrNativeQueryService extends AbstractSolrService implements NativeQueryService {
+public class SolrNativeQueryService extends AbstractSolrEventService implements NativeQueryService {
 
     private final JSONResponseWriter jsonResponseWriter = new JSONResponseWriter();
 

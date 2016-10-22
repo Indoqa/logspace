@@ -37,8 +37,6 @@ import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.cloud.Slice;
 import org.apache.solr.common.util.NamedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.lang.util.TimeUtils;
@@ -52,7 +50,7 @@ import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.event.EventService;
 import io.logspace.hq.core.api.event.StoredEvent;
-import io.logspace.hq.core.solr.AbstractSolrService;
+import io.logspace.hq.core.solr.AbstractSolrEventService;
 import io.logspace.hq.rest.api.DataDeletionException;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.EventStoreException;
@@ -61,19 +59,20 @@ import io.logspace.hq.rest.api.timeseries.InvalidTimeSeriesDefinitionException;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
 
 @Named
-public class SolrEventService extends AbstractSolrService implements EventService {
+public class SolrEventService extends AbstractSolrEventService implements EventService {
 
     private static final long SLICE_UPDATE_INTERVAL = 1000L;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Map<String, Slice> activeSlicesMap;
-    private long nextSliceUpdate;
 
     @Value("${logspace.solr.fallback-shard}")
     private String fallbackShard;
 
+    private Map<String, Slice> activeSlicesMap;
+    private long nextSliceUpdate;
+
     @Override
     public void delete(List<String> ids) {
+        this.logger.debug("Deleting events with IDs {}.", ids);
+
         try {
             this.solrClient.deleteById(ids);
         } catch (SolrServerException | IOException e) {
