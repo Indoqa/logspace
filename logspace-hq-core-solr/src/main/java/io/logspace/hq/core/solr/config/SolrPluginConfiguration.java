@@ -7,12 +7,14 @@
  */
 package io.logspace.hq.core.solr.config;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.indoqa.solr.spring.client.SolrClientFactory;
+
+import io.logspace.hq.core.solr.ConfigQualifier;
+import io.logspace.hq.core.solr.EventQualifier;
 
 @Configuration
 public class SolrPluginConfiguration {
@@ -24,7 +26,7 @@ public class SolrPluginConfiguration {
     private String configSolrBaseUrl;
 
     @Bean
-    @Qualifier("config-solr-client")
+    @ConfigQualifier
     public SolrClientFactory getConfigSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
 
@@ -35,7 +37,7 @@ public class SolrPluginConfiguration {
     }
 
     @Bean
-    @Qualifier("event-solr-client")
+    @EventQualifier
     public SolrClientFactory getEventSolrClientFactory() {
         SolrClientFactory solrClientFactory = new SolrClientFactory();
 

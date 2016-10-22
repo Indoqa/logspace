@@ -26,7 +26,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonSerializer;
@@ -35,6 +34,7 @@ import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.solr.ConfigQualifier;
 import io.logspace.hq.core.solr.utils.SolrDocumentHelper;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.DataStorageException;
@@ -49,7 +49,7 @@ public class SolrCapabilitiesService implements CapabilitiesService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    @Qualifier("config-solr-client")
+    @ConfigQualifier
     private SolrClient solrClient;
 
     @Override

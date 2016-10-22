@@ -12,12 +12,11 @@ import javax.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public abstract class AbstractSolrService {
 
     @Inject
-    @Qualifier("event-solr-client")
+    @EventQualifier
     protected SolrClient solrClient;
 
     protected boolean isCloud;

@@ -29,7 +29,6 @@ import org.apache.solr.client.solrj.StreamingResponseCallback;
 import org.apache.solr.common.SolrDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.indoqa.lang.util.TimeUtils;
@@ -37,6 +36,7 @@ import com.indoqa.lang.util.TimeUtils;
 import io.logspace.agent.api.event.Event;
 import io.logspace.hq.core.api.event.EventStreamService;
 import io.logspace.hq.core.api.event.StoredEvent;
+import io.logspace.hq.core.solr.EventQualifier;
 import io.logspace.hq.rest.api.EventStoreException;
 import io.logspace.hq.rest.api.event.*;
 import io.logspace.hq.rest.api.timeseries.TimeSeriesDefinition;
@@ -48,7 +48,7 @@ public class SolrEventStreamService implements EventStreamService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    @Qualifier("event-solr-client")
+    @EventQualifier
     private SolrClient solrClient;
 
     @Value("${logspace.solr.fallback-shard}")

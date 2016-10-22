@@ -20,11 +20,11 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.junit.rules.ExternalResource;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import io.logspace.hq.core.api.orders.OrderService;
 import io.logspace.hq.core.api.spaces.SpacesService;
+import io.logspace.hq.core.solr.EventQualifier;
 import io.logspace.hq.webapp.LogspaceHq;
 import io.logspace.hq.webapp.mode.DemoHqMode;
 
@@ -37,7 +37,7 @@ public class InfrastructureRule extends ExternalResource {
     private LogspaceHq logspaceHq;
 
     @Inject
-    @Qualifier("event-solr-client")
+    @EventQualifier
     private SolrClient solrClient;
 
     @Inject

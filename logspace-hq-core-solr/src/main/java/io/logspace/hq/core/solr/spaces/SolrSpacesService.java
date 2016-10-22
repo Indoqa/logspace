@@ -26,10 +26,10 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import io.logspace.hq.core.api.spaces.SpacesService;
 import io.logspace.hq.core.solr.ConfigFieldConstants;
+import io.logspace.hq.core.solr.ConfigQualifier;
 import io.logspace.hq.core.solr.utils.SolrDocumentHelper;
 import io.logspace.hq.rest.api.DataStorageException;
 
@@ -38,13 +38,13 @@ public class SolrSpacesService implements SpacesService {
 
     private static final String CONFIG_TYPE = "space";
 
+    @Inject
+    @ConfigQualifier
+    private SolrClient solrClient;
+
     private final Map<String, String> spaces = new HashMap<String, String>();
 
     private boolean update;
-
-    @Inject
-    @Qualifier("config-solr-client")
-    private SolrClient solrClient;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
