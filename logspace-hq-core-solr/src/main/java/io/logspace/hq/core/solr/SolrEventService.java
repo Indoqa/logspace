@@ -5,12 +5,12 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.core.solr;
 
 import static com.indoqa.lang.util.StringUtils.escapeSolr;
-import static io.logspace.hq.solr.EventFieldConstants.*;
-import static io.logspace.hq.solr.utils.SolrDocumentHelper.*;
-import static io.logspace.hq.solr.utils.SolrQueryHelper.*;
+import static io.logspace.hq.core.solr.EventFieldConstants.*;
+import static io.logspace.hq.core.solr.utils.SolrDocumentHelper.*;
+import static io.logspace.hq.core.solr.utils.SolrQueryHelper.*;
 import static java.util.Calendar.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.solr.common.params.CommonParams.SORT;

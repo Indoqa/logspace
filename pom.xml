@@ -67,7 +67,7 @@
 
     <slf4j-version>1.7.21</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json 
+    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json
       has JDK1.6 support ) -->
 
     <junit-version>4.12</junit-version>
@@ -84,9 +84,9 @@
     <module>logspace-dist</module>
     <module>logspace-frontend-new</module>
     <module>logspace-hq-core-api</module>
+    <module>logspace-hq-core-solr</module>
     <module>logspace-hq-rest</module>
     <module>logspace-hq-rest-api</module>
-    <module>logspace-hq-solr-plugin</module>
     <module>logspace-hq-webapp</module>
     <module>logspace-it</module>
     <module>logspace-jvm-agent</module>
@@ -454,17 +454,17 @@
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
+        <artifactId>logspace-hq-core-solr</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.logspace</groupId>
         <artifactId>logspace-hq-rest</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
         <artifactId>logspace-hq-rest-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.logspace</groupId>
-        <artifactId>logspace-hq-solr-plugin</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

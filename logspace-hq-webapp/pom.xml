@@ -82,6 +82,10 @@
       <groupId>io.logspace</groupId>
       <artifactId>logspace-hq-rest</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.logspace</groupId>
+      <artifactId>logspace-hq-core-solr</artifactId>
+    </dependency>
     
     <!-- Jar-in-Jar -->
     <dependency>

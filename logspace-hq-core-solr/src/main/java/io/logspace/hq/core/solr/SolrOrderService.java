@@ -5,10 +5,10 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.core.solr;
 
-import static io.logspace.hq.solr.ConfigFieldConstants.*;
-import static io.logspace.hq.solr.utils.SolrDocumentHelper.*;
+import static io.logspace.hq.core.solr.ConfigFieldConstants.*;
+import static io.logspace.hq.core.solr.utils.SolrDocumentHelper.*;
 
 import java.io.IOException;
 

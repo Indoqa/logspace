@@ -5,9 +5,9 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.solr;
+package io.logspace.hq.core.solr;
 
-import static io.logspace.hq.solr.ConfigFieldConstants.*;
+import static io.logspace.hq.core.solr.ConfigFieldConstants.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,10 +35,10 @@ import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.hq.core.api.agent.IdHelper;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.core.solr.utils.SolrDocumentHelper;
 import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.DataStorageException;
 import io.logspace.hq.rest.api.suggestion.AgentDescription;
-import io.logspace.hq.solr.utils.SolrDocumentHelper;
 
 @Named
 public class SolrCapabilitiesService implements CapabilitiesService {

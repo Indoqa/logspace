@@ -18,9 +18,9 @@
     <version>0.4.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>logspace-hq-solr-plugin</artifactId>
+  <artifactId>logspace-hq-core-solr</artifactId>
 
-  <name>Logspace HQ Solr Plugin</name>
+  <name>Logspace HQ Core Solr Implementation</name>
 
   <dependencies>
     <!-- Spring -->

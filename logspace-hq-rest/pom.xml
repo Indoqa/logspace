@@ -65,7 +65,7 @@
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
-      <artifactId>logspace-hq-solr-plugin</artifactId>
+      <artifactId>logspace-hq-core-api</artifactId>
     </dependency>
     <dependency>
       <groupId>io.logspace</groupId>
