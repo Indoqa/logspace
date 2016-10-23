@@ -10,7 +10,11 @@ package io.logspace.hq.core.solr.spaces;
 import static io.logspace.hq.core.solr.ConfigFieldConstants.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -42,7 +46,7 @@ public class SolrSpacesService implements SpacesService {
     @ConfigQualifier
     private SolrClient solrClient;
 
-    private final Map<String, String> spaces = new HashMap<String, String>();
+    private final Map<String, String> spaces = new ConcurrentHashMap<String, String>();
 
     private boolean update;
 
