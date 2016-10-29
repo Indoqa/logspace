@@ -5,13 +5,14 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest;
+package io.logspace.hq.rest.report;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.logspace.hq.core.api.agent.AgentService;
+import io.logspace.hq.rest.AbstractLogspaceResourcesBase;
 import io.logspace.hq.rest.api.suggestion.Suggestion;
 import io.logspace.hq.rest.api.suggestion.SuggestionInput;
 import spark.Request;

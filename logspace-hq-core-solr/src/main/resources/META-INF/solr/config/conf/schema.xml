@@ -46,6 +46,7 @@
   <field name="content" type="string" indexed="false" stored="true" required="true" multiValued="false" />
 
   <dynamicField name="string_property_*" type="string" indexed="true" stored="true" multiValued="true" />
+  <dynamicField name="boolean_property_*" type="boolean" indexed="true" stored="true" multiValued="false" />
 
   <uniqueKey>id</uniqueKey>
 </schema>

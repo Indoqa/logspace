@@ -67,6 +67,10 @@ public abstract class AbstractLogspaceResourceException extends RuntimeException
             return this.message;
         }
 
+        public Object getParameter(String name) {
+            return this.parameters.get(name);
+        }
+
         public Map<String, Object> getParameters() {
             return this.parameters;
         }

@@ -42,6 +42,8 @@ import io.logspace.agent.scheduling.AgentScheduler;
 public class HqAgentController extends AbstractAgentController implements AgentExecutor {
 
     private static final int HTTP_NOT_FOUND = 404;
+    private static final int HTTP_FORBIDDEN = 403;
+
     private static final int UPLOAD_SIZE = 1000;
     private static final int DEFAULT_COMMIT_DELAY = 300;
     private static final int RETRY_DELAY = 60;
@@ -226,11 +228,13 @@ public class HqAgentController extends AbstractAgentController implements AgentE
         } catch (HttpResponseException hrex) {
             if (hrex.getStatusCode() == HTTP_NOT_FOUND) {
                 this.logger.error("There was no order available: {} - Will retry at {}", hrex.getMessage(), nextFireTime);
+            } else if (hrex.getStatusCode() == HTTP_FORBIDDEN) {
+                this.logger.error("Not allowed to download order: {} - Will retry at {}", hrex.getMessage(), nextFireTime);
             } else {
-                this.logger.error("Failed to download order. Will retry at " + nextFireTime, hrex);
+                this.logger.error("Failed to download order. Will retry at {}", nextFireTime, hrex);
             }
         } catch (IOException ioex) {
-            this.logger.error("Failed to download order. Will retry at " + nextFireTime, ioex);
+            this.logger.error("Failed to download order. Will retry at {}", nextFireTime, ioex);
         }
     }
 

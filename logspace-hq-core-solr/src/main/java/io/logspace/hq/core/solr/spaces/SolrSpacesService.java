@@ -35,6 +35,7 @@ import io.logspace.hq.core.api.spaces.SpacesService;
 import io.logspace.hq.core.solr.ConfigFieldConstants;
 import io.logspace.hq.core.solr.ConfigQualifier;
 import io.logspace.hq.core.solr.utils.SolrDocumentHelper;
+import io.logspace.hq.rest.api.DataRetrievalException;
 import io.logspace.hq.rest.api.DataStorageException;
 
 @Named
@@ -46,7 +47,7 @@ public class SolrSpacesService implements SpacesService {
     @ConfigQualifier
     private SolrClient solrClient;
 
-    private final Map<String, String> spaces = new ConcurrentHashMap<String, String>();
+    private final Map<String, String> spaces = new ConcurrentHashMap<>();
 
     private boolean update;
 
@@ -65,6 +66,12 @@ public class SolrSpacesService implements SpacesService {
 
     @PostConstruct
     public void initialize() {
+        try {
+            this.loadSpacesFromSolr();
+        } catch (SolrServerException | IOException e) {
+            throw new DataRetrievalException("Could not load spaces from Solr", e);
+        }
+
         this.update = true;
         new Thread(this::updateSpaces, "Update-Spaces").start();
     }
@@ -90,30 +97,26 @@ public class SolrSpacesService implements SpacesService {
         }
     }
 
-    private void loadSpacesFromSolr() {
-        try {
-            Set<String> activeTokens = new HashSet<>();
+    private void loadSpacesFromSolr() throws SolrServerException, IOException {
+        Set<String> activeTokens = new HashSet<>();
 
-            SolrQuery solrQuery = new SolrQuery("*:*");
-            solrQuery.setFilterQueries(ConfigFieldConstants.FIELD_TYPE + ":" + CONFIG_TYPE);
-            solrQuery.setRows(Integer.MAX_VALUE);
+        SolrQuery solrQuery = new SolrQuery("*:*");
+        solrQuery.setFilterQueries(ConfigFieldConstants.FIELD_TYPE + ":" + CONFIG_TYPE);
+        solrQuery.setRows(Integer.MAX_VALUE);
 
-            QueryResponse queryResponse = this.solrClient.query(solrQuery);
-            for (SolrDocument eachSolrDocument : queryResponse.getResults()) {
-                String spaceName = SolrDocumentHelper.getString(eachSolrDocument, FIELD_NAME);
-                String tokenString = SolrDocumentHelper.getString(eachSolrDocument, FIELD_CONTENT);
-                String[] tokens = tokenString.split("\\s*,\\s*");
+        QueryResponse queryResponse = this.solrClient.query(solrQuery);
+        for (SolrDocument eachSolrDocument : queryResponse.getResults()) {
+            String spaceName = SolrDocumentHelper.getString(eachSolrDocument, FIELD_NAME);
+            String tokenString = SolrDocumentHelper.getString(eachSolrDocument, FIELD_CONTENT);
+            String[] tokens = tokenString.split("\\s*,\\s*");
 
-                for (String eachToken : tokens) {
-                    this.spaces.put(eachToken, spaceName);
-                    activeTokens.add(eachToken);
-                }
+            for (String eachToken : tokens) {
+                this.spaces.put(eachToken, spaceName);
+                activeTokens.add(eachToken);
             }
-
-            this.spaces.keySet().retainAll(activeTokens);
-        } catch (SolrServerException | IOException e) {
-            this.logger.error("Could not load spaces from Solr.", e);
         }
+
+        this.spaces.keySet().retainAll(activeTokens);
     }
 
     private synchronized void sleep() {
@@ -128,9 +131,13 @@ public class SolrSpacesService implements SpacesService {
 
     private void updateSpaces() {
         while (this.update) {
-            this.loadSpacesFromSolr();
-
             this.sleep();
+
+            try {
+                this.loadSpacesFromSolr();
+            } catch (SolrServerException | IOException e) {
+                this.logger.error("Could not load spaces from Solr.", e);
+            }
         }
     }
 

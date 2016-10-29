@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
@@ -44,6 +45,20 @@ public final class SolrQueryHelper {
         }
 
         solrQuery.addFilterQuery(fieldName + ":" + escapeSolr(value));
+    }
+
+    public static void addSort(SolrQuery solrQuery, String sort) {
+        if (sort.endsWith(" asc") || sort.endsWith(" ASC")) {
+            solrQuery.addSort(SortClause.asc(sort.substring(0, sort.length() - 4)));
+            return;
+        }
+
+        if (sort.endsWith(" desc") || sort.endsWith(" DESC")) {
+            solrQuery.addSort(SortClause.desc(sort.substring(0, sort.length() - 5)));
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid sort argument. Expected 'fieldname asc' or 'fieldname desc'.");
     }
 
     public static PropertyDescription createPropertyDescription(String propertyId) {
@@ -80,5 +95,10 @@ public final class SolrQueryHelper {
 
     public static String getTimestampRangeQuery(TimeWindow timeWindow) {
         return getTimestampRangeQuery(timeWindow.getStart(), timeWindow.getEnd());
+    }
+
+    public static void setRange(SolrQuery solrQuery, int start, int count) {
+        solrQuery.setStart(start);
+        solrQuery.setRows(count);
     }
 }
