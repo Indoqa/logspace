@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest;
+package io.logspace.hq.rest.orders;
 
 import static io.logspace.hq.rest.HttpDateHelper.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -18,6 +18,7 @@ import javax.inject.Named;
 
 import io.logspace.hq.core.api.orders.Order;
 import io.logspace.hq.core.api.orders.OrderService;
+import io.logspace.hq.rest.AbstractSpaceResource;
 import io.logspace.hq.rest.api.NotModifiedException;
 import io.logspace.hq.rest.api.OrderNotFoundException;
 import spark.Request;

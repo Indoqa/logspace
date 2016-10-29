@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest;
+package io.logspace.hq.rest.capabilities;
 
 import java.io.IOException;
 
@@ -16,6 +16,7 @@ import javax.inject.Named;
 import io.logspace.agent.api.json.AgentControllerCapabilitiesJsonDeserializer;
 import io.logspace.agent.api.order.AgentControllerCapabilities;
 import io.logspace.hq.core.api.capabilities.CapabilitiesService;
+import io.logspace.hq.rest.AbstractSpaceResource;
 import io.logspace.hq.rest.api.InvalidControllerIdException;
 import spark.Request;
 

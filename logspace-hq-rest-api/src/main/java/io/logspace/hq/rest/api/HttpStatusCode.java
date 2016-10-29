@@ -9,8 +9,8 @@ package io.logspace.hq.rest.api;
 
 public enum HttpStatusCode {
 
-    Accepted(202, true), NotModified(304, false), BadRequest(400, true), Forbidden(403, true), NotFound(404, true),
-    InternalServerError(500, true);
+    Accepted(202, true), NoContent(204, false), NotModified(304, false), BadRequest(400, true), Forbidden(403, true),
+    NotFound(404, true), InternalServerError(500, true), CONFLICT(409, true);
 
     private final int code;
     private final boolean hasBody;

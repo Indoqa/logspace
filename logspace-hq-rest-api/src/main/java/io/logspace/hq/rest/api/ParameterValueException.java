@@ -21,6 +21,12 @@ public final class ParameterValueException extends AbstractLogspaceResourceExcep
         super(message, HttpStatusCode.BadRequest, type, cause);
     }
 
+    public static ParameterValueException invalidValue(String reason, String message) {
+        ParameterValueException result = new ParameterValueException(message, "INVALID_PARAMETER_VALUE");
+        result.setParameter("reason", reason);
+        return result;
+    }
+
     public static ParameterValueException missingQueryParameter(String parameterName) {
         return new ParameterValueException(MessageFormat.format("Missing query parameter ''{0}''.", parameterName),
             "MISSING_QUERY_PARAMETER_VALUE");
