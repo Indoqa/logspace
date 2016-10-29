@@ -23,7 +23,9 @@ import org.junit.rules.ExternalResource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import io.logspace.hq.core.api.orders.OrderService;
+import io.logspace.hq.core.api.report.ReportService;
 import io.logspace.hq.core.api.spaces.SpacesService;
+import io.logspace.hq.core.solr.ConfigQualifier;
 import io.logspace.hq.core.solr.EventQualifier;
 import io.logspace.hq.webapp.LogspaceHq;
 import io.logspace.hq.webapp.mode.DemoHqMode;
@@ -38,13 +40,20 @@ public class InfrastructureRule extends ExternalResource {
 
     @Inject
     @EventQualifier
-    private SolrClient solrClient;
+    private SolrClient eventSolrClient;
+
+    @Inject
+    @ConfigQualifier
+    private SolrClient configSolrClient;
 
     @Inject
     private OrderService orderService;
 
     @Inject
     private SpacesService spacesService;
+
+    @Inject
+    private ReportService reportService;
 
     private static void deleteFile(Path path) {
         try {
@@ -72,8 +81,24 @@ public class InfrastructureRule extends ExternalResource {
         return null;
     }
 
-    public SolrClient getSolrClient() {
-        return this.solrClient;
+    public final SolrClient getConfigSolrClient() {
+        return this.configSolrClient;
+    }
+
+    public final SolrClient getEventSolrClient() {
+        return this.eventSolrClient;
+    }
+
+    public final OrderService getOrderService() {
+        return this.orderService;
+    }
+
+    public final ReportService getReportService() {
+        return this.reportService;
+    }
+
+    public final SpacesService getSpacesService() {
+        return this.spacesService;
     }
 
     @Override

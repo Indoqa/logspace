@@ -17,11 +17,20 @@ public final class SolrDocumentHelper {
         // hide utility class constructor
     }
 
+    public static boolean getBoolean(SolrDocument solrDocument, String fieldName) {
+        Boolean result = (Boolean) solrDocument.getFieldValue(fieldName);
+        if (result == null) {
+            return false;
+        }
+
+        return result.booleanValue();
+    }
+
     public static Date getDate(SolrDocument solrDocument, String fieldName) {
-        return (Date) solrDocument.getFieldValue(fieldName);
+        return (Date) solrDocument.getFirstValue(fieldName);
     }
 
     public static String getString(SolrDocument solrDocument, String fieldName) {
-        return (String) solrDocument.getFieldValue(fieldName);
+        return (String) solrDocument.getFirstValue(fieldName);
     }
 }

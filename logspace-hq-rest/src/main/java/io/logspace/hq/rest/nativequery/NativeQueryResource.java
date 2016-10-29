@@ -5,7 +5,7 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package io.logspace.hq.rest;
+package io.logspace.hq.rest.nativequery;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,6 +16,7 @@ import javax.inject.Named;
 
 import io.logspace.hq.core.api.event.NativeQueryResult;
 import io.logspace.hq.core.api.nativequery.NativeQueryService;
+import io.logspace.hq.rest.AbstractLogspaceResourcesBase;
 import io.logspace.hq.rest.api.nativequery.NativeQueryParameters;
 import spark.Request;
 import spark.Response;

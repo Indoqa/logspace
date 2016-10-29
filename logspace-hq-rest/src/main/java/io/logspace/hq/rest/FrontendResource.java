@@ -23,5 +23,4 @@ public class FrontendResource extends AbstractReactFrontendResource {
     protected ProxyURLMappings getProxyURLMappings() {
         return new ProxyURLMappings().add("logspaceBaseUrl", "");
     }
-
 }
