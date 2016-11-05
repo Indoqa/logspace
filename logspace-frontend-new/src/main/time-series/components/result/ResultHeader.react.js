@@ -9,7 +9,7 @@ import React, {PropTypes} from 'react'
 import {Link} from 'react-router'
 
 import Editable from '../../../app/components/editable/Editable.react'
-import {ROUTE_AGENT_ACTIVITY} from '../../../routes'
+import {ROUTE_AGENT_ACTIVITY, ROUTE_REPORT} from '../../../routes'
 
 import {default as LiteDropdown} from 'react-lite-dropdown'
 import 'react-lite-dropdown/src/style.css'
@@ -96,8 +96,11 @@ export default class Header extends React.Component {
             <label>{this.props.chartTitle}</label>
           </Editable>
         </div>
-        <div className="chart-link">
-          <Link to="/agent-activity"><span>Agent Activity</span></Link>
+        <div className="activity-link">
+          <Link to={ROUTE_AGENT_ACTIVITY}><span>Agent Activity</span></Link>
+        </div>
+        <div className="report-link">
+          <Link to={ROUTE_REPORT}><span>Report</span></Link>
         </div>
       </div>
     )
