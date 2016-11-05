@@ -9,6 +9,7 @@ import download from './app/reducers/download'
 import editable from './app/reducers/editable'
 import exchange from './app/reducers/exchange'
 import history from './app/reducers/history'
+import reports from './report/reducers/reports'
 import drawer from './time-series/reducers/drawer'
 import result from './time-series/reducers/result'
 import suggestions from './time-series/reducers/suggestions'
@@ -23,6 +24,7 @@ export default {
   exchange,
   drawer,
   history,
+  reports,
   result,
   suggestions,
   timeSeries,

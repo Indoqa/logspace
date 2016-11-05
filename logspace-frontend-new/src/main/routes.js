@@ -10,14 +10,17 @@ import {IndexRoute, Route} from 'react-router'
 import App from './app/components/App.redux'
 import LogspacePage from './time-series/components/Page.redux'
 import AgentActivityPage from './agent-activity/components/Page.redux'
+import ReportPage from './report/components/Page.redux'
 
 export const ROUTE_AGENT_ACTIVITY = '/agent-activity'
+export const ROUTE_REPORT = '/report'
 
 const routes = (
   <Route component={App} path="/">
     <IndexRoute component={LogspacePage} />
 
     <Route component={AgentActivityPage} path={ROUTE_AGENT_ACTIVITY} />
+    <Route component={ReportPage} path={ROUTE_REPORT} />
   </Route>
 )
 
