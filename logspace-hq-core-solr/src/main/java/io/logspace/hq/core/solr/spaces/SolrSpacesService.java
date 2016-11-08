@@ -94,7 +94,7 @@ public class SolrSpacesService implements SpacesService {
         try {
             Set<String> activeTokens = new HashSet<>();
 
-            SolrQuery solrQuery = new SolrQuery();
+            SolrQuery solrQuery = new SolrQuery("*:*");
             solrQuery.setFilterQueries(ConfigFieldConstants.FIELD_TYPE + ":" + CONFIG_TYPE);
             solrQuery.setRows(Integer.MAX_VALUE);
 
