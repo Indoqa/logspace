@@ -29,11 +29,6 @@ public final class AgentControllerDescriptionFactory {
         // hide utility class constructor
     }
 
-    public static AgentControllerDescription fromJson(InputStream inputStream) throws IOException {
-        AgentControllerDescriptionDeserializer deserializer = getDeserializer();
-        return deserializer.read(inputStream);
-    }
-
     @SuppressWarnings("unchecked")
     public static AgentControllerDescriptionDeserializer getDeserializer() {
         String deserializerClassName = System.getProperty(IMPLEMENTATION_PROPERTY_NAME, DEFAULT_IMPLEMENTATION);
@@ -46,23 +41,25 @@ public final class AgentControllerDescriptionFactory {
         } catch (ClassNotFoundException e) {
             if (DEFAULT_IMPLEMENTATION.equals(deserializerClassName)) {
                 throw new AgentControllerInitializationException(
-                    "Could not load class '" + deserializerClassName
-                            + "' as deserializer for the logspace configuration. Is logspace-agent-json.jar part of the classpath?",
+                    "Could not find class '" + deserializerClassName
+                        + "' as deserializer for the Logspace configuration. Is logspace-agent-api-json.jar part of the classpath?",
                     e);
             }
 
             throw new AgentControllerInitializationException("Could not find class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Did you configure '" + IMPLEMENTATION_PROPERTY_NAME
-                    + "' properly?",
-                e);
+                + "' as deserializer for the Logspace configuration. Did you configure '" + IMPLEMENTATION_PROPERTY_NAME
+                + "' properly?", e);
         } catch (InstantiationException e) {
             throw new AgentControllerInitializationException("Could not instantiate class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Does this class have a default constructor?",
-                e);
+                + "' as deserializer for the Logspace configuration. Does this class have a default constructor?", e);
         } catch (IllegalAccessException e) {
             throw new AgentControllerInitializationException("Could not access the constructor of class '" + deserializerClassName
-                    + "' as deserializer for the logspace configuration. Does this class have a default constructor?",
-                e);
+                + "' as deserializer for the Logspace configuration. Does this class have a default constructor?", e);
         }
+    }
+
+    public static AgentControllerDescription read(InputStream inputStream) throws IOException {
+        AgentControllerDescriptionDeserializer deserializer = getDeserializer();
+        return deserializer.read(inputStream);
     }
 }

@@ -84,9 +84,11 @@ public final class AgentControllerProvider {
      * <br>
      * This method will fail with an {@link AgentControllerInitializationException} if the AgentController has already been
      * initialized.<br>
-     * Calling this method will <code>null</code> will revert back to the default lookup mechanism.
+     * Calling this method with <code>null</code> will revert back to the default lookup mechanism.
      *
      * @param agentControllerDescription The AgentControllerDescription to be set.
+     *
+     * @see #isInitialized()
      */
     public static synchronized void setDescription(AgentControllerDescription agentControllerDescription) {
         if (isInitialized()) {
@@ -98,7 +100,8 @@ public final class AgentControllerProvider {
     }
 
     /**
-     * Set the {@link AgentControllerDescription} by reading it from the given {@link InputStream} and close the InputStream.<br>
+     * Set the {@link AgentControllerDescription} by reading it from the given {@link InputStream} and close the InputStream
+     * afterwards.<br>
      * <br>
      * This method expects the InputStream to provide a description in a format, that can be read by the
      * {@link AgentControllerDescriptionFactory}.<br>
@@ -106,10 +109,12 @@ public final class AgentControllerProvider {
      * or the AgentControllerDescription could not be loaded from the InputStream.
      *
      * @param inputStream The InputStream to read the AgentControllerDescription from.
+     *
+     * @see #isInitialized()
      */
     public static synchronized void setDescription(InputStream inputStream) {
         try {
-            setDescription(AgentControllerDescriptionFactory.fromJson(inputStream));
+            setDescription(AgentControllerDescriptionFactory.read(inputStream));
         } catch (IOException ioex) {
             throw new AgentControllerInitializationException("Could not load logspace configuration.", ioex);
         } finally {
