@@ -6,30 +6,20 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import {connect} from 'react-redux'
-import Page from './Page.react'
+import Header from './Header.react'
 
 import * as resultActions from '../actions/result'
-import * as suggestionActions from '../actions/suggestions'
 import * as editableActions from '../../app/actions/editable'
 
 const mapStateToProps = (state) => ({
-  navDrawerCss: state.drawer.get('navDrawerCss'),
-  mainCss: state.drawer.get('mainCss'),
-
   autoPlay: state.result.get('autoPlay'),
+  loading: state.result.get('loading'),
   chartType: state.result.get('chartType'),
   chartTitle: state.result.get('chartTitle'),
   chartTitleEditable: state.editable.get('result'),
-  result: state.result.get('translatedResult'),
-  timeSeries: state.timeSeries.get('timeSeries'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  initialize: () => {
-    dispatch(resultActions.refreshResult())
-    dispatch(suggestionActions.refreshSuggestions())
-  },
-
   updateEditableState: (id, name, state) => {
     dispatch(editableActions.updateEditableState(id, name, state))
   },
@@ -50,4 +40,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Page)
+)(Header)

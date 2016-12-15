@@ -6,20 +6,21 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import {connect} from 'react-redux'
+import Header from '../../app/components/header/Header.react'
 
-import App from './App.react'
-import {onApplicationInitialized} from '../actions/history'
+// import {showOptions} from '../../actions/options'
 
 const mapStateToProps = () => ({
+  //
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  onApplicationInitialized: () => {
-    dispatch(onApplicationInitialized())
+  showOptions: () => {
+    // dispatch(showOptions())
   }
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(Header)

@@ -8,7 +8,6 @@
 import React, {PropTypes} from 'react'
 
 import Chart from './ResultChart.react'
-import Header from './ResultHeader.react'
 import Footer from './ResultFooter.react'
 
 export default class Result extends React.Component {
@@ -16,17 +15,6 @@ export default class Result extends React.Component {
   render() {
     return (
       <div>
-        <Header
-          autoPlay={this.props.autoPlay}
-          chartTitle={this.props.chartTitle}
-          chartTitleEditable={this.props.chartTitleEditable}
-          chartType={this.props.chartType}
-          updateEditableState={this.props.updateEditableState}
-          saveChartTitle={this.props.saveChartTitle}
-          setChartType={this.props.setChartType}
-          refreshResult={this.props.refreshResult}
-          toggleAutoPlay={this.props.toggleAutoPlay}
-        />
         <Chart
           series={this.props.timeSeries}
           result={this.props.result}

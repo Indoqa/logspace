@@ -6,7 +6,7 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import {connect} from 'react-redux'
-import Header from './Header.react'
+import Header from '../../../app/components/header/Header.react'
 
 import {showOptions} from '../../actions/options'
 

@@ -7,14 +7,16 @@
  */
 
 import {Map, fromJS} from 'immutable'
-import * as agentActivityActions from '../actions/agentActivity'
+import * as agentsActions from '../actions/agents'
+
+const INITIAL_COUNTDOWN = 15
 
 const InitialState = fromJS({
   loading: false,
   agentActivities: new Map,
   autoPlay: fromJS({
     running: false,
-    countdown: 15
+    countdown: 0
   }),
   duration: 300,
   maxHistoryValue: 0,
@@ -23,45 +25,47 @@ const InitialState = fromJS({
 
 export default (state = InitialState, action) => {
   switch (action.type) {
-    case agentActivityActions.SET_DURATION: {
+    case agentsActions.SET_DURATION: {
       return state.set('duration', action.payload)
     }
 
-    case agentActivityActions.SET_SORT: {
+    case agentsActions.SET_SORT: {
       return state.set('sort', action.payload)
     }
 
-    case agentActivityActions.START_AUTOPLAY: {
+    case agentsActions.START_AUTOPLAY: {
       return state
         .setIn(['autoPlay', 'running'], true)
-        .setIn(['autoPlay', 'countdown'], 15)
+        .setIn(['autoPlay', 'countdown'], INITIAL_COUNTDOWN)
     }
 
-    case agentActivityActions.STOP_AUTOPLAY: {
-      return state.setIn(['autoPlay', 'running'], false)
+    case agentsActions.STOP_AUTOPLAY: {
+      return state
+        .setIn(['autoPlay', 'running'], false)
+        .setIn(['autoPlay', 'countdown'], 0)
     }
 
-    case agentActivityActions.RESET_AUTOPLAY_COUNTDOWN: {
-      return state.setIn(['autoPlay', 'countdown'], 15)
+    case agentsActions.RESET_AUTOPLAY_COUNTDOWN: {
+      return state.setIn(['autoPlay', 'countdown'], INITIAL_COUNTDOWN)
     }
 
-    case agentActivityActions.DECREMENT_AUTOPLAY_COUNTDOWN: {
+    case agentsActions.DECREMENT_AUTOPLAY_COUNTDOWN: {
       const currentValue = state.getIn(['autoPlay', 'countdown'])
       return state.setIn(['autoPlay', 'countdown'], currentValue - 1)
     }
 
-    case `${agentActivityActions.LOAD_AGENT_ACTIVITIES}_START`: {
+    case `${agentsActions.LOAD_AGENT_ACTIVITIES}_START`: {
       return state.set('loading', true)
     }
 
-    case `${agentActivityActions.LOAD_AGENT_ACTIVITIES}_SUCCESS`: {
+    case `${agentsActions.LOAD_AGENT_ACTIVITIES}_SUCCESS`: {
       return state
         .set('agentActivities', fromJS(action.payload.agentActivities))
         .set('maxHistoryValue', action.payload.maxHistoryValue)
         .set('loading', false)
     }
 
-    case `${agentActivityActions.LOAD_AGENT_ACTIVITIES}_ERROR`: {
+    case `${agentsActions.LOAD_AGENT_ACTIVITIES}_ERROR`: {
       return state
       .set('agentActivities', new Map)
       .set('maxHistoryValue', 0)

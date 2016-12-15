@@ -7,16 +7,145 @@
  */
 
 @require '../../app/components/variables'
+@require '../../app/components/fonts/font.css'
+@require './buttons.styl'
+@require './layout.styl'
+// @require './normalize.css'
+// @require './skeleton.css'
 
-#app
-  .header
-    z-index 99
-    background none repeat scroll 0 0 $color-primary
+.time-series
+  font-size 1rem
+  line-height 2.1rem
+  font-weight 400
+  font-family $font-main
+  color $color-text
+
+.btn-floating
+  background-color $color-primary
+  border-radius 50%
+  color $color-text-inverted
+  cursor pointer
+  display inline-block
+  height 37px
+  line-height 37px
+  overflow hidden
+  padding 0
+  position relative
+  transition all 0.3s ease 0s
+  vertical-align middle
+  height 5.5rem
+  width 5.5rem
+  z-index 1
+  outline: 0 none;
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+
+.waves-effect
+  cursor pointer
+  display inline-block
+  overflow hidden
+  position relative
+  transition all 0.3s ease-out 0s
+  vertical-align middle
+  will-change opacity, transform
+  z-index 1
+
+.btn, .btn-large
+  background-color $color-primary
+  color $color-text-inverted
+  cursor pointer
+  letter-spacing 0.5px
+  text-align center
+  text-decoration none
+  transition all 0.2s ease-out 0s
+  border-width 0
+
+  i
+    font-weight 700
+    font-style normal
+    font-size 2.2rem
+    user-select none
+
+.btn
+  border: medium none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  outline: 0 none;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  vertical-align: middle;
+
+.btn-small
+  height 26px
+  line-height 24px
+
+.btn:hover
+  background-color lighten($color-primary, 15%)
+
+.btn-floating:hover
+  box-shadow 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+
+.btn-highlight
+  background-color $color-secondary
+
+.btn-highlight:hover
+  background-color lighten($color-secondary, 15%)
+
+.btn.inverted
+      background-color transparent
+      color $color6
+.btn.inverted:hover
+  background-color lighten($color-primary, 15%)
+  color $color3
+
+.Content
+  .time-series
+    height 100%
+    width 100%
+    position absolute
 
   .navigation-drawer
-    z-index 1
-    background-color $color3
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 2px 12px 0 rgba(0, 0, 0, 0.35);
+    float left
+    width $navigation-drawer-width
+    height 100%
+    position absolute
+    overflow auto
+    overflow-x hidden
+    z-index 999
+    slide-navigation-drawer-transformation()
+
+    .left
+      width: $navigation-drawer-width
+      position: absolute
+      height 100%
+      overflow hidden
+
+    .right
+      width $navigation-drawer-width-expanded-only
+      position absolute
+      left $navigation-drawer-width
+      border-left 1px solid #eee
+      height 100%
+
+  .navigation-drawer-expanded
+    width $navigation-drawer-width-expanded
+
+  .tools
+    position fixed
+    z-index 2
+    bottom 0px
+    height $tools-height
+    width $navigation-drawer-width
+
+  .main
+    margin-left $navigation-drawer-width
+    position relative
+    height 100%
+    slide-navigation-drawer-transformation()
+
+  .main-reduced
+    margin-left $navigation-drawer-width-expanded
 
   .time-window-values
     background-color $color1
@@ -31,7 +160,7 @@
     overflow-y auto
     overflow-x hidden
     width $navigation-drawer-width
-    
+
     .delete-all
       color #e5e5e5
       display inline-block
@@ -58,7 +187,5 @@
     bottom 0
     z-index 2
     width 250px
-    a 
+    a
       width 210px
-   
- 

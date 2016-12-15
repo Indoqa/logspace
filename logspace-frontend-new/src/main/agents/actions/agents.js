@@ -17,23 +17,19 @@ export const RESET_AUTOPLAY_COUNTDOWN = `${ACTION_PREFIX}RESET_AUTOPLAY_COUNTDOW
 export const DECREMENT_AUTOPLAY_COUNTDOWN = `${ACTION_PREFIX}DECREMENT_AUTOPLAY_COUNTDOWN`
 export const LOAD_AGENT_ACTIVITIES = `${ACTION_PREFIX}LOAD_AGENT_ACTIVITIES`
 
-const updateDuration = (duration) => (
-  {
-    type: SET_DURATION,
-    payload: duration,
-  }
-)
+const updateDuration = (duration) => ({
+  type: SET_DURATION,
+  payload: duration,
+})
 
-const updateSort = (sort) => (
-  {
-    type: SET_SORT,
-    payload: sort,
-  }
-)
+const updateSort = (sort) => ({
+  type: SET_SORT,
+  payload: sort,
+})
 
 export const loadAgentActivities = () => ({getState}) => {
-  const duration = getState().agentActivity.get('duration')
-  const sort = getState().agentActivity.get('sort')
+  const duration = getState().agents.get('duration')
+  const sort = getState().agents.get('sort')
 
   return {
     type: LOAD_AGENT_ACTIVITIES,
@@ -44,36 +40,38 @@ export const loadAgentActivities = () => ({getState}) => {
 const decrementAutoPlayCountdown = () => ({getState, dispatch}) => {
   dispatch({type: DECREMENT_AUTOPLAY_COUNTDOWN})
 
-  const countdown = getState().agentActivity.getIn(['autoPlay', 'countdown'])
-
+  const countdown = getState().agents.getIn(['autoPlay', 'countdown'])
   if (countdown === 0) {
-    dispatch({type: RESET_AUTOPLAY_COUNTDOWN})
     dispatch(loadAgentActivities())
+    dispatch({type: RESET_AUTOPLAY_COUNTDOWN})
   }
 }
 
 const startAutoPlay = () => ({getState, dispatch}) => {
   dispatch({type: START_AUTOPLAY})
+  dispatch(loadAgentActivities())
 
   const intervalId = setInterval(() => {
-    const isRunning = getState().agentActivity.getIn(['autoPlay', 'running'])
+    const isRunning = getState().agents.getIn(['autoPlay', 'running'])
+    const isLoading = getState().agents.get('loading')
 
-    if (isRunning) {
-      dispatch(decrementAutoPlayCountdown())
-    } else {
+    if (!isRunning) {
       clearInterval(intervalId)
+      return
     }
 
-
+    if (!isLoading) {
+      dispatch(decrementAutoPlayCountdown())
+    }
   }, 1000)
 }
 
-const stopAutoPlay = () => ({dispatch}) => {
+export const stopAutoPlay = () => ({dispatch}) => {
   dispatch({type: STOP_AUTOPLAY})
 }
 
 export const toggleAutoPlay = () => ({getState, dispatch}) => {
-  const isRunning = getState().agentActivity.getIn(['autoPlay', 'running'])
+  const isRunning = getState().agents.getIn(['autoPlay', 'running'])
 
   if (!isRunning) {
     dispatch(startAutoPlay())
@@ -82,16 +80,12 @@ export const toggleAutoPlay = () => ({getState, dispatch}) => {
   }
 }
 
-export const setDuration = (duration) => (
-  [
-    updateDuration(duration),
-    loadAgentActivities(),
-  ]
-)
+export const setDuration = (duration) => ({dispatch}) => {
+  dispatch(updateDuration(duration))
+  dispatch(loadAgentActivities())
+}
 
-export const setSort = (sort) => (
-  [
-    updateSort(sort),
-    loadAgentActivities(),
-  ]
-)
+export const setSort = (sort) => ({dispatch}) => {
+  dispatch(updateSort(sort))
+  dispatch(loadAgentActivities())
+}

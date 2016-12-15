@@ -7,8 +7,22 @@
  */
 import React from 'react'
 import AgentActivityEntry from './AgentActivityEntry.react'
+import BasePage from '../../app/components/BasePage.react'
 import Header from './Header.redux'
-// import './Page.styl'
+import RefreshIcon from '../../app/components/autoplay/RefreshIcon.react'
+import RunIcon from '../../app/components/autoplay/RunIcon.react'
+import {Button, Dropdown, DropdownMenu, NavItem} from 'rebass'
+import {Flex, Box} from 'reflexbox'
+import {FontAwesome} from 'indoqa-rebass-components'
+import 'font-awesome/css/font-awesome.css'
+
+const BREADCRUMBS = [{children: 'Agents'}]
+const UNITS = [
+  {value: 604800, name: 'Week'},
+  {value: 86400, name: 'Day'},
+  {value: 3600, name: 'Hour'},
+  {value: 60, name: 'Minute'},
+]
 
 export default class Page extends React.Component {
 
@@ -41,8 +55,7 @@ export default class Page extends React.Component {
     const {agentActivities} = this.props
 
     return (
-      <div>
-        <Header />
+      <BasePage title="Agents" breadcrumbs={BREADCRUMBS} headerComponents={<Header />}>
         <table>
           <thead>
             <tr>
@@ -55,7 +68,7 @@ export default class Page extends React.Component {
             {agentActivities.map((eachAgentActivity, index) => this.renderAgentActivity(eachAgentActivity, index)).toList()}
           </tbody>
         </table>
-      </div>
+      </BasePage>
     )
   }
 }

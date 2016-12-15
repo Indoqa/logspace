@@ -5,19 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-*
-  box-sizing border-box
+import React from 'react'
+import BasePage from '../../app/components/BasePage.react'
 
-*:focus
-  outline none
+const BREADCRUMBS = [{children: 'Users'}]
 
-html
-  height 100%
-
-body
-  margin 0px
-  height 100%
-  line-height: 1.5;
-
-#app, .app, .MaterialThemeProvider, .MaterialThemeProvider > div
-  height 100%
+export default class Page extends React.Component {
+  render() {
+    return (
+      <BasePage title="Users" breadcrumbs={BREADCRUMBS}>
+        USERS
+      </BasePage>
+    )
+  }
+}
