@@ -9,12 +9,12 @@ import React, {PropTypes} from 'react'
 
 import {Box, Flex} from 'reflexbox'
 import {Button, Dropdown, DropdownMenu, NavItem} from 'rebass'
-import RefreshIcon from '../../../app/components/autoplay/RefreshIcon.react'
-import RunIcon from '../../../app/components/autoplay/RunIcon.react'
+import RefreshIcon from '../../app/components/autoplay/RefreshIcon.react'
+import RunIcon from '../../app/components/autoplay/RunIcon.react'
 import {FontAwesome} from 'indoqa-rebass-components'
 import 'font-awesome/css/font-awesome.css'
 
-import Editable from '../../../app/components/editable/Editable.react'
+import Editable from '../../app/components/editable/Editable.react'
 
 export default class Header extends React.Component {
 
@@ -49,7 +49,7 @@ export default class Header extends React.Component {
             <RunIcon running={this.props.autoPlay.get('running')} />
           </Button>
           <Button _className="ReloadButton" >
-            <RefreshIcon countdown={this.props.autoPlay.get('countdown')} />
+            <RefreshIcon countdown={this.props.autoPlay.get('countdown')} loading={this.props.loading} onClick={this.props.refreshResult} />
           </Button>
           <Dropdown>
             <Button _className="ChartTypeButton" onClick={() => this.toggleChartTypeDropdownShown()} >
@@ -76,7 +76,6 @@ export default class Header extends React.Component {
 Header.propTypes = {
   autoPlay: PropTypes.object.isRequired,
   loading: PropTypes.bool,
-
   chartType: PropTypes.string.isRequired,
   chartTitle: PropTypes.string.isRequired,
   chartTitleEditable: PropTypes.object,

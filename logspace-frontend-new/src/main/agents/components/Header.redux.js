@@ -6,32 +6,31 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import {connect} from 'react-redux'
-import Page from './Page.react'
+import Header from './Header.react'
 
-import * as agentActivityActions from '../actions/agentActivity'
+import * as agentsActions from '../actions/agents'
 
 const mapStateToProps = (state) => ({
-  agentActivities: state.agentActivity.get('agentActivities'),
-  maxHistoryValue: state.agentActivity.get('maxHistoryValue'),
-  sort: state.agentActivity.get('sort'),
-  loading: state.agentActivity.get('loading'),
+  autoPlay: state.agents.get('autoPlay'),
+  duration: state.agents.get('duration'),
+  loading: state.agents.get('loading'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   loadAgentActivities: () => {
-    dispatch(agentActivityActions.loadAgentActivities())
+    dispatch(agentsActions.loadAgentActivities())
   },
 
   setDuration: (duration) => {
-    dispatch(agentActivityActions.setDuration(duration))
+    dispatch(agentsActions.setDuration(duration))
   },
 
-  setSort: (sort) => {
-    dispatch(agentActivityActions.setSort(sort))
+  toggleAutoPlay: () => {
+    dispatch(agentsActions.toggleAutoPlay())
   },
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Page)
+)(Header)

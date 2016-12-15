@@ -6,29 +6,36 @@
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 import React, {PropTypes} from 'react'
+import {Div} from 'indoqa-rebass-components'
+
 import './App.styl'
 
 class App extends React.Component {
 
-  componentDidMount() {
-    this.props.onApplicationInitialized()
+  getChildContext() {
+    return {
+      location: this.props.location
+    }
   }
 
   render() {
     const {children} = this.props
 
     return (
-      <div id="app">
+      <Div>
         {children}
-      </div>
+      </Div>
     )
   }
-
 }
 
 App.propTypes = {
   children: PropTypes.node.isRequired,
-  onApplicationInitialized: PropTypes.func.isRequired
+  location: PropTypes.object.isRequired,
+}
+
+App.childContextTypes = {
+  location: PropTypes.object.isRequired,
 }
 
 export default App

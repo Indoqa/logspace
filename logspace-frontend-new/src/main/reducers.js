@@ -9,16 +9,16 @@ import download from './app/reducers/download'
 import editable from './app/reducers/editable'
 import exchange from './app/reducers/exchange'
 import history from './app/reducers/history'
-import reports from './report/reducers/reports'
+import reports from './reports/reducers/reports'
 import drawer from './time-series/reducers/drawer'
 import result from './time-series/reducers/result'
 import suggestions from './time-series/reducers/suggestions'
 import timeSeries from './time-series/reducers/timeSeries'
 import timeWindow from './time-series/reducers/timeWindow'
-import agentActivity from './agent-activity/reducers/agentActivity'
+import agents from './agents/reducers/agents'
 
 export default {
-  agentActivity,
+  agents,
   download,
   editable,
   exchange,

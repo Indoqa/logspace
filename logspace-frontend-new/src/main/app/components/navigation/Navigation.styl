@@ -5,19 +5,17 @@
  * the Eclipse Public License Version 1.0, which accompanies this distribution and
  * is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-*
-  box-sizing border-box
 
-*:focus
-  outline none
+ @require '../../../app/components/variables'
 
-html
-  height 100%
+.navigation
 
-body
-  margin 0px
-  height 100%
-  line-height: 1.5;
+  .navigation-items
+    list-style-type: none
+    padding-left: 20px
 
-#app, .app, .MaterialThemeProvider, .MaterialThemeProvider > div
-  height 100%
+    .navigation-item
+      font-weight: normal
+      font-size: 20px
+      line-height: 28px
+      color: $color-text
