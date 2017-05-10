@@ -1,0 +1,39 @@
+{
+  "name": "indoqa-react-redux-archetype",
+  "version": "2.0.0",
+  "description": "Indoqa React/Redux Archetype",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Indoqa/indoqa-react-redux.git"
+  },
+  "scripts": {
+    "start": "node ./src/dev/server.js",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "lint": "indoqa-eslint ./src/main",
+    "package": "yarn run lint && yarn run flow && yarn run test && indoqa-webpack indoqa-webpack-options.js",
+    "test": "indoqa-jest",
+    "test:watch": "yarn run test -- --watch",
+    "postinstall": "yarn run package"
+  },
+  "dependencies": {
+    "fela": "^4.3.5",
+    "indoqa-react-app": "^2.0.2",
+    "indoqa-react-fela": "^0.1.1",
+    "ramda": "^0.23.0",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
+    "react-fela": "^4.3.5",
+    "react-redux": "^5.0.3",
+    "react-router": "^3.0.2",
+    "redux": "^3.6.0",
+    "redux-observable": "^0.13.0",
+    "reselect": "^2.5.4",
+    "rxjs": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "flow-bin": "0.40.0",
+    "indoqa-webpack": "0.9.0"
+  }
+}
