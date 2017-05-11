@@ -576,6 +576,11 @@
             <exclude>**/.babelrc</exclude>
             <exclude>**/.eslintrc</exclude>
             <exclude>**/.sublimelinterrc</exclude>
+            <exclude>**/logspace-frontend/**</exclude>
+            <exclude>**/.classpath</exclude>
+            <exclude>**/.project</exclude>
+            <exclude>**/.settings/**</exclude>
+            <exclude>**/target/**</exclude>
           </excludes>
           <licenses>
             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
