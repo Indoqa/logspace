@@ -3,13 +3,12 @@ import {Box, Flex} from 'indoqa-react-fela'
 import Bar from '../molecules/Bar.fela'
 import Content from '../molecules/Content.fela'
 import MainMenu from '../organisms/MainMenu.react'
-import ActionBar from '../organisms/ActionBar.react'
 
 const MainMenuPage = ({title, header, children}) => (
   <Flex stretch height={'100%'}>
     <MainMenu />
     <Box grow={1}>
-     <Bar pl={1} pr={1}>
+      <Bar pl={1} pr={1}>
         <Box>{title}</Box>
         <Box grow={1} />
         <Box>{header}</Box>
