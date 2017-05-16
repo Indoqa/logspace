@@ -17,7 +17,22 @@ const MainMenu = () => (
       <Link to="/"> Module 1 </Link>
     </MenuLink>
     <MenuLink>
-      <Link to="/module2">  Module 2 </Link>
+      <Link to="/module2"> Module 2 </Link>
+    </MenuLink>
+    <MenuLink>
+      <Link to="/agents"> Agents </Link>
+    </MenuLink>
+    <MenuLink>
+      <Link to="/dashboards"> Dashboard </Link>
+    </MenuLink>
+    <MenuLink>
+      <Link to="/reports"> Reports </Link>
+    </MenuLink>
+    <MenuLink>
+      <Link to="/alerts"> Alerts </Link>
+    </MenuLink>
+    <MenuLink>
+      <Link to="/users"> Users </Link>
     </MenuLink>
   </Menu>
 )
