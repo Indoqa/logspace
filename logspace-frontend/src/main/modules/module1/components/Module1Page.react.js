@@ -4,6 +4,7 @@ import React from 'react'
 import {Box} from 'indoqa-react-fela'
 import Action from '../../../commons/components/molecules/Action.fela'
 import ActionBar from '../../../commons/components/organisms/ActionBar.react'
+import DataTable from '../../../commons/components/molecules/DataTable.react'
 import MainMenuPage from '../../../commons/components/templates/MainMenuPage.react'
 import RightDrawerLayout from '../../../commons/components/templates/RightDrawerLayout.react'
 
@@ -33,10 +34,50 @@ class Module1Page extends React.Component {
   }
 
   render() {
+    const data = {
+      widths: [
+        100,
+        20,
+        80,
+      ],
+      header: [
+        {
+          cells: [
+            {content: 'h1'},
+            {content: 'h2'},
+            {content: 'h3'},
+          ],
+        }
+      ],
+      body: [
+        {
+          cells: [
+            {content: 'row1_c1'},
+            {content: 'row1_c2', align: 'right'},
+            {content: 'row1_c3'},
+          ],
+        },
+        {
+          cells: [
+            {content: 'row1_c1'},
+            {content: 'row1_c2'},
+            {content: 'row1_c3'},
+          ],
+        },
+      ],
+      footer: [{
+        cells: [
+          {content: 'f1'},
+          {content: 'f2'},
+          {content: 'f3'},
+        ]}
+      ],
+    }
+
     return (
       <MainMenuPage header={this.renderActionBar()}>
         <RightDrawerLayout active={this.state.showSettings} drawer={renderSettings()}>
-          Content of module 1
+          <DataTable data={data} />
         </RightDrawerLayout>
       </MainMenuPage>
     )
