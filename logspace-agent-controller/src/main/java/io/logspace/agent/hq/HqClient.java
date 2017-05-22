@@ -57,7 +57,8 @@ public class HqClient {
         this.agentControllerId = agentControllerId;
         this.spaceToken = spaceToken;
 
-        RequestConfig requestConfig = RequestConfig.custom()
+        RequestConfig requestConfig = RequestConfig
+            .custom()
             .setConnectionRequestTimeout(TIMEOUT)
             .setConnectTimeout(TIMEOUT)
             .setSocketTimeout(TIMEOUT)
@@ -65,7 +66,8 @@ public class HqClient {
 
         Set<? extends Header> defaultHeaders = Collections.singleton(new BasicHeader("Accept", APPLICATION_JSON.getMimeType()));
 
-        this.httpClient = HttpClients.custom()
+        this.httpClient = HttpClients
+            .custom()
             .disableAutomaticRetries()
             .setDefaultRequestConfig(requestConfig)
             .setDefaultHeaders(defaultHeaders)
@@ -86,7 +88,7 @@ public class HqClient {
     }
 
     public AgentControllerOrder downloadOrder() throws IOException {
-        HttpGet httpGet = new HttpGet(this.baseUrl + "/orders/" + this.agentControllerId);
+        HttpGet httpGet = new HttpGet(this.baseUrl + "/api/orders/" + this.agentControllerId);
         httpGet.addHeader("If-Modified-Since", this.agentControllerOrderResponseHandler.getLastModified());
         httpGet.addHeader("logspace.space-token", this.spaceToken);
 
@@ -94,7 +96,7 @@ public class HqClient {
     }
 
     public void uploadCapabilities(AgentControllerCapabilities capabilities) throws IOException {
-        HttpPut httpPut = new HttpPut(this.baseUrl + "/capabilities/" + this.agentControllerId);
+        HttpPut httpPut = new HttpPut(this.baseUrl + "/api/capabilities/" + this.agentControllerId);
         httpPut.setEntity(toJSonEntity(capabilities));
         httpPut.addHeader("logspace.space-token", this.spaceToken);
 
@@ -102,7 +104,7 @@ public class HqClient {
     }
 
     public void uploadEvents(Collection<Event> events) throws IOException {
-        String eventsUrl = this.baseUrl + "/events";
+        String eventsUrl = this.baseUrl + "/api/events";
         HttpPut httpPut = new HttpPut(eventsUrl);
         httpPut.setEntity(toJsonEntity(events));
         httpPut.addHeader("logspace.space-token", this.spaceToken);

@@ -8,8 +8,7 @@
 package io.logspace.system;
 
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -38,11 +37,11 @@ public class SolrClientResource extends ExternalResource {
     public void assertSolrNumFound(String message, String baseUrl, IntFunction<Boolean> eval) {
         JsonNode rootNode;
         try {
-            rootNode = this.httpClient.execute(new HttpGet(baseUrl + "/native-query?q=*:*&rows=0"), JSON_NODE_RESPONSE_HANLDER);
+            rootNode = this.httpClient.execute(new HttpGet(baseUrl + "/api/native-query?q=*:*&rows=0"), JSON_NODE_RESPONSE_HANLDER);
             int actualNumFound = rootNode.path("response").path("numFound").asInt();
             assertTrue(message + " Actual found " + actualNumFound + " event(s).", eval.apply(actualNumFound));
         } catch (IOException e) {
-            fail("Error while accessing Solr: " + baseUrl);
+            fail("Error while accessing Solr " + baseUrl + ": " + e.getMessage());
         }
     }
 
@@ -57,9 +56,11 @@ public class SolrClientResource extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        this.httpClient = HttpClients.custom()
+        this.httpClient = HttpClients
+            .custom()
             .disableAutomaticRetries()
-            .setDefaultRequestConfig(RequestConfig.custom()
+            .setDefaultRequestConfig(RequestConfig
+                .custom()
                 .setConnectionRequestTimeout(TIMEOUT)
                 .setConnectTimeout(TIMEOUT)
                 .setSocketTimeout(TIMEOUT)

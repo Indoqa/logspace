@@ -59,7 +59,7 @@
     <solr-facet-api-version>0.2-SNAPSHOT</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
-    <system-test-tools-version>0.1.0-SNAPSHOT</system-test-tools-version>
+    <system-test-tools-version>1.0.0</system-test-tools-version>
 
     <commons-lang3-version>3.4</commons-lang3-version>
     <commons-io-version>2.5</commons-io-version>

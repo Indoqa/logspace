@@ -45,13 +45,13 @@ public class ReportResource extends AbstractLogspaceResourcesBase {
 
     @PostConstruct
     public void mount() {
-        this.get("/v1/reports", (req, res) -> this.getReports(req));
-        this.get("/v1/reports/:" + PARAMETER_ID, (req, res) -> this.getReport(req));
-        this.get("/v1/reports/:" + PARAMETER_ID + "/history", (req, res) -> this.getReportHistory(req));
+        this.get("/reports", (req, res) -> this.getReports(req));
+        this.get("/reports/:" + PARAMETER_ID, (req, res) -> this.getReport(req));
+        this.get("/reports/:" + PARAMETER_ID + "/history", (req, res) -> this.getReportHistory(req));
 
-        this.post("/v1/reports", (req, res) -> this.postReport(req));
+        this.post("/reports", (req, res) -> this.postReport(req));
 
-        this.delete("/v1/reports/:" + PARAMETER_ID, (req, res) -> this.deleteReport(req, res));
+        this.delete("/reports/:" + PARAMETER_ID, (req, res) -> this.deleteReport(req, res));
     }
 
     private Void deleteReport(Request req, Response res) {
