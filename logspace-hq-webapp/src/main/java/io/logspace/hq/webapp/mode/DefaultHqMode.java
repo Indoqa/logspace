@@ -12,12 +12,12 @@ import org.springframework.context.ApplicationContext;
 public class DefaultHqMode implements HqMode {
 
     @Override
-    public void afterInitialization(ApplicationContext applicationContext) {
+    public void didInitialize(ApplicationContext applicationContext) {
         // default does nothing
     }
 
     @Override
-    public void beforeInitialization() {
+    public void willInitialize() {
         // default does nothing
     }
 }

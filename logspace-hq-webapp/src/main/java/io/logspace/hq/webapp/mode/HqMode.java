@@ -11,8 +11,8 @@ import org.springframework.context.ApplicationContext;
 
 public interface HqMode {
 
-    void afterInitialization(ApplicationContext applicationContext);
+    void didInitialize(ApplicationContext applicationContext);
 
-    void beforeInitialization();
+    void willInitialize();
 
 }

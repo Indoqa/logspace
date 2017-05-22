@@ -11,64 +11,17 @@ import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssetsInClassp
 
 import com.indoqa.boot.AbstractIndoqaBootApplication;
 
-import io.logspace.hq.rest.FrontendResource;
-import io.logspace.hq.webapp.mode.DefaultHqMode;
-import io.logspace.hq.webapp.mode.DemoHqMode;
-import io.logspace.hq.webapp.mode.HqMode;
-
 public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     private static final String APPLICATION_NAME = "Logspace";
+
     private static final String BASE_PACKAGE = "io.logspace";
     private static final String LOGO_PATH = "/logspace.io.txt";
     private static final String FRONTEND_MODULE = "/logspace-frontend-new";
 
-    private final HqMode hqMode;
-
-    public LogspaceHq() {
-        this(new DefaultHqMode());
-    }
-
-    public LogspaceHq(HqMode hqMode) {
-        super();
-
-        this.hqMode = hqMode;
-    }
-
-    public static String getLogoPath() {
-        return LOGO_PATH;
-    }
-
     public static void main(String[] args) {
-        LogspaceHq logspaceHq;
-
-        if (hasArgument(args, "--demo")) {
-            logspaceHq = new LogspaceHq(new DemoHqMode());
-        } else {
-            logspaceHq = new LogspaceHq(new DefaultHqMode());
-        }
-
-        logspaceHq.invoke();
-    }
-
-    private static boolean hasArgument(String[] arguments, String argument) {
-        for (String eachArgument : arguments) {
-            if (eachArgument.equalsIgnoreCase(argument)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    protected void afterInitialization() {
-        this.hqMode.afterInitialization(this.getApplicationContext());
-    }
-
-    @Override
-    protected void beforeInitialization() {
-        this.hqMode.beforeInitialization();
+        LogspaceStartupLifecycle lifecycle = new LogspaceStartupLifecycle(args);
+        new LogspaceHq().invoke(lifecycle);
     }
 
     @Override
@@ -77,13 +30,13 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
     }
 
     @Override
-    protected String[] getComponentScanBasePackages() {
-        return new String[] {BASE_PACKAGE};
+    protected String getAsciiLogoPath() {
+        return LOGO_PATH;
     }
 
     @Override
-    protected void initializeSpringBeans() {
-        this.getApplicationContext().register(FrontendResource.class);
+    protected String[] getComponentScanBasePackages() {
+        return new String[] {BASE_PACKAGE};
     }
 
     @Override

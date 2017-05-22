@@ -46,7 +46,7 @@ public class DemoHqMode implements HqMode {
     }
 
     @Override
-    public void afterInitialization(ApplicationContext applicationContext) {
+    public void didInitialize(ApplicationContext applicationContext) {
         OrderService orderService = applicationContext.getBean(OrderService.class);
         orderService.storeOrder(loadOrder("/demo/orders/", "logspace-demo"));
 
@@ -59,7 +59,7 @@ public class DemoHqMode implements HqMode {
     }
 
     @Override
-    public void beforeInitialization() {
+    public void willInitialize() {
         this.initializeDemoPort();
         this.initializeDemoSolr();
     }

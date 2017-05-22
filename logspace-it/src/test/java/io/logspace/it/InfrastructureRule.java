@@ -119,6 +119,7 @@ public class InfrastructureRule extends ExternalResource {
         Files.newDirectoryStream(capabilitiesDirectory, "*.json").forEach(InfrastructureRule::deleteFile);
 
         System.setProperty("port", String.valueOf(TEST_PORT));
+        System.setProperty("admin.separate-service", "false");
         System.setProperty("log-path", "./target");
         System.setProperty("spring.profiles.active", "prod,test");
 
