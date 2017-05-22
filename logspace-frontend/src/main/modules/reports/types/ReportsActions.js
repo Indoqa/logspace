@@ -1,6 +1,6 @@
 // @flow
 
-import type {Reports} from './Reports'
+import type {Result} from './Result'
 
 type LoadReportsAction = {
   type: 'REPORTS#LOAD_REPORTS',
@@ -11,12 +11,12 @@ type LoadReportsErrorAction = {
   error: any,
 }
 
-type SetReportsAction = {
-  type: 'REPORTS#SET_REPORTS',
-  payload: Reports,
+type SetResultAction = {
+  type: 'REPORTS#SET_RESULT',
+  payload: Result,
 }
 
 export type Action =
-  | SetReportsAction
+  | SetResultAction
   | LoadReportsAction
   | LoadReportsErrorAction

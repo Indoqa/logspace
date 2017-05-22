@@ -1,7 +1,7 @@
 // @flow
 
 import type {Action} from '../types/ReportsActions'
-import type {Reports} from '../types/Reports'
+import type {Result} from '../types/Result'
 
 
 export const loadReports = (): Action => ({
@@ -13,7 +13,7 @@ export const loadReportsError = (error: any): Action => ({
   error,
 })
 
-export const setReports = (payload: Reports): Action => ({
-  type: 'REPORTS#SET_REPORTS',
+export const setResult = (payload: Result): Action => ({
+  type: 'REPORTS#SET_RESULT',
   payload,
 })

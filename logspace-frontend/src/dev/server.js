@@ -3,9 +3,12 @@ const options = require('./../../indoqa-webpack-options.js')
 const runDevServer = require('indoqa-webpack').runDevServer
 
 const routesCallback = ({app, proxy}) => {
-  app.use('/reports', proxy('http://localhost:3456/reports', {
+  app.use('/api', proxy('http://localhost:4567', {
     forwardPath: (req) => {
-      return `${url.parse(req.url).path}`
+      console.log(req.url)
+      const result =  `/api${url.parse(req.url).path}`
+      console.log(req.url + ' -> ' + result)
+      return result
     },
     decorateRequest: (req) => {
       // add Authorization if needed

@@ -2,7 +2,7 @@
 
 import type {Report} from './Report'
 
-export type Reports = {
+export type Result = {
   offset: number,
   totalCount: number,
   reports: Array<Report>
