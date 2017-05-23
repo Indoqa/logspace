@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {Box} from 'indoqa-react-fela'
-import Action from '../../../commons/components/molecules/Action.fela'
+import Action from '../../../commons/components/molecules/Action.react'
 import ActionBar from '../../../commons/components/organisms/ActionBar.react'
 import DataTable from '../../../commons/components/molecules/DataTable.react'
 import MainMenuPage from '../../../commons/components/templates/MainMenuPage.react'

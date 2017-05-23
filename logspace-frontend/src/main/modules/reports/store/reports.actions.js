@@ -17,3 +17,13 @@ export const setResult = (payload: Result): Action => ({
   type: 'REPORTS#SET_RESULT',
   payload,
 })
+
+export const toggleSort = (property: string): Action => ({
+  type: 'REPORTS#TOGGLE_SORT',
+  property,
+})
+
+export const setPage = (page: number): Action => ({
+  type: 'REPORTS#SET_PAGE',
+  page,
+})

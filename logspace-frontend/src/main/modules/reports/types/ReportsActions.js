@@ -16,7 +16,19 @@ type SetResultAction = {
   payload: Result,
 }
 
+type ToggleSortAction = {
+  type: 'REPORTS#TOGGLE_SORT',
+  property: string,
+}
+
+type SetPageAction = {
+  type: 'REPORTS#SET_PAGE',
+  page: number,
+}
+
 export type Action =
   | SetResultAction
   | LoadReportsAction
   | LoadReportsErrorAction
+  | ToggleSortAction
+  | SetPageAction

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {Box} from 'indoqa-react-fela'
-import Bar from '../molecules/Bar.fela'
+import Bar from '../molecules/Bar.react'
 
 const ActionBar = ({left, center, right}) => (
   <Bar pl={1} pr={1}>

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {Flex, Box} from 'indoqa-react-fela'
-import RightDrawer from '../molecules/RightDrawer.fela'
+import RightDrawer from '../molecules/RightDrawer.react'
 
 const RightDrawerLayout = ({active, drawer, children}) => (
   <Flex stretch height="100%">

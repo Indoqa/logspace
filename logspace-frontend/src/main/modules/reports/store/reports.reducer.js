@@ -4,8 +4,6 @@ import * as R from 'ramda'
 
 import type {ReportsState} from '../types/ReportsState'
 import type {Action} from '../types/ReportsActions'
-import type {Paging} from '../../../commons/types/Paging'
-import type {Sorting} from '../../../commons/types/Sorting'
 
 
 const initialState = {
@@ -30,14 +28,29 @@ export default (state: ReportsState = initialState, action: Action) => {
       state = R.assoc('error', null, state)
       return state
 
-    case 'REPORTS#SET_REPORTS':
+    case 'REPORTS#LOAD_REPORTS_ERROR':
+      state = R.assoc('isLoading', false, state)
+      state = R.assoc('error', action.error, state)
+      return state
+
+    case 'REPORTS#SET_RESULT':
       state = R.assoc('isLoading', false, state)
       state = R.assoc('result', action.payload, state)
       return state
 
-    case 'REPORTS#LOAD_REPORTS_ERROR':
-      state = R.assoc('isLoading', false, state)
-      state = R.assoc('error', action.error, state)
+    case 'REPORTS#TOGGLE_SORT':
+      if (state.sorting.property === action.property) {
+        state = R.assocPath(['sorting', 'ascending'], !state.sorting.ascending, state)
+      } else {
+        state = R.assocPath(['sorting', 'property'], action.property, state)
+        state = R.assocPath(['sorting', 'ascending'], true, state)
+      }
+
+      return state
+
+    case 'REPORTS#SET_PAGE':
+      state = R.assocPath(['paging', 'start'], action.page * state.paging.count, state)
+
       return state
 
     default:

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {Box, Flex} from 'indoqa-react-fela'
-import Bar from '../molecules/Bar.fela'
-import Content from '../molecules/Content.fela'
+import Bar from '../molecules/Bar.react'
+import Content from '../molecules/Content.react'
 import MainMenu from '../organisms/MainMenu.react'
 
 const MainMenuPage = ({title, header, children}) => (

@@ -3,9 +3,9 @@
 import React from 'react'
 import {Box} from 'indoqa-react-fela'
 import {Link} from 'react-router'
-import Logo from '../molecules/Logo.fela'
-import Menu from '../molecules/Menu.fela'
-import MenuLink from '../molecules/MenuLink.fela'
+import Logo from '../molecules/Logo.react'
+import Menu from '../molecules/Menu.react'
+import MenuLink from '../molecules/MenuLink.react'
 
 const MainMenu = () => (
   <Menu>
