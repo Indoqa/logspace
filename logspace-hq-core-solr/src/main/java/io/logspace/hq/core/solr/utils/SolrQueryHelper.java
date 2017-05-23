@@ -21,6 +21,7 @@ import org.apache.solr.client.solrj.SolrQuery.SortClause;
 
 import io.logspace.agent.api.order.PropertyDescription;
 import io.logspace.agent.api.order.PropertyType;
+import io.logspace.hq.core.solr.FieldDefinitions;
 import io.logspace.hq.rest.api.timeseries.TimeWindow;
 
 public final class SolrQueryHelper {
@@ -48,13 +49,21 @@ public final class SolrQueryHelper {
     }
 
     public static void addSort(SolrQuery solrQuery, String sort) {
+        addSort(solrQuery, sort, FieldDefinitions.empty());
+    }
+
+    public static void addSort(SolrQuery solrQuery, String sort, FieldDefinitions fieldDefinitions) {
         if (sort.endsWith(" asc") || sort.endsWith(" ASC")) {
-            solrQuery.addSort(SortClause.asc(sort.substring(0, sort.length() - 4)));
+            String apiFieldName = sort.substring(0, sort.length() - 4);
+            String solrFieldName = fieldDefinitions.getSolrFieldName(apiFieldName);
+            solrQuery.addSort(SortClause.asc(solrFieldName));
             return;
         }
 
         if (sort.endsWith(" desc") || sort.endsWith(" DESC")) {
-            solrQuery.addSort(SortClause.desc(sort.substring(0, sort.length() - 5)));
+            String apiFieldName = sort.substring(0, sort.length() - 5);
+            String solrFieldName = fieldDefinitions.getSolrFieldName(apiFieldName);
+            solrQuery.addSort(SortClause.desc(solrFieldName));
             return;
         }
 

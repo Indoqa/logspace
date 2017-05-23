@@ -30,6 +30,8 @@ import org.apache.solr.common.SolrInputDocument;
 
 import io.logspace.hq.core.api.report.ReportService;
 import io.logspace.hq.core.solr.AbstractSolrConfigService;
+import io.logspace.hq.core.solr.FieldDefinition;
+import io.logspace.hq.core.solr.FieldDefinitions;
 import io.logspace.hq.core.solr.utils.SolrQueryHelper;
 import io.logspace.hq.rest.api.*;
 import io.logspace.hq.rest.api.report.Report;
@@ -132,7 +134,7 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
         solrQuery.addFilterQuery(FILTER_REPORT);
         solrQuery.addFilterQuery(FILTER_UNDELETED);
 
-        SolrQueryHelper.addSort(solrQuery, sort);
+        SolrQueryHelper.addSort(solrQuery, sort, this.getFieldDefinitions());
         SolrQueryHelper.setRange(solrQuery, start, count);
 
         try {
@@ -220,6 +222,12 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
                 throw new DataStorageException("Could not store order.", e);
             }
         }
+    }
+
+    @Override
+    protected FieldDefinitions createFieldDefinitions() {
+        return new FieldDefinitions(new FieldDefinition(FIELD_BRANCH, "branch"), new FieldDefinition(FIELD_DELETED, "deleted"),
+            new FieldDefinition(FIELD_PARENT_ID, "parentId"));
     }
 
     private boolean isTipOfBranch(Report report) {

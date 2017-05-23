@@ -21,4 +21,13 @@ public abstract class AbstractSolrConfigService {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final FieldDefinitions fieldDefinitions = this.createFieldDefinitions();
+
+    public FieldDefinitions getFieldDefinitions() {
+        return this.fieldDefinitions;
+    }
+
+    protected FieldDefinitions createFieldDefinitions() {
+        return FieldDefinitions.empty();
+    }
 }
