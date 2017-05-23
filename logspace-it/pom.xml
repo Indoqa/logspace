@@ -65,29 +65,11 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-config</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeGroupIds>io.logspace</includeGroupIds>
-              <includeArtifactIds>logspace-frontend-new</includeArtifactIds>
-              <includeClassifiers>dist</includeClassifiers>
-              <outputDirectory>${project.build.directory}/unpacked-frontend</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <!-- we need to configure additional classpath elements, because Maven will not include .zip files -->
           <additionalClasspathElements>
-            <additionalClasspathElement>${project.build.directory}/unpacked-frontend</additionalClasspathElement>
+            <additionalClasspathElement>../frontend-new/target/logspace-frontend-new-${project.version}-dist.zip</additionalClasspathElement>
           </additionalClasspathElements>
         </configuration>
       </plugin>
