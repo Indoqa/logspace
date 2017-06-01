@@ -98,6 +98,7 @@ public class SolrSpacesService implements SpacesService {
     }
 
     private void loadSpacesFromSolr() throws SolrServerException, IOException {
+        this.logger.debug("Loading spaces from Config Solr.");
         Set<String> activeTokens = new HashSet<>();
 
         SolrQuery solrQuery = new SolrQuery("*:*");
