@@ -5,7 +5,7 @@ import {IndexRoute, Route} from 'react-router'
 import Module1Page from './modules/module1/components/Module1Page.react'
 import Module2Page from './modules/module2/components/Module2Page.react'
 
-import AgentsPage from './modules/agents/components/AgentsPage.react'
+import AgentsPage from './modules/agents/components/AgentsPage.redux'
 import DashboardsPage from './modules/dashboards/components/DashboardsPage.react'
 import ReportsPage from './modules/reports/components/ReportsPage.redux'
 import AlertsPage from './modules/alerts/components/AlertsPage.react'

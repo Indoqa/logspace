@@ -10,6 +10,7 @@ import Paginator from '../../../commons/components/molecules/Paginator.react'
 
 import type {Report} from '../types/Report'
 
+
 export default class ReportsPage extends React.Component {
 
   static defaultProps = {
