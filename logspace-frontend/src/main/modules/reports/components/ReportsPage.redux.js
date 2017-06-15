@@ -2,9 +2,10 @@
 
 import {connect} from 'react-redux'
 import ReportsPage from './ReportsPage.react'
-import {loadReports, deleteReport, toggleSort, setPage} from '../store/reports.actions'
+import {loadReports, copyReport, deleteReport, toggleSort, setPage} from '../store/reports.actions'
 import {selectPaging, selectResult, selectError, selectIsLoading} from '../store/reports.selectors'
 
+import type {Report} from '../types/Report'
 
 const mapStateToProps = (state) => ({
   paging: selectPaging(state),
@@ -16,6 +17,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadReports: () => {
     dispatch(loadReports())
+  },
+
+  copyReport: (report: Report) => {
+    dispatch(copyReport(report))
   },
 
   deleteReport: (id: string) => {

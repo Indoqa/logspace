@@ -1,5 +1,7 @@
 // @flow
 
+import * as R from 'ramda'
+
 import {ajax} from 'rxjs/observable/dom/ajax'
 import {Observable} from 'rxjs'
 import 'rxjs/add/operator/debounce'
@@ -7,6 +9,7 @@ import 'rxjs/add/operator/debounce'
 import {loadReports, loadReportsError, setResult, deleteReportError, setDeletedReportId, setPage} from './reports.actions'
 import {selectPaging, selectSorting, selectDeletedReportId} from './reports.selectors'
 
+import type {Report} from '../types/Report'
 import type {Paging} from '../../../commons/types/Paging'
 import type {Sorting} from '../../../commons/types/Sorting'
 
@@ -26,12 +29,34 @@ const RESTORE_REPORT_URL = (state: any) => {
   return `/api/reports/${id}?restore`
 }
 
+const createReportCopy = (report: Report) => {
+  const transformation = {
+    id: R.always(null),
+    branch: R.always(null),
+    timestamp: R.always(null),
+    parentId: R.always(report.id),
+    deleted: R.always(null),
+  }
+  const copy = R.evolve(transformation, report)
+  console.log(copy)
+  return copy
+}
+
 const loadReportsEpic$ = (action$: any, store: any) => {
   return action$
     .ofType('REPORTS#LOAD_REPORTS')
     .switchMap(() => ajax.get(REPORTS_URL(store.getState())))
     .map((data) => setResult(data.response))
     .catch((error) => Observable.of(loadReportsError(error)))
+}
+
+const copyReportEpic$ = (action$: any) => {
+  return action$
+    .ofType('REPORTS#COPY_REPORT')
+    .map((action) => createReportCopy(action.report))
+    .switchMap((report) => ajax.post('/api/reports',  JSON.stringify(report)))
+    .map(loadReports)
+    .catch((error) => Observable.of(copyReportError(error)))
 }
 
 const deleteReportEpic$ = (action$: any) => {
@@ -70,6 +95,7 @@ const refreshReportAfterPagingChangedEpic$ = (action$: any) => {
 
 export default [
   loadReportsEpic$,
+  copyReportEpic$,
   deleteReportEpic$,
   restoreDeletedReportEpic$,
   refreshReportAfterDeletedReportIdChangedEpic$,

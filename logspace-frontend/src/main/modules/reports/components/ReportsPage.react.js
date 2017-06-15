@@ -1,7 +1,7 @@
 // @flow
 
 import React, {PropTypes} from 'react'
-import {Box} from 'indoqa-react-fela'
+import {Box, Flex} from 'indoqa-react-fela'
 
 import MainMenuPage from '../../../commons/components/templates/MainMenuPage.react'
 import Action from '../../../commons/components/molecules/Action.react'
@@ -30,14 +30,20 @@ export default class ReportsPage extends React.Component {
     loadReports: PropTypes.func.isRequired,
     toggleSort: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
+    copyReport: PropTypes.func.isRequired,
     deleteReport: PropTypes.func.isRequired,
   }
 
   createReportActions(report: Report) {
     return (
-      <Box>
-        <Action onClick={() => this.props.deleteReport(report.id)}>Delete</Action>
-      </Box>
+      <Flex>
+        <Box p={1}>
+          <Action onClick={() => this.props.copyReport(report)}>Copy</Action>
+        </Box>
+        <Box p={1}>
+          <Action onClick={() => this.props.deleteReport(report.id)}>Delete</Action>
+        </Box>
+      </Flex>
     )
   }
 

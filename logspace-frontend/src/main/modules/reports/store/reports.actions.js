@@ -1,6 +1,7 @@
 // @flow
 
 import type {Action} from '../types/ReportsActions'
+import type {Report} from '../types/Report'
 import type {Result} from '../types/Result'
 
 
@@ -16,6 +17,11 @@ export const loadReportsError = (error: any): Action => ({
 export const setResult = (payload: Result): Action => ({
   type: 'REPORTS#SET_RESULT',
   payload,
+})
+
+export const copyReport = (report: Report): Action => ({
+  type: 'REPORTS#COPY_REPORT',
+  report: report,
 })
 
 export const deleteReport = (id: string): Action => ({

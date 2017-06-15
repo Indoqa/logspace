@@ -49,7 +49,7 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
 
     private static final String FILTER_REPORT = FIELD_TYPE + ":" + CONFIG_TYPE;
     private static final String FILTER_UNDELETED = "-" + FIELD_DELETED + ":*";
-    private static final String FILTER_TIP_OF_BRANCH = "-{!join from=" + FIELD_PARENT_ID + " to=" + FIELD_ID + "}*:*";
+    private static final String FILTER_TIP_OF_BRANCH = "{!collapse field=string_property_branch max=_version_}";
 
     private static Report createReport(SolrDocument solrDocument) throws IOException {
         Report result = new Report();
