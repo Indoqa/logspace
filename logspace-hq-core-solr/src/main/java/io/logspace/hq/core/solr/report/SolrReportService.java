@@ -13,8 +13,8 @@ import static io.logspace.hq.core.solr.utils.SolrDocumentHelper.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Named;
@@ -41,8 +41,6 @@ import io.logspace.hq.rest.api.report.Reports;
 @Named
 public class SolrReportService extends AbstractSolrConfigService implements ReportService {
 
-    private static final int COMMIT_WITHIN = 1000;
-
     private static final String CONFIG_TYPE = "report";
 
     private static final String FIELD_DELETED = "boolean_property_deleted";
@@ -51,6 +49,7 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
 
     private static final String FILTER_REPORT = FIELD_TYPE + ":" + CONFIG_TYPE;
     private static final String FILTER_UNDELETED = "-" + FIELD_DELETED + ":*";
+    private static final String FILTER_TIP_OF_BRANCH = "-{!join from=" + FIELD_PARENT_ID + " to=" + FIELD_ID + "}*:*";
 
     private static Report createReport(SolrDocument solrDocument) throws IOException {
         Report result = new Report();
@@ -73,8 +72,19 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
         try {
             SolrInputDocument solrInputDocument = new SolrInputDocument();
             solrInputDocument.setField(FIELD_ID, reportId);
-            solrInputDocument.setField(FIELD_DELETED, Collections.singletonMap("set", Boolean.TRUE));
+
+            // make this a field update to an existing document
+            solrInputDocument.setField(FIELD_DELETED, asFieldUpdate(Boolean.TRUE));
+            documentMustExist(solrInputDocument);
+
             this.solrClient.add(solrInputDocument);
+
+            this.makeChangesVisible();
+        } catch (SolrException e) {
+            if (HttpStatusCode.CONFLICT.matches(e.code())) {
+                // this means that the ID does not exist -> throw appropriate exception
+                throw ReportNotFoundException.forReportId(reportId);
+            }
         } catch (SolrServerException | IOException e) {
             throw new DataDeletionException("Could not delete report.", e);
         }
@@ -84,13 +94,8 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
     public Report getReport(String reportId) {
         this.logger.debug("Retrieving report with ID '{}'.", reportId);
 
-        SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setRequestHandler("/get");
-        solrQuery.set("id", reportId);
-
         try {
-            QueryResponse queryResponse = this.solrClient.query(solrQuery);
-            SolrDocument solrDocument = (SolrDocument) queryResponse.getResponse().get("doc");
+            SolrDocument solrDocument = this.realTimeGet(reportId);
             if (solrDocument == null) {
                 return null;
             }
@@ -103,6 +108,7 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
 
     @Override
     public ReportHistory getReportHistory(String reportId) {
+        this.logger.debug("Retrieving history for report with ID '{}'.", reportId);
         List<Report> history = new ArrayList<>();
 
         String nextReportId = reportId;
@@ -133,6 +139,7 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
 
         solrQuery.addFilterQuery(FILTER_REPORT);
         solrQuery.addFilterQuery(FILTER_UNDELETED);
+        solrQuery.addFilterQuery(FILTER_TIP_OF_BRANCH);
 
         SolrQueryHelper.addSort(solrQuery, sort, this.getFieldDefinitions());
         SolrQueryHelper.setRange(solrQuery, start, count);
@@ -154,42 +161,12 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
 
     @Override
     public void saveReport(Report report) {
-        if (report.getId() != null) {
-            throw ParameterValueException.invalidValue("ID_MUST_BE_OMITTED",
-                "Reports are immutable and IDs will be assigned by the server.");
-        }
-
-        if (report.getParentId() == null && report.getBranch() != null) {
-            throw ParameterValueException.invalidValue("BRANCH_MUST_BE_OMITTED",
-                "When creating a new root the branch must be omitted.");
-        }
-
-        if (report.getParentId() != null) {
-            Report parentReport = this.getReport(report.getParentId());
-            if (parentReport == null) {
-                throw ParameterValueException.invalidValue("UNKNOWN_PARENT", "The referenced parent report does not exist.");
-            }
-
-            if (report.getBranch() != null && !report.getBranch().equals(parentReport.getBranch())) {
-                throw ParameterValueException.invalidValue("INVALID_BRANCH",
-                    "The referenced branch does not match the branch of the parent report. "
-                        + "Either use the branch of the parent to continue it or omit the branch to create a new one.");
-            }
-
-            if (report.getBranch() != null && !this.isTipOfBranch(parentReport)) {
-                throw ParameterValueException.invalidValue("NOT_TIP_OF_BRANCH",
-                    "The referenced parent report is not the tip of its branch. Either continue the branch from its tip or create a new branch.");
-            }
-        }
+        this.validateReportCanBeSaved(report);
 
         this.logger.debug("Storing report with ID '{}'.", report.getId());
 
-        EscalatingIdGenerator idGenerator = new EscalatingIdGenerator("", 3);
-
-        while (true) {
-            String rawId = idGenerator.getNextId();
-            String id = "report_" + rawId;
-            String branch = report.getBranch() != null ? report.getBranch() : rawId;
+        for (String id : new EscalatingIdGenerator("report_", 3)) {
+            String branch = report.getBranch() != null ? report.getBranch() : id;
             Date timestamp = new Date();
 
             try {
@@ -202,9 +179,11 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
                 solrInputDocument.setField(FIELD_TIMESTAMP, timestamp);
                 solrInputDocument.setField(FIELD_CONTENT, serializeDefinitions(report.getTimeSeriesDefinitions()));
 
-                // force this to be an "add" and fail with HTTP 409 Conflict if the ID is already in use
-                solrInputDocument.setField("_version_", -1);
-                this.solrClient.add(solrInputDocument, COMMIT_WITHIN);
+                // fail with HTTP CONFLICT if the ID is already in use
+                documentMustNotExist(solrInputDocument);
+                this.solrClient.add(solrInputDocument);
+
+                this.makeChangesVisible();
 
                 // the add was successful -> update the report and stop here
                 report.setId(id);
@@ -217,10 +196,35 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
                     continue;
                 }
 
-                throw new DataStorageException("Could not store order.", e);
+                throw new DataStorageException("Could not store report.", e);
             } catch (SolrServerException | IOException e) {
-                throw new DataStorageException("Could not store order.", e);
+                throw new DataStorageException("Could not store report.", e);
             }
+        }
+    }
+
+    @Override
+    public void undeleteReport(String reportId) {
+        this.logger.debug("Un-deleting report with ID '{}'.", reportId);
+
+        try {
+            SolrInputDocument solrInputDocument = new SolrInputDocument();
+            solrInputDocument.setField(FIELD_ID, reportId);
+
+            // make this a field update to an existing document
+            solrInputDocument.setField(FIELD_DELETED, asFieldUpdate(null));
+            documentMustExist(solrInputDocument);
+
+            this.solrClient.add(solrInputDocument);
+
+            this.makeChangesVisible();
+        } catch (SolrException e) {
+            if (HttpStatusCode.CONFLICT.matches(e.code())) {
+                // this means that the id does not exist -> throw appropriate exception
+                throw ReportNotFoundException.forReportId(reportId);
+            }
+        } catch (SolrServerException | IOException e) {
+            throw new DataDeletionException("Could not un-delete report.", e);
         }
     }
 
@@ -245,20 +249,66 @@ public class SolrReportService extends AbstractSolrConfigService implements Repo
         }
     }
 
-    private static final class EscalatingIdGenerator {
-
-        private final String prefix;
-        private int nextIdLength;
-
-        public EscalatingIdGenerator(String prefix, int initialIdLength) {
-            super();
-
-            this.prefix = prefix;
-            this.nextIdLength = initialIdLength;
+    private void validateReportCanBeSaved(Report report) {
+        if (report.getId() != null) {
+            throw ParameterValueException.invalidValue("ID_MUST_BE_OMITTED",
+                "Reports are immutable and IDs will be assigned by the server.");
         }
 
-        public String getNextId() {
-            return this.prefix + RandomStringUtils.random(this.nextIdLength++, "abcdefghijklmnopqrstuvwxyz0123456789");
+        if (report.getParentId() == null && report.getBranch() != null) {
+            throw ParameterValueException.invalidValue("BRANCH_MUST_BE_OMITTED",
+                "When creating a report without parent the branch must be omitted.");
+        }
+
+        if (report.getParentId() != null) {
+            Report parentReport = this.getReport(report.getParentId());
+            if (parentReport == null) {
+                throw ParameterValueException.invalidValue("UNKNOWN_PARENT", "The referenced parent report does not exist.");
+            }
+
+            if (report.getBranch() != null && !report.getBranch().equals(parentReport.getBranch())) {
+                throw ParameterValueException.invalidValue("INVALID_BRANCH",
+                    "The referenced branch does not match the branch of the parent report. "
+                        + "Either use the branch of the parent to continue it or omit the branch to create a new one.");
+            }
+
+            if (report.getBranch() != null && !this.isTipOfBranch(parentReport)) {
+                throw ParameterValueException.invalidValue("NOT_TIP_OF_BRANCH",
+                    "The referenced parent report is not the tip of its branch. Either continue the branch from its tip or create a new branch.");
+            }
+        }
+    }
+
+    private static final class EscalatingIdGenerator implements Iterable<String>, Iterator<String> {
+
+        private final String prefix;
+        private int length;
+
+        public EscalatingIdGenerator(String prefix, int length) {
+            super();
+            this.prefix = prefix;
+            this.length = length;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public Iterator<String> iterator() {
+            return this;
+        }
+
+        @Override
+        public String next() {
+            String randomPart = RandomStringUtils.random(this.length++, "abcdefghijklmnopqrstuvwxyz0123456789");
+
+            if (this.prefix == null) {
+                return randomPart;
+            }
+
+            return this.prefix + randomPart;
         }
     }
 }

@@ -10,3 +10,4 @@ export const selectSorting = createSelector(selectReportsState, (state: ReportsS
 export const selectResult = createSelector(selectReportsState, (state: ReportsState) => state.result)
 export const selectError = createSelector(selectReportsState, (state: ReportsState) => state.error)
 export const selectIsLoading = createSelector(selectReportsState, (state: ReportsState) => state.isLoading)
+export const selectDeletedReportId = createSelector(selectReportsState, (state: ReportsState) => state.deletedReportId)

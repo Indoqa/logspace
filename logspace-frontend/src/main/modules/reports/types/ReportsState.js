@@ -10,5 +10,6 @@ export type ReportsState = {
   sorting: Sorting,
   result: ?Result,
   error: ?string,
-  isLoading: boolean
+  isLoading: boolean,
+  deletedReportId: ?string,
 }

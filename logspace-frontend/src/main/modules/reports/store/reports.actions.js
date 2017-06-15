@@ -18,6 +18,25 @@ export const setResult = (payload: Result): Action => ({
   payload,
 })
 
+export const deleteReport = (id: string): Action => ({
+  type: 'REPORTS#DELETE_REPORT',
+  id,
+})
+
+export const deleteReportError = (error: any): Action => ({
+  type: 'REPORTS#DELETE_REPORT_ERROR',
+  error,
+})
+
+export const setDeletedReportId = (id: ?string): Action => ({
+  type: 'REPORTS#SET_DELETED_REPORT_ID',
+  id,
+})
+
+export const restoreDeletedReport = (): Action => ({
+  type: 'REPORTS#RESTORE_DELETED_REPORT',
+})
+
 export const toggleSort = (property: string): Action => ({
   type: 'REPORTS#TOGGLE_SORT',
   property,

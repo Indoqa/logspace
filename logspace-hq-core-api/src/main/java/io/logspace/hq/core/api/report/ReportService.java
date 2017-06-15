@@ -23,4 +23,6 @@ public interface ReportService {
 
     void saveReport(Report report);
 
+    void undeleteReport(String reportId);
+
 }

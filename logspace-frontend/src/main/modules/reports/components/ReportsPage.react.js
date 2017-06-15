@@ -8,6 +8,8 @@ import Action from '../../../commons/components/molecules/Action.react'
 import DataTable from '../../../commons/components/molecules/DataTable.react'
 import Paginator from '../../../commons/components/molecules/Paginator.react'
 
+import UndoDeleteReport from './UndoDeleteReport.redux'
+
 import type {Report} from '../types/Report'
 
 
@@ -23,14 +25,24 @@ export default class ReportsPage extends React.Component {
     result: PropTypes.object,
     isLoading: PropTypes.bool.isRequired,
     error: PropTypes.object,
+    deletedReportId:PropTypes.string,
 
     loadReports: PropTypes.func.isRequired,
     toggleSort: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
+    deleteReport: PropTypes.func.isRequired,
   }
 
-  static createReportData(report: Report) {
-    return ReportsPage.createRow([report.id, report.name, report.branch, report.timestamp])
+  createReportActions(report: Report) {
+    return (
+      <Box>
+        <Action onClick={() => this.props.deleteReport(report.id)}>Delete</Action>
+      </Box>
+    )
+  }
+
+  createReportData(report: Report) {
+    return ReportsPage.createRow([report.id, report.name, report.branch, report.timestamp, this.createReportActions(report)])
   }
 
   static createRow(values: Array<any>) {
@@ -55,6 +67,7 @@ export default class ReportsPage extends React.Component {
           {content: this.createSortableHeader('name', 'Name')},
           {content: this.createSortableHeader('branch', 'Branch')},
           {content: this.createSortableHeader('timestamp', 'Timestamp')},
+          {content: ''},
         ],
       }
     ]
@@ -71,7 +84,7 @@ export default class ReportsPage extends React.Component {
       return [ReportsPage.createRow(['No result'])]
     }
 
-    return result.reports.map(ReportsPage.createReportData)
+    return result.reports.map((report) => this.createReportData(report))
   }
 
   createTableData() {
@@ -101,6 +114,7 @@ export default class ReportsPage extends React.Component {
     return (
       <MainMenuPage title="Reports" >
         <Box>
+          <UndoDeleteReport />
           {this.renderReports()}
           {this.renderPaginator()}
         </Box>

@@ -16,6 +16,25 @@ type SetResultAction = {
   payload: Result,
 }
 
+type DeleteReportAction = {
+  type: 'REPORTS#DELETE_REPORT',
+  id: string,
+}
+
+type DeleteReportErrorAction = {
+  type: 'REPORTS#DELETE_REPORT_ERROR',
+  error: any,
+}
+
+type SetDeletedReportIdAction = {
+  type: 'REPORTS#SET_DELETED_REPORT_ID',
+  id: ?string,
+}
+
+type RestoreDeletedReportAction = {
+  type: 'REPORTS#RESTORE_DELETED_REPORT',
+}
+
 type ToggleSortAction = {
   type: 'REPORTS#TOGGLE_SORT',
   property: string,
@@ -27,8 +46,12 @@ type SetPageAction = {
 }
 
 export type Action =
-  | SetResultAction
   | LoadReportsAction
   | LoadReportsErrorAction
+  | SetResultAction
+  | DeleteReportAction
+  | DeleteReportErrorAction
+  | RestoreDeletedReportAction
+  | SetDeletedReportIdAction
   | ToggleSortAction
   | SetPageAction

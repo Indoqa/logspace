@@ -15,6 +15,8 @@ public final class ConfigFieldConstants {
     public static final String FIELD_TIMESTAMP = "timestamp";
     public static final String FIELD_CONTENT = "content";
 
+    public static final String FIELD_VERSION = "_version_";
+
     private ConfigFieldConstants() {
         // hide constants class constructor
     }

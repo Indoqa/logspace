@@ -2,7 +2,7 @@
 
 import {connect} from 'react-redux'
 import ReportsPage from './ReportsPage.react'
-import {loadReports, toggleSort, setPage} from '../store/reports.actions'
+import {loadReports, deleteReport, toggleSort, setPage} from '../store/reports.actions'
 import {selectPaging, selectResult, selectError, selectIsLoading} from '../store/reports.selectors'
 
 
@@ -16,6 +16,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadReports: () => {
     dispatch(loadReports())
+  },
+
+  deleteReport: (id: string) => {
+    dispatch(deleteReport(id))
   },
 
   toggleSort: (property: string) => {

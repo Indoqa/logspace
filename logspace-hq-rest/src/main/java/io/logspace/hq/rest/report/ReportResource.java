@@ -15,6 +15,7 @@ import javax.inject.Named;
 
 import io.logspace.hq.core.api.report.ReportService;
 import io.logspace.hq.rest.AbstractLogspaceResourcesBase;
+import io.logspace.hq.rest.api.InvalidOperationException;
 import io.logspace.hq.rest.api.ReportNotFoundException;
 import io.logspace.hq.rest.api.report.Report;
 import io.logspace.hq.rest.api.report.ReportHistory;
@@ -26,6 +27,7 @@ import spark.Response;
 public class ReportResource extends AbstractLogspaceResourcesBase {
 
     private static final String PARAMETER_ID = "id";
+    private static final String PARAMETER_RESTORE = "restore";
 
     private static final String PARAMETER_START = "start";
     private static final int DEFAULT_START = 0;
@@ -52,6 +54,7 @@ public class ReportResource extends AbstractLogspaceResourcesBase {
         this.post("/reports", (req, res) -> this.postReport(req));
 
         this.delete("/reports/:" + PARAMETER_ID, (req, res) -> this.deleteReport(req, res));
+        this.post("/reports/:" + PARAMETER_ID, (req, res) -> this.undeleteReport(req, res));
     }
 
     private Void deleteReport(Request req, Response res) {
@@ -60,6 +63,8 @@ public class ReportResource extends AbstractLogspaceResourcesBase {
         this.reportService.deleteReport(reportId);
 
         res.status(NoContent.getCode());
+        res.header("report-id", reportId);
+
         return null;
     }
 
@@ -99,5 +104,18 @@ public class ReportResource extends AbstractLogspaceResourcesBase {
         this.reportService.saveReport(report);
 
         return report;
+    }
+
+    private Void undeleteReport(Request req, Response res) {
+        if (!req.queryParams().contains(PARAMETER_RESTORE)) {
+            throw new InvalidOperationException();
+        }
+
+        String reportId = req.params(PARAMETER_ID);
+        this.reportService.undeleteReport(reportId);
+
+        res.status(NoContent.getCode());
+
+        return null;
     }
 }

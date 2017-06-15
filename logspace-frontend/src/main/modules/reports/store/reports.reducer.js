@@ -18,6 +18,7 @@ const initialState = {
   result: null,
   error: null,
   isLoading: false,
+  deletedReportId: null,
 }
 
 export default (state: ReportsState = initialState, action: Action) => {
@@ -36,6 +37,10 @@ export default (state: ReportsState = initialState, action: Action) => {
     case 'REPORTS#SET_RESULT':
       state = R.assoc('isLoading', false, state)
       state = R.assoc('result', action.payload, state)
+      return state
+
+    case 'REPORTS#SET_DELETED_REPORT_ID':
+      state = R.assoc('deletedReportId', action.id, state)
       return state
 
     case 'REPORTS#TOGGLE_SORT':
