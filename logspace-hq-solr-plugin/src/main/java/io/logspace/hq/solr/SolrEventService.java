@@ -35,6 +35,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.cloud.DocCollection;
 import org.apache.solr.common.cloud.Slice;
 import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
@@ -358,10 +359,11 @@ public class SolrEventService extends AbstractSolrService implements EventServic
 
         if (System.currentTimeMillis() > this.nextSliceUpdate) {
             this.nextSliceUpdate = System.currentTimeMillis() + SLICE_UPDATE_INTERVAL;
-            this.activeSlicesMap = cloudSolrClient
-                .getZkStateReader()
-                .getClusterState()
-                .getActiveSlicesMap(cloudSolrClient.getDefaultCollection());
+            DocCollection docCollection = cloudSolrClient
+                    .getZkStateReader()
+                    .getClusterState()
+                    .getCollectionOrNull(cloudSolrClient.getDefaultCollection());
+            this.activeSlicesMap = docCollection != null ? docCollection.getActiveSlicesMap() : Collections.<String, Slice>emptyMap();
         }
 
         Calendar calendar = Calendar.getInstance();
