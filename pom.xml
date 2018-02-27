@@ -54,11 +54,11 @@
     <!--<tape-version>1.2.3</tape-version> -->
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
-    <solr-spring-client-version>7.2.0-SNAPSHOT</solr-spring-client-version>
+    <solr-spring-client-version>7.2.0</solr-spring-client-version>
     <solr-facet-api-version>0.2.0</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>
-    <system-test-tools-version>0.1.0-SNAPSHOT</system-test-tools-version>
+    <system-test-tools-version>1.0.0</system-test-tools-version>
 
     <commons-lang3-version>3.4</commons-lang3-version>
     <commons-io-version>2.5</commons-io-version>
