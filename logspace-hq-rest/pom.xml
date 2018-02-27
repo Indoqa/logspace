@@ -15,7 +15,7 @@
   <parent>
     <groupId>io.logspace</groupId>
     <artifactId>logspace</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.1</version>
   </parent>
 
   <artifactId>logspace-hq-rest</artifactId>
