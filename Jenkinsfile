@@ -20,6 +20,7 @@ pipeline {
 
   tools {
     maven 'Maven 3.5.x' 
+    nodejs '8.1.2'
   }
 
   stages {
