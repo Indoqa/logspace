@@ -98,7 +98,7 @@ public class SolrEventService extends AbstractSolrEventService implements EventS
         try {
             QueryResponse response = this.solrClient.query(solrQuery, METHOD.POST);
 
-            List<Object> values = new ArrayList<Object>();
+            List<Object> values = new ArrayList<>();
 
             Buckets buckets = Buckets.fromResponse(response, FIELD_TIMESTAMP);
             for (NamedList<Object> eachBucket : buckets) {
@@ -310,7 +310,7 @@ public class SolrEventService extends AbstractSolrEventService implements EventS
     }
 
     private Collection<SolrInputDocument> createInputDocuments(Collection<? extends Event> events, String space) {
-        Collection<SolrInputDocument> result = new ArrayList<SolrInputDocument>();
+        Collection<SolrInputDocument> result = new ArrayList<>();
 
         for (Event eachEvent : events) {
             result.add(this.createInputDocument(eachEvent, space));
@@ -322,7 +322,8 @@ public class SolrEventService extends AbstractSolrEventService implements EventS
     private String createTimeSeriesFacets(TimeSeriesDefinition dataDefinition) {
         PropertyDescription propertyDescription = createPropertyDescription(dataDefinition.getPropertyId());
         if (!propertyDescription.getPropertyType().isAllowed(dataDefinition.getAggregate())) {
-            throw InvalidTimeSeriesDefinitionException.illegalAggregate(propertyDescription.getPropertyType(),
+            throw InvalidTimeSeriesDefinitionException.illegalAggregate(
+                propertyDescription.getPropertyType(),
                 dataDefinition.getAggregate());
         }
 
@@ -330,7 +331,7 @@ public class SolrEventService extends AbstractSolrEventService implements EventS
         Date endDate = dataDefinition.getTimeWindow().getEnd();
         int gap = dataDefinition.getTimeWindow().getGap();
 
-        RangeFacet rangeFacet = new RangeFacet(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, gap);
+        RangeFacet rangeFacet = RangeFacet.fromDates(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, gap);
         if (dataDefinition.getAggregate() != Aggregate.count) {
             rangeFacet.addSubFacet(new StatisticFacet(AGGREGATION_FACET_NAME, dataDefinition.getFacetFunction()));
         }

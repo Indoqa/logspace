@@ -73,7 +73,7 @@ public class SolrAgentService extends AbstractSolrEventService implements AgentS
         agentFacet.setNumBuckets(true);
         agentFacet.setSort(sort);
         agentFacet.addSubFacet(
-            new RangeFacet(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, durationSeconds / steps));
+            RangeFacet.fromDates(FIELD_TIMESTAMP, FIELD_TIMESTAMP, startDate, endDate, GapUnit.SECONDS, durationSeconds / steps));
 
         solrQuery.set("json.facet", FacetList.toJsonString(agentFacet));
 
@@ -191,7 +191,9 @@ public class SolrAgentService extends AbstractSolrEventService implements AgentS
     @Override
     @PostConstruct
     public void initialize() {
-        new Timer(true).schedule(new RefreshAgentDescriptionCacheTask(), AGENT_DESCRIPTION_REFRESH_INTERVAL,
+        new Timer(true).schedule(
+            new RefreshAgentDescriptionCacheTask(),
+            AGENT_DESCRIPTION_REFRESH_INTERVAL,
             AGENT_DESCRIPTION_REFRESH_INTERVAL);
     }
 
