@@ -27,6 +27,7 @@ pipeline {
   tools {
     maven 'Maven 3.5.x' 
     nodejs '8.1.2'
+    jdk 'J2SDK 14 (AdoptOpenJdk)'
   }
 
   stages {
