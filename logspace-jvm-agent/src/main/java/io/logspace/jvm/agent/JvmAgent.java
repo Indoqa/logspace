@@ -48,8 +48,9 @@ public final class JvmAgent extends AbstractSchedulerAgent {
         String agentDescriptionUrl = System.getProperty(SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL);
 
         if (agentDescriptionUrl == null || agentDescriptionUrl.isEmpty()) {
-            throw new IllegalArgumentException("System Property: '" + SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL
-                + "' not defined. Please set this property to valid logspace configuration file.");
+            throw new IllegalArgumentException(
+                "System Property: '" + SYSTEM_PROPERTY_AGENT_DESCRIPTION_URL
+                    + "' not defined. Please set this property to valid logspace configuration file.");
         }
 
         try {
@@ -168,26 +169,26 @@ public final class JvmAgent extends AbstractSchedulerAgent {
 
     private void addSystemInformation(JvmEventBuilder eventBuilder) {
         eventBuilder.setAvailableProcessors(Runtime.getRuntime().availableProcessors());
-        eventBuilder.setCpuEndian(System.getProperty("sun.cpu.endian"));
+        eventBuilder.setCpuEndian(System.getProperty("sun.cpu.endian", ""));
 
-        eventBuilder.setJavaRuntimeName(System.getProperty("java.runtime.name"));
-        eventBuilder.setJavaRuntimeVersion(System.getProperty("java.runtime.version"));
+        eventBuilder.setJavaRuntimeName(System.getProperty("java.runtime.name", ""));
+        eventBuilder.setJavaRuntimeVersion(System.getProperty("java.runtime.version", ""));
 
-        eventBuilder.setJvmVersion(System.getProperty("java.vm.version"));
-        eventBuilder.setJvmVendor(System.getProperty("java.vm.vendor"));
-        eventBuilder.setJvmName(System.getProperty("java.vm.name"));
-        eventBuilder.setJvmInfo(System.getProperty("java.vm.info"));
+        eventBuilder.setJvmVersion(System.getProperty("java.vm.version", ""));
+        eventBuilder.setJvmVendor(System.getProperty("java.vm.vendor", ""));
+        eventBuilder.setJvmName(System.getProperty("java.vm.name", ""));
+        eventBuilder.setJvmInfo(System.getProperty("java.vm.info", ""));
 
-        eventBuilder.setOsName(System.getProperty("os.name"));
-        eventBuilder.setOsArchitecture(System.getProperty("os.arch"));
-        eventBuilder.setOsVersion(System.getProperty("os.version"));
+        eventBuilder.setOsName(System.getProperty("os.name", ""));
+        eventBuilder.setOsArchitecture(System.getProperty("os.arch", ""));
+        eventBuilder.setOsVersion(System.getProperty("os.version", ""));
 
-        eventBuilder.setUserCountry(System.getProperty("user.country"));
-        eventBuilder.setUserDirectory(System.getProperty("user.dir"));
-        eventBuilder.setUserHome(System.getProperty("user.home"));
-        eventBuilder.setUserLanguage(System.getProperty("user.language"));
-        eventBuilder.setUserName(System.getProperty("user.name"));
-        eventBuilder.setUserTimezone(System.getProperty("user.timezone"));
+        eventBuilder.setUserCountry(System.getProperty("user.country", ""));
+        eventBuilder.setUserDirectory(System.getProperty("user.dir", ""));
+        eventBuilder.setUserHome(System.getProperty("user.home", ""));
+        eventBuilder.setUserLanguage(System.getProperty("user.language", ""));
+        eventBuilder.setUserName(System.getProperty("user.name", ""));
+        eventBuilder.setUserTimezone(System.getProperty("user.timezone", ""));
     }
 
     private void addThreadProperties(JvmEventBuilder eventBuilder) {

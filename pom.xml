@@ -16,7 +16,7 @@
   <parent>
     <groupId>com.indoqa</groupId>
     <artifactId>indoqa-oss-parent</artifactId>
-    <version>4</version>
+    <version>6</version>
   </parent>
 
   <groupId>io.logspace</groupId>
@@ -40,7 +40,7 @@
   </scm>
 
   <properties>
-    <project.build.compiler.version>1.8</project.build.compiler.version>
+    <project.build.compiler.version>14</project.build.compiler.version>
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
     <indoqa-boot-version>0.6.0</indoqa-boot-version>
@@ -67,7 +67,8 @@
 
     <slf4j-version>1.7.21</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json
+    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because
+      logspace-agent-json
       has JDK1.6 support ) -->
 
     <junit-version>4.12</junit-version>
@@ -95,6 +96,18 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Javax -->
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>1.3.2</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+
       <!-- Indoqa Boot -->
       <dependency>
         <groupId>com.indoqa</groupId>
@@ -489,9 +502,14 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+      
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-eclipse-plugin</artifactId>
-          <version>2.9</version><!-- 2.10 restricts usage of com.sun packages -->
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.1.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
@@ -540,6 +558,17 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>com.indoqa</groupId>
+        <artifactId>cycle-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <!-- disable this plugin for now -->
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
