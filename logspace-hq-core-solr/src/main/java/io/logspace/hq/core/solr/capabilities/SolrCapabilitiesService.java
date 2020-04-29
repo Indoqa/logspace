@@ -43,7 +43,7 @@ import io.logspace.hq.rest.api.suggestion.AgentDescription;
 @Named
 public class SolrCapabilitiesService implements CapabilitiesService {
 
-    private static final String FIELD_GLOBAL_AGENT_ID = "string_property_globalAgentId";
+    private static final String FIELD_GLOBAL_AGENT_ID = "strings_property_globalAgentId";
     private static final String CONFIG_TYPE = "capabilitites";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -110,7 +110,9 @@ public class SolrCapabilitiesService implements CapabilitiesService {
             solrInputDocument.setField(FIELD_CONTENT, AgentControllerCapabilitiesJsonSerializer.toJson(capabilities));
 
             for (AgentCapabilities eachAgentCapabilities : capabilities.getAgentCapabilities()) {
-                String globalAgentId = IdHelper.getGlobalAgentId(capabilities.getSpace(), capabilities.getSystem(),
+                String globalAgentId = IdHelper.getGlobalAgentId(
+                    capabilities.getSpace(),
+                    capabilities.getSystem(),
                     eachAgentCapabilities.getId());
                 solrInputDocument.addField(FIELD_GLOBAL_AGENT_ID, globalAgentId);
             }
