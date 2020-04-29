@@ -10,7 +10,7 @@ package io.logspace.hq.rest;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.indoqa.boot.AbstractJsonResourcesBase;
+import com.indoqa.boot.json.resources.AbstractJsonResourcesBase;
 
 import io.logspace.hq.rest.api.ParameterValueException;
 import spark.Request;

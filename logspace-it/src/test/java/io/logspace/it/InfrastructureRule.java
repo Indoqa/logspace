@@ -11,6 +11,7 @@ import static com.indoqa.lang.util.FileUtils.getCanonicalFile;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -116,9 +117,13 @@ public class InfrastructureRule extends ExternalResource {
 
         Path capabilitiesDirectory = Paths.get("./capabilities");
         Files.createDirectories(capabilitiesDirectory);
-        Files.newDirectoryStream(capabilitiesDirectory, "*.json").forEach(InfrastructureRule::deleteFile);
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(capabilitiesDirectory, "*.json")) {
+            stream.forEach(InfrastructureRule::deleteFile);
+        }
 
         System.setProperty("port", String.valueOf(TEST_PORT));
+        System.setProperty("admin.port", String.valueOf(TEST_PORT + 30_000));
         System.setProperty("admin.separate-service", "false");
         System.setProperty("log-path", "./target");
         System.setProperty("spring.profiles.active", "prod,test");

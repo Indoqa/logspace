@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.indoqa.boot.lifecycle.AbstractStartupLifecycle;
+import com.indoqa.boot.application.AbstractStartupLifecycle;
 
 import io.logspace.hq.rest.FrontendResource;
 import io.logspace.hq.webapp.mode.DefaultHqMode;

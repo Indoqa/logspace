@@ -43,19 +43,19 @@
     <project.build.compiler.version>14</project.build.compiler.version>
     <project.license.rootDir>${basedir}/..</project.license.rootDir>
 
-    <indoqa-boot-version>0.6.0</indoqa-boot-version>
+    <indoqa-boot-version>0.10.0</indoqa-boot-version>
     <spring-version>4.3.2.RELEASE</spring-version>
-    <solr-version>6.1.0</solr-version>
+    <solr-version>7.2.1</solr-version>
     <jetty-version>9.3.11.v20160721</jetty-version>
 
     <jackson-version>2.8.2</jackson-version>
-    <httpclient-version>4.3.6</httpclient-version>
-    <httpcore-version>4.3.3</httpcore-version>
+    <httpclient-version>4.5.5</httpclient-version>
+    <httpcore-version>4.4.9</httpcore-version>
     <quartz-version>2.2.3</quartz-version>
     <!--<tape-version>1.2.3</tape-version> -->
 
     <solr-spring-server-version>4.10.0</solr-spring-server-version>
-    <solr-spring-client-version>6.1.0</solr-spring-client-version>
+    <solr-spring-client-version>7.2.0</solr-spring-client-version>
     <solr-facet-api-version>0.2.1</solr-facet-api-version>
     <indoqa-jar-in-jar-version>1.0.1</indoqa-jar-in-jar-version>
     <indoqa-lang-version>1.0.0</indoqa-lang-version>

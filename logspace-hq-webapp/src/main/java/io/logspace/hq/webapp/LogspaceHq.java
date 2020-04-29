@@ -7,9 +7,7 @@
  */
 package io.logspace.hq.webapp;
 
-import static com.indoqa.boot.jsapp.WebpackAssetsUtils.findWebpackAssetsInClasspath;
-
-import com.indoqa.boot.AbstractIndoqaBootApplication;
+import com.indoqa.boot.application.AbstractIndoqaBootApplication;
 
 public class LogspaceHq extends AbstractIndoqaBootApplication {
 
@@ -41,6 +39,7 @@ public class LogspaceHq extends AbstractIndoqaBootApplication {
 
     @Override
     protected boolean isDevEnvironment() {
-        return findWebpackAssetsInClasspath(FRONTEND_MODULE).isEmpty();
+        // return WebpackAssetsUtils.findWebpackAssetsInClasspath(FRONTEND_MODULE).isEmpty();
+        return false;
     }
 }

@@ -7,20 +7,22 @@
  */
 package io.logspace.hq.rest;
 
-import com.indoqa.boot.jsapp.AbstractReactFrontendResource;
-import com.indoqa.boot.jsapp.ProxyURLMappings;
+import javax.annotation.PostConstruct;
 
-public class FrontendResource extends AbstractReactFrontendResource {
+import com.indoqa.boot.html.react.AbstractReactResourceBase;
+
+public class FrontendResource extends AbstractReactResourceBase {
 
     private static final String CLASSPATH_LOCATION = "/logspace-frontend-new";
     private static final String FILESYSTEM_LOCATION = "../logspace-frontend-new/target";
 
-    public FrontendResource() {
-        super("/*", CLASSPATH_LOCATION, FILESYSTEM_LOCATION);
+    @PostConstruct
+    public void mount() {
+        this.html("/", CLASSPATH_LOCATION, FILESYSTEM_LOCATION);
     }
 
-    @Override
-    protected ProxyURLMappings getProxyURLMappings() {
-        return new ProxyURLMappings().add("logspaceBaseUrl", "");
-    }
+    // @Override
+    // protected ProxyURLMappings getProxyURLMappings() {
+    // return new ProxyURLMappings().add("logspaceBaseUrl", "");
+    // }
 }
