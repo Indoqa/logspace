@@ -34,6 +34,8 @@ import io.logspace.hq.rest.api.DataStorageException;
 @Named
 public class SolrOrderService implements OrderService {
 
+    private static final int COMMIT_WITHIN = 1000;
+
     private static final String CONFIG_TYPE = "order";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -41,6 +43,14 @@ public class SolrOrderService implements OrderService {
     @Inject
     @ConfigQualifier
     private SolrClient solrClient;
+
+    private static String getOrderId(String id) {
+        if (id.startsWith("order_")) {
+            return id;
+        }
+
+        return "order_" + id;
+    }
 
     @Override
     public void deleteOrder(String orderId) {
@@ -59,7 +69,7 @@ public class SolrOrderService implements OrderService {
 
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRequestHandler("/get");
-        solrQuery.set("id", this.getOrderId(controllerId));
+        solrQuery.set("id", getOrderId(controllerId));
 
         try {
             QueryResponse queryResponse = this.solrClient.query(solrQuery);
@@ -84,18 +94,14 @@ public class SolrOrderService implements OrderService {
 
         try {
             SolrInputDocument solrInputDocument = new SolrInputDocument();
-            solrInputDocument.setField(FIELD_ID, order.getId());
+            solrInputDocument.setField(FIELD_ID, getOrderId(order.getId()));
             solrInputDocument.setField(FIELD_TYPE, CONFIG_TYPE);
             solrInputDocument.setField(FIELD_NAME, order.getId());
             solrInputDocument.setField(FIELD_TIMESTAMP, order.getLastModified());
             solrInputDocument.setField(FIELD_CONTENT, order.getContent());
-            this.solrClient.add(solrInputDocument);
+            this.solrClient.add(solrInputDocument, COMMIT_WITHIN);
         } catch (SolrServerException | IOException e) {
             throw new DataStorageException("Could not store order.", e);
         }
-    }
-
-    private String getOrderId(String controllerId) {
-        return "order_" + controllerId;
     }
 }
