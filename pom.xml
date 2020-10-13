@@ -71,7 +71,7 @@
       logspace-agent-json
       has JDK1.6 support ) -->
 
-    <junit-version>4.12</junit-version>
+    <junit-version>4.13.1</junit-version>
   </properties>
 
   <modules>
