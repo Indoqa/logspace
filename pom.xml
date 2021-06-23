@@ -46,7 +46,7 @@
     <indoqa-boot-version>0.10.0</indoqa-boot-version>
     <spring-version>4.3.2.RELEASE</spring-version>
     <solr-version>7.2.1</solr-version>
-    <jetty-version>9.3.11.v20160721</jetty-version>
+    <jetty-version>9.4.41.v20210516</jetty-version>
 
     <jackson-version>2.8.2</jackson-version>
     <httpclient-version>4.5.5</httpclient-version>
