@@ -74,6 +74,7 @@
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-frontend</artifactId>
+      <version>0.3.0</version>
       <classifier>dist</classifier>
       <type>zip</type>
     </dependency>
