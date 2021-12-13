@@ -40,7 +40,7 @@
     <dependency>
       <groupId>io.logspace</groupId>
       <artifactId>logspace-jvm-agent</artifactId>
-      <version>${project.version}</version>
+      <version>0.3.0</version>
     </dependency>
   </dependencies>
 
