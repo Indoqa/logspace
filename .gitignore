@@ -8,3 +8,4 @@ cocoon-files
 .recommenders
 monitor.json 
 JMeter.json
+.idea
