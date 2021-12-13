@@ -85,7 +85,7 @@
     <module>logspace-hq-solr-plugin</module>
     <module>logspace-hq-webapp</module>
     <module>logspace-it</module>
-    <module>logspace-jvm-agent</module>
+<!--    <module>logspace-jvm-agent</module> -->
     <module>logspace-monitor</module>
   </modules>
 
@@ -412,7 +412,7 @@
       <dependency>
         <groupId>io.logspace</groupId>
         <artifactId>logspace-jvm-agent</artifactId>
-        <version>${project.version}</version>
+        <version>0.3.0</version>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
