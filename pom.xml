@@ -419,7 +419,7 @@
         <artifactId>logspace-frontend</artifactId>
         <classifier>dist</classifier>
         <type>zip</type>
-        <version>${project.version}</version>
+        <version>0.3.0</version>
       </dependency>
       <dependency>
         <groupId>io.logspace</groupId>
