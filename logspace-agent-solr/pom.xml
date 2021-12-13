@@ -48,6 +48,14 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.restlet.jee</groupId>
+          <artifactId>org.restlet.ext.servlet</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-server</artifactId>
         </exclusion>

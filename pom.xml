@@ -66,7 +66,7 @@
 
     <slf4j-version>1.7.21</slf4j-version>
     <commons-logging-version>99.0-does-not-exist</commons-logging-version>
-    <log4j-version>2.3</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
+    <log4j-version>2.15.0</log4j-version><!-- Can't upgrade to 2.4.1 because logspace-agent-json's tests cannot be compiled (probably because logspace-agent-json has JDK1.6 support )-->
 
     <junit-version>4.12</junit-version>
   </properties>
@@ -78,7 +78,7 @@
     <module>logspace-agent-cxf</module>
     <module>logspace-agent-journal</module>
     <module>logspace-agent-os</module>
-    <module>logspace-agent-solr</module>
+<!--    <module>logspace-agent-solr</module>-->
     <module>logspace-dist</module>
     <module>logspace-frontend-new</module>
     <module>logspace-hq-core</module>
@@ -596,125 +596,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>build-with-jdk-6</id>
-      <activation>
-        <file>
-          <exists>src/build-with-jdk-6</exists>
-        </file>
-      </activation>
-      <properties>
-        <project.build.compiler.version>1.6</project.build.compiler.version>
-        <JAVA_6_HOME>${env.JAVA_6_HOME}</JAVA_6_HOME>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <verbose>true</verbose>
-              <fork>true</fork>
-              <executable>${JAVA_6_HOME}/bin/javac</executable>
-              <compilerVersion>1.6</compilerVersion>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>enforce-property</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <requireProperty>
-                      <property>JAVA_6_HOME</property>
-                      <message>You must set the environment variable JAVA_6_HOME to an existing Java 1.6 JDK.</message>
-                    </requireProperty>
-                  </rules>
-                  <fail>true</fail>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <archive>
-                <index>true</index>
-                <manifestEntries>
-                  <Build-Jdk>1.6.0</Build-Jdk>
-                </manifestEntries>
-              </archive>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>build-with-jdk-7</id>
-      <activation>
-        <file>
-          <exists>src/build-with-jdk-7</exists>
-        </file>
-      </activation>
-      <properties>
-        <project.build.compiler.version>1.7</project.build.compiler.version>
-        <JAVA_7_HOME>${env.JAVA_7_HOME}</JAVA_7_HOME>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <verbose>true</verbose>
-              <fork>true</fork>
-              <executable>${JAVA_7_HOME}/bin/javac</executable>
-              <compilerVersion>1.7</compilerVersion>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>enforce-property</id>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <requireProperty>
-                      <property>JAVA_7_HOME</property>
-                      <message>You must set the environment variable JAVA_7_HOME to an existing Java 1.7 JDK.</message>
-                    </requireProperty>
-                  </rules>
-                  <fail>true</fail>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <archive>
-                <index>true</index>
-                <manifestEntries>
-                  <Build-Jdk>1.7.0</Build-Jdk>
-                </manifestEntries>
-              </archive>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
