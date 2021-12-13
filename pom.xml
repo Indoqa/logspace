@@ -77,7 +77,7 @@
     <module>logspace-agent-os</module>
 <!--    <module>logspace-agent-solr</module>-->
     <module>logspace-dist</module>
-    <module>logspace-frontend</module>
+<!--    <module>logspace-frontend</module> -->
     <module>logspace-hq-core</module>
     <module>logspace-hq-core-api</module>
     <module>logspace-hq-rest</module>
