@@ -44,7 +44,7 @@
     "cross-env": "^2.0.1",
     "expect": "^1.20.2",
     "indoqa-webpack": "^0.6.8",
-    "jsdom": "^9.5.0",
+    "jsdom": "^16.5.0",
     "mocha": "^3.0.2"
   }
 }
