@@ -21,7 +21,7 @@
     "indoqa-rebass-components": "^0.2.4",
     "indoqa-rebass-theme": "^0.1.2",
     "intl": "^1.2.4",
-    "moment": "^2.14.1",
+    "moment": "^2.29.4",
     "react": "^15.3.2",
     "react-addons-perf": "^15.3.2",
     "react-daterange-picker": "^1.1.0",
